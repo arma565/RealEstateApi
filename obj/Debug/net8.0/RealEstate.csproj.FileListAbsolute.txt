@@ -140,3 +140,4 @@ D:\Applications\WebProgramming\Back\Visual studio code projects\NetCore\Projects
 D:\Applications\WebProgramming\Back\Visual studio code projects\NetCore\Projects\RealEstate\obj\Debug\net8.0\RealEstate.pdb
 D:\Applications\WebProgramming\Back\Visual studio code projects\NetCore\Projects\RealEstate\obj\Debug\net8.0\RealEstate.genruntimeconfig.cache
 D:\Applications\WebProgramming\Back\Visual studio code projects\NetCore\Projects\RealEstate\obj\Debug\net8.0\ref\RealEstate.dll
+D:\Applications\WebProgramming\Back\Visual studio code projects\NetCore\Projects\RealEstate\obj\Debug\net8.0\RealEstate.sourcelink.json
