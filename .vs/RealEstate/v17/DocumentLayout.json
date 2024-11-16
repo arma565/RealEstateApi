@@ -1,12 +1,36 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Applications\\WebProgramming\\Back\\Visual studio code projects\\NetCore\\Projects\\RealEstate\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|d:\\applications\\webprogramming\\back\\visual studio code projects\\netcore\\projects\\realestate\\realestate.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:realestate.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RealEstate",
+              "DocumentMoniker": "D:\\Applications\\WebProgramming\\Back\\Visual studio code projects\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
+              "RelativeDocumentMoniker": "RealEstate.csproj",
+              "ToolTip": "D:\\Applications\\WebProgramming\\Back\\Visual studio code projects\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
+              "RelativeToolTip": "RealEstate.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-11-11T16:20:35.024Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
