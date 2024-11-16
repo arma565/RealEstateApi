@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("[controller]")]
@@ -12,15 +13,15 @@ public class EstateController : ControllerBase
 
     #region
     [HttpGet("/property")]
-    public IEnumerable<Property> GetPropertyList() => _service.GetPropertyList();
+    public async Task<IEnumerable<Property>> GetPropertyList() => await _service.GetPropertyList();
 
     [HttpGet("/property/{propertyID}")]
-    public ActionResult<Property> GetProperty(int propertyID)
+    public async Task<ActionResult<Property>> GetProperty(int propertyID)
     {
-        Property? property = _service.GetProperty(propertyID);
+        Property? property = await _service.GetProperty(propertyID);
         if (property is null)
         {
-            return NotFound();
+            return NotFound("Property not found!");
         }
         else
         {
@@ -29,25 +30,25 @@ public class EstateController : ControllerBase
     }
 
     [HttpPost("/property/add")]
-    public IActionResult AddProperty(Property newProperty)
+    public async Task<IActionResult> AddProperty(Property newProperty)
     {
-        if (newProperty.PlatesNumber is null or "" || _service.GetPropertyByPlateNumber(newProperty.PlatesNumber)) return BadRequest();
-        var addedProperty = _service.AddProperty(newProperty);
-        var response = CreatedAtAction(nameof(GetProperty), new { propertyID = addedProperty!.Id }, addedProperty);
-        Console.WriteLine("Response =>" + response);
-        return response;
+        if (newProperty.PlatesNumber is null or "") return BadRequest("Plates number can't be empty!");
+        bool? getPlatesNum = await _service.GetPropertyByPlateNumber(newProperty.PlatesNumber);
+        if (getPlatesNum == true) return BadRequest("Plates number already exist!");
+        var addedProperty = await _service.AddProperty(newProperty);
+        return CreatedAtAction(nameof(GetProperty), new { propertyID = addedProperty!.Id }, addedProperty); ;
     }
 
     [HttpPut("/property/update/")]
-    public IActionResult UpdateProperty(Property updateProperty)
+    public async Task<IActionResult> UpdateProperty(Property updateProperty)
     {
-        Property? property = _service.GetProperty(updateProperty.Id);
+        Property? property = await _service.GetProperty(updateProperty.Id);
         if (property is null)
         {
-            return NotFound();
+            return NotFound("Property not found!");
         }
         else
-        {   
+        {
             _service.UpdateProperty(updateProperty);
             return NoContent();
         }
@@ -55,9 +56,9 @@ public class EstateController : ControllerBase
     }
 
     [HttpDelete("/property/delete/")]
-    public IActionResult DeleteProperty(Property propertyInput)
+    public async Task<IActionResult> DeleteProperty(Property propertyInput)
     {
-        Property? property = _service.GetProperty(propertyInput.Id);
+        Property? property = await _service.GetProperty(propertyInput.Id);
         if (property is null)
         {
             return NotFound();
@@ -80,33 +81,39 @@ public class EstateController : ControllerBase
 
     #region 
     [HttpGet("/person/{id}")]
-    public ActionResult<Person> GetPerson(int id)
+    public async Task<ActionResult<Person>> GetPerson(int id)
     {
-        Person? person = _service.GetPerson(id);
+        Person? person = await _service.GetPerson(id);
         if (person is null)
         {
-            return NotFound();
+            return NotFound("Person not found!");
         }
         else
         {
             return person;
         }
     }
-    
+
     [HttpPost("/person/add")]
-    public IActionResult AddPerson(Person newPerson)
+    public async Task<IActionResult> AddPerson(Person newPerson)
     {
-        var addedPerson = _service.AddPerson(newPerson);
+        if (newPerson.PropertyID.ToString().IsNullOrEmpty()) return BadRequest("PropertyID can't be empty");
+        var existProperty = await _service.GetProperty(newPerson.PropertyID);
+        if (existProperty is null) return NotFound("PropertyID is incorrect or property not found!");
+        var addedPerson = await _service.AddPerson(newPerson);
         return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
     }
 
     [HttpPut("/person/update/")]
-    public IActionResult UpdatePerson(Person updatePerson)
+    public async Task<IActionResult> UpdatePerson(Person updatePerson)
     {
-        Person? existPerson = _service.GetPerson(updatePerson.Id);
+        if (updatePerson.PropertyID.ToString().IsNullOrEmpty()) return BadRequest("PropertyID can't be empty");
+        var existProperty = await _service.GetProperty(updatePerson.PropertyID);
+        if (existProperty is null) return NotFound("PropertyID is incorrect or property not found!");
+        Person? existPerson = await _service.GetPerson(updatePerson.Id);
         if (existPerson is null)
         {
-            return NotFound();
+            return NotFound("Person not found!");
         }
         else
         {
@@ -116,12 +123,12 @@ public class EstateController : ControllerBase
     }
 
     [HttpDelete("/person/delete/")]
-    public IActionResult DeletePerson(Person inputPerson)
+    public async Task<IActionResult> DeletePerson(Person inputPerson)
     {
-        Person? existPerson = _service.GetPerson(inputPerson.Id);
+        Person? existPerson = await _service.GetPerson(inputPerson.Id);
         if (existPerson is null)
         {
-            return NotFound();
+            return NotFound("Person not found!");
         }
         else
         {
