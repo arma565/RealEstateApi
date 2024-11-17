@@ -55,17 +55,17 @@ public class EstateController : ControllerBase
 
     }
 
-    [HttpDelete("/property/delete/")]
-    public async Task<IActionResult> DeleteProperty(Property propertyInput)
+    [HttpDelete("/property/delete/{id}")]
+    public async Task<IActionResult> DeleteProperty(int id)
     {
-        Property? property = await _service.GetProperty(propertyInput.Id);
+        Property? property = await _service.GetProperty(id);
         if (property is null)
         {
             return NotFound();
         }
         else
         {
-            _service.DeleteProperty(propertyInput);
+            _service.DeleteProperty(property);
             return Ok();
         }
     }
@@ -77,7 +77,6 @@ public class EstateController : ControllerBase
         return Ok();
     }
     #endregion
-
 
     #region 
     [HttpGet("/person/{id}")]
@@ -122,17 +121,17 @@ public class EstateController : ControllerBase
         }
     }
 
-    [HttpDelete("/person/delete/")]
-    public async Task<IActionResult> DeletePerson(Person inputPerson)
+    [HttpDelete("/person/delete/{id}")]
+    public async Task<IActionResult> DeletePerson(int id)
     {
-        Person? existPerson = await _service.GetPerson(inputPerson.Id);
-        if (existPerson is null)
+        Person? person = await _service.GetPerson(id);
+        if (person is null)
         {
             return NotFound("Person not found!");
         }
         else
         {
-            _service.DeletePerson(existPerson);
+            _service.DeletePerson(person);
             return Ok();
         }
     }
@@ -143,8 +142,5 @@ public class EstateController : ControllerBase
         _service.DeleteAllPersons();
         return Ok();
     }
-
     #endregion
-
-
 }
