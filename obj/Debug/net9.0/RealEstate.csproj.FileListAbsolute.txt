@@ -155,3 +155,4 @@ D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\obj\Debug\net9.0
 D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.pdb
 D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.genruntimeconfig.cache
 D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\obj\Debug\net9.0\ref\RealEstate.dll
+D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
