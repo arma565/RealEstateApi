@@ -118,6 +118,27 @@ public class RepositoryService
     }
 
     /// <summary>
+    /// This function delete all users
+    /// </summary>
+    /// <returns></returns>
+    public async Task DeleteAllUsers(){
+       var users = await _userManager.Users.ToListAsync();
+       foreach (var user in users)
+       {
+           await _userManager.DeleteAsync(user);
+       }
+    }
+
+    /// <summary>
+    /// This function Delete a user from identity store
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    public async Task<IdentityResult> DeleteUser(UserProfileIdentity user){
+        return await _userManager.DeleteAsync(user);
+    }
+
+    /// <summary>
     /// Login user using username and password
     /// </summary>
     /// <param name="model">

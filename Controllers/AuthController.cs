@@ -1,20 +1,25 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthControllers : ControllerBase
+public class AuthController : ControllerBase
 {
     private readonly RepositoryService _service;
-    public AuthControllers(RepositoryService service)
+    private readonly PasswordHelper _passwordHelper;
+
+    public AuthController(RepositoryService service, PasswordHelper passwordHelper)
     {
         _service = service;
+        _passwordHelper = passwordHelper;
     }
 
     [HttpGet("users")]
     public async Task<ActionResult<IEnumerable<UserProfileIdentity>>> GetAllUsers()
     {
-       return Ok(await _service.GetAllUsers());
+        return Ok(await _service.GetAllUsers());
     }
 
     [HttpPost("register")]
@@ -32,6 +37,41 @@ public class AuthControllers : ControllerBase
         if (res.Succeeded)
         {
             return Ok(new { Message = "User created successfully" });
+        }
+        return BadRequest(res.Errors);
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllUsers()
+    {
+        await _service.DeleteAllUsers();
+        var users = await _service.GetAllUsers();
+        if (users.IsNullOrEmpty())
+        {
+            return Ok("All users deleted");
+        }
+        else
+        {
+            return BadRequest("Could not delete users!");
+        }
+    }
+
+    [HttpDelete("delete/{userName}/{password}")]
+    public async Task<IActionResult> DeleteUser(string userName, string password)
+    {
+        var user = await _service.FindUserByUserName(userName);
+        if (user == null)
+        {
+            return BadRequest("No such user found!");
+        }
+        var hashedPassword = _passwordHelper.HashPassword(user, password);
+        if (!_passwordHelper.VerifyPassword(user, hashedPassword, password))
+        {
+            return BadRequest("Password is not correct");
+        }
+        var res = await _service.DeleteUser(user);
+        if (res.Succeeded){
+            return Ok(new { Message = "User deleted successfully" });
         }
         return BadRequest(res.Errors);
     }
@@ -59,36 +99,7 @@ public class AuthControllers : ControllerBase
         }
 
         var generatedToken = await _service.GenerateTokenToRecoverUser(user);
-        var resetLink = Url.Action(
-            "ResetUser",
-            "AuthControllers",
-            new { email = userEmail, token = generatedToken },
-            Request.Scheme
-        );
-
-        // Here, you'd send the reset link via email
-        // For example, use an email service like SendGrid, SMTP, etc.
-        Console.WriteLine("Your reset link is:" + resetLink);
-
-        return Ok(
-            new
-            {
-                Message = "if the email exists, a password reset link will be sent. " + resetLink,
-            }
-        );
-    }
-
-    [HttpGet("hidden-route")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public async Task<IActionResult> ResetUser(string email, string token)
-    {
-        var user = await _service.FindUserByEmail(email);
-        if (user == null || string.IsNullOrEmpty(token))
-        {
-            return BadRequest(new { Message = "Invalid password reset link!" });
-        }
-        var newUser = new Reset() { Email = email, Token = token };
-        return Ok(newUser);
+        return Ok(generatedToken);
     }
 
     [HttpPost("reset/password")]
@@ -119,7 +130,7 @@ public class AuthControllers : ControllerBase
         {
             return BadRequest(new { Message = "Image not provided" });
         }
-        
+
         var filePath = await _service.UploadProfileImage(image);
         return Ok(new { Message = "Image saved successfully filePath: " + filePath });
     }
@@ -140,11 +151,13 @@ public class AuthControllers : ControllerBase
         {
             return NotFound("File not found");
         }
-         // Get the file's content type
+        // Get the file's content type
         var contentType = "application/octet-stream";
         var fileExtension = Path.GetExtension(fileName).ToLower();
-        if (fileExtension == ".jpg" || fileExtension == ".jpeg") contentType = "image/jpeg";
-        else if (fileExtension == ".png") contentType = "image/png";
+        if (fileExtension == ".jpg" || fileExtension == ".jpeg")
+            contentType = "image/jpeg";
+        else if (fileExtension == ".png")
+            contentType = "image/png";
 
         try
         {
@@ -160,7 +173,7 @@ public class AuthControllers : ControllerBase
         }
     }
 
-    [HttpPut("profile")]
+    [HttpPut("edit/profile")]
     public async Task<IActionResult> EditUserProfile([FromBody] Profile model)
     {
         var user = await _service.FindUserByUserName(model.UserName);
