@@ -1,8 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 public class Reset
 {
+    [Required]
     private string email = "";
+    [Required]
     private string token = "";
+    [Required]
     private string new_password = "";
+    [Required]
     private string repeat_new_password = "";
 
     public string Email { get => email; set => email = value; }

@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
         var res = await _service.RegisterUser(model);
         if (res.Succeeded)
         {
-            return Ok(new { Message = "User created successfully" });
+            return Ok("User created successfully");
         }
         return BadRequest(res.Errors);
     }
@@ -64,14 +64,13 @@ public class AuthController : ControllerBase
         {
             return BadRequest("No such user found!");
         }
-        var hashedPassword = _passwordHelper.HashPassword(user, password);
-        if (!_passwordHelper.VerifyPassword(user, hashedPassword, password))
+        if (!_passwordHelper.VerifyPassword(user, user.PasswordHash!, password))
         {
-            return BadRequest("Password is not correct");
+            return BadRequest("Password is not correct!");
         }
         var res = await _service.DeleteUser(user);
         if (res.Succeeded){
-            return Ok(new { Message = "User deleted successfully" });
+            return Ok("User deleted successfully");
         }
         return BadRequest(res.Errors);
     }
@@ -82,10 +81,10 @@ public class AuthController : ControllerBase
         var result = await _service.LoginUser(model);
         if (result.Succeeded)
         {
-            return Ok(new { Message = "Login successful" });
+            return Ok("Login successful");
         }
         return Unauthorized(
-            new { Message = "Username or password is not correct! please try again" }
+           "Username or password is not correct! please try again"
         );
     }
 
@@ -95,7 +94,7 @@ public class AuthController : ControllerBase
         var user = await _service.FindUserByEmail(userEmail);
         if (user == null)
         {
-            return Ok(new { Message = "If the email exists, a password reset link will be sent." });
+            return BadRequest("No such user found!");
         }
 
         var generatedToken = await _service.GenerateTokenToRecoverUser(user);
@@ -108,7 +107,7 @@ public class AuthController : ControllerBase
         var user = await _service.FindUserByEmail(model.Email);
         if (user == null)
         {
-            return NotFound(new { Message = "No such user found!" });
+            return NotFound("No such user found!");
         }
         if (model.NewPassword != model.RepeatNewPassword)
         {
@@ -118,7 +117,7 @@ public class AuthController : ControllerBase
         var result = await _service.ResetPassword(user, model.Token, model.NewPassword);
         if (result.Succeeded)
         {
-            return Ok(new { Message = "Password reset was successful" });
+            return Ok("Password reset was successful");
         }
         return BadRequest(result.Errors);
     }
@@ -128,11 +127,11 @@ public class AuthController : ControllerBase
     {
         if (image == null || image.Length == 0)
         {
-            return BadRequest(new { Message = "Image not provided" });
+            return BadRequest("Image not provided!");
         }
 
         var filePath = await _service.UploadProfileImage(image);
-        return Ok(new { Message = "Image saved successfully filePath: " + filePath });
+        return Ok("Image saved successfully filePath: " + filePath);
     }
 
     [HttpGet("download/{fileName}")]
@@ -169,7 +168,7 @@ public class AuthController : ControllerBase
         catch (IOException ex)
         {
             // Log the error if needed
-            return StatusCode(500, new { Message = "Error reading the file.", Error = ex.Message });
+            return StatusCode(500, "Error reading the file!. Error =" + ex.Message);
         }
     }
 
@@ -179,7 +178,7 @@ public class AuthController : ControllerBase
         var user = await _service.FindUserByUserName(model.UserName);
         if (user == null)
         {
-            return NotFound(new { Message = "No such user found" });
+            return NotFound("No such user found!");
         }
 
         user.ProfileImagePath = model.ProfileImagePath;
@@ -189,7 +188,7 @@ public class AuthController : ControllerBase
         var result = await _service.EditUserProfile(user);
         if (result.Succeeded)
         {
-            return Ok(new { Message = "Profile updated successfully" });
+            return Ok("Profile updated successfully");
         }
         return BadRequest(result.Errors);
     }

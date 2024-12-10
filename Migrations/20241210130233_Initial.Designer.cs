@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241205174441_Initial")]
+    [Migration("20241210130233_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

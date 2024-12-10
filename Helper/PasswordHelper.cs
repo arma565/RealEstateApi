@@ -8,17 +8,9 @@ public class PasswordHelper
     {
         _passwordHasher = new PasswordHasher<UserProfileIdentity>();
     }
-
-    public string HashPassword(UserProfileIdentity user,string password)
-    {
-        // Hash the password
-        return _passwordHasher.HashPassword(user, password);
-    }
-
     public bool VerifyPassword(UserProfileIdentity user,string hashedPassword, string inputPassword)
     {
         // Verify the password
-        var result = _passwordHasher.VerifyHashedPassword(user, hashedPassword, inputPassword);
-        return result == PasswordVerificationResult.Success;
+        return _passwordHasher.VerifyHashedPassword(user, hashedPassword, inputPassword) == PasswordVerificationResult.Success;
     }
 }

@@ -1,9 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 public class Register
 {
+    [Required]
     private string user_name = "";
+    [Required]
     private string email = "";
+    [Required]
     private string password = "";
+    [Required]
     private string repeat_password = "";
+    [Required]
     private bool accept_terms = false;
 
     public string UserName
