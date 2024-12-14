@@ -10,16 +10,19 @@ public class AuthController : ControllerBase
     private readonly RepositoryService _service;
     private readonly PasswordHelper _passwordHelper;
     private readonly HttpClient _httpClient;
+    private readonly ILogger<AuthController> _logger;
 
     public AuthController(
         RepositoryService service,
         PasswordHelper passwordHelper,
-        HttpClient httpClient
+        HttpClient httpClient,
+        ILogger<AuthController> logger
     )
     {
         _service = service;
         _passwordHelper = passwordHelper;
         _httpClient = httpClient;
+        _logger = logger;
     }
 
     [HttpGet("users")]
@@ -31,13 +34,9 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser([FromBody] Register model)
     {
-        if (model.Password != model.RepeatPassword)
+        if (!ModelState.IsValid)
         {
-            return BadRequest("Passwords do not match!");
-        }
-        if (model.AcceptTerms == false)
-        {
-            return BadRequest("Please accept our terms!");
+            return BadRequest(ModelState);
         }
         var res = await _service.RegisterUser(model);
         if (res.Succeeded)
@@ -85,6 +84,10 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> LoginUser([FromBody] Login model)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var result = await _service.LoginUser(model);
         if (result.Succeeded)
         {
@@ -93,10 +96,14 @@ public class AuthController : ControllerBase
         return Unauthorized("Username or password is not correct! please try again");
     }
 
-    [HttpGet("recovery/{userEmail}")]
-    public async Task<IActionResult> RecoverUser(string userEmail = "")
+    [HttpGet("recovery/account")]
+    public async Task<IActionResult> RecoverUser([FromBody] Recovery recovery)
     {
-        var user = await _service.FindUserByEmail(userEmail);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var user = await _service.FindUserByEmail(recovery.Email);
         if (user == null)
         {
             return BadRequest("No such user found!");
@@ -109,6 +116,10 @@ public class AuthController : ControllerBase
     [HttpPost("reset/password")]
     public async Task<IActionResult> ResetPassword(Reset model)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var user = await _service.FindUserByEmail(model.Email);
         if (user == null)
         {

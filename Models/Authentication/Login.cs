@@ -2,11 +2,22 @@ using System.ComponentModel.DataAnnotations;
 
 public class Login
 {
-    [Required]
     string user_name = "";
-    [Required]
+
     string password = "";
 
-    public string UserName { get => user_name; set => user_name = value; }
-    public string Password { get => password; set => password = value; }
+    [Required]
+    public string UserName
+    {
+        get => user_name;
+        set => user_name = value;
+    }
+
+    [Required]
+    [DataType(DataType.Password)]
+    public string Password
+    {
+        get => password;
+        set => password = value;
+    }
 }

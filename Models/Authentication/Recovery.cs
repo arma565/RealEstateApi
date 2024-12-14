@@ -2,8 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 public class Recovery
 {
-    [Required]
     private string email = "";
 
-    public string Email { get => email; set => email = value; }
+    [Required(ErrorMessage = "Email is reqired!")]
+    [EmailAddress(ErrorMessage = "Invalid email address!")]
+    public string Email
+    {
+        get => email;
+        set => email = value;
+    }
 }
