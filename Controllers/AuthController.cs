@@ -9,15 +9,21 @@ public class AuthController : ControllerBase
 {
     private readonly RepositoryService _service;
     private readonly PasswordHelper _passwordHelper;
+    private readonly HttpClient _httpClient;
 
-    public AuthController(RepositoryService service, PasswordHelper passwordHelper)
+    public AuthController(
+        RepositoryService service,
+        PasswordHelper passwordHelper,
+        HttpClient httpClient
+    )
     {
         _service = service;
         _passwordHelper = passwordHelper;
+        _httpClient = httpClient;
     }
 
     [HttpGet("users")]
-    public async Task<ActionResult<IEnumerable<UserProfileIdentity>>> GetAllUsers()
+    public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
     {
         return Ok(await _service.GetAllUsers());
     }
@@ -69,7 +75,8 @@ public class AuthController : ControllerBase
             return BadRequest("Password is not correct!");
         }
         var res = await _service.DeleteUser(user);
-        if (res.Succeeded){
+        if (res.Succeeded)
+        {
             return Ok("User deleted successfully");
         }
         return BadRequest(res.Errors);
@@ -83,9 +90,7 @@ public class AuthController : ControllerBase
         {
             return Ok("Login successful");
         }
-        return Unauthorized(
-           "Username or password is not correct! please try again"
-        );
+        return Unauthorized("Username or password is not correct! please try again");
     }
 
     [HttpGet("recovery/{userEmail}")]
@@ -129,9 +134,15 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Image not provided!");
         }
-
-        var filePath = await _service.UploadProfileImage(image);
-        return Ok("Image saved successfully filePath: " + filePath);
+        await _service.UploadProfileImage(image);
+        return Ok(
+            Url.Action(
+                action: "DownloadProfileImage",
+                controller: "Auth",
+                values: new { image.FileName },
+                protocol: Request.Scheme
+            )
+        );
     }
 
     [HttpGet("download/{fileName}")]
@@ -142,6 +153,10 @@ public class AuthController : ControllerBase
         {
             return BadRequest("File name can't be empty!");
         }
+        if (fileName.Contains("..") || Path.GetInvalidFileNameChars().Any(fileName.Contains))
+        {
+            return BadRequest("Invalid file name.");
+        }
 
         //check directory if exist
         var imageDir = Path.Combine(Directory.GetCurrentDirectory(), "Images");
@@ -151,12 +166,13 @@ public class AuthController : ControllerBase
             return NotFound("File not found");
         }
         // Get the file's content type
-        var contentType = "application/octet-stream";
         var fileExtension = Path.GetExtension(fileName).ToLower();
-        if (fileExtension == ".jpg" || fileExtension == ".jpeg")
-            contentType = "image/jpeg";
-        else if (fileExtension == ".png")
-            contentType = "image/png";
+        var contentType = fileExtension switch
+        {
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            _ => "application/octet-stream",
+        };
 
         try
         {
@@ -169,6 +185,42 @@ public class AuthController : ControllerBase
         {
             // Log the error if needed
             return StatusCode(500, "Error reading the file!. Error =" + ex.Message);
+        }
+    }
+
+    [HttpGet("getFromUrl")]
+    public async Task<IActionResult> GetImageFromUrl([FromQuery] string fileUrl)
+    {
+        if (string.IsNullOrEmpty(fileUrl))
+        {
+            return BadRequest("URL parameter is required.");
+        }
+
+        try
+        {
+            // Fetch the image from the URL
+            var response = await _httpClient.GetAsync(fileUrl);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch the image.");
+            }
+
+            // Get the image content as a stream
+            var imageStream = await response.Content.ReadAsStreamAsync();
+            var contentType =
+                response.Content.Headers.ContentType?.ToString() ?? "application/octet-stream";
+
+            // Return the image stream
+            return File(imageStream, contentType);
+        }
+        catch (HttpRequestException ex)
+        {
+            return StatusCode(500, $"Error fetching the image: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
         }
     }
 

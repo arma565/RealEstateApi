@@ -99,8 +99,23 @@ public class RepositoryService
     /// This function return all registered users
     /// </summary>
     /// <returns></returns>
-    public async Task<IEnumerable<UserProfileIdentity>> GetAllUsers(){
-        return await _userManager.Users.ToListAsync();
+    public async Task<IEnumerable<User>> GetAllUsers(){
+        var users =  await _userManager.Users.AsNoTracking().ToListAsync();
+        var usersList = new List<User>();
+       foreach (var userInUserManager in users)
+       {
+        var user = new User{
+            ProfileImagePath = userInUserManager.ProfileImagePath,
+            FirstName = userInUserManager.FirstName,
+            LastName = userInUserManager.LastName,
+            AcceptTerms = userInUserManager.AcceptTerms,
+            UserName = userInUserManager.UserName ?? "",
+            Email = userInUserManager.Email ?? "",
+            PhoneNumber = userInUserManager.PhoneNumber ?? "",
+        };
+        usersList.Add(user);
+       }
+       return  usersList;
     }
 
     /// <summary>
