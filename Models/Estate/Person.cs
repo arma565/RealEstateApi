@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 public class Person
 {
     public Person() { }
@@ -45,6 +47,8 @@ public class Person
         get => id;
         set => id = value;
     }
+
+    [Required]
     public string Name
     {
         get => name;
@@ -55,6 +59,9 @@ public class Person
         get => fatherName;
         set => fatherName = value;
     }
+
+    [Required]
+    [Range(0.0, 9999999999)]
     public long BirthCertificateNumber
     {
         get => birthCertificateNumber;
@@ -65,6 +72,9 @@ public class Person
         get => birthCertificateIssued;
         set => birthCertificateIssued = value;
     }
+
+    [Required]
+    [Range(0.0, 9999999999)]
     public long PersonID
     {
         get => personID;
@@ -75,11 +85,15 @@ public class Person
         get => born;
         set => born = value;
     }
+
+    [Required]
     public string Address
     {
         get => address;
         set => address = value;
     }
+
+    [Required]
     public string Phone
     {
         get => phone;
