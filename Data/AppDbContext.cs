@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options)
-    : IdentityDbContext<UserProfileIdentity>(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserProfileIdentity>(options)
 {
     public required DbSet<Property> Properties { get; set; }
 
@@ -20,16 +19,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder
-            .Entity<IdentityUserLogin<string>>()
-            .HasNoKey();
+        modelBuilder.Entity<IdentityUserLogin<string>>().HasNoKey();
 
-              modelBuilder
-            .Entity<IdentityUserRole<string>>()
-            .HasNoKey();
+        modelBuilder.Entity<IdentityUserRole<string>>().HasNoKey();
 
-              modelBuilder
-            .Entity<IdentityUserToken<string>>()
-            .HasNoKey();
+        modelBuilder.Entity<IdentityUserToken<string>>().HasNoKey();
     }
 }

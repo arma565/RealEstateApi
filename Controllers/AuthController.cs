@@ -26,9 +26,35 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("users")]
-    public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+    public async Task<ActionResult<List<User>>> GetAllUsers()
     {
         return Ok(await _service.GetAllUsers());
+    }
+
+    [HttpGet("{userName}")]
+    public async Task<ActionResult<User>> GetUserByUserName(string userName)
+    {
+        if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
+        {
+            return BadRequest("Username can not be empty!");
+        }
+        var user = await _service.FindUserByUserName(userName);
+        if (user == null)
+        {
+            return NotFound("No such user found!");
+        }
+        return Ok(
+            new User
+            {
+                ProfileImagePath = user!.ProfileImagePath,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                AcceptTerms = user.AcceptTerms,
+                UserName = user.UserName!,
+                Email = user.Email!,
+                PhoneNumber = user.PhoneNumber!,
+            }
+        );
     }
 
     [HttpPost("register")]
@@ -41,9 +67,24 @@ public class AuthController : ControllerBase
         var res = await _service.RegisterUser(model);
         if (res.Succeeded)
         {
-            return Ok("User created successfully");
+            return CreatedAtAction(nameof(GetUserByUserName), new { model.UserName }, model);
         }
         return BadRequest(res.Errors);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginUser([FromBody] Login model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var result = await _service.LoginUser(model);
+        if (result.Succeeded)
+        {
+            return Ok("Login successful");
+        }
+        return Unauthorized("Username or password is not correct! please try again");
     }
 
     [HttpDelete("delete-all")]
@@ -53,7 +94,7 @@ public class AuthController : ControllerBase
         var users = await _service.GetAllUsers();
         if (users.IsNullOrEmpty())
         {
-            return Ok("All users deleted");
+            return NoContent();
         }
         else
         {
@@ -76,28 +117,13 @@ public class AuthController : ControllerBase
         var res = await _service.DeleteUser(user);
         if (res.Succeeded)
         {
-            return Ok("User deleted successfully");
+            return NoContent();
         }
         return BadRequest(res.Errors);
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> LoginUser([FromBody] Login model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        var result = await _service.LoginUser(model);
-        if (result.Succeeded)
-        {
-            return Ok("Login successful");
-        }
-        return Unauthorized("Username or password is not correct! please try again");
-    }
-
-    [HttpGet("recovery/account")]
-    public async Task<IActionResult> RecoverUser([FromBody] Recovery recovery)
+    [HttpPost("recovery/account")]
+    public async Task<ActionResult<string>> RecoverUser([FromBody] Recovery recovery)
     {
         if (!ModelState.IsValid)
         {
@@ -114,7 +140,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("reset/password")]
-    public async Task<IActionResult> ResetPassword(Reset model)
+    public async Task<IActionResult> ResetPassword([FromBody] Reset model)
     {
         if (!ModelState.IsValid)
         {
@@ -125,11 +151,6 @@ public class AuthController : ControllerBase
         {
             return NotFound("No such user found!");
         }
-        if (model.NewPassword != model.RepeatNewPassword)
-        {
-            return BadRequest("Passwords do not match!");
-        }
-
         var result = await _service.ResetPassword(user, model.Token, model.NewPassword);
         if (result.Succeeded)
         {
@@ -251,7 +272,7 @@ public class AuthController : ControllerBase
         var result = await _service.EditUserProfile(user);
         if (result.Succeeded)
         {
-            return Ok("Profile updated successfully");
+            return NoContent();
         }
         return BadRequest(result.Errors);
     }

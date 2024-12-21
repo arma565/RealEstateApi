@@ -15,7 +15,6 @@ public class Reset
         set => email = value;
     }
 
-    [Required]
     public string Token
     {
         get => token;
@@ -32,7 +31,7 @@ public class Reset
 
     [Required]
     [DataType(DataType.Password)]
-    [Compare("Password", ErrorMessage = "The Password and Repeat New Password do not match!")]
+    [Compare("NewPassword", ErrorMessage = "The Password and Repeat New Password do not match!")]
     public string RepeatNewPassword
     {
         get => repeat_new_password;

@@ -8,7 +8,11 @@ public class RepositoryService
     private readonly UserManager<UserProfileIdentity> _userManager;
     private readonly SignInManager<UserProfileIdentity> _signInManager;
 
-    public RepositoryService(AppDbContext context , UserManager<UserProfileIdentity> userManager,SignInManager<UserProfileIdentity> signInManager)
+    public RepositoryService(
+        AppDbContext context,
+        UserManager<UserProfileIdentity> userManager,
+        SignInManager<UserProfileIdentity> signInManager
+    )
     {
         _context = context;
         _userManager = userManager;
@@ -99,23 +103,25 @@ public class RepositoryService
     /// This function return all registered users
     /// </summary>
     /// <returns></returns>
-    public async Task<IEnumerable<User>> GetAllUsers(){
-        var users =  await _userManager.Users.AsNoTracking().ToListAsync();
+    public async Task<IEnumerable<User>> GetAllUsers()
+    {
+        var users = await _userManager.Users.AsNoTracking().ToListAsync();
         var usersList = new List<User>();
-       foreach (var userInUserManager in users)
-       {
-        var user = new User{
-            ProfileImagePath = userInUserManager.ProfileImagePath,
-            FirstName = userInUserManager.FirstName,
-            LastName = userInUserManager.LastName,
-            AcceptTerms = userInUserManager.AcceptTerms,
-            UserName = userInUserManager.UserName ?? "",
-            Email = userInUserManager.Email ?? "",
-            PhoneNumber = userInUserManager.PhoneNumber ?? "",
-        };
-        usersList.Add(user);
-       }
-       return  usersList;
+        foreach (var userInUserManager in users)
+        {
+            var user = new User
+            {
+                ProfileImagePath = userInUserManager.ProfileImagePath,
+                FirstName = userInUserManager.FirstName,
+                LastName = userInUserManager.LastName,
+                AcceptTerms = userInUserManager.AcceptTerms,
+                UserName = userInUserManager.UserName ?? "",
+                Email = userInUserManager.Email ?? "",
+                PhoneNumber = userInUserManager.PhoneNumber ?? "",
+            };
+            usersList.Add(user);
+        }
+        return usersList.ToArray();
     }
 
     /// <summary>
@@ -123,25 +129,26 @@ public class RepositoryService
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<IdentityResult> RegisterUser(Register model){
-        var newUser = new UserProfileIdentity(){
+    public async Task<IdentityResult> RegisterUser(Register model)
+    {
+        return await _userManager.CreateAsync(new UserProfileIdentity{
             UserName = model.UserName,
             Email = model.Email,
-            AcceptTerms = model.AcceptTerms       
-        };
-        return await _userManager.CreateAsync(newUser , model.Password);
+            AcceptTerms = model.AcceptTerms,
+        }, model.Password);
     }
 
     /// <summary>
     /// This function delete all users
     /// </summary>
     /// <returns></returns>
-    public async Task DeleteAllUsers(){
-       var users = await _userManager.Users.ToListAsync();
-       foreach (var user in users)
-       {
-           await _userManager.DeleteAsync(user);
-       }
+    public async Task DeleteAllUsers()
+    {
+        var users = await _userManager.Users.ToListAsync();
+        foreach (var user in users)
+        {
+            await _userManager.DeleteAsync(user);
+        }
     }
 
     /// <summary>
@@ -149,7 +156,8 @@ public class RepositoryService
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    public async Task<IdentityResult> DeleteUser(UserProfileIdentity user){
+    public async Task<IdentityResult> DeleteUser(UserProfileIdentity user)
+    {
         return await _userManager.DeleteAsync(user);
     }
 
@@ -160,7 +168,8 @@ public class RepositoryService
     /// Login model containing username and password
     /// </param>
     /// <returns></returns>
-    public async Task<SignInResult> LoginUser(Login model){
+    public async Task<SignInResult> LoginUser(Login model)
+    {
         return await _signInManager.PasswordSignInAsync(
             model.UserName,
             model.Password,
@@ -170,13 +179,14 @@ public class RepositoryService
     }
 
     /// <summary>
-    /// This function create a token to reset password 
+    /// This function create a token to reset password
     /// </summary>
     /// <param name="user">
-    /// User account which needs reset 
+    /// User account which needs reset
     /// </param>
     /// <returns></returns>
-    public async Task<string> GenerateTokenToRecoverUser(UserProfileIdentity user){
+    public async Task<string> GenerateTokenToRecoverUser(UserProfileIdentity user)
+    {
         return await _userManager.GeneratePasswordResetTokenAsync(user);
     }
 
@@ -184,27 +194,29 @@ public class RepositoryService
     /// Reset the user account password
     /// </summary>
     /// <param name="user">
-    /// user account 
+    /// user account
     /// </param>
     /// <param name="token">
     /// Tokeen reset password
     /// </param>
     /// <param name="newPassword">
-    /// new password of account 
+    /// new password of account
     /// </param>
     /// <returns></returns>
-    public async Task<IdentityResult> ResetPassword(UserProfileIdentity user , string token , string newPassword){
-        return await _userManager.ResetPasswordAsync(user , token , newPassword);
+    public async Task<IdentityResult> ResetPassword(UserProfileIdentity user, string token, string newPassword)
+    {
+        return await _userManager.ResetPasswordAsync(user, token, newPassword);
     }
 
     /// <summary>
-    /// Use this function to upload profile image to server 
+    /// Use this function to upload profile image to server
     /// </summary>
     /// <param name="image">
     /// image to upload
     /// </param>
     /// <returns></returns>
-    public async Task<string> UploadProfileImage(IFormFile image){
+    public async Task<string> UploadProfileImage(IFormFile image)
+    {
         var imageDir = Path.Combine(Directory.GetCurrentDirectory(), "Images");
         var filePath = Path.Combine(imageDir, image.FileName);
         if (!Directory.Exists(imageDir))
@@ -230,7 +242,14 @@ public class RepositoryService
     {
         try
         {
-            return new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+            return new FileStream(
+                filePath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                4096,
+                useAsync: true
+            );
         }
         catch (IOException ex)
         {
@@ -250,11 +269,13 @@ public class RepositoryService
         return await _userManager.UpdateAsync(user);
     }
 
-    public async Task<UserProfileIdentity?> FindUserByEmail(string email){
+    public async Task<UserProfileIdentity?> FindUserByEmail(string email)
+    {
         return await _userManager.FindByEmailAsync(email);
     }
 
-    public async Task<UserProfileIdentity?> FindUserByUserName(string userName){
+    public async Task<UserProfileIdentity?> FindUserByUserName(string userName)
+    {
         return await _userManager.FindByNameAsync(userName);
     }
     #endregion

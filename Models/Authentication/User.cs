@@ -1,17 +1,19 @@
+using Microsoft.AspNetCore.Identity;
+
 public class User
 {
-    private string profileImagePath = "";
+    private string profile_image_path = "";
     private string first_name = "";
     private string last_name = "";
     private bool accept_terms = false;
     private string user_name = "";
     private string email = "";
     private string phone_number = "";
-
+    
     public string ProfileImagePath
     {
-        get => profileImagePath;
-        set => profileImagePath = value;
+        get => profile_image_path;
+        set => profile_image_path = value;
     }
     public string FirstName
     {
