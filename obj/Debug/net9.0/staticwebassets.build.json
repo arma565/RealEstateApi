@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "AUPhFIFERKx86yJeuHiWXzy6fQZqauy/A7BNofQHj+8=",
+  "Hash": "+gkAAoeEPG/fBjXC7Yf8P+jcbXXuRL+Bdy4t/1EZkHQ=",
   "Source": "RealEstate",
   "BasePath": "_content/RealEstate",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "RealEstate\\wwwroot",
+      "Source": "RealEstate",
+      "ContentRoot": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\wwwroot\\",
+      "BasePath": "_content/RealEstate",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }

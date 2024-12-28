@@ -1,3 +1,4 @@
+using System.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -42,10 +43,10 @@ public class RepositoryService
         return newProperty;
     }
 
-    public void UpdateProperty(Property updateProperty)
+    public async Task UpdateProperty(Property updateProperty)
     {
         _context.Properties.Update(updateProperty);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public void DeleteProperty(Property deleteProperty)
@@ -111,9 +112,9 @@ public class RepositoryService
         {
             var user = new User
             {
-                ProfileImagePath = userInUserManager.ProfileImagePath,
-                FirstName = userInUserManager.FirstName,
-                LastName = userInUserManager.LastName,
+                ProfileImagePath = userInUserManager.ProfileImageUrl!,
+                FirstName = userInUserManager.FirstName!,
+                LastName = userInUserManager.LastName!,
                 AcceptTerms = userInUserManager.AcceptTerms,
                 UserName = userInUserManager.UserName ?? "",
                 Email = userInUserManager.Email ?? "",
@@ -131,11 +132,15 @@ public class RepositoryService
     /// <returns></returns>
     public async Task<IdentityResult> RegisterUser(Register model)
     {
-        return await _userManager.CreateAsync(new UserProfileIdentity{
-            UserName = model.UserName,
-            Email = model.Email,
-            AcceptTerms = model.AcceptTerms,
-        }, model.Password);
+        return await _userManager.CreateAsync(
+            new UserProfileIdentity
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                AcceptTerms = model.AcceptTerms,
+            },
+            model.Password
+        );
     }
 
     /// <summary>
@@ -149,6 +154,11 @@ public class RepositoryService
         {
             await _userManager.DeleteAsync(user);
         }
+        var files = Directory.GetFiles(Path.Combine("wwwroot/images"));
+        foreach (var file in files)
+        {
+            File.Delete(file);
+        }
     }
 
     /// <summary>
@@ -158,6 +168,17 @@ public class RepositoryService
     /// <returns></returns>
     public async Task<IdentityResult> DeleteUser(UserProfileIdentity user)
     {
+        if (!string.IsNullOrEmpty(user.ProfileImageUrl))
+        {
+            Uri uri = new Uri(user.ProfileImageUrl);
+            var profileImageName = Path.GetFileName(uri.AbsolutePath);
+            var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            var filePath = Path.Combine(webRootPath, "images", profileImageName);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
         return await _userManager.DeleteAsync(user);
     }
 
@@ -203,7 +224,11 @@ public class RepositoryService
     /// new password of account
     /// </param>
     /// <returns></returns>
-    public async Task<IdentityResult> ResetPassword(UserProfileIdentity user, string token, string newPassword)
+    public async Task<IdentityResult> ResetPassword(
+        UserProfileIdentity user,
+        string token,
+        string newPassword
+    )
     {
         return await _userManager.ResetPasswordAsync(user, token, newPassword);
     }
@@ -217,17 +242,21 @@ public class RepositoryService
     /// <returns></returns>
     public async Task<string> UploadProfileImage(IFormFile image)
     {
-        var imageDir = Path.Combine(Directory.GetCurrentDirectory(), "Images");
-        var filePath = Path.Combine(imageDir, image.FileName);
+        var imageDir = Path.Combine("wwwroot", "images");
+        var filePath = Path.Combine(
+            imageDir,
+            Guid.CreateVersion7().ToString() + Path.GetExtension(image.FileName)
+        );
         if (!Directory.Exists(imageDir))
         {
             Directory.CreateDirectory(imageDir);
         }
+
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
             await image.CopyToAsync(stream);
         }
-        return filePath;
+        return Path.GetFileName(filePath);
     }
 
     /// <summary>

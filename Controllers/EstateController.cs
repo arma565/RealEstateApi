@@ -13,15 +13,14 @@ public class EstateController : ControllerBase
     }
 
     #region
-    [HttpGet("/property")]
+    [HttpGet("property")]
     public async Task<IEnumerable<Property>> GetPropertyList() => await _service.GetPropertyList();
 
-    [HttpGet("/property/{propertyID}")]
+    [HttpGet("property/{propertyID}")]
     public async Task<ActionResult<Property>> GetProperty(int propertyID)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
+        if(propertyID <= 0){
+            return BadRequest("Invalid propertyID");
         }
         Property? property = await _service.GetProperty(propertyID);
         if (property is null)
@@ -34,8 +33,8 @@ public class EstateController : ControllerBase
         }
     }
 
-    [HttpPost("/property/add")]
-    public async Task<IActionResult> AddProperty(Property newProperty)
+    [HttpPost("property/add")]
+    public async Task<IActionResult> AddProperty([FromBody] Property newProperty)
     {
         if (!ModelState.IsValid)
         {
@@ -46,8 +45,6 @@ public class EstateController : ControllerBase
             newProperty.Date = DateTime.Now.ToString("yyyy-MM-dd");
             newProperty.Time = DateTime.Now.ToString("HH:mm:ss");
         }
-        /*  if (newProperty.PlatesNumber is null or "")
-             return BadRequest("Plates number can't be empty!"); */
         bool? getPlatesNum = await _service.GetPropertyByPlateNumber(newProperty.PlatesNumber!);
         if (getPlatesNum == true)
             return BadRequest("Plates number already exist!");
@@ -57,31 +54,29 @@ public class EstateController : ControllerBase
             new { propertyID = addedProperty!.Id },
             addedProperty
         );
-        ;
     }
 
-    [HttpPut("/property/update/")]
-    public async Task<IActionResult> UpdateProperty(Property updateProperty)
+    [HttpPut("property/update")]
+    public async Task<IActionResult> UpdateProperty([FromBody] Property updateProperty)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
+        if(updateProperty.Id <= 0){
+            return BadRequest("Updating property is not possible without id!");
         }
-        updateProperty.Date = DateTime.Now.ToString("yyyy-MM-dd");
-        updateProperty.Time = DateTime.Now.ToString("HH:mm:ss");
         Property? property = await _service.GetProperty(updateProperty.Id);
         if (property is null)
         {
             return NotFound("Property not found!");
         }
-        else
-        {
-            _service.UpdateProperty(updateProperty);
-            return NoContent();
+        updateProperty.Date = DateTime.Now.ToString("yyyy-MM-dd");
+        updateProperty.Time = DateTime.Now.ToString("HH:mm:ss");
+        if(!ModelState.IsValid){
+            return BadRequest(ModelState);
         }
+        await _service.UpdateProperty(updateProperty);
+            return NoContent();
     }
 
-    [HttpDelete("/property/delete/{id}")]
+    [HttpDelete("property/delete/{id}")]
     public async Task<IActionResult> DeleteProperty(int id)
     {
         Property? property = await _service.GetProperty(id);
@@ -96,7 +91,7 @@ public class EstateController : ControllerBase
         }
     }
 
-    [HttpDelete("/property/delete-all")]
+    [HttpDelete("property/delete-all")]
     public IActionResult DeleteProperties()
     {
         _service.DeleteAllProperties();
@@ -105,7 +100,7 @@ public class EstateController : ControllerBase
     #endregion
 
     #region
-    [HttpGet("/person/{id}")]
+    [HttpGet("person/{id}")]
     public async Task<ActionResult<Person>> GetPerson(int id)
     {
         if (!ModelState.IsValid)
@@ -123,8 +118,8 @@ public class EstateController : ControllerBase
         }
     }
 
-    [HttpPost("/person/add")]
-    public async Task<IActionResult> AddPerson(Person newPerson)
+    [HttpPost("person/add")]
+    public async Task<IActionResult> AddPerson([FromBody] Person newPerson)
     {
         if (!ModelState.IsValid)
         {
@@ -139,8 +134,8 @@ public class EstateController : ControllerBase
         return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
     }
 
-    [HttpPut("/person/update/")]
-    public async Task<IActionResult> UpdatePerson(Person updatePerson)
+    [HttpPut("person/update")]
+    public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
     {
         if (!ModelState.IsValid)
         {
@@ -163,7 +158,7 @@ public class EstateController : ControllerBase
         }
     }
 
-    [HttpDelete("/person/delete/{id}")]
+    [HttpDelete("person/delete/{id}")]
     public async Task<IActionResult> DeletePerson(int id)
     {
         if (!ModelState.IsValid)
@@ -182,7 +177,7 @@ public class EstateController : ControllerBase
         }
     }
 
-    [HttpDelete("/person/delete-all")]
+    [HttpDelete("person/delete-all")]
     public IActionResult DeleteAllPersons()
     {
         _service.DeleteAllPersons();

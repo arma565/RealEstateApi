@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -9,19 +8,16 @@ public class AuthController : ControllerBase
 {
     private readonly RepositoryService _service;
     private readonly PasswordHelper _passwordHelper;
-    private readonly HttpClient _httpClient;
     private readonly ILogger<AuthController> _logger;
 
     public AuthController(
         RepositoryService service,
         PasswordHelper passwordHelper,
-        HttpClient httpClient,
         ILogger<AuthController> logger
     )
     {
         _service = service;
         _passwordHelper = passwordHelper;
-        _httpClient = httpClient;
         _logger = logger;
     }
 
@@ -46,9 +42,9 @@ public class AuthController : ControllerBase
         return Ok(
             new User
             {
-                ProfileImagePath = user!.ProfileImagePath,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                ProfileImagePath = user!.ProfileImageUrl!,
+                FirstName = user.FirstName!,
+                LastName = user.LastName!,
                 AcceptTerms = user.AcceptTerms,
                 UserName = user.UserName!,
                 Email = user.Email!,
@@ -159,24 +155,6 @@ public class AuthController : ControllerBase
         return BadRequest(result.Errors);
     }
 
-    [HttpPost("upload")]
-    public async Task<IActionResult> UploadProfileImage(IFormFile image)
-    {
-        if (image == null || image.Length == 0)
-        {
-            return BadRequest("Image not provided!");
-        }
-        await _service.UploadProfileImage(image);
-        return Ok(
-            Url.Action(
-                action: "DownloadProfileImage",
-                controller: "Auth",
-                values: new { image.FileName },
-                protocol: Request.Scheme
-            )
-        );
-    }
-
     [HttpGet("download/{fileName}")]
     public IActionResult DownloadProfileImage(string fileName)
     {
@@ -191,8 +169,11 @@ public class AuthController : ControllerBase
         }
 
         //check directory if exist
-        var imageDir = Path.Combine(Directory.GetCurrentDirectory(), "Images");
-        var filePath = Path.Combine(imageDir, fileName);
+        var imageDir = Path.Combine("wwwroot", "images");
+        var filePath = Path.Combine(
+            imageDir,
+            fileName.Trim().Replace(" ", "").Replace("-", "").Replace("_", "")
+        );
         if (!System.IO.File.Exists(filePath))
         {
             return NotFound("File not found");
@@ -220,52 +201,31 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpGet("getFromUrl")]
-    public async Task<IActionResult> GetImageFromUrl([FromQuery] string fileUrl)
+    [HttpPut("edit/profile/{userName}")]
+    public async Task<IActionResult> EditUserProfile(
+        IFormFile image,
+        string userName,
+        [FromForm] Profile model
+    )
     {
-        if (string.IsNullOrEmpty(fileUrl))
-        {
-            return BadRequest("URL parameter is required.");
-        }
-
-        try
-        {
-            // Fetch the image from the URL
-            var response = await _httpClient.GetAsync(fileUrl);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return StatusCode((int)response.StatusCode, "Failed to fetch the image.");
-            }
-
-            // Get the image content as a stream
-            var imageStream = await response.Content.ReadAsStreamAsync();
-            var contentType =
-                response.Content.Headers.ContentType?.ToString() ?? "application/octet-stream";
-
-            // Return the image stream
-            return File(imageStream, contentType);
-        }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(500, $"Error fetching the image: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
-        }
-    }
-
-    [HttpPut("edit/profile")]
-    public async Task<IActionResult> EditUserProfile([FromBody] Profile model)
-    {
-        var user = await _service.FindUserByUserName(model.UserName);
+        var user = await _service.FindUserByUserName(userName);
         if (user == null)
         {
             return NotFound("No such user found!");
         }
-
-        user.ProfileImagePath = model.ProfileImagePath;
+        if (image == null || image.Length == 0)
+        {
+            return BadRequest("Image not provided!");
+        }
+        var fileName = await _service.UploadProfileImage(image);
+        var imageUrl = Url.Action(
+            action: "DownloadProfileImage",
+            controller: "Auth",
+            values: new { fileName },
+            protocol: Request.Scheme
+        );
+        user.ProfileImageUrl = imageUrl!;
+        user.UserName = model.UserName;
         user.FirstName = model.FirstName;
         user.LastName = model.LastName;
         user.PhoneNumber = model.PhoneNumber;
