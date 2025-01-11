@@ -1,22 +1,22 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\01940f7c-caa4-768d-8e6a-6f5af18cf3ed.png'))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\117cc5a1-3f5a-4f62-a36d-7ec131e6afdf.png'))">
       <SourceType>Package</SourceType>
       <SourceId>RealEstate</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/RealEstate</BasePath>
-      <RelativePath>images/01940f7c-caa4-768d-8e6a-6f5af18cf3ed.png</RelativePath>
+      <RelativePath>images/117cc5a1-3f5a-4f62-a36d-7ec131e6afdf.png</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>egzl8dphk5</Fingerprint>
-      <Integrity>Qi2GFA8nEfb+SPmpTn39bJuaUWY9SG98AYMHkck50s4=</Integrity>
+      <Fingerprint>avxvgvg8oa</Fingerprint>
+      <Integrity>NqmNl3vfiEY+xRB/BZH22QQzJ3aY0hUXFLIbWmPPJms=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\01940f7c-caa4-768d-8e6a-6f5af18cf3ed.png'))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\117cc5a1-3f5a-4f62-a36d-7ec131e6afdf.png'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>

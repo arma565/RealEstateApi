@@ -112,6 +112,7 @@ public class RepositoryService
         {
             var user = new User
             {
+                Id = userInUserManager.Id,
                 ProfileImagePath = userInUserManager.ProfileImageUrl!,
                 FirstName = userInUserManager.FirstName!,
                 LastName = userInUserManager.LastName!,
@@ -233,57 +234,9 @@ public class RepositoryService
         return await _userManager.ResetPasswordAsync(user, token, newPassword);
     }
 
-    /// <summary>
-    /// Use this function to upload profile image to server
-    /// </summary>
-    /// <param name="image">
-    /// image to upload
-    /// </param>
-    /// <returns></returns>
-    public async Task<string> UploadProfileImage(IFormFile image)
+     public async Task<IdentityResult> ChangePassword(UserProfileIdentity user,string currentPassword,string newPassword)
     {
-        var imageDir = Path.Combine("wwwroot", "images");
-        var filePath = Path.Combine(
-            imageDir,
-            Guid.CreateVersion7().ToString() + Path.GetExtension(image.FileName)
-        );
-        if (!Directory.Exists(imageDir))
-        {
-            Directory.CreateDirectory(imageDir);
-        }
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await image.CopyToAsync(stream);
-        }
-        return Path.GetFileName(filePath);
-    }
-
-    /// <summary>
-    /// Use this to download image from server
-    /// </summary>
-    /// <param name="filePath">
-    /// file path of image file
-    /// </param>
-    /// <returns></returns>
-    /// <exception cref="IOException"></exception>
-    public FileStream ReadProfileImage(string filePath)
-    {
-        try
-        {
-            return new FileStream(
-                filePath,
-                FileMode.Open,
-                FileAccess.Read,
-                FileShare.Read,
-                4096,
-                useAsync: true
-            );
-        }
-        catch (IOException ex)
-        {
-            throw new IOException("Error reading the file. Error =" + ex.Message);
-        }
+        return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
     }
 
     /// <summary>

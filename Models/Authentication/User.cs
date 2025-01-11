@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 public class User
 {
+    private string id = "";
     private string profile_image_path = "";
     private string first_name = "";
     private string last_name = "";
@@ -9,7 +10,12 @@ public class User
     private string user_name = "";
     private string email = "";
     private string phone_number = "";
-    
+
+    public string Id
+    {
+        get => id;
+        set => id = value;
+    }
     public string ProfileImagePath
     {
         get => profile_image_path;

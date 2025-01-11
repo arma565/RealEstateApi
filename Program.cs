@@ -34,8 +34,11 @@ builder
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<RepositoryService>();
+builder.Services.AddScoped<ImageService>();
+builder.Services.AddScoped<IImageService,ImageService>();
 builder.Services.AddScoped<PasswordHelper>();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 builder
     .Services.AddControllers()
     .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
