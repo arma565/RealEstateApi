@@ -3,22 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-public class RepositoryService
+public class RepositoryService( AppDbContext context,
+UserManager<UserProfileIdentity> userManager,
+SignInManager<UserProfileIdentity> signInManager,
+DatabaseService databaseService)
 {
-    private readonly AppDbContext _context;
-    private readonly UserManager<UserProfileIdentity> _userManager;
-    private readonly SignInManager<UserProfileIdentity> _signInManager;
-
-    public RepositoryService(
-        AppDbContext context,
-        UserManager<UserProfileIdentity> userManager,
-        SignInManager<UserProfileIdentity> signInManager
-    )
-    {
-        _context = context;
-        _userManager = userManager;
-        _signInManager = signInManager;
-    }
+    private readonly AppDbContext _context = context;
+    private readonly UserManager<UserProfileIdentity> _userManager = userManager;
+    private readonly SignInManager<UserProfileIdentity> _signInManager = signInManager;
+    private readonly DatabaseService _databaseService = databaseService;
 
     #region Property
     public async Task<IEnumerable<Property>> GetPropertyList() =>
@@ -59,6 +52,7 @@ public class RepositoryService
     {
         _context.Properties.ExecuteDelete();
         _context.SaveChanges();
+        _databaseService.ResetIdentity(nameof(AppDbContext.Properties));
     }
     #endregion
 
@@ -92,6 +86,7 @@ public class RepositoryService
     {
         _context.Persons.ExecuteDelete();
         _context.SaveChanges();
+        _databaseService.ResetIdentity(nameof(AppDbContext.Persons));
     }
 
     private IEnumerable<Person> GetPersonList() =>
@@ -155,6 +150,7 @@ public class RepositoryService
         {
             await _userManager.DeleteAsync(user);
         }
+        _databaseService.ResetIdentity(nameof(_userManager.Users));
         var files = Directory.GetFiles(Path.Combine("wwwroot/images"));
         foreach (var file in files)
         {

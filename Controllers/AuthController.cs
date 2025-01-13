@@ -163,8 +163,10 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("change/password")]
-    public async Task<IActionResult> ChangePassword([FromBody] Change model){
-        if(!ModelState.IsValid){
+    public async Task<IActionResult> ChangePassword([FromBody] Change model)
+    {
+        if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
         }
 
@@ -173,13 +175,12 @@ public class AuthController : ControllerBase
         {
             return NotFound("No such user found!");
         }
-          var result = await _service.ChangePassword(user, model.CurrentPassword, model.NewPassword);
+        var result = await _service.ChangePassword(user, model.CurrentPassword, model.NewPassword);
         if (result.Succeeded)
         {
             return Ok("Password has been changed");
         }
         return BadRequest(result.Errors);
-
     }
 
     [HttpGet("download/{userName}")]
@@ -207,11 +208,10 @@ public class AuthController : ControllerBase
             }
             // Read the image as a byte array
             var imageData = await response.Content.ReadAsByteArrayAsync();
-
             // Return the image as a file response
             var contentType =
                 response.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
-            return Ok(File(imageData, contentType));
+            return File(imageData, contentType);
         }
         catch (Exception ex)
         {

@@ -34,6 +34,7 @@ builder
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<RepositoryService>();
+builder.Services.AddScoped<DatabaseService>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<IImageService,ImageService>();
 builder.Services.AddScoped<PasswordHelper>();

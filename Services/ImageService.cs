@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 public interface IImageService
 {
     Task<string> UploadProfileImage(IFormFile image);
@@ -118,7 +120,9 @@ public class ImageService : IImageService
             {
                 return $"http://{connection.RemoteIpAddress}:5068/images/{fileName}";
             }
-        }else{
+        }
+        else
+        {
             return $"http://localhost:5068/images/{fileName}";
         }
     }
