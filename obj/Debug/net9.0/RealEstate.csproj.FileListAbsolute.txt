@@ -157,3 +157,7 @@ D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\obj\Debug\net9.0
 D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\obj\Debug\net9.0\ref\RealEstate.dll
 D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\bin\Debug\net9.0\RealEstate.staticwebassets.runtime.json
+D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\bin\Debug\net9.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\bin\Debug\net9.0\Newtonsoft.Json.dll
+D:\Applications\WebProgramming\Back\NetCore\Projects\RealEstate\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll

@@ -40,11 +40,9 @@ builder.Services.AddScoped<IImageService,ImageService>();
 builder.Services.AddScoped<PasswordHelper>();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
-builder
-    .Services.AddControllers()
-    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
-    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

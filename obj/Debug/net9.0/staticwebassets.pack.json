@@ -1,8 +1,20 @@
 {
   "Files": [
     {
-      "Id": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\46e5d1ff-fac7-41a3-8c1d-054238b91c80.png",
-      "PackagePath": "staticwebassets\\images\\46e5d1ff-fac7-41a3-8c1d-054238b91c80.png"
+      "Id": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\82bf6823-dbc9-4cb7-a375-8aa5f58762f3.png",
+      "PackagePath": "staticwebassets\\images\\82bf6823-dbc9-4cb7-a375-8aa5f58762f3.png"
+    },
+    {
+      "Id": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\99a02fa4-0fd5-46e6-aeff-b1604cf514e5.png",
+      "PackagePath": "staticwebassets\\images\\99a02fa4-0fd5-46e6-aeff-b1604cf514e5.png"
+    },
+    {
+      "Id": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\c8bf31d6-b540-437d-9c3d-c86d0851c968.png",
+      "PackagePath": "staticwebassets\\images\\c8bf31d6-b540-437d-9c3d-c86d0851c968.png"
+    },
+    {
+      "Id": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\f5d581af-1ba1-44eb-89ba-78867e54dc2c.png",
+      "PackagePath": "staticwebassets\\images\\f5d581af-1ba1-44eb-89ba-78867e54dc2c.png"
     },
     {
       "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.RealEstate.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",

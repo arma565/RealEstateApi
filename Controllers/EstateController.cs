@@ -12,14 +12,15 @@ public class EstateController : ControllerBase
         _service = service;
     }
 
-    #region
+    #region "Property"
     [HttpGet("property")]
     public async Task<IEnumerable<Property>> GetPropertyList() => await _service.GetPropertyList();
 
     [HttpGet("property/{propertyID}")]
     public async Task<ActionResult<Property>> GetProperty(int propertyID)
     {
-        if(propertyID <= 0){
+        if (propertyID <= 0)
+        {
             return BadRequest("Invalid propertyID");
         }
         Property? property = await _service.GetProperty(propertyID);
@@ -59,7 +60,8 @@ public class EstateController : ControllerBase
     [HttpPut("property/update")]
     public async Task<IActionResult> UpdateProperty([FromBody] Property updateProperty)
     {
-        if(updateProperty.Id <= 0){
+        if (updateProperty.Id <= 0)
+        {
             return BadRequest("Updating property is not possible without id!");
         }
         Property? property = await _service.GetProperty(updateProperty.Id);
@@ -69,11 +71,12 @@ public class EstateController : ControllerBase
         }
         updateProperty.Date = DateTime.Now.ToString("yyyy-MM-dd");
         updateProperty.Time = DateTime.Now.ToString("HH:mm:ss");
-        if(!ModelState.IsValid){
+        if (!ModelState.IsValid)
+        {
             return BadRequest(ModelState);
         }
         await _service.UpdateProperty(updateProperty);
-            return NoContent();
+        return NoContent();
     }
 
     [HttpDelete("property/delete/{id}")]
@@ -99,7 +102,10 @@ public class EstateController : ControllerBase
     }
     #endregion
 
-    #region
+    #region "Person"
+    [HttpGet("persons")]
+    public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList();
+
     [HttpGet("person/{id}")]
     public async Task<ActionResult<Person>> GetPerson(int id)
     {
@@ -153,8 +159,8 @@ public class EstateController : ControllerBase
         }
         else
         {
-            _service.UpdatePerson(updatePerson);
-            return NoContent();
+            var updatedPerson = await _service.UpdatePerson(updatePerson);
+            return Ok(updatedPerson);
         }
     }
 

@@ -57,6 +57,11 @@ DatabaseService databaseService)
     #endregion
 
     #region Person
+    public async Task<IEnumerable<Person>> GetPersonsList() =>
+        await _context
+            .Persons.AsNoTracking()
+            .OrderByDescending(per => per.Id)
+            .ToListAsync();
     public async Task<Person?> GetPerson(int id) =>
         await _context.Persons.AsNoTracking().SingleOrDefaultAsync(pers => pers.Id == id);
 
@@ -70,10 +75,11 @@ DatabaseService databaseService)
         return newPerson;
     }
 
-    public void UpdatePerson(Person updatePerson)
+    public async Task<Person> UpdatePerson(Person updatePerson)
     {
         _context.Persons.Update(updatePerson);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        return updatePerson;
     }
 
     public void DeletePerson(Person deletePerson)

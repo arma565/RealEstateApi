@@ -61,7 +61,6 @@ public class Person
     }
 
     [Required]
-    [Range(0.0, 9999999999)]
     public long BirthCertificateNumber
     {
         get => birthCertificateNumber;
@@ -74,7 +73,6 @@ public class Person
     }
 
     [Required]
-    [Range(0.0, 9999999999)]
     public long PersonID
     {
         get => personID;
