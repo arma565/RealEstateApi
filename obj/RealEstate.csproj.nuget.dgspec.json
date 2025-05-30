@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\RealEstate.csproj": {}
+    "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\RealEstate.csproj": {}
   },
   "projects": {
-    "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\RealEstate.csproj": {
+    "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\RealEstate.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
+        "projectUniqueName": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
         "projectName": "RealEstate",
-        "projectPath": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
+        "projectPath": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
         "packagesPath": "C:\\Users\\MSP\\.nuget\\packages\\",
-        "outputPath": "D:\\Applications\\WebProgramming\\Back\\NetCore\\Projects\\RealEstate\\obj\\",
+        "outputPath": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\MSP\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -101,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.106/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
