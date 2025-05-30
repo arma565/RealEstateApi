@@ -1,0 +1,37 @@
+{
+  "Files": [
+    {
+      "Id": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\82bf6823-dbc9-4cb7-a375-8aa5f58762f3.png",
+      "PackagePath": "staticwebassets\\images\\82bf6823-dbc9-4cb7-a375-8aa5f58762f3.png"
+    },
+    {
+      "Id": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\99a02fa4-0fd5-46e6-aeff-b1604cf514e5.png",
+      "PackagePath": "staticwebassets\\images\\99a02fa4-0fd5-46e6-aeff-b1604cf514e5.png"
+    },
+    {
+      "Id": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\c8bf31d6-b540-437d-9c3d-c86d0851c968.png",
+      "PackagePath": "staticwebassets\\images\\c8bf31d6-b540-437d-9c3d-c86d0851c968.png"
+    },
+    {
+      "Id": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\wwwroot\\images\\f5d581af-1ba1-44eb-89ba-78867e54dc2c.png",
+      "PackagePath": "staticwebassets\\images\\f5d581af-1ba1-44eb-89ba-78867e54dc2c.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.RealEstate.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.RealEstate.props",
+      "PackagePath": "build\\RealEstate.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.RealEstate.props",
+      "PackagePath": "buildMultiTargeting\\RealEstate.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.RealEstate.props",
+      "PackagePath": "buildTransitive\\RealEstate.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
