@@ -1,284 +1,286 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RealEstate.Helper;
+using RealEstate.Models.Authentication;
+using RealEstate.Services;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
-
-[ApiController]
-[Route("[controller]")]
-public class AuthController : ControllerBase
+namespace RealEstate.Controllers
 {
-    private readonly RepositoryService _service;
-    private readonly ImageService _imageService;
-    private readonly PasswordHelper _passwordHelper;
-    private readonly ILogger<AuthController> _logger;
-    private readonly HttpClient _httpClient;
-
-    public AuthController(
+    [ApiController]
+    [Route("[controller]")]
+    public class AuthController(
         RepositoryService service,
         ImageService imageService,
         PasswordHelper passwordHelper,
-        ILogger<AuthController> logger,
         HttpClient httpClient
-    )
+        ) : ControllerBase
     {
-        _service = service;
-        _imageService = imageService;
-        _passwordHelper = passwordHelper;
-        _logger = logger;
-        _httpClient = httpClient;
-    }
+        private readonly RepositoryService _service = service;
+        private readonly ImageService _imageService = imageService;
+        private readonly PasswordHelper _passwordHelper = passwordHelper;
+        private readonly HttpClient _httpClient = httpClient;
 
-    [HttpGet("users")]
-    public async Task<ActionResult<List<User>>> GetAllUsers()
-    {
-        return Ok(await _service.GetAllUsers());
-    }
+        [HttpGet("users")]
+        public async Task<ActionResult<List<User>>> GetAllUsers()
+        {
+            return Ok(await _service.GetAllUsers().ConfigureAwait(false));
+        }
 
-    [HttpGet("{userName}")]
-    public async Task<ActionResult<User>> GetUserByUserName(string userName)
-    {
-        if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
+        [HttpGet("{userName}")]
+        public async Task<ActionResult<User>> GetUserByUserName(string userName)
         {
-            return BadRequest("Username can not be empty!");
-        }
-        var user = await _service.FindUserByUserName(userName);
-        if (user == null)
-        {
-            return NotFound("No such user found!");
-        }
-        return Ok(
-            new User
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
             {
-                Id = user!.Id,
-                ProfileImagePath = user!.ProfileImageUrl!,
-                FirstName = user.FirstName!,
-                LastName = user.LastName!,
-                AcceptTerms = user.AcceptTerms,
-                UserName = user.UserName!,
-                Email = user.Email!,
-                PhoneNumber = user.PhoneNumber!,
+                return BadRequest("Username can not be empty!");
             }
-        );
-    }
-
-    [HttpPost("register")]
-    public async Task<IActionResult> RegisterUser([FromBody] Register model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        var res = await _service.RegisterUser(model);
-        if (res.Succeeded)
-        {
-            return CreatedAtAction(nameof(GetUserByUserName), new { model.UserName }, model);
-        }
-        return BadRequest(res.Errors);
-    }
-
-    [HttpPost("login")]
-    public async Task<IActionResult> LoginUser([FromBody] Login model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        var result = await _service.LoginUser(model);
-        if (result.Succeeded)
-        {
-            return Ok("Login successful");
-        }
-        return Unauthorized("Username or password is not correct! please try again");
-    }
-
-    [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllUsers()
-    {
-        await _service.DeleteAllUsers();
-        var users = await _service.GetAllUsers();
-        if (users.IsNullOrEmpty())
-        {
-            return NoContent();
-        }
-        else
-        {
-            return BadRequest("Could not delete users!");
-        }
-    }
-
-    [HttpDelete("delete/{userName}/{password}")]
-    public async Task<IActionResult> DeleteUser(string userName, string password)
-    {
-        var user = await _service.FindUserByUserName(userName);
-        if (user == null)
-        {
-            return BadRequest("No such user found!");
-        }
-        if (!_passwordHelper.VerifyPassword(user, user.PasswordHash!, password))
-        {
-            return BadRequest("Password is not correct!");
-        }
-        var res = await _service.DeleteUser(user);
-        if (res.Succeeded)
-        {
-            return NoContent();
-        }
-        return BadRequest(res.Errors);
-    }
-
-    [HttpPost("recovery/account")]
-    public async Task<ActionResult<string>> RecoverUser([FromBody] Recovery recovery)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        var user = await _service.FindUserByEmail(recovery.Email);
-        if (user == null)
-        {
-            return BadRequest("No such user found!");
-        }
-
-        var generatedToken = await _service.GenerateTokenToRecoverUser(user);
-        return Ok(generatedToken);
-    }
-
-    [HttpPost("reset/password")]
-    public async Task<IActionResult> ResetPassword([FromBody] Reset model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        var user = await _service.FindUserByEmail(model.Email);
-        if (user == null)
-        {
-            return NotFound("No such user found!");
-        }
-        var result = await _service.ResetPassword(user, model.Token, model.NewPassword);
-        if (result.Succeeded)
-        {
-            return Ok("Password reset was successful");
-        }
-        return BadRequest(result.Errors);
-    }
-
-    [HttpPost("change/password")]
-    public async Task<IActionResult> ChangePassword([FromBody] Change model)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var user = await _service.FindUserByUserName(model.UserName);
-        if (user == null)
-        {
-            return NotFound("No such user found!");
-        }
-        var result = await _service.ChangePassword(user, model.CurrentPassword, model.NewPassword);
-        if (result.Succeeded)
-        {
-            return Ok("Password has been changed");
-        }
-        return BadRequest(result.Errors);
-    }
-
-    [HttpGet("download/{userName}")]
-    public async Task<IActionResult> DownloadProfileImage(string userName)
-    {
-        try
-        {
-            //check if filename is not empty or null
-            var user = await _service.FindUserByUserName(userName);
+            var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
             if (user == null)
             {
                 return NotFound("No such user found!");
             }
-            if (
-                string.IsNullOrEmpty(user.ProfileImageUrl)
-                || !Uri.IsWellFormedUriString(user.ProfileImageUrl, UriKind.Absolute)
-            )
-            {
-                return BadRequest("Invalid URL");
-            }
-            var response = await _httpClient.GetAsync(user.ProfileImageUrl);
-            if (!response.IsSuccessStatusCode)
-            {
-                return StatusCode((int)response.StatusCode, "Failed to download image");
-            }
-            // Read the image as a byte array
-            var imageData = await response.Content.ReadAsByteArrayAsync();
-            // Return the image as a file response
-            var contentType =
-                response.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
-            return File(imageData, contentType);
+            return Ok(
+                new User
+                {
+                    Id = user!.Id,
+                    ProfileImagePath = user!.ProfileImageUrl!,
+                    FirstName = user.FirstName!,
+                    LastName = user.LastName!,
+                    AcceptTerms = user.AcceptTerms,
+                    UserName = user.UserName!,
+                    Email = user.Email!,
+                    PhoneNumber = user.PhoneNumber!,
+                }
+            );
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"An error occurred: {ex.Message}");
-        }
-    }
 
-    [HttpPost("upload/{userName}")]
-    public async Task<IActionResult> UploadProfileImage(string userName, IFormFile image)
-    {
-        try
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser([FromBody] Register model)
         {
-            var user = await _service.FindUserByUserName(userName);
-            if (user == null)
+            if (model == null)
             {
-                return NotFound("No such user found!");
+                return BadRequest("Failed to retreive parameter!");
             }
-            var imageUrl = await _imageService.UploadProfileImage(image);
-            user.ProfileImageUrl = imageUrl!;
-            var result = await _service.EditUserProfile(user);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var res = await _service.RegisterUser(model).ConfigureAwait(false);
+            if (res.Succeeded)
+            {
+                return CreatedAtAction(nameof(GetUserByUserName), new { model.UserName }, model);
+            }
+            return BadRequest(res.Errors);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] Login model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _service.LoginUser(model).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                return Ok(imageUrl);
+                return Ok("Login successful");
+            }
+            return Unauthorized("Username or password is not correct! please try again");
+        }
+
+        [HttpDelete("delete-all")]
+        public async Task<IActionResult> DeleteAllUsers()
+        {
+            await _service.DeleteAllUsers().ConfigureAwait(false);
+            var users = await _service.GetAllUsers().ConfigureAwait(false);
+            if (users.IsNullOrEmpty())
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("Could not delete users!");
+            }
+        }
+
+        [HttpDelete("delete/{userName}/{password}")]
+        public async Task<IActionResult> DeleteUser(string userName, string password)
+        {
+            var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
+            if (user == null)
+            {
+                return BadRequest("No such user found!");
+            }
+            if (!_passwordHelper.VerifyPassword(user, user.PasswordHash!, password))
+            {
+                return BadRequest("Password is not correct!");
+            }
+            var res = await _service.DeleteUser(user).ConfigureAwait(false);
+            if (res.Succeeded)
+            {
+                return NoContent();
+            }
+            return BadRequest(res.Errors);
+        }
+
+        [HttpPost("recovery/account")]
+        public async Task<ActionResult<string>> RecoverUser([FromBody] Recovery recovery)
+        {
+            if (recovery == null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _service.FindUserByEmail(recovery.Email).ConfigureAwait(false);
+            if (user == null)
+            {
+                return BadRequest("No such user found!");
+            }
+
+            var generatedToken = await _service.GenerateTokenToRecoverUser(user).ConfigureAwait(false);
+            return Ok(generatedToken);
+        }
+
+        [HttpPost("reset/password")]
+        public async Task<IActionResult> ResetPassword([FromBody] Reset model)
+        {
+            if (model == null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _service.FindUserByEmail(model.Email).ConfigureAwait(false);
+            if (user == null)
+            {
+                return NotFound("No such user found!");
+            }
+            var result = await _service.ResetPassword(user, model.Token, model.NewPassword).ConfigureAwait(false);
+            if (result.Succeeded)
+            {
+                return Ok("Password reset was successful");
             }
             return BadRequest(result.Errors);
         }
-        catch (IOException ex)
-        {
-            _logger.LogError(
-                ex,
-                "Unexpected error while editing profile for user: {UserName}",
-                userName
-            );
-            return StatusCode(500, "An unexpected error occurred. Please try again later.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(
-                ex,
-                "Unexpected error while editing profile for user: {UserName}",
-                userName
-            );
-            return StatusCode(500, "An unexpected error occurred. Please try again later.");
-        }
-    }
 
-    [HttpPut("edit/profile")]
-    public async Task<IActionResult> EditUserProfile([FromBody] Profile model)
-    {
-        if (!ModelState.IsValid)
+        [HttpPost("change/password")]
+        public async Task<IActionResult> ChangePassword([FromBody] Change model)
         {
-            return UnprocessableEntity(ModelState);
+            if (model == null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _service.FindUserByUserName(model.UserName).ConfigureAwait(false);
+            if (user == null)
+            {
+                return NotFound("No such user found!");
+            }
+            var result = await _service.ChangePassword(user, model.CurrentPassword, model.NewPassword).ConfigureAwait(false);
+            if (result.Succeeded)
+            {
+                return Ok("Password has been changed");
+            }
+            return BadRequest(result.Errors);
         }
-        var user = await _service.FindUserByUserName(model.UserName);
-        if (user == null)
+
+        [HttpGet("download/{userName}")]
+        public async Task<IActionResult> DownloadProfileImage(string userName)
         {
-            return NotFound("No such user found!");
+            try
+            {
+                //check if filename is not empty or null
+                var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    return NotFound("No such user found!");
+                }
+                if (
+                    string.IsNullOrEmpty(user.ProfileImageUrl!.ToString())
+                    || !Uri.IsWellFormedUriString(user.ProfileImageUrl.ToString(), UriKind.Absolute)
+                )
+                {
+                    return BadRequest("Invalid URL");
+                }
+                HttpResponseMessage response = await _httpClient.GetAsync(new Uri(user.ProfileImageUrl.ToString()))
+                    .ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return StatusCode((int)response.StatusCode, "Failed to download image");
+                }
+                // Read the image as a byte array
+                var imageData = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                // Return the image as a file response
+                var contentType =
+                    response.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
+                return File(imageData, contentType);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
-        user.UserName = model.UserName;
-        user.FirstName = model.FirstName;
-        user.LastName = model.LastName;
-        user.PhoneNumber = model.PhoneNumber;
-        var result = await _service.EditUserProfile(user);
-        if (result.Succeeded)
+
+        [HttpPost("upload/{userName}")]
+        public async Task<IActionResult> UploadProfileImage(string userName, IFormFile image)
         {
-            return NoContent();
+            try
+            {
+                var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    return NotFound("No such user found!");
+                }
+                var imageUrl = await _imageService.UploadProfileImage(image).ConfigureAwait(false);
+                user.ProfileImageUrl = new Uri(imageUrl);
+                var result = await _service.EditUserProfile(user).ConfigureAwait(false);
+                if (result.Succeeded)
+                {
+                    return Ok(imageUrl);
+                }
+                return BadRequest(result.Errors);
+            }
+            catch (IOException ex)
+            {
+                return StatusCode(500, "An unexpected error occurred. Please try again later." + "Error detailes: " + ex.Message);
+            }
         }
-        return BadRequest(result.Errors);
+
+        [HttpPut("edit/profile")]
+        public async Task<IActionResult> EditUserProfile([FromBody] Profile model)
+        {
+            if (model is null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+            var user = await _service.FindUserByUserName(model.UserName).ConfigureAwait(false);
+            if (user == null)
+            {
+                return NotFound("No such user found!");
+            }
+            user.UserName = model.UserName;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.PhoneNumber = model.PhoneNumber;
+            var result = await _service.EditUserProfile(user).ConfigureAwait(false);
+            if (result.Succeeded)
+            {
+                return NoContent();
+            }
+            return BadRequest(result.Errors);
+        }
     }
 }
+

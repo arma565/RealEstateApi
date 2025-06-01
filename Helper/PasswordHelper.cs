@@ -1,18 +1,23 @@
 using Microsoft.AspNetCore.Identity;
+using RealEstate.Data;
 
-public class PasswordHelper
+namespace RealEstate.Helper
 {
-    private readonly PasswordHasher<UserProfileIdentity> _passwordHasher;
-
-    public PasswordHelper()
+    public class PasswordHelper
     {
-        _passwordHasher = new PasswordHasher<UserProfileIdentity>();
-    }
+        private readonly PasswordHasher<UserProfileIdentity> _passwordHasher;
 
-    public bool VerifyPassword(UserProfileIdentity user, string hashedPassword, string inputPassword)
-    {
-        // Verify the password
-        return _passwordHasher.VerifyHashedPassword(user, hashedPassword, inputPassword)
-            == PasswordVerificationResult.Success;
+        public PasswordHelper()
+        {
+            _passwordHasher = new PasswordHasher<UserProfileIdentity>();
+        }
+
+        public bool VerifyPassword(UserProfileIdentity user, string hashedPassword, string inputPassword)
+        {
+            // Verify the password
+            return _passwordHasher.VerifyHashedPassword(user, hashedPassword, inputPassword)
+                == PasswordVerificationResult.Success;
+        }
     }
 }
+

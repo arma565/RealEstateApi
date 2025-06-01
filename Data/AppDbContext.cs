@@ -1,28 +1,42 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RealEstate.Models.Estate;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserProfileIdentity>(options)
+namespace RealEstate.Data
 {
-    public required DbSet<Property> Properties { get; set; }
-
-    public required DbSet<Person> Persons { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserProfileIdentity>(options)
     {
-        modelBuilder
-            .Entity<Property>()
-            .HasMany(prop => prop.Persons)
-            .WithOne(pers => pers.Property)
-            .HasForeignKey(pers => pers.PropertyID)
-            .HasPrincipalKey(prop => prop.Id)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+        public required DbSet<Estate> Properties { get; set; }
 
-        modelBuilder.Entity<IdentityUserLogin<string>>().HasNoKey();
+        public required DbSet<Person> Persons { get; set; }
 
-        modelBuilder.Entity<IdentityUserRole<string>>().HasNoKey();
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            ArgumentNullException.ThrowIfNull(builder);
 
-        modelBuilder.Entity<IdentityUserToken<string>>().HasNoKey();
+            builder.Entity<UserProfileIdentity>()
+            .Property(e => e.ProfileImageUrl)
+            .HasConversion(
+             v => v!.ToString(),// string to Uri
+             v => new Uri(v));  // Uri to string        
+
+
+            builder
+                .Entity<Estate>()
+                .HasMany(prop => prop.Persons)
+                .WithOne(pers => pers.Property)
+                .HasForeignKey(pers => pers.PropertyID)
+                .HasPrincipalKey(prop => prop.Id)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<IdentityUserLogin<string>>().HasNoKey();
+
+            builder.Entity<IdentityUserRole<string>>().HasNoKey();
+
+            builder.Entity<IdentityUserToken<string>>().HasNoKey();
+        }
     }
 }
+

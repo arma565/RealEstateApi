@@ -1,14 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 
-public class Recovery
+namespace RealEstate.Models.Authentication
 {
-    private string email = "";
-
-    [Required(ErrorMessage = "Email is reqired!")]
-    [EmailAddress(ErrorMessage = "Invalid email address!")]
-    public string Email
+    public class Recovery
     {
-        get => email;
-        set => email = value;
+        private string email = "";
+
+        [Required(ErrorMessage = "Email is reqired!")]
+        [EmailAddress(ErrorMessage = "Invalid email address!")]
+        public string Email
+        {
+            get => email;
+            set => email = value;
+        }
     }
 }
+

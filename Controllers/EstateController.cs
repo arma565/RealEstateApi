@@ -1,193 +1,211 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RealEstate.Models.Estate;
+using RealEstate.Services;
+using System.Globalization;
 
-[ApiController]
-[Route("[controller]")]
-public class EstateController : ControllerBase
+namespace RealEstate.Controllers
 {
-    private readonly RepositoryService _service;
-
-    public EstateController(RepositoryService service)
+    [ApiController]
+    [Route("[controller]")]
+    public class EstateController(RepositoryService service) : ControllerBase
     {
-        _service = service;
-    }
+        private readonly RepositoryService _service = service;
 
-    #region "Property"
-    [HttpGet("property")]
-    public async Task<IEnumerable<Property>> GetPropertyList() => await _service.GetPropertyList();
+        #region "Property"
+        [HttpGet("property")]
+        public async Task<IEnumerable<Estate>> GetPropertyList() => await _service.GetPropertyList().ConfigureAwait(false);
 
-    [HttpGet("property/{propertyID}")]
-    public async Task<ActionResult<Property>> GetProperty(int propertyID)
-    {
-        if (propertyID <= 0)
+        [HttpGet("property/{propertyID}")]
+        public async Task<ActionResult<Estate>> GetProperty(int propertyID)
         {
-            return BadRequest("Invalid propertyID");
+            if (propertyID <= 0)
+            {
+                return BadRequest("Invalid propertyID");
+            }
+            Estate? property = await _service.GetProperty(propertyID).ConfigureAwait(false);
+            if (property is null)
+            {
+                return NotFound("Property not found!");
+            }
+            else
+            {
+                return property;
+            }
         }
-        Property? property = await _service.GetProperty(propertyID);
-        if (property is null)
-        {
-            return NotFound("Property not found!");
-        }
-        else
-        {
-            return property;
-        }
-    }
 
-    [HttpPost("property/add")]
-    public async Task<IActionResult> AddProperty([FromBody] Property newProperty)
-    {
-        if (!ModelState.IsValid)
+        [HttpPost("property/add")]
+        public async Task<IActionResult> AddProperty([FromBody] Estate newProperty)
         {
-            return BadRequest(ModelState);
+            if (newProperty == null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (newProperty.Date!.ToString().IsNullOrEmpty() && newProperty.Time.IsNullOrEmpty())
+            {
+                newProperty.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                newProperty.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+            }
+            bool? getPlatesNum = await _service.GetPropertyByPlateNumber(newProperty.PlatesNumber!).ConfigureAwait(false);
+            if (getPlatesNum == true)
+                return BadRequest("Plates number already exist!");
+            var addedProperty = await _service.AddProperty(newProperty).ConfigureAwait(false);
+            return CreatedAtAction(
+                nameof(GetProperty),
+                new { propertyID = addedProperty!.Id },
+                addedProperty
+            );
         }
-        if (newProperty.Date!.ToString().IsNullOrEmpty() && newProperty.Time.IsNullOrEmpty())
-        {
-            newProperty.Date = DateTime.Now.ToString("yyyy-MM-dd");
-            newProperty.Time = DateTime.Now.ToString("HH:mm:ss");
-        }
-        bool? getPlatesNum = await _service.GetPropertyByPlateNumber(newProperty.PlatesNumber!);
-        if (getPlatesNum == true)
-            return BadRequest("Plates number already exist!");
-        var addedProperty = await _service.AddProperty(newProperty);
-        return CreatedAtAction(
-            nameof(GetProperty),
-            new { propertyID = addedProperty!.Id },
-            addedProperty
-        );
-    }
 
-    [HttpPut("property/update")]
-    public async Task<IActionResult> UpdateProperty([FromBody] Property updateProperty)
-    {
-        if (updateProperty.Id <= 0)
+        [HttpPut("property/update")]
+        public async Task<IActionResult> UpdateProperty([FromBody] Estate updateProperty)
         {
-            return BadRequest("Updating property is not possible without id!");
+            if (updateProperty == null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (updateProperty.Id <= 0)
+            {
+                return BadRequest("Updating property is not possible without id!");
+            }
+            Estate? property = await _service.GetProperty(updateProperty.Id).ConfigureAwait(false);
+            if (property is null)
+            {
+                return NotFound("Property not found!");
+            }
+            updateProperty.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            updateProperty.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _service.UpdateProperty(updateProperty).ConfigureAwait(false);
+            return NoContent();
         }
-        Property? property = await _service.GetProperty(updateProperty.Id);
-        if (property is null)
-        {
-            return NotFound("Property not found!");
-        }
-        updateProperty.Date = DateTime.Now.ToString("yyyy-MM-dd");
-        updateProperty.Time = DateTime.Now.ToString("HH:mm:ss");
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        await _service.UpdateProperty(updateProperty);
-        return NoContent();
-    }
 
-    [HttpDelete("property/delete/{id}")]
-    public async Task<IActionResult> DeleteProperty(int id)
-    {
-        Property? property = await _service.GetProperty(id);
-        if (property is null)
+        [HttpDelete("property/delete/{id}")]
+        public async Task<IActionResult> DeleteProperty(int id)
         {
-            return NotFound();
+            Estate? property = await _service.GetProperty(id).ConfigureAwait(false);
+            if (property is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _service.DeleteProperty(property);
+                return Ok();
+            }
         }
-        else
+
+        [HttpDelete("property/delete-all")]
+        public IActionResult DeleteProperties()
         {
-            _service.DeleteProperty(property);
+            _service.DeleteAllProperties();
             return Ok();
         }
-    }
+        #endregion
 
-    [HttpDelete("property/delete-all")]
-    public IActionResult DeleteProperties()
-    {
-        _service.DeleteAllProperties();
-        return Ok();
-    }
-    #endregion
+        #region "Person"
+        [HttpGet("persons")]
+        public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList().ConfigureAwait(false);
 
-    #region "Person"
-    [HttpGet("persons")]
-    public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList();
+        [HttpGet("person/{id}")]
+        public async Task<ActionResult<Person>> GetPerson(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Person? person = await _service.GetPerson(id).ConfigureAwait(false);
+            if (person is null)
+            {
+                return NotFound("Person not found!");
+            }
+            else
+            {
+                return person;
+            }
+        }
 
-    [HttpGet("person/{id}")]
-    public async Task<ActionResult<Person>> GetPerson(int id)
-    {
-        if (!ModelState.IsValid)
+        [HttpPost("person/add")]
+        public async Task<IActionResult> AddPerson([FromBody] Person newPerson)
         {
-            return BadRequest(ModelState);
+            if (newPerson == null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (newPerson.PropertyID.ToString(CultureInfo.InvariantCulture).IsNullOrEmpty())
+                return BadRequest("PropertyID can't be empty");
+            var existProperty = await _service.GetProperty(newPerson.PropertyID).ConfigureAwait(false);
+            if (existProperty is null)
+                return NotFound("PropertyID is incorrect or property not found!");
+            var addedPerson = await _service.AddPerson(newPerson).ConfigureAwait(false);
+            return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
         }
-        Person? person = await _service.GetPerson(id);
-        if (person is null)
-        {
-            return NotFound("Person not found!");
-        }
-        else
-        {
-            return person;
-        }
-    }
 
-    [HttpPost("person/add")]
-    public async Task<IActionResult> AddPerson([FromBody] Person newPerson)
-    {
-        if (!ModelState.IsValid)
+        [HttpPut("person/update")]
+        public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
         {
-            return BadRequest(ModelState);
+            if (updatePerson == null)
+            {
+                return BadRequest("Failed to retreive parameter!");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (updatePerson.PropertyID.ToString(CultureInfo.InvariantCulture).IsNullOrEmpty())
+                return BadRequest("PropertyID can't be empty");
+            var existProperty = await _service.GetProperty(updatePerson.PropertyID).ConfigureAwait(false);
+            if (existProperty is null)
+                return NotFound("PropertyID is incorrect or property not found!");
+            Person? existPerson = await _service.GetPerson(updatePerson.Id).ConfigureAwait(false);
+            if (existPerson is null)
+            {
+                return NotFound("Person not found!");
+            }
+            else
+            {
+                var updatedPerson = await _service.UpdatePerson(updatePerson).ConfigureAwait(false);
+                return Ok(updatedPerson);
+            }
         }
-        if (newPerson.PropertyID.ToString().IsNullOrEmpty())
-            return BadRequest("PropertyID can't be empty");
-        var existProperty = await _service.GetProperty(newPerson.PropertyID);
-        if (existProperty is null)
-            return NotFound("PropertyID is incorrect or property not found!");
-        var addedPerson = await _service.AddPerson(newPerson);
-        return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
-    }
 
-    [HttpPut("person/update")]
-    public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
-    {
-        if (!ModelState.IsValid)
+        [HttpDelete("person/delete/{id}")]
+        public async Task<IActionResult> DeletePerson(int id)
         {
-            return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Person? person = await _service.GetPerson(id).ConfigureAwait(false);
+            if (person is null)
+            {
+                return NotFound("Person not found!");
+            }
+            else
+            {
+                _service.DeletePerson(person);
+                return Ok();
+            }
         }
-        if (updatePerson.PropertyID.ToString().IsNullOrEmpty())
-            return BadRequest("PropertyID can't be empty");
-        var existProperty = await _service.GetProperty(updatePerson.PropertyID);
-        if (existProperty is null)
-            return NotFound("PropertyID is incorrect or property not found!");
-        Person? existPerson = await _service.GetPerson(updatePerson.Id);
-        if (existPerson is null)
-        {
-            return NotFound("Person not found!");
-        }
-        else
-        {
-            var updatedPerson = await _service.UpdatePerson(updatePerson);
-            return Ok(updatedPerson);
-        }
-    }
 
-    [HttpDelete("person/delete/{id}")]
-    public async Task<IActionResult> DeletePerson(int id)
-    {
-        if (!ModelState.IsValid)
+        [HttpDelete("person/delete-all")]
+        public IActionResult DeleteAllPersons()
         {
-            return BadRequest(ModelState);
-        }
-        Person? person = await _service.GetPerson(id);
-        if (person is null)
-        {
-            return NotFound("Person not found!");
-        }
-        else
-        {
-            _service.DeletePerson(person);
+            _service.DeleteAllPersons();
             return Ok();
         }
+        #endregion
     }
-
-    [HttpDelete("person/delete-all")]
-    public IActionResult DeleteAllPersons()
-    {
-        _service.DeleteAllPersons();
-        return Ok();
-    }
-    #endregion
 }
+

@@ -1,40 +1,44 @@
 using System.ComponentModel.DataAnnotations;
 
-public class Reset
+namespace RealEstate.Models.Authentication
 {
-    private string email = "";
-    private string token = "";
-    private string new_password = "";
-    private string repeat_new_password = "";
-
-    [Required(ErrorMessage = "Email is reqired!")]
-    [EmailAddress(ErrorMessage = "Invalid email address!")]
-    public string Email
+    public class Reset
     {
-        get => email;
-        set => email = value;
-    }
+        private string email = "";
+        private string token = "";
+        private string new_password = "";
+        private string repeat_new_password = "";
 
-    public string Token
-    {
-        get => token;
-        set => token = value;
-    }
+        [Required(ErrorMessage = "Email is reqired!")]
+        [EmailAddress(ErrorMessage = "Invalid email address!")]
+        public string Email
+        {
+            get => email;
+            set => email = value;
+        }
 
-    [Required]
-    [DataType(DataType.Password)]
-    public string NewPassword
-    {
-        get => new_password;
-        set => new_password = value;
-    }
+        public string Token
+        {
+            get => token;
+            set => token = value;
+        }
 
-    [Required]
-    [DataType(DataType.Password)]
-    [Compare("NewPassword", ErrorMessage = "The Password and Repeat New Password do not match!")]
-    public string RepeatNewPassword
-    {
-        get => repeat_new_password;
-        set => repeat_new_password = value;
+        [Required]
+        [DataType(DataType.Password)]
+        public string NewPassword
+        {
+            get => new_password;
+            set => new_password = value;
+        }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("NewPassword", ErrorMessage = "The Password and Repeat New Password do not match!")]
+        public string RepeatNewPassword
+        {
+            get => repeat_new_password;
+            set => repeat_new_password = value;
+        }
     }
 }
+

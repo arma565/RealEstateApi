@@ -1,7 +1,8 @@
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using RealEstate.Data;
+using RealEstate.Helper;
+using RealEstate.Services;
 
 var MyAllowSpecificOrigins = "_estatePolicy";
 var builder = WebApplication.CreateBuilder(args);
@@ -34,9 +35,8 @@ builder
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<RepositoryService>();
-builder.Services.AddScoped<DatabaseService>();
 builder.Services.AddScoped<ImageService>();
-builder.Services.AddScoped<IImageService,ImageService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<PasswordHelper>();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
