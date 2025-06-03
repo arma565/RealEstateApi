@@ -163,10 +163,10 @@ M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\stat
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.build.json.cache
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.development.json
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.csproj.Up2Date
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.dll
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\refint\RealEstate.dll
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.pdb
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.genruntimeconfig.cache
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\ref\RealEstate.dll
+M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
