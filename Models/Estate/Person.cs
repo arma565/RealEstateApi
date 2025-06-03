@@ -16,7 +16,7 @@ namespace RealEstate.Models.Estate
             string address,
             string phone,
             string role,
-            int propertyID
+            Guid propertyID
         )
         {
             this.name = name;
@@ -31,7 +31,7 @@ namespace RealEstate.Models.Estate
             this.propertyID = propertyID;
         }
 
-        private int id;
+        private Guid id;
         private string name = "";
         private string fatherName = "";
         private long birthCertificateNumber;
@@ -42,9 +42,9 @@ namespace RealEstate.Models.Estate
         private string phone = "";
         private string role = "";
         private Estate? property;
-        private int propertyID;
+        private Guid propertyID;
 
-        public int Id
+        public Guid Id
         {
             get => id;
             set => id = value;
@@ -104,7 +104,7 @@ namespace RealEstate.Models.Estate
             get => role;
             set => role = value;
         }
-        public int PropertyID
+        public Guid PropertyID
         {
             get => propertyID;
             set => propertyID = value;

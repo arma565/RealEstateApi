@@ -17,9 +17,9 @@ namespace RealEstate.Controllers
         public async Task<IEnumerable<Estate>> GetPropertyList() => await _service.GetPropertyList().ConfigureAwait(false);
 
         [HttpGet("property/{propertyID}")]
-        public async Task<ActionResult<Estate>> GetProperty(int propertyID)
+        public async Task<ActionResult<Estate>> GetProperty(Guid propertyID)
         {
-            if (propertyID <= 0)
+            if (string.IsNullOrEmpty(propertyID.ToString()))
             {
                 return BadRequest("Invalid propertyID");
             }
@@ -68,7 +68,7 @@ namespace RealEstate.Controllers
             {
                 return BadRequest("Failed to retreive parameter!");
             }
-            if (updateProperty.Id <= 0)
+            if (string.IsNullOrEmpty(updateProperty.Id.ToString()))
             {
                 return BadRequest("Updating property is not possible without id!");
             }
@@ -88,7 +88,7 @@ namespace RealEstate.Controllers
         }
 
         [HttpDelete("property/delete/{id}")]
-        public async Task<IActionResult> DeleteProperty(int id)
+        public async Task<IActionResult> DeleteProperty(Guid id)
         {
             Estate? property = await _service.GetProperty(id).ConfigureAwait(false);
             if (property is null)
@@ -115,7 +115,7 @@ namespace RealEstate.Controllers
         public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList().ConfigureAwait(false);
 
         [HttpGet("person/{id}")]
-        public async Task<ActionResult<Person>> GetPerson(int id)
+        public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -143,8 +143,9 @@ namespace RealEstate.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (newPerson.PropertyID.ToString(CultureInfo.InvariantCulture).IsNullOrEmpty())
+            if (newPerson.PropertyID.ToString().IsNullOrEmpty()) { 
                 return BadRequest("PropertyID can't be empty");
+            }
             var existProperty = await _service.GetProperty(newPerson.PropertyID).ConfigureAwait(false);
             if (existProperty is null)
                 return NotFound("PropertyID is incorrect or property not found!");
@@ -163,8 +164,9 @@ namespace RealEstate.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (updatePerson.PropertyID.ToString(CultureInfo.InvariantCulture).IsNullOrEmpty())
+            if (updatePerson.PropertyID.ToString().IsNullOrEmpty()) { 
                 return BadRequest("PropertyID can't be empty");
+            }
             var existProperty = await _service.GetProperty(updatePerson.PropertyID).ConfigureAwait(false);
             if (existProperty is null)
                 return NotFound("PropertyID is incorrect or property not found!");
@@ -181,7 +183,7 @@ namespace RealEstate.Controllers
         }
 
         [HttpDelete("person/delete/{id}")]
-        public async Task<IActionResult> DeletePerson(int id)
+        public async Task<IActionResult> DeletePerson(Guid id)
         {
             if (!ModelState.IsValid)
             {

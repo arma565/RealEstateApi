@@ -3,7 +3,7 @@ namespace RealEstate.Models.Authentication
     public class User
     {
         private string id = "";
-        private Uri profile_image_path = new("");
+        private Uri? profile_image_path;
         private string first_name = "";
         private string last_name = "";
         private bool? accept_terms = false;
@@ -16,7 +16,7 @@ namespace RealEstate.Models.Authentication
             get => id;
             set => id = value;
         }
-        public Uri ProfileImagePath
+        public Uri? ProfileImagePath
         {
             get => profile_image_path;
             set => profile_image_path = value;

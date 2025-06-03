@@ -7,7 +7,7 @@ namespace RealEstate.Data
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserProfileIdentity>(options)
     {
-        public required DbSet<Estate> Properties { get; set; }
+        public required DbSet<Estate> Estates { get; set; }
 
         public required DbSet<Person> Persons { get; set; }
 

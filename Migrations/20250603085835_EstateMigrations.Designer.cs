@@ -12,8 +12,8 @@ using RealEstate.Data;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250601124256_RealEstateMigrations")]
-    partial class RealEstateMigrations
+    [Migration("20250603085835_EstateMigrations")]
+    partial class EstateMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,11 +203,9 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("RealEstate.Models.Estate.Estate", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -272,16 +270,14 @@ namespace RealEstate.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Properties");
+                    b.ToTable("Estates");
                 });
 
             modelBuilder.Entity("RealEstate.Models.Estate.Person", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -313,8 +309,8 @@ namespace RealEstate.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PropertyID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PropertyID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Role")
                         .IsRequired()

@@ -49,7 +49,7 @@ namespace RealEstate.Models.Estate
             this.persons = persons;
         }
 
-        private int id;
+        private Guid id;
         private string? name = "";
         private string? platesNumber = "";
         private string? area = "";
@@ -69,7 +69,7 @@ namespace RealEstate.Models.Estate
         private bool phone = true;
         private readonly ICollection<Person> persons = [];
 
-        public int Id
+        public Guid Id
         {
             get => id;
             set => id = value;

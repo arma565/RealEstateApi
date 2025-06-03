@@ -6,17 +6,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RealEstate.Migrations
 {
     /// <inheritdoc />
-    public partial class RealEstateMigrations : Migration
+    public partial class EstateMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Properties",
+                name: "Estates",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlatesNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Area = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -37,7 +36,7 @@ namespace RealEstate.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Properties", x => x.Id);
+                    table.PrimaryKey("PK_Estates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,8 +153,7 @@ namespace RealEstate.Migrations
                 name: "Persons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FatherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirthCertificateNumber = table.Column<long>(type: "bigint", nullable: false),
@@ -165,15 +163,15 @@ namespace RealEstate.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PropertyID = table.Column<int>(type: "int", nullable: false)
+                    PropertyID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Persons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Persons_Properties_PropertyID",
+                        name: "FK_Persons_Estates_PropertyID",
                         column: x => x.PropertyID,
-                        principalTable: "Properties",
+                        principalTable: "Estates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -212,7 +210,7 @@ namespace RealEstate.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Properties");
+                name: "Estates");
         }
     }
 }

@@ -15,90 +15,6 @@ SignInManager<UserProfileIdentity> signInManager)
         private readonly UserManager<UserProfileIdentity> _userManager = userManager;
         private readonly SignInManager<UserProfileIdentity> _signInManager = signInManager;
 
-        #region Property
-        public async Task<IEnumerable<Estate>> GetPropertyList() =>
-            await _context
-                .Properties.AsNoTracking()
-                .Include(prop => prop.Persons)
-                .OrderByDescending(prop => prop.Id)
-                .ToListAsync().ConfigureAwait(false);
-
-        public async Task<Estate?> GetProperty(int propertyID) =>
-            await _context
-                .Properties.AsNoTracking()
-                .SingleOrDefaultAsync(prop => prop.Id == propertyID).ConfigureAwait(false);
-
-        public async Task<bool> GetPropertyByPlateNumber(string plateNumber) =>
-            await _context.Properties.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
-
-        public async Task<Estate?> AddProperty(Estate newProperty)
-        {
-            await _context.Properties.AddAsync(newProperty).ConfigureAwait(false);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            return newProperty;
-        }
-
-        public async Task UpdateProperty(Estate updateProperty)
-        {
-            _context.Properties.Update(updateProperty);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-        }
-
-        public void DeleteProperty(Estate deleteProperty)
-        {
-            _context.Properties.Remove(deleteProperty);
-            _context.SaveChanges();
-        }
-
-        public void DeleteAllProperties()
-        {
-            _context.Properties.ExecuteDelete();
-            _context.SaveChanges();
-        }
-        #endregion
-
-        #region Person
-        public async Task<IEnumerable<Person>> GetPersonsList() =>
-            await _context
-                .Persons.AsNoTracking()
-                .OrderByDescending(per => per.Id)
-                .ToListAsync().ConfigureAwait(false);
-        public async Task<Person?> GetPerson(int id) =>
-            await _context.Persons.AsNoTracking().SingleOrDefaultAsync(pers => pers.Id == id).ConfigureAwait(false);
-
-        public async Task<bool> GetPersonByPersonID(long personID) =>
-            await _context.Persons.AsNoTracking().AnyAsync(pers => pers.PersonID == personID).ConfigureAwait(false);
-
-        public async Task<Person> AddPerson(Person newPerson)
-        {
-            await _context.Persons.AddAsync(newPerson).ConfigureAwait(false);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            return newPerson;
-        }
-
-        public async Task<Person> UpdatePerson(Person updatePerson)
-        {
-            _context.Persons.Update(updatePerson);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-            return updatePerson;
-        }
-
-        public void DeletePerson(Person deletePerson)
-        {
-            _context.Persons.Remove(deletePerson);
-            _context.SaveChanges();
-        }
-
-        public void DeleteAllPersons()
-        {
-            _context.Persons.ExecuteDelete();
-            _context.SaveChanges();
-        }
-
-        private IEnumerable<Person> GetPersonList() =>
-            [.. _context.Persons.AsNoTracking().OrderByDescending(pers => pers.Id)];
-        #endregion
-
         #region Authentication
 
         /// <summary>
@@ -175,12 +91,11 @@ SignInManager<UserProfileIdentity> signInManager)
         /// <returns></returns>
         public async Task<IdentityResult> DeleteUser(UserProfileIdentity user)
         {
-            if (user is null || user.ProfileImageUrl is null)
+            if (user is null)
             {
                 return IdentityResult.Failed();
             }
-            if (!string.IsNullOrEmpty(user.ProfileImageUrl.ToString()))
-            {
+            if (user.ProfileImageUrl != null) {
                 Uri uri = new(user.ProfileImageUrl.ToString());
                 var profileImageName = Path.GetFileName(uri.AbsolutePath);
                 var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
@@ -189,7 +104,7 @@ SignInManager<UserProfileIdentity> signInManager)
                 {
                     File.Delete(filePath);
                 }
-            }
+            }  
             return await _userManager.DeleteAsync(user).ConfigureAwait(false);
         }
 
@@ -275,6 +190,92 @@ SignInManager<UserProfileIdentity> signInManager)
             return await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
         }
         #endregion
+
+        #region Property
+        public async Task<IEnumerable<Estate>> GetPropertyList() =>
+            await _context
+                .Estates.AsNoTracking()
+                .Include(prop => prop.Persons)
+                .OrderByDescending(prop => prop.Id)
+                .ToListAsync().ConfigureAwait(false);
+
+        public async Task<Estate?> GetProperty(Guid propertyID) =>
+            await _context
+                .Estates.AsNoTracking()
+                .SingleOrDefaultAsync(prop => prop.Id == propertyID).ConfigureAwait(false);
+
+        public async Task<bool> GetPropertyByPlateNumber(string plateNumber) =>
+            await _context.Estates.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
+
+        public async Task<Estate?> AddProperty(Estate newProperty)
+        {
+            await _context.Estates.AddAsync(newProperty).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return newProperty;
+        }
+
+        public async Task UpdateProperty(Estate updateProperty)
+        {
+            _context.Estates.Update(updateProperty);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public void DeleteProperty(Estate deleteProperty)
+        {
+            _context.Estates.Remove(deleteProperty);
+            _context.SaveChanges();
+        }
+
+        public void DeleteAllProperties()
+        {
+            _context.Estates.ExecuteDelete();
+            _context.SaveChanges();
+        }
+        #endregion
+
+        #region Person
+        public async Task<IEnumerable<Person>> GetPersonsList() =>
+            await _context
+                .Persons.AsNoTracking()
+                .OrderByDescending(per => per.Id)
+                .ToListAsync().ConfigureAwait(false);
+        public async Task<Person?> GetPerson(Guid id) =>
+            await _context.Persons.AsNoTracking().SingleOrDefaultAsync(pers => pers.Id == id).ConfigureAwait(false);
+
+        public async Task<bool> GetPersonByPersonID(long personID) =>
+            await _context.Persons.AsNoTracking().AnyAsync(pers => pers.PersonID == personID).ConfigureAwait(false);
+
+        public async Task<Person> AddPerson(Person newPerson)
+        {
+            await _context.Persons.AddAsync(newPerson).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return newPerson;
+        }
+
+        public async Task<Person> UpdatePerson(Person updatePerson)
+        {
+            _context.Persons.Update(updatePerson);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return updatePerson;
+        }
+
+        public void DeletePerson(Person deletePerson)
+        {
+            _context.Persons.Remove(deletePerson);
+            _context.SaveChanges();
+        }
+
+        public void DeleteAllPersons()
+        {
+            _context.Persons.ExecuteDelete();
+            _context.SaveChanges();
+        }
+
+        private IEnumerable<Person> GetPersonList() =>
+            [.. _context.Persons.AsNoTracking().OrderByDescending(pers => pers.Id)];
+        #endregion
+
+    
     }
 
 }

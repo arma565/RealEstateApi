@@ -89,7 +89,7 @@ namespace RealEstate.Services
                 return false; // File is too large
             }
 
-            var validExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var validExtensions = new[] { ".JPG", ".JPEG", ".PNG", ".GIF" };
             var extension = Path.GetExtension(image.FileName)?.ToUpperInvariant();
 
             if (!validExtensions.Contains(extension))
