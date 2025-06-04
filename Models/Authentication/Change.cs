@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models.Authentication
 {
-    public class Change
+    public sealed class Change
     {
         private string user_name = "";
         private string current_password = "";

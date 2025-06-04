@@ -8,22 +8,22 @@ namespace RealEstate.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class EstateController(RepositoryService service) : ControllerBase
+    internal sealed class EstateController(RepositoryService service) : ControllerBase
     {
         private readonly RepositoryService _service = service;
 
         #region "Property"
         [HttpGet("property")]
-        public async Task<IEnumerable<Estate>> GetPropertyList() => await _service.GetPropertyList().ConfigureAwait(false);
+        public async Task<IEnumerable<Asset>> GetPropertyList() => await _service.GetPropertyList().ConfigureAwait(false);
 
         [HttpGet("property/{propertyID}")]
-        public async Task<ActionResult<Estate>> GetProperty(Guid propertyID)
+        public async Task<ActionResult<Asset>> GetProperty(Guid propertyID)
         {
             if (string.IsNullOrEmpty(propertyID.ToString()))
             {
                 return BadRequest("Invalid propertyID");
             }
-            Estate? property = await _service.GetProperty(propertyID).ConfigureAwait(false);
+            Asset? property = await _service.GetProperty(propertyID).ConfigureAwait(false);
             if (property is null)
             {
                 return NotFound("Property not found!");
@@ -35,7 +35,7 @@ namespace RealEstate.Controllers
         }
 
         [HttpPost("property/add")]
-        public async Task<IActionResult> AddProperty([FromBody] Estate newProperty)
+        public async Task<IActionResult> AddProperty([FromBody] Asset newProperty)
         {
             if (newProperty == null)
             {
@@ -62,7 +62,7 @@ namespace RealEstate.Controllers
         }
 
         [HttpPut("property/update")]
-        public async Task<IActionResult> UpdateProperty([FromBody] Estate updateProperty)
+        public async Task<IActionResult> UpdateProperty([FromBody] Asset updateProperty)
         {
             if (updateProperty == null)
             {
@@ -72,7 +72,7 @@ namespace RealEstate.Controllers
             {
                 return BadRequest("Updating property is not possible without id!");
             }
-            Estate? property = await _service.GetProperty(updateProperty.Id).ConfigureAwait(false);
+            Asset? property = await _service.GetProperty(updateProperty.Id).ConfigureAwait(false);
             if (property is null)
             {
                 return NotFound("Property not found!");
@@ -90,7 +90,7 @@ namespace RealEstate.Controllers
         [HttpDelete("property/delete/{id}")]
         public async Task<IActionResult> DeleteProperty(Guid id)
         {
-            Estate? property = await _service.GetProperty(id).ConfigureAwait(false);
+            Asset? property = await _service.GetProperty(id).ConfigureAwait(false);
             if (property is null)
             {
                 return NotFound();

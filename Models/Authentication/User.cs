@@ -1,6 +1,6 @@
 namespace RealEstate.Models.Authentication
 {
-    public class User
+    public sealed class User
     {
         private string id = "";
         private Uri? profile_image_path;

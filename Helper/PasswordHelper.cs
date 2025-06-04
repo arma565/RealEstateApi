@@ -3,7 +3,7 @@ using RealEstate.Data;
 
 namespace RealEstate.Helper
 {
-    public class PasswordHelper
+    public sealed class PasswordHelper
     {
         private readonly PasswordHasher<UserProfileIdentity> _passwordHasher;
 

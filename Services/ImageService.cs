@@ -1,12 +1,12 @@
 namespace RealEstate.Services
 {
-    public interface IImageService
+    internal interface IImageService
     {
         Task<string> UploadProfileImage(IFormFile image);
         FileStream ReadProfileImage(string filePath);
     }
 
-    public class ImageService(
+    public sealed class ImageService(
         IWebHostEnvironment environment,
         IHttpContextAccessor httpContextAccessor
         ) : IImageService

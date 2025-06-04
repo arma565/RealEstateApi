@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models.Authentication
 {
-    public class Reset
+    public sealed class Reset
     {
         private string email = "";
         private string token = "";

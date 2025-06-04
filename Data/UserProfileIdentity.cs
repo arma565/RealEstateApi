@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace RealEstate.Data
 {
-    public class UserProfileIdentity : IdentityUser
+    public sealed class UserProfileIdentity : IdentityUser
     {
         public Uri? ProfileImageUrl { get; set; }
         public string? FirstName { get; set; } = "";

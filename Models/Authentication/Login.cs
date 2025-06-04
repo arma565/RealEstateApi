@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models.Authentication
 {
-    public class Login
+    public sealed class Login
     {
         string user_name = "";
 

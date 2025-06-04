@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models.Authentication
 {
-    public class Recovery
+    public sealed class Recovery
     {
         private string email = "";
 

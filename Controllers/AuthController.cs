@@ -8,7 +8,7 @@ namespace RealEstate.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController(
+    public sealed class AuthController(
         RepositoryService service,
         ImageService imageService,
         PasswordHelper passwordHelper,
@@ -258,7 +258,7 @@ namespace RealEstate.Controllers
         }
 
         [HttpPut("edit/profile")]
-        public async Task<IActionResult> EditUserProfile([FromBody] Profile model)
+        public async Task<IActionResult> EditUserProfile([FromBody] UserProfile model)
         {
             if (model is null)
             {

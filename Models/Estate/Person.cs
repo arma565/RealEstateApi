@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models.Estate
 {
-    public class Person
+    public sealed class Person
     {
         public Person() { }
 
@@ -16,7 +16,7 @@ namespace RealEstate.Models.Estate
             string address,
             string phone,
             string role,
-            Guid propertyID
+            Guid assetID
         )
         {
             this.name = name;
@@ -28,7 +28,7 @@ namespace RealEstate.Models.Estate
             this.address = address;
             this.phone = phone;
             this.role = role;
-            this.propertyID = propertyID;
+            this.assetID = assetID;
         }
 
         private Guid id;
@@ -41,8 +41,8 @@ namespace RealEstate.Models.Estate
         private string address = "";
         private string phone = "";
         private string role = "";
-        private Estate? property;
-        private Guid propertyID;
+        private Asset? asset;
+        private Guid assetID;
 
         public Guid Id
         {
@@ -106,13 +106,13 @@ namespace RealEstate.Models.Estate
         }
         public Guid PropertyID
         {
-            get => propertyID;
-            set => propertyID = value;
+            get => assetID;
+            set => assetID = value;
         }
-        public Estate? Property
+        public Asset? Asset
         {
-            get => property;
-            set => property = value;
+            get => asset;
+            set => asset = value;
         }
     }
 }

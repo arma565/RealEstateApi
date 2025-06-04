@@ -7,7 +7,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace RealEstate.Services
 {
-    public class RepositoryService(AppDbContext context,
+    public sealed class RepositoryService(AppDbContext context,
 UserManager<UserProfileIdentity> userManager,
 SignInManager<UserProfileIdentity> signInManager)
     {
@@ -95,7 +95,8 @@ SignInManager<UserProfileIdentity> signInManager)
             {
                 return IdentityResult.Failed();
             }
-            if (user.ProfileImageUrl != null) {
+            if (user.ProfileImageUrl != null)
+            {
                 Uri uri = new(user.ProfileImageUrl.ToString());
                 var profileImageName = Path.GetFileName(uri.AbsolutePath);
                 var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
@@ -104,7 +105,7 @@ SignInManager<UserProfileIdentity> signInManager)
                 {
                     File.Delete(filePath);
                 }
-            }  
+            }
             return await _userManager.DeleteAsync(user).ConfigureAwait(false);
         }
 
@@ -192,14 +193,14 @@ SignInManager<UserProfileIdentity> signInManager)
         #endregion
 
         #region Property
-        public async Task<IEnumerable<Estate>> GetPropertyList() =>
+        public async Task<IEnumerable<Asset>> GetPropertyList() =>
             await _context
                 .Estates.AsNoTracking()
                 .Include(prop => prop.Persons)
                 .OrderByDescending(prop => prop.Id)
                 .ToListAsync().ConfigureAwait(false);
 
-        public async Task<Estate?> GetProperty(Guid propertyID) =>
+        public async Task<Asset?> GetProperty(Guid propertyID) =>
             await _context
                 .Estates.AsNoTracking()
                 .SingleOrDefaultAsync(prop => prop.Id == propertyID).ConfigureAwait(false);
@@ -207,20 +208,20 @@ SignInManager<UserProfileIdentity> signInManager)
         public async Task<bool> GetPropertyByPlateNumber(string plateNumber) =>
             await _context.Estates.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
 
-        public async Task<Estate?> AddProperty(Estate newProperty)
+        public async Task<Asset?> AddProperty(Asset newProperty)
         {
             await _context.Estates.AddAsync(newProperty).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return newProperty;
         }
 
-        public async Task UpdateProperty(Estate updateProperty)
+        public async Task UpdateProperty(Asset updateProperty)
         {
             _context.Estates.Update(updateProperty);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void DeleteProperty(Estate deleteProperty)
+        public void DeleteProperty(Asset deleteProperty)
         {
             _context.Estates.Remove(deleteProperty);
             _context.SaveChanges();
@@ -275,7 +276,7 @@ SignInManager<UserProfileIdentity> signInManager)
             [.. _context.Persons.AsNoTracking().OrderByDescending(pers => pers.Id)];
         #endregion
 
-    
+
     }
 
 }

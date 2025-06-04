@@ -5,9 +5,9 @@ using RealEstate.Models.Estate;
 
 namespace RealEstate.Data
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserProfileIdentity>(options)
+    public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserProfileIdentity>(options)
     {
-        public required DbSet<Estate> Estates { get; set; }
+        public required DbSet<Asset> Estates { get; set; }
 
         public required DbSet<Person> Persons { get; set; }
 
@@ -23,9 +23,9 @@ namespace RealEstate.Data
 
 
             builder
-                .Entity<Estate>()
+                .Entity<Asset>()
                 .HasMany(prop => prop.Persons)
-                .WithOne(pers => pers.Property)
+                .WithOne(pers => pers.Asset)
                 .HasForeignKey(pers => pers.PropertyID)
                 .HasPrincipalKey(prop => prop.Id)
                 .IsRequired()
