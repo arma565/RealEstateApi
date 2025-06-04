@@ -203,7 +203,11 @@ namespace RealEstate.Controllers
                 {
                     return NotFound("No such user found!");
                 }
-                if (user.ProfileImageUrl == null|| !Uri.IsWellFormedUriString(user.ProfileImageUrl.ToString(), UriKind.Absolute))
+                if (user.ProfileImageUrl == null)
+                {
+                    return BadRequest("No image found!");
+                }
+                if (!Uri.IsWellFormedUriString(user.ProfileImageUrl.ToString(), UriKind.Absolute))
                 {
                     return BadRequest("Invalid URL");
                 }
@@ -231,7 +235,8 @@ namespace RealEstate.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(userName)) {
+                if (string.IsNullOrEmpty(userName))
+                {
                     return BadRequest("Username can not be empty!");
                 }
                 var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
@@ -239,7 +244,8 @@ namespace RealEstate.Controllers
                 {
                     return NotFound("No such user found!");
                 }
-                if (image == null) {
+                if (image == null)
+                {
                     return BadRequest("Image can not be empty!");
                 }
                 var imageUrl = await _imageService.UploadProfileImage(image).ConfigureAwait(false);

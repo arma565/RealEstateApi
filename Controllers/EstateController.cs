@@ -8,7 +8,7 @@ namespace RealEstate.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    internal sealed class EstateController(RepositoryService service) : ControllerBase
+    public sealed class EstateController(RepositoryService service) : ControllerBase
     {
         private readonly RepositoryService _service = service;
 
