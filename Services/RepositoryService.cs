@@ -50,19 +50,18 @@ SignInManager<UserProfileIdentity> signInManager)
         /// <returns></returns>
         public async Task<IdentityResult> RegisterUser(Register model)
         {
-            if (model is null)
-            {
-                return IdentityResult.Failed();
-            }
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+            else
             return await _userManager.CreateAsync(
-                new UserProfileIdentity
-                {
-                    UserName = model.UserName,
-                    Email = model.Email,
-                    AcceptTerms = model.AcceptTerms,
-                },
-                model.Password
-            ).ConfigureAwait(false);
+                   new UserProfileIdentity
+                   {
+                       UserName = model.UserName,
+                       Email = model.Email,
+                       AcceptTerms = model.AcceptTerms,
+                   },
+                   model.Password
+               ).ConfigureAwait(false);
         }
 
 

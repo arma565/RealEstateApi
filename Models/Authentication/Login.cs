@@ -16,6 +16,7 @@ namespace RealEstate.Models.Authentication
         }
 
         [Required]
+        [MinLength(8,ErrorMessage = "The password must be more than 8 characters!")]
         [DataType(DataType.Password)]
         public string Password
         {

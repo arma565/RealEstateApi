@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
@@ -56,20 +57,38 @@ namespace RealEstate.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] Register model)
         {
-            if (model == null)
+            try
+            {
+                if (model == null)
+                {
+                    return BadRequest("Failed to retreive parameter!");
+                }
+                // Check for existing username or email
+                var userWithSameUsername = await _service.GetAllUsers().ConfigureAwait(false);
+                if (userWithSameUsername.Any(u => u.UserName == model.UserName))
+                {
+                    return BadRequest("Username is already taken!");
+                }
+                if (userWithSameUsername.Any(u => u.Email == model.Email))
+                {
+                    return BadRequest("Email is already taken!");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var res = await _service.RegisterUser(model).ConfigureAwait(false);
+                if (res.Succeeded)
+                {
+                    return CreatedAtAction(nameof(GetUserByUserName), new { model.UserName }, model);
+                }
+                return BadRequest(res.Errors);
+            }
+            catch (ArgumentNullException)
             {
                 return BadRequest("Failed to retreive parameter!");
             }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var res = await _service.RegisterUser(model).ConfigureAwait(false);
-            if (res.Succeeded)
-            {
-                return CreatedAtAction(nameof(GetUserByUserName), new { model.UserName }, model);
-            }
-            return BadRequest(res.Errors);
         }
 
         [HttpPost("login")]
@@ -125,22 +144,30 @@ namespace RealEstate.Controllers
         [HttpPost("recovery/account")]
         public async Task<ActionResult<string>> RecoverUser([FromBody] Recovery recovery)
         {
-            if (recovery == null)
+            try
+            {
+                if (recovery == null)
+                {
+                    return BadRequest("Failed to retreive parameter!");
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var user = await _service.FindUserByEmail(recovery.Email).ConfigureAwait(false);
+                if (user == null)
+                {
+                    return BadRequest("No such user found!");
+                }
+
+                var generatedToken = await _service.GenerateTokenToRecoverUser(user).ConfigureAwait(false);
+                return Ok(generatedToken);
+            }
+            catch (ArgumentNullException)
             {
                 return BadRequest("Failed to retreive parameter!");
             }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var user = await _service.FindUserByEmail(recovery.Email).ConfigureAwait(false);
-            if (user == null)
-            {
-                return BadRequest("No such user found!");
-            }
 
-            var generatedToken = await _service.GenerateTokenToRecoverUser(user).ConfigureAwait(false);
-            return Ok(generatedToken);
         }
 
         [HttpPost("reset/password")]
