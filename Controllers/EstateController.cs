@@ -1,116 +1,189 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.IdentityModel.Tokens;
 using RealEstate.Models.Estate;
+using RealEstate.Models.Estate.Assets;
 using RealEstate.Services;
+using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace RealEstate.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public sealed class EstateController(RepositoryService service) : ControllerBase
+    public sealed class EstateController(RepositoryService service, ImageService imageService) : ControllerBase
     {
         private readonly RepositoryService _service = service;
+        private readonly ImageService _imageService = imageService;
 
-        #region "Property"
-        [HttpGet("property")]
-        public async Task<IEnumerable<Asset>> GetPropertyList() => await _service.GetPropertyList().ConfigureAwait(false);
+        #region "Asset"
 
-        [HttpGet("property/{propertyID}")]
-        public async Task<ActionResult<Asset>> GetProperty(Guid propertyID)
+        [HttpPost("asset/upload/{assetID}")]
+        public async Task<IActionResult> AssetImageUpload(Guid assetID, Collection<IFormFile> images)
         {
-            if (string.IsNullOrEmpty(propertyID.ToString()))
+            try
             {
-                return BadRequest("Invalid propertyID");
+                var asset = await _service.GetAsset(assetID).ConfigureAwait(false);
+
+                if (asset == null)
+                    return NotFound("No such asset found");
+
+                if (images.IsNullOrEmpty())
+                    return BadRequest("Image list can not be empty!");
+
+                var imageUrlList = await _imageService.UploadImages(images).ConfigureAwait(false);
+
+                foreach (var img in imageUrlList)
+                {
+                    var assetImage = new AssetImage()
+                    {
+                        FileName = img,
+                        AssetID = assetID
+                    };
+                    await _service.AddAssetImage(assetImage).ConfigureAwait(false);
+                }
+
+                return Ok("Images added successfully");
             }
-            Asset? property = await _service.GetProperty(propertyID).ConfigureAwait(false);
-            if (property is null)
+            catch (IOException ex)
             {
-                return NotFound("Property not found!");
+                return StatusCode(500, "An unexpected error occurred. Please try again later." + "Error detailes: " + ex.Message);
             }
-            else
+            catch (ArgumentNullException ex)
             {
-                return property;
+                return StatusCode(500, "An unexpected error occurred. Please try again later." + "Error detailes: " + ex.Message);
             }
         }
 
-        [HttpPost("property/add")]
-        public async Task<IActionResult> AddProperty([FromBody] Asset newProperty)
+        [HttpGet("asset/download/{imageFileName}")]
+        public async Task<IActionResult> DownloadAssetImages(string imageFileName)
         {
-            if (newProperty == null)
+            try
             {
+                List<AssetImage> assetImagesList = await _service.GetAssetImagesList().ConfigureAwait(false);
+
+                if (assetImagesList.IsNullOrEmpty())
+                    return NotFound("list is empty!");
+
+                var environmentPath = _imageService.GetLocalImagesFullPath("asset");
+
+                var imgFileName = assetImagesList.FirstOrDefault(assetImg => assetImg.FileName == imageFileName);
+
+                if (imgFileName == null)
+                    return NotFound("No such image found!");
+
+                var fullPath = Path.Combine(environmentPath + imgFileName.FileName);
+
+                if (!System.IO.File.Exists(fullPath))
+                    return NotFound("Image file not found!");
+
+                // Detect MIME type
+                var provider = new FileExtensionContentTypeProvider();
+
+                if (!provider.TryGetContentType(fullPath, out var contentType))
+                    contentType = "application/octet-stream";
+
+                return PhysicalFile(fullPath, contentType, Path.GetFileName(fullPath));
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+
+        [HttpGet("asset")]
+        public async Task<IEnumerable<Asset>> GetAssetList() => await _service.GetAssetList().ConfigureAwait(false);
+
+        [HttpGet("asset/{assetID}")]
+        public async Task<ActionResult<Asset>> GetAsset(Guid assetID)
+        {
+            if (string.IsNullOrEmpty(assetID.ToString()))
+                return BadRequest("Invalid assetID");
+
+            Asset? asset = await _service.GetAsset(assetID).ConfigureAwait(false);
+
+            if (asset is null)
+                return NotFound("Asset not found!");
+
+            return asset;
+        }
+
+        [HttpPost("asset/add")]
+        public async Task<IActionResult> AddAsset([FromBody] Asset newAsset)
+        {
+            if (newAsset == null)
                 return BadRequest("Failed to retreive parameter!");
-            }
+
+
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-            if (newProperty.Date!.ToString().IsNullOrEmpty() && newProperty.Time.IsNullOrEmpty())
-            {
-                newProperty.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                newProperty.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
-            }
-            bool? getPlatesNum = await _service.GetPropertyByPlateNumber(newProperty.PlatesNumber!).ConfigureAwait(false);
-            if (getPlatesNum == true)
-                return BadRequest("Plates number already exist!");
-            var addedProperty = await _service.AddProperty(newProperty).ConfigureAwait(false);
+
+
+            if (newAsset.Date!.ToString().IsNullOrEmpty() && newAsset.Time.IsNullOrEmpty())
+                newAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            newAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+
+
+            bool? isAssetExists = await _service.IsAssetExist(newAsset.PlatesNumber!).ConfigureAwait(false);
+
+            if (isAssetExists == true)
+                return BadRequest("Asset with this plates number is already exist!");
+
+            Asset? addedAsset = await _service.AddAsset(newAsset).ConfigureAwait(false);
+
             return CreatedAtAction(
-                nameof(GetProperty),
-                new { propertyID = addedProperty!.Id },
-                addedProperty
+                nameof(GetAsset),
+                new { AssetID = addedAsset!.Id },
+                addedAsset
             );
         }
 
-        [HttpPut("property/update")]
-        public async Task<IActionResult> UpdateProperty([FromBody] Asset updateProperty)
+        [HttpPut("asset/update")]
+        public async Task<IActionResult> UpdateAsset([FromBody] Asset updateAsset)
         {
-            if (updateProperty == null)
-            {
+            if (updateAsset == null)
                 return BadRequest("Failed to retreive parameter!");
-            }
-            if (string.IsNullOrEmpty(updateProperty.Id.ToString()))
-            {
-                return BadRequest("Updating property is not possible without id!");
-            }
-            Asset? property = await _service.GetProperty(updateProperty.Id).ConfigureAwait(false);
-            if (property is null)
-            {
-                return NotFound("Property not found!");
-            }
-            updateProperty.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            updateProperty.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+
+            Asset? asset = await _service.GetAsset(updateAsset.Id).ConfigureAwait(false);
+
+            if (asset is null)
+                return NotFound("Asset not found!");
+
+            updateAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            updateAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-            await _service.UpdateProperty(updateProperty).ConfigureAwait(false);
+
+            await _service.UpdateAsset(updateAsset).ConfigureAwait(false);
+
             return NoContent();
         }
 
-        [HttpDelete("property/delete/{id}")]
-        public async Task<IActionResult> DeleteProperty(Guid id)
+        [HttpDelete("asset/delete/{id}")]
+        public async Task<IActionResult> DeleteAsset(Guid id)
         {
-            Asset? property = await _service.GetProperty(id).ConfigureAwait(false);
-            if (property is null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                _service.DeleteProperty(property);
-                return Ok();
-            }
+            Asset? asset = await _service.GetAsset(id).ConfigureAwait(false);
+
+            if (asset is null)
+                return NotFound("Asset not found!");
+
+            _service.DeleteAsset(asset);
+
+            return Ok("Asset successfully deleted");
         }
 
-        [HttpDelete("property/delete-all")]
-        public IActionResult DeleteProperties()
+        [HttpDelete("asset/delete-all")]
+        public IActionResult DeleteAssets()
         {
-            _service.DeleteAllProperties();
-            return Ok();
+            _service.DeleteAllAssets();
+            return Ok("All assets has been deleted!");
         }
         #endregion
 
         #region "Person"
+
         [HttpGet("persons")]
         public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList().ConfigureAwait(false);
 
@@ -118,38 +191,32 @@ namespace RealEstate.Controllers
         public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
+
             Person? person = await _service.GetPerson(id).ConfigureAwait(false);
+
             if (person is null)
-            {
                 return NotFound("Person not found!");
-            }
-            else
-            {
-                return person;
-            }
+
+            return person;
         }
 
         [HttpPost("person/add")]
         public async Task<IActionResult> AddPerson([FromBody] Person newPerson)
         {
             if (newPerson == null)
-            {
                 return BadRequest("Failed to retreive parameter!");
-            }
+
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-            if (newPerson.PropertyID.ToString().IsNullOrEmpty()) { 
-                return BadRequest("PropertyID can't be empty");
-            }
-            var existProperty = await _service.GetProperty(newPerson.PropertyID).ConfigureAwait(false);
-            if (existProperty is null)
-                return NotFound("PropertyID is incorrect or property not found!");
+
+            var existAsset = await _service.GetAsset(newPerson.AssetID).ConfigureAwait(false);
+
+            if (existAsset is null)
+                return NotFound("AssetID is incorrect or Asset not found!");
+
             var addedPerson = await _service.AddPerson(newPerson).ConfigureAwait(false);
+
             return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
         }
 
@@ -157,55 +224,47 @@ namespace RealEstate.Controllers
         public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
         {
             if (updatePerson == null)
-            {
                 return BadRequest("Failed to retreive parameter!");
-            }
+
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-            if (updatePerson.PropertyID.ToString().IsNullOrEmpty()) { 
-                return BadRequest("PropertyID can't be empty");
-            }
-            var existProperty = await _service.GetProperty(updatePerson.PropertyID).ConfigureAwait(false);
-            if (existProperty is null)
-                return NotFound("PropertyID is incorrect or property not found!");
+
+            var existAsset = await _service.GetAsset(updatePerson.AssetID).ConfigureAwait(false);
+
+            if (existAsset is null)
+                return NotFound("AssetID is incorrect or Asset not found!");
+
             Person? existPerson = await _service.GetPerson(updatePerson.Id).ConfigureAwait(false);
+
             if (existPerson is null)
-            {
                 return NotFound("Person not found!");
-            }
-            else
-            {
-                var updatedPerson = await _service.UpdatePerson(updatePerson).ConfigureAwait(false);
-                return Ok(updatedPerson);
-            }
+
+            var updatedPerson = await _service.UpdatePerson(updatePerson).ConfigureAwait(false);
+
+            return Ok(updatedPerson);
         }
 
         [HttpDelete("person/delete/{id}")]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
+
             Person? person = await _service.GetPerson(id).ConfigureAwait(false);
+
             if (person is null)
-            {
                 return NotFound("Person not found!");
-            }
-            else
-            {
-                _service.DeletePerson(person);
-                return Ok();
-            }
+
+            _service.DeletePerson(person);
+
+            return Ok("Person successfully deleted");
         }
 
         [HttpDelete("person/delete-all")]
         public IActionResult DeleteAllPersons()
         {
             _service.DeleteAllPersons();
-            return Ok();
+            return Ok("All persons has been deleted!");
         }
         #endregion
     }

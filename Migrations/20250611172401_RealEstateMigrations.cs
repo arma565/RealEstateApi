@@ -12,7 +12,7 @@ namespace RealEstate.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Estates",
+                name: "Assets",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -36,7 +36,7 @@ namespace RealEstate.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estates", x => x.Id);
+                    table.PrimaryKey("PK_Assets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +112,7 @@ namespace RealEstate.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProfileImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfileImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AcceptTerms = table.Column<bool>(type: "bit", nullable: false),
@@ -150,6 +150,25 @@ namespace RealEstate.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AssetImages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AssetID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssetImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AssetImages_Assets_AssetID",
+                        column: x => x.AssetID,
+                        principalTable: "Assets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Persons",
                 columns: table => new
                 {
@@ -163,28 +182,36 @@ namespace RealEstate.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PropertyID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AssetID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Persons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Persons_Estates_PropertyID",
-                        column: x => x.PropertyID,
-                        principalTable: "Estates",
+                        name: "FK_Persons_Assets_AssetID",
+                        column: x => x.AssetID,
+                        principalTable: "Assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Persons_PropertyID",
+                name: "IX_AssetImages_AssetID",
+                table: "AssetImages",
+                column: "AssetID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Persons_AssetID",
                 table: "Persons",
-                column: "PropertyID");
+                column: "AssetID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AssetImages");
+
             migrationBuilder.DropTable(
                 name: "Persons");
 
@@ -210,7 +237,7 @@ namespace RealEstate.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Estates");
+                name: "Assets");
         }
     }
 }

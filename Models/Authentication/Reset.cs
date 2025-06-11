@@ -4,23 +4,23 @@ namespace RealEstate.Models.Authentication
 {
     public sealed class Reset
     {
-        private string email = "";
-        private string token = "";
-        private string new_password = "";
-        private string repeat_new_password = "";
+        private string _email = "";
+        private string _token = "";
+        private string _new_password = "";
+        private string _repeat_new_password = "";
 
         [Required(ErrorMessage = "Email is reqired!")]
         [EmailAddress(ErrorMessage = "Invalid email address!")]
         public string Email
         {
-            get => email;
-            set => email = value;
+            get => _email;
+            set => _email = value;
         }
 
         public string Token
         {
-            get => token;
-            set => token = value;
+            get => _token;
+            set => _token = value;
         }
 
         [Required]
@@ -28,8 +28,8 @@ namespace RealEstate.Models.Authentication
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
         public string NewPassword
         {
-            get => new_password;
-            set => new_password = value;
+            get => _new_password;
+            set => _new_password = value;
         }
 
         [Required]
@@ -37,8 +37,8 @@ namespace RealEstate.Models.Authentication
         [Compare("NewPassword", ErrorMessage = "The Password and Repeat New Password do not match!")]
         public string RepeatNewPassword
         {
-            get => repeat_new_password;
-            set => repeat_new_password = value;
+            get => _repeat_new_password;
+            set => _repeat_new_password = value;
         }
     }
 }

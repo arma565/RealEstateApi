@@ -4,24 +4,24 @@ namespace RealEstate.Models.Authentication
 {
     public sealed class Change
     {
-        private string user_name = "";
-        private string current_password = "";
-        private string new_password = "";
-        private string repeat_password = "";
+        private string _user_name = "";
+        private string _current_password = "";
+        private string _new_password = "";
+        private string _repeat_password = "";
 
         [Required]
         public string UserName
         {
-            get => user_name;
-            set => user_name = value;
+            get => _user_name;
+            set => _user_name = value;
         }
 
         [Required]
         [DataType(DataType.Password)]
         public string CurrentPassword
         {
-            get => current_password;
-            set => current_password = value;
+            get => _current_password;
+            set => _current_password = value;
         }
 
         [Required]
@@ -29,8 +29,8 @@ namespace RealEstate.Models.Authentication
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
         public string NewPassword
         {
-            get => new_password;
-            set => new_password = value;
+            get => _new_password;
+            set => _new_password = value;
         }
 
         [Required]
@@ -39,8 +39,8 @@ namespace RealEstate.Models.Authentication
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
         public string RepeatPassword
         {
-            get => repeat_password;
-            set => repeat_password = value;
+            get => _repeat_password;
+            set => _repeat_password = value;
         }
     }
 }

@@ -1,3 +1,7 @@
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.ObjectModel;
+using static System.Net.Mime.MediaTypeNames;
+
 namespace RealEstate.Services
 {
     internal interface IImageService
@@ -7,12 +11,11 @@ namespace RealEstate.Services
     }
 
     public sealed class ImageService(
-        IWebHostEnvironment environment,
-        IHttpContextAccessor httpContextAccessor
+        IWebHostEnvironment environment
         ) : IImageService
     {
         private readonly IWebHostEnvironment _environment = environment;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
         private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
 
         /// <summary>
@@ -25,21 +28,22 @@ namespace RealEstate.Services
         public async Task<string> UploadProfileImage(IFormFile image)
         {
             if (image is null)
-            {
                 return "";
-            }
+
             if (!IsValidImage(image))
-            {
                 throw new InvalidOperationException("Invalid image file.");
-            }
+
+            var webRootPath = _environment.WebRootPath;
 
             var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-            var uploadsFolder = Path.Combine(_environment.WebRootPath, "images");
+
+            if (!Directory.Exists(webRootPath))
+                Directory.CreateDirectory(webRootPath); // Recreate wwwroot
+
+            var uploadsFolder = Path.Combine(webRootPath, "images/auth");
 
             if (!Directory.Exists(uploadsFolder))
-            {
                 Directory.CreateDirectory(uploadsFolder);
-            }
 
             var filePath = Path.Combine(uploadsFolder, fileName);
 
@@ -47,8 +51,56 @@ namespace RealEstate.Services
             {
                 await image.CopyToAsync(stream).ConfigureAwait(false);
             }
-            return GetFileUrl(fileName);
+
+            return fileName;
         }
+
+        /// <summary>
+        /// Use this function to upload list of images to server
+        /// </summary>
+        /// <param name="images">
+        /// list of images to upload
+        /// </param>
+        /// <returns>
+        /// list of images as string
+        /// </returns>
+        public async Task<List<string>> UploadImages(Collection<IFormFile> images)
+        {
+            var fileNameList = new List<string>();
+
+            if (images.IsNullOrEmpty())
+                return fileNameList;
+
+            foreach (var image in images)
+            {
+                if (!IsValidImage(image))
+                    throw new InvalidOperationException("Invalid image file.");
+            }
+
+            var webRootPath = _environment.WebRootPath;
+
+            if (!Directory.Exists(webRootPath))
+                Directory.CreateDirectory(webRootPath); // Recreate wwwroot
+
+            var uploadsFolder = Path.Combine(_environment.WebRootPath, "images/asset");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            foreach (var image in images)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream).ConfigureAwait(false);
+                }
+                fileNameList.Add(fileName);
+            }
+
+            return fileNameList;
+        }
+
 
         /// <summary>
         /// Use this to download image from server
@@ -80,46 +132,36 @@ namespace RealEstate.Services
         private static bool IsValidImage(IFormFile image)
         {
             if (image == null || image.Length == 0)
-            {
                 return false;
-            }
 
             if (image.Length > MaxFileSize)
-            {
                 return false; // File is too large
-            }
 
             var validExtensions = new[] { ".JPG", ".JPEG", ".PNG", ".GIF" };
+
             var extension = Path.GetExtension(image.FileName)?.ToUpperInvariant();
 
             if (!validExtensions.Contains(extension))
-            {
                 return false; // Invalid file type
-            }
 
             return true;
         }
 
-        private string GetFileUrl(string fileName)
+        public string GetLocalImagesFullPath(string requestedModelPath)
         {
-            var connection = _httpContextAccessor.HttpContext?.Connection;
-            if (connection != null)
-            {
-                var localIpAddress = connection.LocalIpAddress?.ToString();
 
-                if (localIpAddress == "127.0.0.1" || localIpAddress == "::1")
-                {
-                    return $"http://localhost:5068/images/{fileName}";
-                }
-                else
-                {
-                    return $"http://{connection.RemoteIpAddress}:5068/images/{fileName}";
-                }
-            }
+            if (requestedModelPath.IsNullOrEmpty())
+                return "";
+
+            var webRootPath = _environment.WebRootPath;
+
+            if (!Directory.Exists(webRootPath))
+                return "";
+
+            if (requestedModelPath == "asset")
+                return Path.Combine(webRootPath, "images/asset");
             else
-            {
-                return $"http://localhost:5068/images/{fileName}";
-            }
+                return Path.Combine(webRootPath, "images/auth");
         }
     }
 }

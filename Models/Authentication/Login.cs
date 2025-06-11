@@ -4,15 +4,15 @@ namespace RealEstate.Models.Authentication
 {
     public sealed class Login
     {
-        string user_name = "";
+       private string _user_name = "";
 
-        string password = "";
+       private string _password = "";
 
         [Required]
         public string UserName
         {
-            get => user_name;
-            set => user_name = value;
+            get => _user_name;
+            set => _user_name = value;
         }
 
         [Required]
@@ -20,8 +20,8 @@ namespace RealEstate.Models.Authentication
         [DataType(DataType.Password)]
         public string Password
         {
-            get => password;
-            set => password = value;
+            get => _password;
+            set => _password = value;
         }
     }
 }

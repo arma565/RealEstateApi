@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Estate;
+using RealEstate.Models.Estate.Assets;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace RealEstate.Services
@@ -30,7 +31,7 @@ SignInManager<UserProfileIdentity> signInManager)
                 var user = new User
                 {
                     Id = userInUserManager.Id,
-                    ProfileImagePath = userInUserManager.ProfileImageUrl!,
+                    ProfileImagePath = userInUserManager.ProfileImageName,
                     FirstName = userInUserManager.FirstName!,
                     LastName = userInUserManager.LastName!,
                     AcceptTerms = userInUserManager.AcceptTerms,
@@ -53,15 +54,15 @@ SignInManager<UserProfileIdentity> signInManager)
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
             else
-            return await _userManager.CreateAsync(
-                   new UserProfileIdentity
-                   {
-                       UserName = model.UserName,
-                       Email = model.Email,
-                       AcceptTerms = model.AcceptTerms,
-                   },
-                   model.Password
-               ).ConfigureAwait(false);
+                return await _userManager.CreateAsync(
+                       new UserProfileIdentity
+                       {
+                           UserName = model.UserName,
+                           Email = model.Email,
+                           AcceptTerms = model.AcceptTerms,
+                       },
+                       model.Password
+                   ).ConfigureAwait(false);
         }
 
 
@@ -76,7 +77,7 @@ SignInManager<UserProfileIdentity> signInManager)
             {
                 await _userManager.DeleteAsync(user).ConfigureAwait(false);
             }
-            var files = Directory.GetFiles(Path.Combine("wwwroot/images"));
+            var files = Directory.GetFiles(Path.Combine("wwwroot/images/auth"));
             foreach (var file in files)
             {
                 File.Delete(file);
@@ -94,9 +95,9 @@ SignInManager<UserProfileIdentity> signInManager)
             {
                 return IdentityResult.Failed();
             }
-            if (user.ProfileImageUrl != null)
+            if (user.ProfileImageName != null)
             {
-                Uri uri = new(user.ProfileImageUrl.ToString());
+                Uri uri = new(user.ProfileImageName.ToString());
                 var profileImageName = Path.GetFileName(uri.AbsolutePath);
                 var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
                 var filePath = Path.Combine(webRootPath, "images", profileImageName);
@@ -191,46 +192,76 @@ SignInManager<UserProfileIdentity> signInManager)
         }
         #endregion
 
-        #region Property
-        public async Task<IEnumerable<Asset>> GetPropertyList() =>
+        #region Asset
+        public async Task<IEnumerable<Asset>> GetAssetList() =>
             await _context
-                .Estates.AsNoTracking()
+                .Assets
+                .AsNoTracking()
                 .Include(prop => prop.Persons)
+                .Include(assetImg => assetImg.AssetImages)
                 .OrderByDescending(prop => prop.Id)
                 .ToListAsync().ConfigureAwait(false);
 
-        public async Task<Asset?> GetProperty(Guid propertyID) =>
+        public async Task<Asset?> GetAsset(Guid assetID) =>
             await _context
-                .Estates.AsNoTracking()
-                .SingleOrDefaultAsync(prop => prop.Id == propertyID).ConfigureAwait(false);
+                .Assets.AsNoTracking()
+                .SingleOrDefaultAsync(prop => prop.Id == assetID)
+                .ConfigureAwait(false);
 
-        public async Task<bool> GetPropertyByPlateNumber(string plateNumber) =>
-            await _context.Estates.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
+        public async Task<List<AssetImage>> GetAssetImagesList() => 
+            await _context
+            .AssetImages
+            .AsNoTracking()
+            .OrderByDescending(assetImg => assetImg.Id)
+            .ToListAsync()
+            .ConfigureAwait(false);
 
-        public async Task<Asset?> AddProperty(Asset newProperty)
+        public async Task<Asset?> AddAsset(Asset newAsset)
         {
-            await _context.Estates.AddAsync(newProperty).ConfigureAwait(false);
+            await _context.Assets.AddAsync(newAsset).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
-            return newProperty;
+            return newAsset;
         }
 
-        public async Task UpdateProperty(Asset updateProperty)
+        public async Task AddAssetImage(AssetImage assetImage)
         {
-            _context.Estates.Update(updateProperty);
+            await _context.AssetImages.AddAsync(assetImage).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void DeleteProperty(Asset deleteProperty)
+        public async Task UpdateAsset(Asset updateAsset)
         {
-            _context.Estates.Remove(deleteProperty);
+            _context.Assets.Update(updateAsset);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public void DeleteAsset(Asset deleteAsset)
+        {
+            _context.Assets.Remove(deleteAsset);
             _context.SaveChanges();
         }
 
-        public void DeleteAllProperties()
+        public void DeleteAllAssets()
         {
-            _context.Estates.ExecuteDelete();
+            _context.Assets.ExecuteDelete();
             _context.SaveChanges();
+            if (Directory.Exists(Path.Combine("wwwroot/images/Asset")))
+            {
+                var files = Directory.GetFiles(Path.Combine("wwwroot/images/Asset"));
+                foreach (var file in files)
+                {
+                    File.Delete(file);
+                }
+            }
         }
+
+        public async Task<Asset?> FindAssetByPlatesNumber(string platesNumber)
+        {
+            var assetList = await GetAssetList().ConfigureAwait(false);
+            return assetList.FirstOrDefault(asset => asset.PlatesNumber == platesNumber);
+        }
+        public async Task<bool> IsAssetExist(string plateNumber) =>
+           await _context.Assets.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
         #endregion
 
         #region Person
@@ -274,7 +305,6 @@ SignInManager<UserProfileIdentity> signInManager)
         private IEnumerable<Person> GetPersonList() =>
             [.. _context.Persons.AsNoTracking().OrderByDescending(pers => pers.Id)];
         #endregion
-
 
     }
 

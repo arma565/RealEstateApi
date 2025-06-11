@@ -12,7 +12,7 @@ using RealEstate.Data;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250603144808_RealEstateMigrations")]
+    [Migration("20250611172401_RealEstateMigrations")]
     partial class RealEstateMigrations
     {
         /// <inheritdoc />
@@ -184,7 +184,7 @@ namespace RealEstate.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProfileImageUrl")
+                    b.Property<string>("ProfileImageName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -201,7 +201,7 @@ namespace RealEstate.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Estate.Estate", b =>
+            modelBuilder.Entity("RealEstate.Models.Estate.Assets.Asset", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -270,7 +270,27 @@ namespace RealEstate.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Estates");
+                    b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Estate.Assets.AssetImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssetID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetID");
+
+                    b.ToTable("AssetImages");
                 });
 
             modelBuilder.Entity("RealEstate.Models.Estate.Person", b =>
@@ -282,6 +302,9 @@ namespace RealEstate.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("AssetID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BirthCertificateIssued")
                         .IsRequired()
@@ -309,33 +332,43 @@ namespace RealEstate.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PropertyID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PropertyID");
+                    b.HasIndex("AssetID");
 
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Estate.Person", b =>
+            modelBuilder.Entity("RealEstate.Models.Estate.Assets.AssetImage", b =>
                 {
-                    b.HasOne("RealEstate.Models.Estate.Estate", "Property")
-                        .WithMany("Persons")
-                        .HasForeignKey("PropertyID")
+                    b.HasOne("RealEstate.Models.Estate.Assets.Asset", "Asset")
+                        .WithMany("AssetImages")
+                        .HasForeignKey("AssetID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Property");
+                    b.Navigation("Asset");
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Estate.Estate", b =>
+            modelBuilder.Entity("RealEstate.Models.Estate.Person", b =>
                 {
+                    b.HasOne("RealEstate.Models.Estate.Assets.Asset", "Asset")
+                        .WithMany("Persons")
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Estate.Assets.Asset", b =>
+                {
+                    b.Navigation("AssetImages");
+
                     b.Navigation("Persons");
                 });
 #pragma warning restore 612, 618

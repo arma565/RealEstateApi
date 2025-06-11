@@ -2,7 +2,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "GetUserByUserName",
-    "RelativePath": "Auth/{userName}",
+    "RelativePath": "Auth/user/{userName}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -28,7 +28,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "ChangePassword",
-    "RelativePath": "Auth/change/password",
+    "RelativePath": "Auth/user/change/password",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -44,7 +44,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "DeleteAllUsers",
-    "RelativePath": "Auth/delete-all",
+    "RelativePath": "Auth/user/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -54,7 +54,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "DeleteUser",
-    "RelativePath": "Auth/delete/{userName}/{password}",
+    "RelativePath": "Auth/user/delete/{userName}/{password}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -75,7 +75,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "DownloadProfileImage",
-    "RelativePath": "Auth/download/{userName}",
+    "RelativePath": "Auth/user/download/{userName}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -91,7 +91,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "EditUserProfile",
-    "RelativePath": "Auth/edit/profile",
+    "RelativePath": "Auth/user/edit/profile",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -107,7 +107,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "LoginUser",
-    "RelativePath": "Auth/login",
+    "RelativePath": "Auth/user/login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -123,7 +123,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "RecoverUser",
-    "RelativePath": "Auth/recovery/account",
+    "RelativePath": "Auth/user/recovery/account",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -149,7 +149,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "RegisterUser",
-    "RelativePath": "Auth/register",
+    "RelativePath": "Auth/user/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -165,7 +165,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "ResetPassword",
-    "RelativePath": "Auth/reset/password",
+    "RelativePath": "Auth/user/reset/password",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -181,7 +181,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "UploadProfileImage",
-    "RelativePath": "Auth/upload/{userName}",
+    "RelativePath": "Auth/user/upload/{userName}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -218,6 +218,147 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "GetAssetList",
+    "RelativePath": "Estate/asset",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "GetAsset",
+    "RelativePath": "Estate/asset/{assetID}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "assetID",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Models.Estate.Assets.Asset",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "AddAsset",
+    "RelativePath": "Estate/asset/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "newAsset",
+        "Type": "RealEstate.Models.Estate.Assets.Asset",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "DeleteAssets",
+    "RelativePath": "Estate/asset/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "DeleteAsset",
+    "RelativePath": "Estate/asset/delete/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "DownloadAssetImages",
+    "RelativePath": "Estate/asset/download/{imageFileName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageFileName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "UpdateAsset",
+    "RelativePath": "Estate/asset/update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateAsset",
+        "Type": "RealEstate.Models.Estate.Assets.Asset",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "AssetImageUpload",
+    "RelativePath": "Estate/asset/upload/{assetID}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "assetID",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "System.Collections.ObjectModel.Collection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
@@ -322,109 +463,5 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "GetPropertyList",
-    "RelativePath": "Estate/property",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "GetProperty",
-    "RelativePath": "Estate/property/{propertyID}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "propertyID",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "RealEstate.Models.Estate.Asset",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "AddProperty",
-    "RelativePath": "Estate/property/add",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "newProperty",
-        "Type": "RealEstate.Models.Estate.Asset",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "DeleteProperties",
-    "RelativePath": "Estate/property/delete-all",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "DeleteProperty",
-    "RelativePath": "Estate/property/delete/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "UpdateProperty",
-    "RelativePath": "Estate/property/update",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "updateProperty",
-        "Type": "RealEstate.Models.Estate.Asset",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   }
 ]

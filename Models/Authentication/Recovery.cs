@@ -4,14 +4,14 @@ namespace RealEstate.Models.Authentication
 {
     public sealed class Recovery
     {
-        private string email = "";
+        private string _email = "";
 
         [Required(ErrorMessage = "Email is reqired!")]
         [EmailAddress(ErrorMessage = "Invalid email address!")]
         public string Email
         {
-            get => email;
-            set => email = value;
+            get => _email;
+            set => _email = value;
         }
     }
 }

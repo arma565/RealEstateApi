@@ -4,10 +4,10 @@ namespace RealEstate.Models.Authentication
 {
     public sealed class Register
     {
-        private string user_name = "";
-        private string email = "";
-        private string password = "";
-        private string repeat_password = "";
+        private string _user_name = "";
+        private string _email = "";
+        private string _password = "";
+        private string _repeat_password = "";
 
         [Required]
         private bool accept_terms = false;
@@ -15,16 +15,16 @@ namespace RealEstate.Models.Authentication
         [Required]
         public string UserName
         {
-            get => user_name;
-            set => user_name = value;
+            get => _user_name;
+            set => _user_name = value;
         }
 
         [Required(ErrorMessage = "Email is reqired!")]
         [EmailAddress(ErrorMessage = "Invalid email address!")]
         public string Email
         {
-            get => email;
-            set => email = value;
+            get => _email;
+            set => _email = value;
         }
 
         [Required]
@@ -32,8 +32,8 @@ namespace RealEstate.Models.Authentication
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
         public string Password
         {
-            get => password;
-            set => password = value;
+            get => _password;
+            set => _password = value;
         }
 
         [Required]
@@ -42,8 +42,8 @@ namespace RealEstate.Models.Authentication
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
         public string RepeatPassword
         {
-            get => repeat_password;
-            set => repeat_password = value;
+            get => _repeat_password;
+            set => _repeat_password = value;
         }
         [Required]
         [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the terms and conditions!")]

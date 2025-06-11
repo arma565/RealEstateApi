@@ -1,55 +1,58 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace RealEstate.Models.Authentication
 {
     public sealed class User
     {
-        private string id = "";
-        private Uri? profile_image_path;
-        private string first_name = "";
-        private string last_name = "";
-        private bool? accept_terms = false;
-        private string user_name = "";
-        private string email = "";
-        private string phone_number = "";
+        private string _id = "";
+        private string? _profile_image_name;
+        private string _first_name = "";
+        private string _last_name = "";
+        private bool? _accept_terms = false;
+        private string _user_name = "";
+        private string _email = "";
+        private string _phone_number = "";
 
         public string Id
         {
-            get => id;
-            set => id = value;
+            get => _id;
+            set => _id = value;
         }
-        public Uri? ProfileImagePath
+
+        public string? ProfileImagePath
         {
-            get => profile_image_path;
-            set => profile_image_path = value;
+            get => _profile_image_name;
+            set => _profile_image_name = value;
         }
         public string FirstName
         {
-            get => first_name;
-            set => first_name = value;
+            get => _first_name;
+            set => _first_name = value;
         }
         public string LastName
         {
-            get => last_name;
-            set => last_name = value;
+            get => _last_name;
+            set => _last_name = value;
         }
         public bool? AcceptTerms
         {
-            get => accept_terms;
-            set => accept_terms = value;
+            get => _accept_terms;
+            set => _accept_terms = value;
         }
         public string UserName
         {
-            get => user_name;
-            set => user_name = value;
+            get => _user_name;
+            set => _user_name = value;
         }
         public string Email
         {
-            get => email;
-            set => email = value;
+            get => _email;
+            set => _email = value;
         }
         public string PhoneNumber
         {
-            get => phone_number;
-            set => phone_number = value;
+            get => _phone_number;
+            set => _phone_number = value;
         }
     }
 }

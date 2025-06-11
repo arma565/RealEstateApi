@@ -1,3 +1,4 @@
+using RealEstate.Models.Estate.Assets;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models.Estate
@@ -19,100 +20,101 @@ namespace RealEstate.Models.Estate
             Guid assetID
         )
         {
-            this.name = name;
-            this.fatherName = fatherName;
-            this.birthCertificateNumber = birthCertificateNumber;
-            this.birthCertificateIssued = birthCertificateIssued;
-            this.personID = personID;
-            this.born = born;
-            this.address = address;
-            this.phone = phone;
-            this.role = role;
-            this.assetID = assetID;
+            _name = name;
+            _fatherName = fatherName;
+            _birthCertificateNumber = birthCertificateNumber;
+            _birthCertificateIssued = birthCertificateIssued;
+            _personID = personID;
+            _born = born;
+            _address = address;
+            _phone = phone;
+            _role = role;
+            _assetID = assetID;
         }
 
-        private Guid id;
-        private string name = "";
-        private string fatherName = "";
-        private long birthCertificateNumber;
-        private string birthCertificateIssued = "";
-        private long personID;
-        private string born = "";
-        private string address = "";
-        private string phone = "";
-        private string role = "";
-        private Asset? asset;
-        private Guid assetID;
+        private Guid _id;
+        private string _name = "";
+        private string _fatherName = "";
+        private long _birthCertificateNumber;
+        private string _birthCertificateIssued = "";
+        private long _personID;
+        private string _born = "";
+        private string _address = "";
+        private string _phone = "";
+        private string _role = "";
+        private Asset? _asset;
+        private Guid _assetID;
 
+        [Key]
         public Guid Id
         {
-            get => id;
-            set => id = value;
+            get => _id;
+            set => _id = value;
         }
 
         [Required]
         public string Name
         {
-            get => name;
-            set => name = value;
+            get => _name;
+            set => _name = value;
         }
         public string FatherName
         {
-            get => fatherName;
-            set => fatherName = value;
+            get => _fatherName;
+            set => _fatherName = value;
         }
 
         [Required]
         public long BirthCertificateNumber
         {
-            get => birthCertificateNumber;
-            set => birthCertificateNumber = value;
+            get => _birthCertificateNumber;
+            set => _birthCertificateNumber = value;
         }
         public string BirthCertificateIssued
         {
-            get => birthCertificateIssued;
-            set => birthCertificateIssued = value;
+            get => _birthCertificateIssued;
+            set => _birthCertificateIssued = value;
         }
 
         [Required]
         public long PersonID
         {
-            get => personID;
-            set => personID = value;
+            get => _personID;
+            set => _personID = value;
         }
         public string Born
         {
-            get => born;
-            set => born = value;
+            get => _born;
+            set => _born = value;
         }
 
         [Required]
         public string Address
         {
-            get => address;
-            set => address = value;
+            get => _address;
+            set => _address = value;
         }
 
         [Required]
         public string Phone
         {
-            get => phone;
-            set => phone = value;
+            get => _phone;
+            set => _phone = value;
         }
         public string Role
         {
-            get => role;
-            set => role = value;
+            get => _role;
+            set => _role = value;
         }
-        public Guid PropertyID
+        public Guid AssetID
         {
-            get => assetID;
-            set => assetID = value;
+            get => _assetID;
+            set => _assetID = value;
         }
         public Asset? Asset
         {
-            get => asset;
-            set => asset = value;
+            get => _asset;
+            set => _asset = value;
         }
     }
 }
