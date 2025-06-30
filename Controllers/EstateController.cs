@@ -26,7 +26,7 @@ namespace RealEstate.Controllers
                 var asset = await _service.GetAsset(assetID).ConfigureAwait(false);
 
                 if (asset == null)
-                    return NotFound("No such asset found");
+                    return NotFound("No such asset found!");
 
                 if (images.IsNullOrEmpty())
                     return BadRequest("Image list can not be empty!");
@@ -38,7 +38,7 @@ namespace RealEstate.Controllers
                     var assetImage = new AssetImage()
                     {
                         FileName = img,
-                        AssetID = assetID
+                        AssetID = assetID,
                     };
                     await _service.AddAssetImage(assetImage).ConfigureAwait(false);
                 }
@@ -47,32 +47,40 @@ namespace RealEstate.Controllers
             }
             catch (IOException ex)
             {
-                return StatusCode(500, "An unexpected error occurred. Please try again later." + "Error detailes: " + ex.Message);
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
             }
             catch (ArgumentNullException ex)
             {
-                return StatusCode(500, "An unexpected error occurred. Please try again later." + "Error detailes: " + ex.Message);
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
             }
         }
 
         [HttpGet("asset/download/{imageFileName}")]
-        public async Task<IActionResult> DownloadAssetImages(string imageFileName)
+        public async Task<IActionResult> DownloadAssetImage(string imageFileName)
         {
             try
             {
                 List<AssetImage> assetImagesList = await _service.GetAssetImagesList().ConfigureAwait(false);
 
-                if (assetImagesList.IsNullOrEmpty())
-                    return NotFound("list is empty!");
+                var assetImage = assetImagesList.FirstOrDefault(assetImg => assetImg.FileName == imageFileName);
+
+                if (assetImage == null)
+                    return NotFound("No such image found!");
 
                 var environmentPath = _imageService.GetLocalImagesFullPath("asset");
 
-                var imgFileName = assetImagesList.FirstOrDefault(assetImg => assetImg.FileName == imageFileName);
+                var fullPath = Path.Combine(environmentPath , assetImage.FileName);
 
-                if (imgFileName == null)
-                    return NotFound("No such image found!");
-
-                var fullPath = Path.Combine(environmentPath + imgFileName.FileName);
+                var normalizedPath = Path.GetFullPath(fullPath);
+                if (!normalizedPath.StartsWith(Path.GetFullPath(fullPath) , StringComparison.CurrentCulture))
+                    return BadRequest("Invalid file path access.");
 
                 if (!System.IO.File.Exists(fullPath))
                     return NotFound("Image file not found!");
@@ -87,91 +95,127 @@ namespace RealEstate.Controllers
             }
             catch (BadHttpRequestException ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
             }
         }
 
-
         [HttpGet("asset")]
-        public async Task<IEnumerable<Asset>> GetAssetList() => await _service.GetAssetList().ConfigureAwait(false);
+        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetList() => Ok(await _service.GetAssetList().ConfigureAwait(false));
 
         [HttpGet("asset/{assetID}")]
-        public async Task<ActionResult<Asset>> GetAsset(Guid assetID)
+        public async Task<ActionResult<Asset>> GetAsset(string assetID)
         {
-            if (string.IsNullOrEmpty(assetID.ToString()))
-                return BadRequest("Invalid assetID");
+            try
+            {
+                if (assetID.IsNullOrEmpty())
+                    return BadRequest("Invalid assetID");
 
-            Asset? asset = await _service.GetAsset(assetID).ConfigureAwait(false);
+                Guid realEstateAssetID = Guid.Parse(assetID);
 
-            if (asset is null)
-                return NotFound("Asset not found!");
+                Asset? asset = await _service.GetAsset(realEstateAssetID).ConfigureAwait(false);
 
-            return asset;
+                if (asset is null)
+                    return NotFound("Asset not found!");
+
+                return Ok(asset);
+
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
         }
 
         [HttpPost("asset/add")]
         public async Task<IActionResult> AddAsset([FromBody] Asset newAsset)
         {
-            if (newAsset == null)
-                return BadRequest("Failed to retreive parameter!");
+            try
+            {
+                if (newAsset == null)
+                    return BadRequest("Failed to retreive parameter!");
 
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (newAsset.Date!.ToString().IsNullOrEmpty() && newAsset.Time.IsNullOrEmpty())
+                    newAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                newAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
 
+                bool? isAssetExists = await _service.IsAssetExist(newAsset.PlatesNumber!).ConfigureAwait(false);
 
-            if (newAsset.Date!.ToString().IsNullOrEmpty() && newAsset.Time.IsNullOrEmpty())
-                newAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            newAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                if (isAssetExists == true)
+                    return BadRequest("Asset with this plates number is already exist!");
 
+                Asset? addedAsset = await _service.AddAsset(newAsset).ConfigureAwait(false);
 
-            bool? isAssetExists = await _service.IsAssetExist(newAsset.PlatesNumber!).ConfigureAwait(false);
+                return CreatedAtAction(
+                    nameof(GetAsset),
+                    new { AssetID = addedAsset!.Id },
+                    addedAsset
+                );
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
 
-            if (isAssetExists == true)
-                return BadRequest("Asset with this plates number is already exist!");
-
-            Asset? addedAsset = await _service.AddAsset(newAsset).ConfigureAwait(false);
-
-            return CreatedAtAction(
-                nameof(GetAsset),
-                new { AssetID = addedAsset!.Id },
-                addedAsset
-            );
         }
 
         [HttpPut("asset/update")]
         public async Task<IActionResult> UpdateAsset([FromBody] Asset updateAsset)
         {
-            if (updateAsset == null)
-                return BadRequest("Failed to retreive parameter!");
+            try
+            {
+                if (updateAsset == null)
+                    return BadRequest("Failed to retreive parameter!");
 
-            Asset? asset = await _service.GetAsset(updateAsset.Id).ConfigureAwait(false);
+                Asset? asset = await _service.GetAsset(updateAsset.Id).ConfigureAwait(false);
 
-            if (asset is null)
-                return NotFound("Asset not found!");
+                if (asset is null)
+                    return NotFound("Asset not found!");
 
-            updateAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            updateAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                updateAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                updateAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            await _service.UpdateAsset(updateAsset).ConfigureAwait(false);
+                await _service.UpdateAsset(updateAsset).ConfigureAwait(false);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
+
         }
 
         [HttpDelete("asset/delete/{id}")]
-        public async Task<IActionResult> DeleteAsset(Guid id)
+        public async Task<IActionResult> DeleteAsset(string id)
         {
-            Asset? asset = await _service.GetAsset(id).ConfigureAwait(false);
+            try
+            {
+                Guid assetId = Guid.Parse(id);
 
-            if (asset is null)
-                return NotFound("Asset not found!");
+                Asset? asset = await _service.GetAsset(assetId).ConfigureAwait(false);
 
-            _service.DeleteAsset(asset);
+                if (asset is null)
+                    return NotFound("Asset not found!");
 
-            return Ok("Asset successfully deleted");
+                _service.DeleteAsset(asset);
+
+                return Ok("Asset successfully deleted");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
         }
 
         [HttpDelete("asset/delete-all")]
@@ -184,21 +228,32 @@ namespace RealEstate.Controllers
 
         #region "Person"
 
-        [HttpGet("persons")]
+        [HttpGet("person")]
         public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList().ConfigureAwait(false);
 
         [HttpGet("person/{id}")]
-        public async Task<ActionResult<Person>> GetPerson(Guid id)
+        public async Task<ActionResult<Person>> GetPerson(string id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                Guid personID = Guid.Parse(id);
 
-            Person? person = await _service.GetPerson(id).ConfigureAwait(false);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            if (person is null)
-                return NotFound("Person not found!");
+                Person? person = await _service.GetPerson(personID).ConfigureAwait(false);
 
-            return person;
+                if (person is null)
+                    return NotFound("Person not found!");
+
+                return person;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
+
         }
 
         [HttpPost("person/add")]
@@ -245,19 +300,30 @@ namespace RealEstate.Controllers
         }
 
         [HttpDelete("person/delete/{id}")]
-        public async Task<IActionResult> DeletePerson(Guid id)
+        public async Task<IActionResult> DeletePerson(string id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                Guid personID = Guid.Parse(id);
 
-            Person? person = await _service.GetPerson(id).ConfigureAwait(false);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            if (person is null)
-                return NotFound("Person not found!");
+                Person? person = await _service.GetPerson(personID).ConfigureAwait(false);
 
-            _service.DeletePerson(person);
+                if (person is null)
+                    return NotFound("Person not found!");
 
-            return Ok("Person successfully deleted");
+                _service.DeletePerson(person);
+
+                return Ok("Person successfully deleted");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
+
         }
 
         [HttpDelete("person/delete-all")]

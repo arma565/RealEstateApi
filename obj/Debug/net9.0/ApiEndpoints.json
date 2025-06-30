@@ -249,7 +249,7 @@
     "Parameters": [
       {
         "Name": "assetID",
-        "Type": "System.Guid",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -301,7 +301,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Guid",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -309,7 +309,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "DownloadAssetImages",
+    "Method": "DownloadAssetImage",
     "RelativePath": "Estate/asset/download/{imageFileName}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -362,6 +362,26 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "GetPersonsList",
+    "RelativePath": "Estate/person",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Person, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
     "Method": "GetPerson",
     "RelativePath": "Estate/person/{id}",
     "HttpMethod": "GET",
@@ -370,7 +390,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Guid",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -422,7 +442,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Guid",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -443,25 +463,5 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "GetPersonsList",
-    "RelativePath": "Estate/persons",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Person, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   }
 ]

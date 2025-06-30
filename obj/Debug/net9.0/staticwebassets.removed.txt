@@ -1,5 +1,1 @@
-M:\Applications\WebProgramming\NetCore\Projects\RealEstate\wwwroot\images\auth\a0e0cf5d-7c99-4c77-a085-7d48b865f413.png
-M:\Applications\WebProgramming\NetCore\Projects\RealEstate\wwwroot\images\asset\1c0a1483-d4d2-482f-be6c-3c09dbaa6134.png
-M:\Applications\WebProgramming\NetCore\Projects\RealEstate\wwwroot\images\asset\9c22b644-65c5-4909-97ae-a5136a9585e1.png
-M:\Applications\WebProgramming\NetCore\Projects\RealEstate\wwwroot\images\asset\9d5e361a-60d9-45b5-accf-d60ca56e9461.png
-M:\Applications\WebProgramming\NetCore\Projects\RealEstate\wwwroot\images\auth\de8e8cc7-22ad-44b4-8a67-1a9853811d6b.png
+M:\Applications\WebProgramming\NetCore\Projects\RealEstate\wwwroot\images\asset\07961998-8f69-4014-8a7f-f5a1ca6e395b.jpg

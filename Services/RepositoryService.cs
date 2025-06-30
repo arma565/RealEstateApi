@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RealEstate.Data;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Estate;
@@ -10,11 +12,13 @@ namespace RealEstate.Services
 {
     public sealed class RepositoryService(AppDbContext context,
 UserManager<UserProfileIdentity> userManager,
-SignInManager<UserProfileIdentity> signInManager)
+SignInManager<UserProfileIdentity> signInManager,
+ImageService imageService)
     {
         private readonly AppDbContext _context = context;
         private readonly UserManager<UserProfileIdentity> _userManager = userManager;
         private readonly SignInManager<UserProfileIdentity> _signInManager = signInManager;
+        private readonly ImageService _imageService = imageService;
 
         #region Authentication
 
@@ -91,22 +95,14 @@ SignInManager<UserProfileIdentity> signInManager)
         /// <returns></returns>
         public async Task<IdentityResult> DeleteUser(UserProfileIdentity user)
         {
-            if (user is null)
-            {
-                return IdentityResult.Failed();
-            }
-            if (user.ProfileImageName != null)
-            {
-                Uri uri = new(user.ProfileImageName.ToString());
-                var profileImageName = Path.GetFileName(uri.AbsolutePath);
-                var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-                var filePath = Path.Combine(webRootPath, "images", profileImageName);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
-            return await _userManager.DeleteAsync(user).ConfigureAwait(false);
+            var environmentPath = _imageService.GetLocalImagesFullPath("auth");
+
+            var filePath = Path.Combine(environmentPath, user?.ProfileImageName ?? "");
+
+            if (File.Exists(filePath))
+                File.Delete(filePath);
+
+            return await _userManager.DeleteAsync(user!).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -208,7 +204,7 @@ SignInManager<UserProfileIdentity> signInManager)
                 .SingleOrDefaultAsync(prop => prop.Id == assetID)
                 .ConfigureAwait(false);
 
-        public async Task<List<AssetImage>> GetAssetImagesList() => 
+        public async Task<List<AssetImage>> GetAssetImagesList() =>
             await _context
             .AssetImages
             .AsNoTracking()

@@ -9,49 +9,6 @@ namespace RealEstate.Models.Estate.Assets
     {
         public Asset() { }
 
-        public Asset(
-            string? name,
-            string? platesNumber,
-            string? area,
-            string? constructionYear,
-            string? price,
-            string? deposit,
-            string? rentAmount,
-            string? payment,
-            string? address,
-            string? description,
-            string? time,
-            string? date,
-            string? type,
-            bool water,
-            bool electricity,
-            bool gas,
-            bool phone,
-            ICollection<AssetImage> assetImages,
-            ICollection<Person> persons
-        )
-        {
-            _name = name;
-            _platesNumber = platesNumber;
-            _area = area;
-            _constructionYear = constructionYear;
-            _price = price;
-            _deposit = deposit;
-            _rentAmount = rentAmount;
-            _payment = payment;
-            _address = address;
-            _description = description;
-            _time = time;
-            _date = date;
-            _type = type;
-            _water = water;
-            _electricity = electricity;
-            _gas = gas;
-            _phone = phone;
-            _assetImages = assetImages;
-            _persons = persons;
-        }
-
         private Guid _id;
         private string? _name = "";
         private string? _platesNumber = "";

@@ -5,7 +5,7 @@ namespace RealEstate.Models.Authentication
     public sealed class User
     {
         private string _id = "";
-        private string? _profile_image_name;
+        private string? _profile_image_name = "";
         private string _first_name = "";
         private string _last_name = "";
         private bool? _accept_terms = false;

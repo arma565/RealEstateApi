@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
 using RealEstate.Services;
@@ -50,11 +48,13 @@ namespace RealEstate.Controllers
             }
             catch (IOException ex)
             {
-                return StatusCode(500, "An unexpected error occurred. Please try again later." + "Error detailes: " + ex.Message);
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later.");
             }
             catch (ArgumentNullException ex)
             {
-                return StatusCode(500, "An unexpected error occurred. Please try again later." + "Error detailes: " + ex.Message);
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later." );
             }
         }
 
@@ -68,44 +68,35 @@ namespace RealEstate.Controllers
                 if (user == null)
                     return NotFound("No such user found!");
 
-                if (user.ProfileImageName == null)
-                    return NotFound("No such image found!");
+                if (string.IsNullOrWhiteSpace(user.ProfileImageName))
+                    return NotFound("No image found!");
 
-                var environmentPath = _imageService.GetLocalImagesFullPath("auth");
+                var fileName = Path.GetFileName(user.ProfileImageName);
 
-                var fullPath = Path.Combine(environmentPath , user.ProfileImageName);
+                var fullPath = _imageService.GetFullImagePath(user.ProfileImageName);
 
-                if (!System.IO.File.Exists(fullPath))
-                    return NotFound("Image file path not found!");
+                if (string.IsNullOrWhiteSpace(fullPath) || !System.IO.File.Exists(fullPath))
+                    return NotFound("Image file not found on disk!");
 
-                // Detect MIME type
                 var provider = new FileExtensionContentTypeProvider();
 
                 if (!provider.TryGetContentType(fullPath, out var contentType))
                     contentType = "application/octet-stream";
 
-                return PhysicalFile(fullPath, contentType, Path.GetFileName(fullPath));
-
-
-       /*         if (!Uri.IsWellFormedUriString(user.ProfileImageUrl.ToString(), UriKind.Absolute))
-                    return BadRequest("Invalid URL");
-
-                HttpResponseMessage response = await _httpClient.GetAsync(new Uri(user.ProfileImageUrl.ToString())).ConfigureAwait(false);
-
-                if (!response.IsSuccessStatusCode)
-                    return StatusCode((int)response.StatusCode, "Failed to download image");
-                // Read the image as a byte array
-                var imageData = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-                // Return the image as a file response
-                var contentType = response.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
-
-                return File(imageData, contentType);*/
+                return PhysicalFile(fullPath, contentType, fileName);
             }
             catch (BadHttpRequestException ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unknown server error");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unknown server error");
             }
         }
+
 
         [HttpGet("users")]
         public async Task<ActionResult<List<User>>> GetAllUsers()
@@ -197,7 +188,7 @@ namespace RealEstate.Controllers
         {
             var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
 
-            if (user == null)
+            if (user is null)
                 return BadRequest("No such user found!");
 
             if (!_passwordHelper.VerifyPassword(user, user.PasswordHash!, password))

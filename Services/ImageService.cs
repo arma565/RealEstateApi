@@ -1,4 +1,5 @@
 using Microsoft.IdentityModel.Tokens;
+using RealEstate.Models.Authentication;
 using System.Collections.ObjectModel;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -53,6 +54,21 @@ namespace RealEstate.Services
             }
 
             return fileName;
+        }
+
+        public string GetFullImagePath(string userProfileImageName) {
+
+            var environmentPath = GetLocalImagesFullPath("auth");
+
+            // Normalize and sanitize the path
+            var fileName = Path.GetFileName(userProfileImageName); // strips any path traversal
+
+            var fullPath = Path.Combine(environmentPath, fileName);
+
+            if (!File.Exists(fullPath))
+                return "";
+
+            return fullPath;
         }
 
         /// <summary>
@@ -159,9 +175,9 @@ namespace RealEstate.Services
                 return "";
 
             if (requestedModelPath == "asset")
-                return Path.Combine(webRootPath, "images/asset");
+                return Path.Combine(webRootPath, "images\\asset");
             else
-                return Path.Combine(webRootPath, "images/auth");
+                return Path.Combine(webRootPath, "images\\auth");
         }
     }
 }
