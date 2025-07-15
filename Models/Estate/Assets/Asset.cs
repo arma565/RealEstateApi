@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -10,6 +11,7 @@ namespace RealEstate.Models.Estate.Assets
         public Asset() { }
 
         private Guid _id;
+        private int _orderID;
         private string? _name = "";
         private string? _platesNumber = "";
         private string? _area = "";
@@ -35,6 +37,13 @@ namespace RealEstate.Models.Estate.Assets
         {
             get => _id;
             set => _id = value;
+        }
+
+        [DefaultValue(0)]
+        public int OrderID
+        {
+            get => _orderID;
+            set => _orderID = value;
         }
 
         [Required]
@@ -72,14 +81,12 @@ namespace RealEstate.Models.Estate.Assets
             set => _price = value;
         }
 
-        [Required]
         public string? Deposit
         {
             get => _deposit;
             set => _deposit = value;
         }
 
-        [Required]
         public string? RentAmount
         {
             get => _rentAmount;

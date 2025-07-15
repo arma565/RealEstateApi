@@ -221,26 +221,6 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "GetAssetList",
-    "RelativePath": "Estate/asset",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
     "Method": "GetAsset",
     "RelativePath": "Estate/asset/{assetID}",
     "HttpMethod": "GET",
@@ -283,6 +263,46 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "GetAssetListAscending",
+    "RelativePath": "Estate/asset/asc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "GetAssetListDateModified",
+    "RelativePath": "Estate/asset/date",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
     "Method": "DeleteAssets",
     "RelativePath": "Estate/asset/delete-all",
     "HttpMethod": "DELETE",
@@ -306,6 +326,26 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "GetAssetListDescending",
+    "RelativePath": "Estate/asset/desc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Estate.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
@@ -349,12 +389,12 @@
     "Parameters": [
       {
         "Name": "assetID",
-        "Type": "System.Guid",
+        "Type": "System.String",
         "IsRequired": true
       },
       {
         "Name": "images",
-        "Type": "System.Collections.ObjectModel.Collection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
         "IsRequired": false
       }
     ],

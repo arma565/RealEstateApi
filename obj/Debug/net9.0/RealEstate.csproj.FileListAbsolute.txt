@@ -151,6 +151,7 @@ M:\Applications\WebProgramming\NetCore\Projects\RealEstate\bin\Debug\net9.0\runt
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.csproj.AssemblyReference.cache
+M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\rpswa.dswa.cache.json
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.GeneratedMSBuildEditorConfig.editorconfig
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.AssemblyInfoInputs.cache
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.AssemblyInfo.cs
@@ -158,15 +159,18 @@ M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\Real
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.MvcApplicationPartsAssemblyInfo.cs
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.MvcApplicationPartsAssemblyInfo.cache
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.sourcelink.json
+M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\rjimswa.dswa.cache.json
+M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\scopedcss\bundle\RealEstate.styles.css
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.build.json
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.build.json.cache
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.development.json
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.csproj.Up2Date
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.dll
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\refint\RealEstate.dll
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.pdb
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\RealEstate.genruntimeconfig.cache
 M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\ref\RealEstate.dll
+M:\Applications\WebProgramming\NetCore\Projects\RealEstate\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

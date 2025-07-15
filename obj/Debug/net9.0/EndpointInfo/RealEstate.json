@@ -432,8 +432,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           }
         ],
@@ -489,7 +488,83 @@
         }
       }
     },
-    "/Estate/asset": {
+    "/Estate/asset/desc": {
+      "get": {
+        "tags": [
+          "Estate"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Estate/asset/asc": {
+      "get": {
+        "tags": [
+          "Estate"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Estate/asset/date": {
       "get": {
         "tags": [
           "Estate"
@@ -863,12 +938,10 @@
           "address",
           "area",
           "constructionYear",
-          "deposit",
           "name",
           "payment",
           "platesNumber",
           "price",
-          "rentAmount",
           "type"
         ],
         "type": "object",
@@ -876,6 +949,11 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "orderID": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
           },
           "name": {
             "minLength": 1,
@@ -898,12 +976,12 @@
             "type": "string"
           },
           "deposit": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "rentAmount": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "payment": {
             "minLength": 1,

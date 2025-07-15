@@ -189,18 +189,35 @@ ImageService imageService)
         #endregion
 
         #region Asset
-        public async Task<IEnumerable<Asset>> GetAssetList() =>
+        public async Task<IEnumerable<Asset>> GetAssetListDescending() =>
             await _context
                 .Assets
                 .AsNoTracking()
                 .Include(prop => prop.Persons)
                 .Include(assetImg => assetImg.AssetImages)
-                .OrderByDescending(prop => prop.Id)
+                .OrderByDescending(prop => prop.OrderID)
+                .ToListAsync().ConfigureAwait(false);
+        public async Task<IEnumerable<Asset>> GetAssetListAscending() =>
+            await _context
+                .Assets
+                .AsNoTracking()
+                .Include(prop => prop.Persons)
+                .Include(assetImg => assetImg.AssetImages)
+                .ToListAsync().ConfigureAwait(false);
+        public async Task<IEnumerable<Asset>> GetAssetListDateModified() =>
+            await _context
+                .Assets
+                .AsNoTracking()
+                .Include(prop => prop.Persons)
+                .Include(assetImg => assetImg.AssetImages)
+                .OrderBy(prop => prop.Date)
                 .ToListAsync().ConfigureAwait(false);
 
         public async Task<Asset?> GetAsset(Guid assetID) =>
             await _context
                 .Assets.AsNoTracking()
+                .Include(prop => prop.Persons)
+                .Include(assetImg => assetImg.AssetImages)
                 .SingleOrDefaultAsync(prop => prop.Id == assetID)
                 .ConfigureAwait(false);
 
@@ -253,7 +270,7 @@ ImageService imageService)
 
         public async Task<Asset?> FindAssetByPlatesNumber(string platesNumber)
         {
-            var assetList = await GetAssetList().ConfigureAwait(false);
+            var assetList = await GetAssetListDescending().ConfigureAwait(false);
             return assetList.FirstOrDefault(asset => asset.PlatesNumber == platesNumber);
         }
         public async Task<bool> IsAssetExist(string plateNumber) =>

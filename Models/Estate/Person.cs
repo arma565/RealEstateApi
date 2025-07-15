@@ -7,31 +7,6 @@ namespace RealEstate.Models.Estate
     {
         public Person() { }
 
-        public Person(
-            string name,
-            string fatherName,
-            long birthCertificateNumber,
-            string birthCertificateIssued,
-            long personID,
-            string born,
-            string address,
-            string phone,
-            string role,
-            Guid assetID
-        )
-        {
-            _name = name;
-            _fatherName = fatherName;
-            _birthCertificateNumber = birthCertificateNumber;
-            _birthCertificateIssued = birthCertificateIssued;
-            _personID = personID;
-            _born = born;
-            _address = address;
-            _phone = phone;
-            _role = role;
-            _assetID = assetID;
-        }
-
         private Guid _id;
         private string _name = "";
         private string _fatherName = "";
@@ -42,9 +17,9 @@ namespace RealEstate.Models.Estate
         private string _address = "";
         private string _phone = "";
         private string _role = "";
-        private Asset? _asset;
         private Guid _assetID;
-
+        private Asset? _asset;
+       
         [Key]
         public Guid Id
         {
@@ -111,11 +86,7 @@ namespace RealEstate.Models.Estate
             get => _assetID;
             set => _assetID = value;
         }
-        public Asset? Asset
-        {
-            get => _asset;
-            set => _asset = value;
-        }
+        public Asset? Asset => _asset;
     }
 }
 

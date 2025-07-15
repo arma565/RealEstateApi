@@ -80,7 +80,7 @@ namespace RealEstate.Services
         /// <returns>
         /// list of images as string
         /// </returns>
-        public async Task<List<string>> UploadImages(Collection<IFormFile> images)
+        public async Task<List<string>> UploadImages(IFormFile[] images)
         {
             var fileNameList = new List<string>();
 
@@ -94,9 +94,6 @@ namespace RealEstate.Services
             }
 
             var webRootPath = _environment.WebRootPath;
-
-            if (!Directory.Exists(webRootPath))
-                Directory.CreateDirectory(webRootPath); // Recreate wwwroot
 
             var uploadsFolder = Path.Combine(_environment.WebRootPath, "images/asset");
 
@@ -116,7 +113,6 @@ namespace RealEstate.Services
 
             return fileNameList;
         }
-
 
         /// <summary>
         /// Use this to download image from server

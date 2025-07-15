@@ -4,8 +4,10 @@ using Microsoft.IdentityModel.Tokens;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
 using RealEstate.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Security;
 
 namespace RealEstate.Controllers
 {
@@ -19,17 +21,23 @@ namespace RealEstate.Controllers
         #region "Asset"
 
         [HttpPost("asset/upload/{assetID}")]
-        public async Task<IActionResult> AssetImageUpload(Guid assetID, Collection<IFormFile> images)
+        public async Task<IActionResult> AssetImageUpload(string assetID, [FromForm] IFormFile[] images)
         {
             try
             {
-                var asset = await _service.GetAsset(assetID).ConfigureAwait(false);
+                if (string.IsNullOrWhiteSpace(assetID))
+                    return BadRequest("AssetID is empty!");
+
+                if (!Guid.TryParse(assetID, out Guid realEstateAssetID))
+                    return BadRequest("assetID must be a valid GUID!");
+
+                var asset = await _service.GetAsset(realEstateAssetID).ConfigureAwait(false);
 
                 if (asset == null)
                     return NotFound("No such asset found!");
 
-                if (images.IsNullOrEmpty())
-                    return BadRequest("Image list can not be empty!");
+                if (images == null || images.Length == 0)
+                    return BadRequest("Image list cannot be empty!");
 
                 var imageUrlList = await _imageService.UploadImages(images).ConfigureAwait(false);
 
@@ -38,27 +46,41 @@ namespace RealEstate.Controllers
                     var assetImage = new AssetImage()
                     {
                         FileName = img,
-                        AssetID = assetID,
+                        AssetID = realEstateAssetID,
                     };
                     await _service.AddAssetImage(assetImage).ConfigureAwait(false);
                 }
 
-                return Ok("Images added successfully");
+                return Ok(new
+                {
+                    Message = "Images added successfully",
+                    ImageUrls = imageUrlList
+                });
             }
             catch (IOException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "File system error occurred while uploading images.");
             }
             catch (ArgumentNullException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Missing argument. Please contact support.");
             }
             catch (FormatException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
         }
 
@@ -67,6 +89,9 @@ namespace RealEstate.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(imageFileName))
+                    return BadRequest("Image file name is empty!");
+
                 List<AssetImage> assetImagesList = await _service.GetAssetImagesList().ConfigureAwait(false);
 
                 var assetImage = assetImagesList.FirstOrDefault(assetImg => assetImg.FileName == imageFileName);
@@ -76,10 +101,11 @@ namespace RealEstate.Controllers
 
                 var environmentPath = _imageService.GetLocalImagesFullPath("asset");
 
-                var fullPath = Path.Combine(environmentPath , assetImage.FileName);
+                var fullPath = Path.Combine(environmentPath, assetImage.FileName);
 
                 var normalizedPath = Path.GetFullPath(fullPath);
-                if (!normalizedPath.StartsWith(Path.GetFullPath(fullPath) , StringComparison.CurrentCulture))
+                var basePath = Path.GetFullPath(environmentPath);
+                if (!normalizedPath.StartsWith(basePath, StringComparison.OrdinalIgnoreCase))
                     return BadRequest("Invalid file path access.");
 
                 if (!System.IO.File.Exists(fullPath))
@@ -98,20 +124,35 @@ namespace RealEstate.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(500, "An unexpected error occurred. Please try again later!");
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred. Please try again later!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+            }
         }
 
-        [HttpGet("asset")]
-        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetList() => Ok(await _service.GetAssetList().ConfigureAwait(false));
+        [HttpGet("asset/desc")]
+        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDescending() => Ok(await _service.GetAssetListDescending().ConfigureAwait(false));
+        [HttpGet("asset/asc")]
+        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListAscending() => Ok(await _service.GetAssetListAscending().ConfigureAwait(false));
+        [HttpGet("asset/date")]
+        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDateModified() => Ok(await _service.GetAssetListDateModified().ConfigureAwait(false));
 
         [HttpGet("asset/{assetID}")]
         public async Task<ActionResult<Asset>> GetAsset(string assetID)
         {
             try
             {
-                if (assetID.IsNullOrEmpty())
-                    return BadRequest("Invalid assetID");
+                if (string.IsNullOrWhiteSpace(assetID))
+                    return BadRequest("Invalid assetID!");
 
-                Guid realEstateAssetID = Guid.Parse(assetID);
+                if (!Guid.TryParse(assetID, out Guid realEstateAssetID))
+                    return BadRequest("assetID must be a valid GUID!");
 
                 Asset? asset = await _service.GetAsset(realEstateAssetID).ConfigureAwait(false);
 
@@ -134,19 +175,52 @@ namespace RealEstate.Controllers
             try
             {
                 if (newAsset == null)
-                    return BadRequest("Failed to retreive parameter!");
+                    return BadRequest("Failed to retrieve parameter!");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                if (newAsset.Date!.ToString().IsNullOrEmpty() && newAsset.Time.IsNullOrEmpty())
-                    newAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                newAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                switch (true)
+                {
+                    case bool _ when string.IsNullOrWhiteSpace(newAsset.Date):
+                        {
+                            newAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        }
+                        break;
+                    case bool _ when string.IsNullOrWhiteSpace(newAsset.Time):
+                        {
+                            newAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                        }
+                        break;
+
+                    case bool _ when string.IsNullOrWhiteSpace(newAsset.Time) && string.IsNullOrWhiteSpace(newAsset.Date):
+                        {
+                            newAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            newAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                        }
+                        break;
+                    default:
+                        {
+                            newAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            newAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                        }
+                        break;
+                }
 
                 bool? isAssetExists = await _service.IsAssetExist(newAsset.PlatesNumber!).ConfigureAwait(false);
 
                 if (isAssetExists == true)
                     return BadRequest("Asset with this plates number is already exist!");
+
+                var allAssets = await _service.GetAssetListAscending().ConfigureAwait(false);
+
+                if (!allAssets.IsNullOrEmpty())
+                {
+                    var lastAssetOrderID = allAssets.Last().OrderID;
+                    newAsset.OrderID = lastAssetOrderID + 1;
+                }
+                else newAsset.OrderID = 1;
+
 
                 Asset? addedAsset = await _service.AddAsset(newAsset).ConfigureAwait(false);
 
@@ -236,10 +310,11 @@ namespace RealEstate.Controllers
         {
             try
             {
-                Guid personID = Guid.Parse(id);
+                if (string.IsNullOrWhiteSpace(id))
+                    return BadRequest("id is empty!");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                if (!Guid.TryParse(id, out Guid personID))
+                    return BadRequest("id must be a valid GUID!");
 
                 Person? person = await _service.GetPerson(personID).ConfigureAwait(false);
 
@@ -304,10 +379,11 @@ namespace RealEstate.Controllers
         {
             try
             {
-                Guid personID = Guid.Parse(id);
+                if (string.IsNullOrWhiteSpace(id))
+                    return BadRequest("id is empty!");
 
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                if (!Guid.TryParse(id, out Guid personID))
+                    return BadRequest("id must be a valid GUID!");
 
                 Person? person = await _service.GetPerson(personID).ConfigureAwait(false);
 
