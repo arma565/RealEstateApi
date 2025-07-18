@@ -212,7 +212,6 @@ ImageService imageService)
                 .Include(assetImg => assetImg.AssetImages)
                 .OrderBy(prop => prop.Date)
                 .ToListAsync().ConfigureAwait(false);
-
         public async Task<Asset?> GetAsset(Guid assetID) =>
             await _context
                 .Assets.AsNoTracking()
@@ -220,40 +219,22 @@ ImageService imageService)
                 .Include(assetImg => assetImg.AssetImages)
                 .SingleOrDefaultAsync(prop => prop.Id == assetID)
                 .ConfigureAwait(false);
-
-        public async Task<List<AssetImage>> GetAssetImagesList() =>
-            await _context
-            .AssetImages
-            .AsNoTracking()
-            .OrderByDescending(assetImg => assetImg.Id)
-            .ToListAsync()
-            .ConfigureAwait(false);
-
         public async Task<Asset?> AddAsset(Asset newAsset)
         {
             await _context.Assets.AddAsync(newAsset).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return newAsset;
         }
-
-        public async Task AddAssetImage(AssetImage assetImage)
-        {
-            await _context.AssetImages.AddAsync(assetImage).ConfigureAwait(false);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
-        }
-
         public async Task UpdateAsset(Asset updateAsset)
         {
             _context.Assets.Update(updateAsset);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-
         public void DeleteAsset(Asset deleteAsset)
         {
             _context.Assets.Remove(deleteAsset);
             _context.SaveChanges();
         }
-
         public void DeleteAllAssets()
         {
             _context.Assets.ExecuteDelete();
@@ -267,7 +248,6 @@ ImageService imageService)
                 }
             }
         }
-
         public async Task<Asset?> FindAssetByPlatesNumber(string platesNumber)
         {
             var assetList = await GetAssetListDescending().ConfigureAwait(false);
@@ -275,6 +255,31 @@ ImageService imageService)
         }
         public async Task<bool> IsAssetExist(string plateNumber) =>
            await _context.Assets.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
+        #endregion
+
+        #region AssetImage
+        public async Task<List<AssetImage>> GetAssetImageList() =>
+           await _context
+           .AssetImages
+           .AsNoTracking()
+           .OrderByDescending(assetImg => assetImg.Id)
+           .ToListAsync()
+           .ConfigureAwait(false);
+        public async Task<AssetImage?> GetAssetImage(Guid assetImageID) =>
+         await _context
+        .AssetImages.AsNoTracking()
+        .SingleOrDefaultAsync(assetImg => assetImg.Id == assetImageID)
+        .ConfigureAwait(false);
+        public async Task AddAssetImage(AssetImage assetImage)
+        {
+            await _context.AssetImages.AddAsync(assetImage).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+        public void DeleteAssetImage(AssetImage deleteAssetImage)
+        {
+            _context.AssetImages.Remove(deleteAssetImage);
+            _context.SaveChanges();
+        }
         #endregion
 
         #region Person

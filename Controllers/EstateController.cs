@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
@@ -19,7 +20,6 @@ namespace RealEstate.Controllers
         private readonly ImageService _imageService = imageService;
 
         #region "Asset"
-
         [HttpPost("asset/upload/{assetID}")]
         public async Task<IActionResult> AssetImageUpload(string assetID, [FromForm] IFormFile[] images)
         {
@@ -83,7 +83,6 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
-
         [HttpGet("asset/download/{imageFileName}")]
         public async Task<IActionResult> DownloadAssetImage(string imageFileName)
         {
@@ -92,7 +91,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrWhiteSpace(imageFileName))
                     return BadRequest("Image file name is empty!");
 
-                List<AssetImage> assetImagesList = await _service.GetAssetImagesList().ConfigureAwait(false);
+                List<AssetImage> assetImagesList = await _service.GetAssetImageList().ConfigureAwait(false);
 
                 var assetImage = assetImagesList.FirstOrDefault(assetImg => assetImg.FileName == imageFileName);
 
@@ -119,30 +118,38 @@ namespace RealEstate.Controllers
 
                 return PhysicalFile(fullPath, contentType, Path.GetFileName(fullPath));
             }
-            catch (BadHttpRequestException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
-            }
             catch (IOException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred. Please try again later!");
+                return StatusCode(500, "File system error occurred while uploading images.");
             }
-            catch (Exception ex)
+            catch (ArgumentNullException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
         }
-
         [HttpGet("asset/desc")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDescending() => Ok(await _service.GetAssetListDescending().ConfigureAwait(false));
         [HttpGet("asset/asc")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListAscending() => Ok(await _service.GetAssetListAscending().ConfigureAwait(false));
         [HttpGet("asset/date")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDateModified() => Ok(await _service.GetAssetListDateModified().ConfigureAwait(false));
-
         [HttpGet("asset/{assetID}")]
         public async Task<ActionResult<Asset>> GetAsset(string assetID)
         {
@@ -162,13 +169,32 @@ namespace RealEstate.Controllers
                 return Ok(asset);
 
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
             catch (FormatException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
         }
-
         [HttpPost("asset/add")]
         public async Task<IActionResult> AddAsset([FromBody] Asset newAsset)
         {
@@ -230,14 +256,33 @@ namespace RealEstate.Controllers
                     addedAsset
                 );
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
             catch (FormatException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
 
         }
-
         [HttpPut("asset/update")]
         public async Task<IActionResult> UpdateAsset([FromBody] Asset updateAsset)
         {
@@ -261,22 +306,42 @@ namespace RealEstate.Controllers
 
                 return NoContent();
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
             catch (FormatException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
 
         }
-
-        [HttpDelete("asset/delete/{id}")]
-        public async Task<IActionResult> DeleteAsset(string id)
+        [HttpDelete("asset/delete/{assetID}")]
+        public async Task<IActionResult> DeleteAsset(string assetID)
         {
             try
             {
-                Guid assetId = Guid.Parse(id);
+                if (!Guid.TryParse(assetID, out Guid realEstateID))
+                    return BadRequest("Id must be a valid GUID!");
 
-                Asset? asset = await _service.GetAsset(assetId).ConfigureAwait(false);
+                Asset? asset = await _service.GetAsset(realEstateID).ConfigureAwait(false);
 
                 if (asset is null)
                     return NotFound("Asset not found!");
@@ -285,13 +350,32 @@ namespace RealEstate.Controllers
 
                 return Ok("Asset successfully deleted");
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
             catch (FormatException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
         }
-
         [HttpDelete("asset/delete-all")]
         public IActionResult DeleteAssets()
         {
@@ -300,11 +384,55 @@ namespace RealEstate.Controllers
         }
         #endregion
 
-        #region "Person"
+        #region AssetImage
+        [HttpDelete("assetImage/delete/{assetImageID}")]
+        public async Task<IActionResult> DeleteAssetImage(string assetImageID)
+        {
+            try
+            {
+                if (!Guid.TryParse(assetImageID, out Guid realEstateAssetImageID))
+                    return BadRequest("Id must be a valid GUID!");
 
+                AssetImage? assetImage = await _service.GetAssetImage(realEstateAssetImageID).ConfigureAwait(false);
+
+                if (assetImage is null)
+                    return NotFound("AssetImage not found!");
+
+                _service.DeleteAssetImage(assetImage);
+
+                return Ok("AssetImage successfully deleted");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
+            }
+        }
+        #endregion
+
+        #region "Person"
         [HttpGet("person")]
         public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList().ConfigureAwait(false);
-
         [HttpGet("person/{id}")]
         public async Task<ActionResult<Person>> GetPerson(string id)
         {
@@ -323,14 +451,33 @@ namespace RealEstate.Controllers
 
                 return person;
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
             catch (FormatException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
 
         }
-
         [HttpPost("person/add")]
         public async Task<IActionResult> AddPerson([FromBody] Person newPerson)
         {
@@ -349,7 +496,6 @@ namespace RealEstate.Controllers
 
             return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
         }
-
         [HttpPut("person/update")]
         public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
         {
@@ -373,7 +519,6 @@ namespace RealEstate.Controllers
 
             return Ok(updatedPerson);
         }
-
         [HttpDelete("person/delete/{id}")]
         public async Task<IActionResult> DeletePerson(string id)
         {
@@ -394,14 +539,33 @@ namespace RealEstate.Controllers
 
                 return Ok("Person successfully deleted");
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
             catch (FormatException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An unexpected error occurred. Please try again later!");
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
             }
 
         }
-
         [HttpDelete("person/delete-all")]
         public IActionResult DeleteAllPersons()
         {

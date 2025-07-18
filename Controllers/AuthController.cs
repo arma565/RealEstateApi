@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
 using RealEstate.Services;
+using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 namespace RealEstate.Controllers
 {
@@ -46,17 +47,32 @@ namespace RealEstate.Controllers
 
 				return BadRequest(result.Errors);
 			}
-			catch (IOException ex)
-			{
-				Console.WriteLine(ex.Message);
-				return StatusCode(500, "An unexpected error occurred. Please try again later.");
-			}
-			catch (ArgumentNullException ex)
-			{
-				Console.WriteLine(ex.Message);
-				return StatusCode(500, "An unexpected error occurred. Please try again later." );
-			}
-		}
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
+            }
+        }
 
 		[HttpGet("user/download/{userName}")]
 		public async Task<IActionResult> DownloadProfileImage(string userName)
@@ -85,17 +101,32 @@ namespace RealEstate.Controllers
 
 				return PhysicalFile(fullPath, contentType, fileName);
 			}
-			catch (BadHttpRequestException ex)
-			{
-				Console.WriteLine(ex.Message);
-				return StatusCode(500, "Unknown server error");
-			}
-			catch (IOException ex)
-			{
-				Console.WriteLine(ex.Message);
-				return StatusCode(500, "Unknown server error");
-			}
-		}
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
+            }
+        }
 
 		[HttpGet("users")]
 		public async Task<ActionResult<List<User>>> GetAllUsers()
@@ -155,11 +186,32 @@ namespace RealEstate.Controllers
 
 				return BadRequest(res.Errors);
 			}
-			catch (ArgumentNullException)
-			{
-				return BadRequest("Failed to retreive parameter!");
-			}
-		}
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
+            }
+        }
 
 		[HttpPost("user/login")]
 		public async Task<IActionResult> LoginUser([FromBody] Login model)
@@ -221,11 +273,32 @@ namespace RealEstate.Controllers
 
 				return Ok(generatedToken);
 			}
-			catch (ArgumentNullException)
-			{
-				return BadRequest("Failed to retreive parameter!");
-			}
-		}
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
+            }
+        }
 
 		[HttpPost("user/reset/password")]
 		public async Task<IActionResult> ResetPassword([FromBody] Reset model)

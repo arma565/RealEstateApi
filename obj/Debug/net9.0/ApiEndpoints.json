@@ -314,13 +314,13 @@
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
     "Method": "DeleteAsset",
-    "RelativePath": "Estate/asset/delete/{id}",
+    "RelativePath": "Estate/asset/delete/{assetID}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "assetID",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -396,6 +396,22 @@
         "Name": "images",
         "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "DeleteAssetImage",
+    "RelativePath": "Estate/assetImage/delete/{assetImageID}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "assetImageID",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

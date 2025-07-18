@@ -713,14 +713,14 @@
         }
       }
     },
-    "/Estate/asset/delete/{id}": {
+    "/Estate/asset/delete/{assetID}": {
       "delete": {
         "tags": [
           "Estate"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "assetID",
             "in": "path",
             "required": true,
             "schema": {
@@ -739,6 +739,28 @@
       "delete": {
         "tags": [
           "Estate"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Estate/assetImage/delete/{assetImageID}": {
+      "delete": {
+        "tags": [
+          "Estate"
+        ],
+        "parameters": [
+          {
+            "name": "assetImageID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
