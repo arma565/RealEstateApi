@@ -1,6 +1,8 @@
 using RealEstate.Models.Estate.Assets;
 using System.ComponentModel.DataAnnotations;
 
+#pragma warning disable CA1515
+#pragma warning disable CS0649
 namespace RealEstate.Models.Estate
 {
     public sealed class Person
@@ -18,7 +20,7 @@ namespace RealEstate.Models.Estate
         private string _phone = "";
         private string _role = "";
         private Guid _assetID;
-        private Asset? _asset;
+        private readonly Asset? _asset;
        
         [Key]
         public Guid Id

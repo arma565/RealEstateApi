@@ -1,23 +1,22 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using RealEstate.Data;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
+#pragma warning disable CA1515
 namespace RealEstate.Services
 {
     public sealed class RepositoryService(AppDbContext context,
-UserManager<UserProfileIdentity> userManager,
-SignInManager<UserProfileIdentity> signInManager,
+UserManager<User> userManager,
+SignInManager<User> signInManager,
 ImageService imageService)
     {
         private readonly AppDbContext _context = context;
-        private readonly UserManager<UserProfileIdentity> _userManager = userManager;
-        private readonly SignInManager<UserProfileIdentity> _signInManager = signInManager;
+        private readonly UserManager<User> _userManager = userManager;
+        private readonly SignInManager<User> _signInManager = signInManager;
         private readonly ImageService _imageService = imageService;
 
         #region Authentication
@@ -26,47 +25,38 @@ ImageService imageService)
         /// This function return all registered users
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<User>> GetAllUsers()
-        {
-            var users = await _userManager.Users.AsNoTracking().ToListAsync().ConfigureAwait(false);
-            var usersList = new List<User>();
-            foreach (var userInUserManager in users)
-            {
-                var user = new User
-                {
-                    Id = userInUserManager.Id,
-                    ProfileImagePath = userInUserManager.ProfileImageName,
-                    FirstName = userInUserManager.FirstName!,
-                    LastName = userInUserManager.LastName!,
-                    AcceptTerms = userInUserManager.AcceptTerms,
-                    UserName = userInUserManager.UserName ?? "",
-                    Email = userInUserManager.Email ?? "",
-                    PhoneNumber = userInUserManager.PhoneNumber ?? "",
-                };
-                usersList.Add(user);
-            }
-            return [.. usersList];
-        }
+        public async Task<IEnumerable<User>> GetAllUsers() => [.. await _userManager.Users.AsNoTracking().ToListAsync().ConfigureAwait(false)];
+
+        /// <summary>
+        /// This function return a user using id
+        /// </summary>
+        /// <returns></returns>
+        public async Task<User?> GetUser(string userID) =>
+             await _userManager
+                 .Users.AsNoTracking()
+                 .SingleOrDefaultAsync(user => user.Id == userID)
+                 .ConfigureAwait(false);
 
         /// <summary>
         /// This function register a user in database
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<IdentityResult> RegisterUser(Register model)
+        public async Task<IdentityResult> RegisterUser(Register userRegister)
         {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            else
-                return await _userManager.CreateAsync(
-                       new UserProfileIdentity
-                       {
-                           UserName = model.UserName,
-                           Email = model.Email,
-                           AcceptTerms = model.AcceptTerms,
-                       },
-                       model.Password
-                   ).ConfigureAwait(false);
+            if (userRegister is null)
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "userRegister Null",
+                    Description = "Failed to retrieve parameter!"
+                });
+
+            return await _userManager.CreateAsync(new User {
+                UserName = userRegister.UserName,
+                Email = userRegister.Email,
+                AcceptTerms = userRegister.AcceptTerms
+            }, userRegister.Password).ConfigureAwait(false);
+
         }
 
 
@@ -93,7 +83,7 @@ ImageService imageService)
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<IdentityResult> DeleteUser(UserProfileIdentity user)
+        public async Task<IdentityResult> DeleteUser(User user)
         {
             var environmentPath = _imageService.GetLocalImagesFullPath("auth");
 
@@ -133,7 +123,7 @@ ImageService imageService)
         /// User account which needs reset
         /// </param>
         /// <returns></returns>
-        public async Task<string> GenerateTokenToRecoverUser(UserProfileIdentity user)
+        public async Task<string> GenerateTokenToRecoverUser(User user)
         {
             return await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
         }
@@ -152,7 +142,7 @@ ImageService imageService)
         /// </param>
         /// <returns></returns>
         public async Task<IdentityResult> ResetPassword(
-            UserProfileIdentity user,
+            User user,
             string token,
             string newPassword
         )
@@ -160,7 +150,7 @@ ImageService imageService)
             return await _userManager.ResetPasswordAsync(user, token, newPassword).ConfigureAwait(false);
         }
 
-        public async Task<IdentityResult> ChangePassword(UserProfileIdentity user, string currentPassword, string newPassword)
+        public async Task<IdentityResult> ChangePassword(User user, string currentPassword, string newPassword)
         {
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
@@ -172,20 +162,14 @@ ImageService imageService)
         /// user account
         /// </param>
         /// <returns></returns>
-        public async Task<IdentityResult> EditUserProfile(UserProfileIdentity user)
-        {
-            return await _userManager.UpdateAsync(user).ConfigureAwait(false);
-        }
+        public async Task<IdentityResult> EditUserProfile(User updateUser) => await _userManager.UpdateAsync(updateUser).ConfigureAwait(false);
+      
+        public async Task<User?> FindUserByEmail(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
-        public async Task<UserProfileIdentity?> FindUserByEmail(string email)
-        {
-            return await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-        }
+        public async Task<User?> FindUserByUserName(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
+        public async Task<User?> FindUserByID(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
-        public async Task<UserProfileIdentity?> FindUserByUserName(string userName)
-        {
-            return await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
-        }
+        public async Task<bool> isUserExist(string userID) => await _userManager.Users.AsNoTracking().AnyAsync(user => user.Id == userID).ConfigureAwait(false);
         #endregion
 
         #region Asset

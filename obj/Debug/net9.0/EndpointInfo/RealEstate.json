@@ -5,14 +5,14 @@
     "version": "1.0"
   },
   "paths": {
-    "/Auth/user/upload/{userName}": {
+    "/Auth/user/upload/{userID}": {
       "post": {
         "tags": [
           "Auth"
         ],
         "parameters": [
           {
-            "name": "userName",
+            "name": "userID",
             "in": "path",
             "required": true,
             "schema": {
@@ -47,14 +47,14 @@
         }
       }
     },
-    "/Auth/user/download/{userName}": {
+    "/Auth/user/download/{userID}": {
       "get": {
         "tags": [
           "Auth"
         ],
         "parameters": [
           {
-            "name": "userName",
+            "name": "userID",
             "in": "path",
             "required": true,
             "schema": {
@@ -107,14 +107,14 @@
         }
       }
     },
-    "/Auth/user/{userName}": {
+    "/Auth/user/{userID}": {
       "get": {
         "tags": [
           "Auth"
         ],
         "parameters": [
           {
-            "name": "userName",
+            "name": "userID",
             "in": "path",
             "required": true,
             "schema": {
@@ -394,22 +394,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserProfile"
+                "$ref": "#/components/schemas/User"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserProfile"
+                "$ref": "#/components/schemas/User"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserProfile"
+                "$ref": "#/components/schemas/User"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserProfile"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -1274,15 +1274,70 @@
         "additionalProperties": false
       },
       "User": {
+        "required": [
+          "acceptTerms",
+          "email",
+          "phoneNumber",
+          "userName"
+        ],
         "type": "object",
         "properties": {
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
           "id": {
             "type": "string",
             "nullable": true
           },
-          "profileImagePath": {
-            "type": "string",
-            "nullable": true
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "phoneNumber": {
+            "minLength": 1,
+            "type": "string"
           },
           "firstName": {
             "type": "string",
@@ -1293,48 +1348,11 @@
             "nullable": true
           },
           "acceptTerms": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           },
-          "userName": {
+          "profileImageName": {
             "type": "string",
             "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserProfile": {
-        "required": [
-          "firstName",
-          "lastName",
-          "phoneNumber",
-          "userName"
-        ],
-        "type": "object",
-        "properties": {
-          "userName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "firstName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "lastName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "phoneNumber": {
-            "minLength": 1,
-            "type": "string"
           }
         },
         "additionalProperties": false

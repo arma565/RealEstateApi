@@ -1,9 +1,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-
+#pragma warning disable CA1515
 namespace RealEstate.Models.Estate.Assets
 {
     public sealed class Asset
@@ -25,10 +24,10 @@ namespace RealEstate.Models.Estate.Assets
         private string? _time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
         private string? _date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         private string? _type = "";
-        private bool _water = true;
-        private bool _electricity = true;
-        private bool _gas = true;
-        private bool _phone = true;
+        private bool _water;
+        private bool _electricity;
+        private bool _gas;
+        private bool _phone;
         private readonly ICollection<AssetImage> _assetImages = [];
         private readonly ICollection<Person> _persons = [];
 

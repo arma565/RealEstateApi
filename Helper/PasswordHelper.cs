@@ -1,18 +1,19 @@
 using Microsoft.AspNetCore.Identity;
-using RealEstate.Data;
+using RealEstate.Models.Authentication;
 
+#pragma warning disable CA1515
 namespace RealEstate.Helper
 {
     public sealed class PasswordHelper
     {
-        private readonly PasswordHasher<UserProfileIdentity> _passwordHasher;
+        private readonly PasswordHasher<User> _passwordHasher;
 
         public PasswordHelper()
         {
-            _passwordHasher = new PasswordHasher<UserProfileIdentity>();
+            _passwordHasher = new PasswordHasher<User>();
         }
 
-        public bool VerifyPassword(UserProfileIdentity user, string hashedPassword, string inputPassword)
+        public bool VerifyPassword(User user, string hashedPassword, string inputPassword)
         {
             // Verify the password
             return _passwordHasher.VerifyHashedPassword(user, hashedPassword, inputPassword)

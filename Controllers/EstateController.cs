@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Security;
 
+#pragma warning disable CA1515
 namespace RealEstate.Controllers
 {
     [ApiController]
@@ -46,7 +47,7 @@ namespace RealEstate.Controllers
                     var assetImage = new AssetImage()
                     {
                         FileName = img,
-                        AssetID = realEstateAssetID,
+                        AssetID = realEstateAssetID
                     };
                     await _service.AddAssetImage(assetImage).ConfigureAwait(false);
                 }
@@ -110,7 +111,6 @@ namespace RealEstate.Controllers
                 if (!System.IO.File.Exists(fullPath))
                     return NotFound("Image file not found!");
 
-                // Detect MIME type
                 var provider = new FileExtensionContentTypeProvider();
 
                 if (!provider.TryGetContentType(fullPath, out var contentType))
@@ -289,7 +289,7 @@ namespace RealEstate.Controllers
             try
             {
                 if (updateAsset == null)
-                    return BadRequest("Failed to retreive parameter!");
+                    return BadRequest("Failed to retrieve parameter!");
 
                 Asset? asset = await _service.GetAsset(updateAsset.Id).ConfigureAwait(false);
 

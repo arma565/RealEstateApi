@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Helper;
+using RealEstate.Models.Authentication;
 using RealEstate.Services;
 
 var MyAllowSpecificOrigins = "_estatePolicy";
@@ -26,7 +27,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PropertyConnection"))
 );
 builder
-    .Services.AddIdentity<UserProfileIdentity, IdentityRole>()
+    .Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddAuthentication();

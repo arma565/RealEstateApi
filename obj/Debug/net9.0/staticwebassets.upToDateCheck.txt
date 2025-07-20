@@ -1,15 +1,2 @@
-wwwroot\images\asset\56008455-d987-49b5-86e8-022fa8366593.png
-wwwroot\images\asset\af09dd00-d911-493e-a9e8-4a6da755e457.png
-wwwroot\images\asset\cb2bea07-abd0-47ed-87f9-73b23b0eaf42.png
-wwwroot\images\asset\5e587b26-9481-43f8-8271-f816aa43aceb.png
-wwwroot\images\asset\b1aed16b-2ad6-44ab-97e4-62c808a9882c.png
-wwwroot\images\asset\02a067b6-589b-40b0-a8e9-0caf94671425.png
-wwwroot\images\asset\3417ec99-88a5-425c-aed9-2cd03c8fbf6b.png
-wwwroot\images\asset\4346f14b-e5ec-4bdc-8059-f19c4b021827.png
-wwwroot\images\asset\b0286f9c-aa02-4cb1-9515-62017844b0a5.png
-wwwroot\images\asset\074734a7-f4b9-4bc1-a00d-2cc21aa14c5e.png
-wwwroot\images\asset\2adbd24f-7c12-4db7-80b5-9ed5e555aed5.png
-wwwroot\images\asset\9e6c8e54-2674-470d-af3b-9b10a5f457c6.png
-wwwroot\images\asset\b47f8262-0333-4a35-bda2-a6e1937daff9.png
-wwwroot\images\asset\5a3b5c30-e462-47fa-9186-6957a47c5cdd.png
-wwwroot\images\asset\69e06672-754a-4242-9316-c0eb094f8f86.png
+wwwroot\images\asset\3f4e4479-731f-4f97-9d42-a74e182099c2.png
+wwwroot\images\asset\fc55bbf9-8c7f-42d2-b45a-d535d67dbb9d.png

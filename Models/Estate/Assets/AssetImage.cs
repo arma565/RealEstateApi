@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+#pragma warning disable CA1515
+#pragma warning disable CS0649
 namespace RealEstate.Models.Estate.Assets
 {
     public sealed class AssetImage

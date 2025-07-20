@@ -2,13 +2,13 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "GetUserByUserName",
-    "RelativePath": "Auth/user/{userName}",
+    "RelativePath": "Auth/user/{userID}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userName",
+        "Name": "userID",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -75,13 +75,13 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "DownloadProfileImage",
-    "RelativePath": "Auth/user/download/{userName}",
+    "RelativePath": "Auth/user/download/{userID}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userName",
+        "Name": "userID",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -97,8 +97,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "model",
-        "Type": "RealEstate.Models.Authentication.UserProfile",
+        "Name": "updateUser",
+        "Type": "RealEstate.Models.Authentication.User",
         "IsRequired": true
       }
     ],
@@ -155,7 +155,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "model",
+        "Name": "registerUser",
         "Type": "RealEstate.Models.Authentication.Register",
         "IsRequired": true
       }
@@ -181,13 +181,13 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "UploadProfileImage",
-    "RelativePath": "Auth/user/upload/{userName}",
+    "RelativePath": "Auth/user/upload/{userID}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userName",
+        "Name": "userID",
         "Type": "System.String",
         "IsRequired": true
       },

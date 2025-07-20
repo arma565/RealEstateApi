@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
+#pragma warning disable CA1515
 namespace RealEstate.Models.Authentication
 {
     public sealed class Register
@@ -8,11 +9,9 @@ namespace RealEstate.Models.Authentication
         private string _email = "";
         private string _password = "";
         private string _repeat_password = "";
+        private bool accept_terms;
 
-        [Required]
-        private bool accept_terms = false;
-
-        [Required]
+        [Required(ErrorMessage = "UserName is reqired!")]
         public string UserName
         {
             get => _user_name;
@@ -45,6 +44,7 @@ namespace RealEstate.Models.Authentication
             get => _repeat_password;
             set => _repeat_password = value;
         }
+
         [Required]
         [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the terms and conditions!")]
         public bool AcceptTerms

@@ -1,8 +1,6 @@
 using Microsoft.IdentityModel.Tokens;
-using RealEstate.Models.Authentication;
-using System.Collections.ObjectModel;
-using static System.Net.Mime.MediaTypeNames;
 
+#pragma warning disable CA1515
 namespace RealEstate.Services
 {
     internal interface IImageService

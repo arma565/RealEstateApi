@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
+#pragma warning disable CA1515
 namespace RealEstate.Models.Authentication
 {
     public sealed class Login

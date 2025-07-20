@@ -1,15 +1,14 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using RealEstate.Models.Authentication;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
-using System.Text.Json;
 
 
+#pragma warning disable CA1515
 namespace RealEstate.Data
 {
-    public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<UserProfileIdentity>(options)
+    public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User>(options)
     {
         public required DbSet<Asset> Assets { get; set; }
 
@@ -20,7 +19,9 @@ namespace RealEstate.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             ArgumentNullException.ThrowIfNull(builder);
- 
+
+            base.OnModelCreating(builder);
+
             builder
                 .Entity<Asset>()
                 .HasMany(asset => asset.Persons)
@@ -37,13 +38,7 @@ namespace RealEstate.Data
                 .HasForeignKey(assetImg => assetImg.AssetID)
                 .HasPrincipalKey(asset => asset.Id)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade); ;
-
-            builder.Entity<IdentityUserLogin<string>>().HasNoKey();
-
-            builder.Entity<IdentityUserRole<string>>().HasNoKey();
-
-            builder.Entity<IdentityUserToken<string>>().HasNoKey();
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

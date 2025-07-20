@@ -1,58 +1,71 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
+#pragma warning disable CA1515
 namespace RealEstate.Models.Authentication
 {
-    public sealed class User
+    public sealed class User : IdentityUser
     {
         private string _id = "";
-        private string? _profile_image_name = "";
-        private string _first_name = "";
-        private string _last_name = "";
-        private bool? _accept_terms = false;
-        private string _user_name = "";
-        private string _email = "";
-        private string _phone_number = "";
+        private string? _userName = "";
+        private string? _email = "";
+        private string? _phoneNumber = "";
+        private string _firstName = "";
+        private string _lastName = "";
+        private bool _acceptTerms;
+        private string _profileImageName = "";
 
-        public string Id
+        [Key]
+        public override string Id
         {
             get => _id;
             set => _id = value;
         }
 
-        public string? ProfileImagePath
+        [Required(ErrorMessage = "UserName is reqired!")]
+        public override string? UserName
         {
-            get => _profile_image_name;
-            set => _profile_image_name = value;
+            get => _userName;
+            set => _userName = value;
         }
-        public string FirstName
-        {
-            get => _first_name;
-            set => _first_name = value;
-        }
-        public string LastName
-        {
-            get => _last_name;
-            set => _last_name = value;
-        }
-        public bool? AcceptTerms
-        {
-            get => _accept_terms;
-            set => _accept_terms = value;
-        }
-        public string UserName
-        {
-            get => _user_name;
-            set => _user_name = value;
-        }
-        public string Email
+
+        [Required(ErrorMessage = "Email is reqired!")]
+        public override string? Email
         {
             get => _email;
             set => _email = value;
         }
-        public string PhoneNumber
+
+        [Required(ErrorMessage = "PhoneNumber is reqired!")]
+        public override string? PhoneNumber
         {
-            get => _phone_number;
-            set => _phone_number = value;
+            get => _phoneNumber;
+            set => _phoneNumber = value;
+        }
+
+        public string FirstName
+        {
+            get => _firstName;
+            set => _firstName = value;
+        }
+        public string LastName
+        {
+            get => _lastName;
+            set => _lastName = value;
+        }
+
+        [Required]
+        [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the terms and conditions!")]
+        public bool AcceptTerms
+        {
+            get => _acceptTerms;
+            set => _acceptTerms = value;
+        }
+       
+        public string ProfileImageName
+        {
+            get => _profileImageName;
+            set => _profileImageName = value;
         }
     }
 }
