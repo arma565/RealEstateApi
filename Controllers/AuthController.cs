@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
+using RealEstate.Models.Authentication.Users;
 using RealEstate.Models.Estate.Assets;
 using RealEstate.Services;
 using System.IO;
@@ -34,26 +35,35 @@ namespace RealEstate.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(userID))
+                    return BadRequest("userID can not be empty!");
+
+                var user = await _service.GetUser(userID).ConfigureAwait(false);
+
+                if (user == null)
+                    return NotFound("No such user found!");
+
                 if (image == null)
                     return BadRequest("Image can not be empty!");
 
                 var imageFileName = await _imageService.UploadProfileImage(image).ConfigureAwait(false);
 
-                if (string.IsNullOrWhiteSpace(userID))
-                    return BadRequest("userID can not be empty!");
+                var profileImage = new ProfileImage();
+                    
+                if (user.ProfileImage != null)
+                {
+                    profileImage.Id = user.ProfileImage!.Id;
+                    profileImage.ProfileImageName = imageFileName;
+                    profileImage.UserID =  userID;
+                    await _service.UpdateProfileImage(profileImage).ConfigureAwait(false);
+                }
+                else {
+                    profileImage.ProfileImageName = imageFileName;
+                    profileImage.UserID = userID;
+                    await _service.AddProfileImage(profileImage).ConfigureAwait(false);
+                }
 
-                var user = await _service.FindUserByID(userID).ConfigureAwait(false);
-
-                if (user == null)
-                    return NotFound("No such user found!");
-
-                user.ProfileImageName = imageFileName;
-
-                var result = await _service.EditUserProfile(user).ConfigureAwait(false);
-                if (result.Succeeded)
-                    return Ok("ProfileImage successfully uploaded");
-                else
-                    return BadRequest(result.Errors);
+                return Ok("ProfileImage successfully uploaded");
             }
             catch (IOException ex)
             {
@@ -90,16 +100,15 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrEmpty(userID))
                     return BadRequest("User id can not be empty!");
 
-                var user = await _service.FindUserByID(userID).ConfigureAwait(false);
+                var user = await _service.GetUser(userID).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
 
-
-                var profileImg = user.ProfileImageName;
-
-                if (profileImg.IsNullOrEmpty())
+                if (user.ProfileImage!.ProfileImageName.IsNullOrEmpty())
                     return NotFound("No image found!");
+
+                var profileImg = user.ProfileImage!.ProfileImageName;
 
                 if (!Regex.IsMatch(Path.GetFileNameWithoutExtension(profileImg), @"^[a-zA-Z0-9_-]+$"))
                     return BadRequest("Invalid file name format.");
@@ -153,18 +162,18 @@ namespace RealEstate.Controllers
             }
         }
 
-        [HttpGet("users")]
+        [HttpGet("user/users")]
         public async Task<ActionResult<List<User>>> GetAllUsers() => Ok(await _service.GetAllUsers().ConfigureAwait(false));
 
         [HttpGet("user/{userID}")]
-        public async Task<ActionResult<User>> GetUserByUserName(string userID)
+        public async Task<ActionResult<User>> GetUserByUserID(string userID)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(userID))
                     return BadRequest("User id can not be empty!");
 
-                var user = await _service.FindUserByID(userID).ConfigureAwait(false);
+                var user = await _service.GetUser(userID).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
@@ -334,9 +343,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
                     return BadRequest("userName or password is empty!");
 
-                var users = await _service.GetAllUsers().ConfigureAwait(false);
-
-                var user = users.FirstOrDefault(user => user.UserName == userName);
+                var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
@@ -378,7 +385,7 @@ namespace RealEstate.Controllers
             }
         }
 
-        [HttpPost("user/recovery/account")]
+        [HttpPost("user/recover/account")]
         public async Task<ActionResult<string>> RecoverUser([FromBody] Recovery recovery)
         {
             try
@@ -547,7 +554,6 @@ namespace RealEstate.Controllers
                 user.FirstName = updateUser.FirstName;
                 user.LastName = updateUser.LastName;
                 user.AcceptTerms = user.AcceptTerms;
-                user.ProfileImageName = user.ProfileImageName;
 
                 var result = await _service.EditUserProfile(user).ConfigureAwait(false);
 

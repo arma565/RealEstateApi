@@ -1,7 +1,7 @@
 [
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
-    "Method": "GetUserByUserName",
+    "Method": "GetUserByUserID",
     "RelativePath": "Auth/user/{userID}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -15,7 +15,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Models.Authentication.User",
+        "Type": "RealEstate.Models.Authentication.Users.User",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -98,7 +98,7 @@
     "Parameters": [
       {
         "Name": "updateUser",
-        "Type": "RealEstate.Models.Authentication.User",
+        "Type": "RealEstate.Models.Authentication.Users.User",
         "IsRequired": true
       }
     ],
@@ -123,7 +123,7 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "RecoverUser",
-    "RelativePath": "Auth/user/recovery/account",
+    "RelativePath": "Auth/user/recover/account",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -202,14 +202,14 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "GetAllUsers",
-    "RelativePath": "Auth/users",
+    "RelativePath": "Auth/user/users",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[RealEstate.Models.Authentication.User, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[RealEstate.Models.Authentication.Users.User, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

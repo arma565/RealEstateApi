@@ -2,12 +2,11 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-#pragma warning disable CA1515
-#pragma warning disable CA1062
+
 namespace RealEstate.Migrations
 {
     /// <inheritdoc />
-    public partial class RealEstateMigration : Migration
+    public partial class RealEstateMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,7 +36,6 @@ namespace RealEstate.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AcceptTerms = table.Column<bool>(type: "bit", nullable: false),
-                    ProfileImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
@@ -191,6 +189,25 @@ namespace RealEstate.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserProfileImages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProfileImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProfileImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserProfileImages_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AssetImages",
                 columns: table => new
                 {
@@ -284,6 +301,12 @@ namespace RealEstate.Migrations
                 name: "IX_Persons_AssetID",
                 table: "Persons",
                 column: "AssetID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProfileImages_UserID",
+                table: "UserProfileImages",
+                column: "UserID",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -311,13 +334,16 @@ namespace RealEstate.Migrations
                 name: "Persons");
 
             migrationBuilder.DropTable(
+                name: "UserProfileImages");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Assets");
 
             migrationBuilder.DropTable(
-                name: "Assets");
+                name: "AspNetUsers");
         }
     }
 }

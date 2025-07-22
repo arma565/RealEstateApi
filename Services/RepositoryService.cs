@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Models.Authentication;
+using RealEstate.Models.Authentication.Users;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -10,9 +11,9 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 namespace RealEstate.Services
 {
     public sealed class RepositoryService(AppDbContext context,
-UserManager<User> userManager,
-SignInManager<User> signInManager,
-ImageService imageService)
+                                            UserManager<User> userManager,
+                                            SignInManager<User> signInManager,
+                                            ImageService imageService)
     {
         private readonly AppDbContext _context = context;
         private readonly UserManager<User> _userManager = userManager;
@@ -25,7 +26,7 @@ ImageService imageService)
         /// This function return all registered users
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<User>> GetAllUsers() => [.. await _userManager.Users.AsNoTracking().ToListAsync().ConfigureAwait(false)];
+        public async Task<IEnumerable<User>> GetAllUsers() => [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
 
         /// <summary>
         /// This function return a user using id
@@ -34,6 +35,7 @@ ImageService imageService)
         public async Task<User?> GetUser(string userID) =>
              await _userManager
                  .Users.AsNoTracking()
+                 .Include(user => user.ProfileImage)
                  .SingleOrDefaultAsync(user => user.Id == userID)
                  .ConfigureAwait(false);
 
@@ -51,7 +53,8 @@ ImageService imageService)
                     Description = "Failed to retrieve parameter!"
                 });
 
-            return await _userManager.CreateAsync(new User {
+            return await _userManager.CreateAsync(new User
+            {
                 UserName = userRegister.UserName,
                 Email = userRegister.Email,
                 AcceptTerms = userRegister.AcceptTerms
@@ -87,7 +90,7 @@ ImageService imageService)
         {
             var environmentPath = _imageService.GetLocalImagesFullPath("auth");
 
-            var filePath = Path.Combine(environmentPath, user?.ProfileImageName ?? "");
+            var filePath = Path.Combine(environmentPath, user?.ProfileImage?.ProfileImageName ?? "");
 
             if (File.Exists(filePath))
                 File.Delete(filePath);
@@ -163,13 +166,47 @@ ImageService imageService)
         /// </param>
         /// <returns></returns>
         public async Task<IdentityResult> EditUserProfile(User updateUser) => await _userManager.UpdateAsync(updateUser).ConfigureAwait(false);
-      
+
         public async Task<User?> FindUserByEmail(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
         public async Task<User?> FindUserByUserName(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
         public async Task<User?> FindUserByID(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
         public async Task<bool> isUserExist(string userID) => await _userManager.Users.AsNoTracking().AnyAsync(user => user.Id == userID).ConfigureAwait(false);
+        #endregion
+
+        #region UserProfileImage
+        public async Task<List<ProfileImage>> GetUserProfileImageList() =>
+          await _context
+          .UserProfileImages
+          .AsNoTracking()
+          .OrderByDescending(userProfileImg => userProfileImg.Id)
+          .ToListAsync()
+          .ConfigureAwait(false);
+
+        public async Task<ProfileImage?> GetUserProfileImage(Guid userProfileImageID) =>
+       await _context
+      .UserProfileImages.AsNoTracking()
+      .SingleOrDefaultAsync(userProfileImg => userProfileImg.Id == userProfileImageID)
+      .ConfigureAwait(false);
+
+        public async Task AddProfileImage(ProfileImage userProfileImage)
+        {
+            await _context.UserProfileImages.AddAsync(userProfileImage).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task UpdateProfileImage(ProfileImage profileImage)
+        {
+            _context.UserProfileImages.Update(profileImage);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public void DeleteUserProfileImage(ProfileImage userProfileImage)
+        {
+            _context.UserProfileImages.Remove(userProfileImage);
+            _context.SaveChanges();
+        }
         #endregion
 
         #region Asset

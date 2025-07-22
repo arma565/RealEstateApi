@@ -11,14 +11,14 @@ namespace RealEstate.Models.Authentication
         private string _repeat_password = "";
         private bool accept_terms;
 
-        [Required(ErrorMessage = "UserName is reqired!")]
+        [Required(ErrorMessage = "UserName is required!")]
         public string UserName
         {
             get => _user_name;
             set => _user_name = value;
         }
 
-        [Required(ErrorMessage = "Email is reqired!")]
+        [Required(ErrorMessage = "Email is required!")]
         [EmailAddress(ErrorMessage = "Invalid email address!")]
         public string Email
         {

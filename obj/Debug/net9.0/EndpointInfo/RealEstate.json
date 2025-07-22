@@ -69,7 +69,7 @@
         }
       }
     },
-    "/Auth/users": {
+    "/Auth/user/users": {
       "get": {
         "tags": [
           "Auth"
@@ -260,7 +260,7 @@
         }
       }
     },
-    "/Auth/user/recovery/account": {
+    "/Auth/user/recover/account": {
       "post": {
         "tags": [
           "Auth"
@@ -1194,6 +1194,27 @@
         },
         "additionalProperties": false
       },
+      "ProfileImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileImageName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userID": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
       "Recovery": {
         "required": [
           "email"
@@ -1350,9 +1371,8 @@
           "acceptTerms": {
             "type": "boolean"
           },
-          "profileImageName": {
-            "type": "string",
-            "nullable": true
+          "profileImage": {
+            "$ref": "#/components/schemas/ProfileImage"
           }
         },
         "additionalProperties": false

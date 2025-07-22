@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 #pragma warning disable CA1515
-namespace RealEstate.Models.Authentication
+namespace RealEstate.Models.Authentication.Users
 {
     public sealed class User : IdentityUser
     {
@@ -13,7 +13,7 @@ namespace RealEstate.Models.Authentication
         private string _firstName = "";
         private string _lastName = "";
         private bool _acceptTerms;
-        private string _profileImageName = "";
+        private ProfileImage? _userProfileImage;
 
         [Key]
         public override string Id
@@ -61,12 +61,15 @@ namespace RealEstate.Models.Authentication
             get => _acceptTerms;
             set => _acceptTerms = value;
         }
-       
-        public string ProfileImageName
-        {
-            get => _profileImageName;
-            set => _profileImageName = value;
-        }
-    }
+
+        public ProfileImage? ProfileImage
+         {
+            get => _userProfileImage;
+            set => _userProfileImage = value;
+         }
+
+
+
+}
 }
 

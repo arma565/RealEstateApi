@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Helper;
-using RealEstate.Models.Authentication;
+using RealEstate.Models.Authentication.Users;
 using RealEstate.Services;
 
 var MyAllowSpecificOrigins = "_estatePolicy";

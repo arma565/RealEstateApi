@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.Models.Authentication;
+using RealEstate.Models.Authentication.Users;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
+using System.Reflection.Emit;
 
 
 #pragma warning disable CA1515
@@ -13,6 +14,7 @@ namespace RealEstate.Data
         public required DbSet<Asset> Assets { get; set; }
 
         public required DbSet<AssetImage> AssetImages { get; set; }
+        public required DbSet<ProfileImage> UserProfileImages { get; set; }
 
         public required DbSet<Person> Persons { get; set; }
 
@@ -39,6 +41,17 @@ namespace RealEstate.Data
                 .HasPrincipalKey(asset => asset.Id)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<User>()
+                .HasOne(user => user.ProfileImage)
+                .WithOne(profileImg => profileImg.User)
+                .HasForeignKey<ProfileImage>(profileImg => profileImg.UserID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ProfileImage>()
+            .HasIndex(p => p.UserID)
+            .IsUnique();
         }
     }
 }

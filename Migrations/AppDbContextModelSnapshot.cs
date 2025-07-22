@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.Data;
 
 #nullable disable
-#pragma warning disable CA1515
+
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
@@ -155,7 +155,29 @@ namespace RealEstate.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Authentication.User", b =>
+            modelBuilder.Entity("RealEstate.Models.Authentication.Users.ProfileImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProfileImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
+
+                    b.ToTable("UserProfileImages");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Authentication.Users.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -209,10 +231,6 @@ namespace RealEstate.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ProfileImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -392,7 +410,7 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("RealEstate.Models.Authentication.User", null)
+                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -401,7 +419,7 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("RealEstate.Models.Authentication.User", null)
+                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -416,7 +434,7 @@ namespace RealEstate.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RealEstate.Models.Authentication.User", null)
+                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -425,11 +443,22 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("RealEstate.Models.Authentication.User", null)
+                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Authentication.Users.ProfileImage", b =>
+                {
+                    b.HasOne("RealEstate.Models.Authentication.Users.User", "User")
+                        .WithOne("ProfileImage")
+                        .HasForeignKey("RealEstate.Models.Authentication.Users.ProfileImage", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RealEstate.Models.Estate.Assets.AssetImage", b =>
@@ -452,6 +481,11 @@ namespace RealEstate.Migrations
                         .IsRequired();
 
                     b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Authentication.Users.User", b =>
+                {
+                    b.Navigation("ProfileImage");
                 });
 
             modelBuilder.Entity("RealEstate.Models.Estate.Assets.Asset", b =>
