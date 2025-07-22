@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RealEstate.Data;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Authentication.Users;
@@ -70,14 +71,16 @@ namespace RealEstate.Services
         public async Task DeleteAllUsers()
         {
             var users = await _userManager.Users.ToListAsync().ConfigureAwait(false);
-            foreach (var user in users)
+           foreach (var user in users)
             {
                 await _userManager.DeleteAsync(user).ConfigureAwait(false);
             }
-            var files = Directory.GetFiles(Path.Combine("wwwroot/images/auth"));
-            foreach (var file in files)
-            {
-                File.Delete(file);
+            if (Directory.Exists(Path.Combine("wwwroot/images/auth"))) {
+                var files = Directory.GetFiles(Path.Combine("wwwroot/images/auth"));
+                foreach (var file in files)
+                {
+                    File.Delete(file);
+                }
             }
         }
 
@@ -184,7 +187,7 @@ namespace RealEstate.Services
           .ToListAsync()
           .ConfigureAwait(false);
 
-        public async Task<ProfileImage?> GetUserProfileImage(Guid userProfileImageID) =>
+        public async Task<ProfileImage?> GetProfileImage(Guid userProfileImageID) =>
        await _context
       .UserProfileImages.AsNoTracking()
       .SingleOrDefaultAsync(userProfileImg => userProfileImg.Id == userProfileImageID)
@@ -202,8 +205,19 @@ namespace RealEstate.Services
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void DeleteUserProfileImage(ProfileImage userProfileImage)
+        public void DeleteProfileImage(ProfileImage userProfileImage)
         {
+            if (userProfileImage == null)
+                return;
+
+            if (userProfileImage.ProfileImageName != null)
+            {
+                var files = Directory.GetFiles(Path.Combine("wwwroot/images/auth"));
+                foreach (var file in files)
+                {
+                    File.Delete(file);
+                }
+            }
             _context.UserProfileImages.Remove(userProfileImage);
             _context.SaveChanges();
         }
@@ -253,6 +267,19 @@ namespace RealEstate.Services
         }
         public void DeleteAsset(Asset deleteAsset)
         {
+            if (deleteAsset == null)
+                return;
+               
+            if (deleteAsset.AssetImages != null) {
+                var files = Directory.GetFiles(Path.Combine("wwwroot/images/Asset"));
+                foreach (var file in files)
+                {
+                    if (deleteAsset.AssetImages.Any(assetImg => assetImg.FileName == file))
+                    {
+                        File.Delete(file);
+                    }
+                }
+            }
             _context.Assets.Remove(deleteAsset);
             _context.SaveChanges();
         }
@@ -298,6 +325,20 @@ namespace RealEstate.Services
         }
         public void DeleteAssetImage(AssetImage deleteAssetImage)
         {
+            if (deleteAssetImage == null)
+                return;
+
+            if (deleteAssetImage.FileName != null)
+            {
+                var files = Directory.GetFiles(Path.Combine("wwwroot/images/Asset"));
+                foreach (var file in files)
+                {
+                    if (deleteAssetImage.FileName == file)
+                    {
+                        File.Delete(file);
+                    }
+                }
+            }
             _context.AssetImages.Remove(deleteAssetImage);
             _context.SaveChanges();
         }

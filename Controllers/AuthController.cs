@@ -1,14 +1,10 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Authentication.Users;
-using RealEstate.Models.Estate.Assets;
 using RealEstate.Services;
-using System.IO;
 using System.Security;
 using System.Text.RegularExpressions;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -29,7 +25,7 @@ namespace RealEstate.Controllers
         private readonly ImageService _imageService = imageService;
         private readonly PasswordHelper _passwordHelper = passwordHelper;
 
-
+        #region Auth
         [HttpPost("user/upload/{userID}")]
         public async Task<IActionResult> UploadProfileImage(string userID, IFormFile image)
         {
@@ -588,6 +584,53 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+        #endregion
+
+        #region ProfileImage
+        [HttpDelete("profile/delete/{profileImageID}")]
+        public async Task<IActionResult> DeleteProfileImage(string profileImageID)
+        {
+            try
+            {
+                if (!Guid.TryParse(profileImageID, out Guid realEstateProfileImageID))
+                    return BadRequest("Id must be a valid GUID!");
+
+                ProfileImage? profileImage = await _service.GetProfileImage(realEstateProfileImageID).ConfigureAwait(false);
+
+                if (profileImage is null)
+                    return NotFound("Image not found!");
+
+                _service.DeleteProfileImage(profileImage);
+
+                return Ok("Profile image successfully deleted");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "File system error occurred while uploading images.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Missing argument. Please contact support.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Unexpected format error.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An invalid operation occurred.");
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is SecurityException)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(403, "Access denied.");
+            }
+        }
+        #endregion
     }
 }
 

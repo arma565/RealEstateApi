@@ -421,6 +421,28 @@
         }
       }
     },
+    "/Auth/profile/delete/{profileImageID}": {
+      "delete": {
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "name": "profileImageID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Estate/asset/upload/{assetID}": {
       "post": {
         "tags": [

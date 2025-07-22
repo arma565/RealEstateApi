@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
+    "Method": "DeleteProfileImage",
+    "RelativePath": "Auth/profile/delete/{profileImageID}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "profileImageID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "GetUserByUserID",
     "RelativePath": "Auth/user/{userID}",
     "HttpMethod": "GET",
