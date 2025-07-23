@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 #pragma warning disable CA1515
@@ -13,7 +14,7 @@ namespace RealEstate.Models.Authentication.Users
         private string _firstName = "";
         private string _lastName = "";
         private bool _acceptTerms;
-        private ProfileImage? _userProfileImage;
+        private ProfileImage? _profileImage;
 
         [Key]
         public override string Id
@@ -63,13 +64,11 @@ namespace RealEstate.Models.Authentication.Users
         }
 
         public ProfileImage? ProfileImage
-         {
-            get => _userProfileImage;
-            set => _userProfileImage = value;
-         }
+        {
+            get => _profileImage;
+            set => _profileImage = value;
+        }
 
-
-
-}
+    }
 }
 

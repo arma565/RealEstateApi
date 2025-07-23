@@ -26,6 +26,12 @@ namespace RealEstate.Controllers
         private readonly PasswordHelper _passwordHelper = passwordHelper;
 
         #region Auth
+        /// <summary>
+        /// Uploads a profile image for the specified user.
+        /// </summary>
+        /// <param name="userID">The ID of the user.</param>
+        /// <param name="image">The image file to upload.</param>
+        /// <returns>Returns 200 OK if successful, 400 BadRequest for invalid input, 404 NotFound if user not found, or 500/403 for errors.</returns>
         [HttpPost("user/upload/{userID}")]
         public async Task<IActionResult> UploadProfileImage(string userID, IFormFile image)
         {
@@ -45,15 +51,16 @@ namespace RealEstate.Controllers
                 var imageFileName = await _imageService.UploadProfileImage(image).ConfigureAwait(false);
 
                 var profileImage = new ProfileImage();
-                    
+
                 if (user.ProfileImage != null)
                 {
                     profileImage.Id = user.ProfileImage!.Id;
                     profileImage.ProfileImageName = imageFileName;
-                    profileImage.UserID =  userID;
+                    profileImage.UserID = userID;
                     await _service.UpdateProfileImage(profileImage).ConfigureAwait(false);
                 }
-                else {
+                else
+                {
                     profileImage.ProfileImageName = imageFileName;
                     profileImage.UserID = userID;
                     await _service.AddProfileImage(profileImage).ConfigureAwait(false);
@@ -88,6 +95,11 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Downloads the profile image for the specified user.
+        /// </summary>
+        /// <param name="userID">The ID of the user.</param>
+        /// <returns>Returns the image file if found, 404 NotFound if not found, 400 BadRequest for invalid input, or 500/403 for errors.</returns>
         [HttpGet("user/download/{userID}")]
         public async Task<IActionResult> DownloadProfileImage(string userID)
         {
@@ -158,9 +170,18 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves all registered users.
+        /// </summary>
+        /// <returns>Returns a list of all users.</returns>
         [HttpGet("user/users")]
         public async Task<ActionResult<List<User>>> GetAllUsers() => Ok(await _service.GetAllUsers().ConfigureAwait(false));
 
+        /// <summary>
+        /// Retrieves a user by their user ID.
+        /// </summary>
+        /// <param name="userID">The ID of the user.</param>
+        /// <returns>Returns the user if found, 404 NotFound if not found, or 400 BadRequest for invalid input.</returns>
         [HttpGet("user/{userID}")]
         public async Task<ActionResult<User>> GetUserByUserID(string userID)
         {
@@ -204,6 +225,11 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <param name="registerUser">The registration model containing user details.</param>
+        /// <returns>Returns 200 OK if successful, 400 BadRequest for validation errors or if username/email is taken.</returns>
         [HttpPost("user/register")]
         public async Task<IActionResult> RegisterUser([FromBody] Register registerUser)
         {
@@ -254,15 +280,20 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Login a user.
+        /// </summary>
+        /// <param name="userLoginInfo">The userLoginInfo containing username and password.</param>
+        /// <returns>Returns 200 OK if successful, 401 Unauthorized if credentials are incorrect, or 400 BadRequest for validation errors.</returns>
         [HttpPost("user/login")]
-        public async Task<IActionResult> LoginUser([FromBody] Login model)
+        public async Task<IActionResult> LoginUser([FromBody] Login userLoginInfo)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _service.LoginUser(model).ConfigureAwait(false);
+                var result = await _service.LoginUser(userLoginInfo).ConfigureAwait(false);
 
                 if (result.Succeeded)
                     return Ok("Login successful");
@@ -296,6 +327,10 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes all users.
+        /// </summary>
+        /// <returns>Returns 200 OK if successful, or 500 for errors.</returns>
         [HttpDelete("user/delete-all")]
         public async Task<IActionResult> DeleteAllUsers()
         {
@@ -331,6 +366,12 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a user by username and password.
+        /// </summary>
+        /// <param name="userName">The username of the user.</param>
+        /// <param name="password">The password of the user.</param>
+        /// <returns>Returns 204 NoContent if successful, 400 BadRequest for invalid input or incorrect password, 404 NotFound if user not found.</returns>
         [HttpDelete("user/delete/{userName}/{password}")]
         public async Task<IActionResult> DeleteUser(string userName, string password)
         {
@@ -381,6 +422,11 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Generates a recovery token for a user to reset their account.
+        /// </summary>
+        /// <param name="recovery">The recovery model containing the user's email.</param>
+        /// <returns>Returns the generated token if successful, 400 BadRequest or 404 NotFound for errors.</returns>
         [HttpPost("user/recover/account")]
         public async Task<ActionResult<string>> RecoverUser([FromBody] Recovery recovery)
         {
@@ -428,6 +474,11 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Resets the password for a user using a token.
+        /// </summary>
+        /// <param name="model">The reset model containing email, token, and new password.</param>
+        /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
         [HttpPost("user/reset/password")]
         public async Task<IActionResult> ResetPassword([FromBody] Reset model)
         {
@@ -478,6 +529,11 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Changes the password for a user.
+        /// </summary>
+        /// <param name="model">The change model containing username, current password, and new password.</param>
+        /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
         [HttpPost("user/change/password")]
         public async Task<IActionResult> ChangePassword([FromBody] Change model)
         {
@@ -528,6 +584,11 @@ namespace RealEstate.Controllers
             }
         }
 
+        /// <summary>
+        /// Edits the profile of a user.
+        /// </summary>
+        /// <param name="updateUser">The user model with updated information.</param>
+        /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
         [HttpPut("user/edit/profile")]
         public async Task<IActionResult> EditUserProfile([FromBody] User updateUser)
         {
@@ -583,10 +644,21 @@ namespace RealEstate.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(403, "Access denied.");
             }
+            
         }
         #endregion
 
         #region ProfileImage
+        /// <summary>
+        /// Deletes a profile image by its ID.
+        /// </summary>
+        /// <param name="profileImageID">The GUID of the profile image to delete.</param>
+        /// <returns>
+        /// Returns 200 OK if the image was successfully deleted,
+        /// 400 BadRequest if the ID is invalid,
+        /// 404 NotFound if the image does not exist,
+        /// or 500/403 for errors.
+        /// </returns>
         [HttpDelete("profile/delete/{profileImageID}")]
         public async Task<IActionResult> DeleteProfileImage(string profileImageID)
         {

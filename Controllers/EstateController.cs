@@ -19,8 +19,13 @@ namespace RealEstate.Controllers
     {
         private readonly RepositoryService _service = service;
         private readonly ImageService _imageService = imageService;
-
-        #region "Asset"
+        #region Asset
+        /// <summary>
+        /// Uploads one or more images for a specific asset.
+        /// </summary>
+        /// <param name="assetID">The GUID of the asset to associate images with.</param>
+        /// <param name="images">Array of image files to upload.</param>
+        /// <returns>Returns a list of uploaded image URLs if successful.</returns>
         [HttpPost("asset/upload/{assetID}")]
         public async Task<IActionResult> AssetImageUpload(string assetID, [FromForm] IFormFile[] images)
         {
@@ -84,6 +89,11 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+        /// <summary>
+        /// Downloads an asset image by its file name.
+        /// </summary>
+        /// <param name="imageFileName">The file name of the image to download.</param>
+        /// <returns>Returns the image file if found.</returns>
         [HttpGet("asset/download/{imageFileName}")]
         public async Task<IActionResult> DownloadAssetImage(string imageFileName)
         {
@@ -144,12 +154,29 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+        /// <summary>
+        /// Gets the list of assets in descending order.
+        /// </summary>
+        /// <returns>Returns a list of assets ordered descendingly.</returns>
         [HttpGet("asset/desc")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDescending() => Ok(await _service.GetAssetListDescending().ConfigureAwait(false));
+        /// <summary>
+        /// Gets the list of assets in ascending order.
+        /// </summary>
+        /// <returns>Returns a list of assets ordered ascendingly.</returns>
         [HttpGet("asset/asc")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListAscending() => Ok(await _service.GetAssetListAscending().ConfigureAwait(false));
+        /// <summary>
+        /// Gets the list of assets ordered by date modified.
+        /// </summary>
+        /// <returns>Returns a list of assets ordered by date modified.</returns>
         [HttpGet("asset/date")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDateModified() => Ok(await _service.GetAssetListDateModified().ConfigureAwait(false));
+        /// <summary>
+        /// Gets a specific asset by its ID.
+        /// </summary>
+        /// <param name="assetID">The GUID of the asset.</param>
+        /// <returns>Returns the asset if found.</returns>
         [HttpGet("asset/{assetID}")]
         public async Task<ActionResult<Asset>> GetAsset(string assetID)
         {
@@ -195,6 +222,11 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+        /// <summary>
+        /// Adds a new asset.
+        /// </summary>
+        /// <param name="newAsset">The asset object to add.</param>
+        /// <returns>Returns the created asset with its location.</returns>
         [HttpPost("asset/add")]
         public async Task<IActionResult> AddAsset([FromBody] Asset newAsset)
         {
@@ -283,6 +315,11 @@ namespace RealEstate.Controllers
             }
 
         }
+        /// <summary>
+        /// Updates an existing asset.
+        /// </summary>
+        /// <param name="updateAsset">The asset object with updated values.</param>
+        /// <returns>Returns no content if update is successful.</returns>
         [HttpPut("asset/update")]
         public async Task<IActionResult> UpdateAsset([FromBody] Asset updateAsset)
         {
@@ -333,6 +370,11 @@ namespace RealEstate.Controllers
             }
 
         }
+        /// <summary>
+        /// Deletes a specific asset by its ID.
+        /// </summary>
+        /// <param name="assetID">The GUID of the asset to delete.</param>
+        /// <returns>Returns a success message if deleted.</returns>
         [HttpDelete("asset/delete/{assetID}")]
         public async Task<IActionResult> DeleteAsset(string assetID)
         {
@@ -376,6 +418,10 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+        /// <summary>
+        /// Deletes all assets.
+        /// </summary>
+        /// <returns>Returns a success message after deleting all assets.</returns>
         [HttpDelete("asset/delete-all")]
         public IActionResult DeleteAssets()
         {
@@ -385,6 +431,11 @@ namespace RealEstate.Controllers
         #endregion
 
         #region AssetImage
+        /// <summary>
+        /// Deletes a specific asset image by its ID.
+        /// </summary>
+        /// <param name="assetImageID">The GUID of the asset image to delete.</param>
+        /// <returns>Returns a success message if deleted, or an error message if not found or invalid.</returns>
         [HttpDelete("assetImage/delete/{assetImageID}")]
         public async Task<IActionResult> DeleteAssetImage(string assetImageID)
         {
@@ -430,9 +481,18 @@ namespace RealEstate.Controllers
         }
         #endregion
 
-        #region "Person"
+        #region Person
+        /// <summary>
+        /// Gets the list of all persons.
+        /// </summary>
+        /// <returns>Returns a list of all persons.</returns>
         [HttpGet("person")]
         public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList().ConfigureAwait(false);
+        /// <summary>
+        /// Gets a specific person by their ID.
+        /// </summary>
+        /// <param name="id">The GUID of the person.</param>
+        /// <returns>Returns the person if found, otherwise an error message.</returns>
         [HttpGet("person/{id}")]
         public async Task<ActionResult<Person>> GetPerson(string id)
         {
@@ -476,8 +536,12 @@ namespace RealEstate.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(403, "Access denied.");
             }
-
         }
+        /// <summary>
+        /// Adds a new person.
+        /// </summary>
+        /// <param name="newPerson">The person object to add.</param>
+        /// <returns>Returns the created person with its location.</returns>
         [HttpPost("person/add")]
         public async Task<IActionResult> AddPerson([FromBody] Person newPerson)
         {
@@ -496,6 +560,11 @@ namespace RealEstate.Controllers
 
             return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
         }
+        /// <summary>
+        /// Updates an existing person.
+        /// </summary>
+        /// <param name="updatePerson">The person object with updated values.</param>
+        /// <returns>Returns the updated person if successful.</returns>
         [HttpPut("person/update")]
         public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
         {
@@ -519,6 +588,11 @@ namespace RealEstate.Controllers
 
             return Ok(updatedPerson);
         }
+        /// <summary>
+        /// Deletes a specific person by their ID.
+        /// </summary>
+        /// <param name="id">The GUID of the person to delete.</param>
+        /// <returns>Returns a success message if deleted, or an error message if not found or invalid.</returns>
         [HttpDelete("person/delete/{id}")]
         public async Task<IActionResult> DeletePerson(string id)
         {
@@ -564,8 +638,11 @@ namespace RealEstate.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(403, "Access denied.");
             }
-
         }
+        /// <summary>
+        /// Deletes all persons.
+        /// </summary>
+        /// <returns>Returns a success message after deleting all persons.</returns>
         [HttpDelete("person/delete-all")]
         public IActionResult DeleteAllPersons()
         {
