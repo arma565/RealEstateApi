@@ -107,14 +107,14 @@
         }
       }
     },
-    "/Auth/user/{userID}": {
+    "/Auth/user/{userName}": {
       "get": {
         "tags": [
           "Auth"
         ],
         "parameters": [
           {
-            "name": "userID",
+            "name": "userName",
             "in": "path",
             "required": true,
             "schema": {
@@ -1318,10 +1318,7 @@
       },
       "User": {
         "required": [
-          "acceptTerms",
-          "email",
-          "phoneNumber",
-          "userName"
+          "acceptTerms"
         ],
         "type": "object",
         "properties": {
@@ -1371,16 +1368,16 @@
             "nullable": true
           },
           "userName": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "email": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "phoneNumber": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "firstName": {
             "type": "string",
@@ -1391,6 +1388,9 @@
             "nullable": true
           },
           "acceptTerms": {
+            "type": "boolean"
+          },
+          "rememberMe": {
             "type": "boolean"
           },
           "profileImage": {

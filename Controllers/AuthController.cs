@@ -40,7 +40,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrWhiteSpace(userID))
                     return BadRequest("userID can not be empty!");
 
-                var user = await _service.GetUser(userID).ConfigureAwait(false);
+                var user = await _service.GetUserByID(userID).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
@@ -108,7 +108,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrEmpty(userID))
                     return BadRequest("User id can not be empty!");
 
-                var user = await _service.GetUser(userID).ConfigureAwait(false);
+                var user = await _service.GetUserByID(userID).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
@@ -178,30 +178,25 @@ namespace RealEstate.Controllers
         public async Task<ActionResult<List<User>>> GetAllUsers() => Ok(await _service.GetAllUsers().ConfigureAwait(false));
 
         /// <summary>
-        /// Retrieves a user by their user ID.
+        /// Retrieves a user by their userName.
         /// </summary>
-        /// <param name="userID">The ID of the user.</param>
+        /// <param name="userName">The userName of the user.</param>
         /// <returns>Returns the user if found, 404 NotFound if not found, or 400 BadRequest for invalid input.</returns>
-        [HttpGet("user/{userID}")]
-        public async Task<ActionResult<User>> GetUserByUserID(string userID)
+        [HttpGet("user/{userName}")]
+        public async Task<ActionResult<User>> GetUserByUserName(string userName)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(userID))
+                if (string.IsNullOrWhiteSpace(userName))
                     return BadRequest("User id can not be empty!");
 
-                var user = await _service.GetUser(userID).ConfigureAwait(false);
+                var user = await _service.GetUserByUserName(userName).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
 
                 return Ok(user);
 
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
             }
             catch (ArgumentNullException ex)
             {
@@ -252,12 +247,7 @@ namespace RealEstate.Controllers
                     return Ok("User registered successfully");
 
                 return BadRequest(res.Errors);
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
-            }
+            }    
             catch (ArgumentNullException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -300,11 +290,6 @@ namespace RealEstate.Controllers
 
                 return Unauthorized("Username or password is not correct! please try again");
             }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
-            }
             catch (ArgumentNullException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -338,11 +323,6 @@ namespace RealEstate.Controllers
             {
                 await _service.DeleteAllUsers().ConfigureAwait(false);
                 return Ok("Users has been deleted");
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
             }
             catch (ArgumentNullException ex)
             {
@@ -395,11 +375,6 @@ namespace RealEstate.Controllers
 
                 return BadRequest(res.Errors);
             }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
-            }
             catch (ArgumentNullException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -435,6 +410,9 @@ namespace RealEstate.Controllers
                 if (recovery == null)
                     return BadRequest("Failed to retreive parameter!");
 
+                if (string.IsNullOrWhiteSpace(recovery.Email) || !new EmailHelper().IsValidEmail(recovery.Email))
+                    return BadRequest("Invalid email format.");
+
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
@@ -446,11 +424,6 @@ namespace RealEstate.Controllers
                 var generatedToken = await _service.GenerateTokenToRecoverUser(user).ConfigureAwait(false);
 
                 return Ok(generatedToken);
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
             }
             catch (ArgumentNullException ex)
             {
@@ -502,11 +475,6 @@ namespace RealEstate.Controllers
 
                 return BadRequest(result.Errors);
             }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
-            }
             catch (ArgumentNullException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -557,11 +525,6 @@ namespace RealEstate.Controllers
 
                 return BadRequest(result.Errors);
             }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
-            }
             catch (ArgumentNullException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -605,12 +568,30 @@ namespace RealEstate.Controllers
                 if (user == null)
                     return NotFound("No such user found!");
 
-                user.UserName = updateUser.UserName;
-                user.Email = updateUser.Email;
+                if (!updateUser.UserName.IsNullOrEmpty()|| !updateUser.Email.IsNullOrEmpty())
+                {
+                    var allUsers = await _service.GetAllUsers().ConfigureAwait(false);
+
+                    if (allUsers.Any(u => u.UserName == updateUser.UserName))
+                        return BadRequest("Username is already taken!");
+
+                    if (allUsers.Any(u => u.Email == updateUser.Email))
+                        return BadRequest("Email is already taken!");
+
+                    user.UserName = updateUser.UserName;
+                    user.Email = updateUser.Email;
+                }
+                else
+                {
+                    user.UserName = user.UserName;
+                    user.Email = user.Email;
+                }
+
                 user.PhoneNumber = updateUser.PhoneNumber;
                 user.FirstName = updateUser.FirstName;
                 user.LastName = updateUser.LastName;
                 user.AcceptTerms = user.AcceptTerms;
+                user.RememberMe = updateUser.RememberMe;
 
                 var result = await _service.EditUserProfile(user).ConfigureAwait(false);
 
@@ -618,11 +599,6 @@ namespace RealEstate.Controllers
                     return Ok("User profile has been updated");
                 else
                     return BadRequest(result.Errors);
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
             }
             catch (ArgumentNullException ex)
             {
@@ -644,7 +620,7 @@ namespace RealEstate.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(403, "Access denied.");
             }
-            
+
         }
         #endregion
 
@@ -675,11 +651,6 @@ namespace RealEstate.Controllers
                 _service.DeleteProfileImage(profileImage);
 
                 return Ok("Profile image successfully deleted");
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "File system error occurred while uploading images.");
             }
             catch (ArgumentNullException ex)
             {

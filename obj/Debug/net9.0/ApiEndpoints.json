@@ -17,14 +17,14 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
-    "Method": "GetUserByUserID",
-    "RelativePath": "Auth/user/{userID}",
+    "Method": "GetUserByUserName",
+    "RelativePath": "Auth/user/{userName}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userID",
+        "Name": "userName",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -129,7 +129,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "model",
+        "Name": "userLoginInfo",
         "Type": "RealEstate.Models.Authentication.Login",
         "IsRequired": true
       }

@@ -14,6 +14,7 @@ namespace RealEstate.Models.Authentication.Users
         private string _firstName = "";
         private string _lastName = "";
         private bool _acceptTerms;
+        private bool _rememberMe;
         private ProfileImage? _profileImage;
 
         [Key]
@@ -23,21 +24,18 @@ namespace RealEstate.Models.Authentication.Users
             set => _id = value;
         }
 
-        [Required(ErrorMessage = "UserName is reqired!")]
         public override string? UserName
         {
             get => _userName;
             set => _userName = value;
         }
 
-        [Required(ErrorMessage = "Email is reqired!")]
         public override string? Email
         {
             get => _email;
             set => _email = value;
         }
 
-        [Required(ErrorMessage = "PhoneNumber is reqired!")]
         public override string? PhoneNumber
         {
             get => _phoneNumber;
@@ -61,6 +59,12 @@ namespace RealEstate.Models.Authentication.Users
         {
             get => _acceptTerms;
             set => _acceptTerms = value;
+        }
+
+        public bool RememberMe
+        {
+            get => _rememberMe;
+            set => _rememberMe = value;
         }
 
         public ProfileImage? ProfileImage

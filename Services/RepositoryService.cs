@@ -32,12 +32,23 @@ namespace RealEstate.Services
         /// <summary>
         /// This function return a user using id
         /// </summary>
-        /// <returns></returns>
-        public async Task<User?> GetUser(string userID) =>
+        /// <returns> User associated to user ID </returns>
+        public async Task<User?> GetUserByID(string userID) =>
              await _userManager
                  .Users.AsNoTracking()
                  .Include(user => user.ProfileImage)
                  .SingleOrDefaultAsync(user => user.Id == userID)
+                 .ConfigureAwait(false);
+
+        /// <summary>
+        /// This function return a user using userName
+        /// </summary>
+        /// <returns> User associated to userName </returns>
+        public async Task<User?> GetUserByUserName(string userName) =>
+             await _userManager
+                 .Users.AsNoTracking()
+                 .Include(user => user.ProfileImage)
+                 .SingleOrDefaultAsync(user => user.UserName == userName)
                  .ConfigureAwait(false);
 
         /// <summary>
