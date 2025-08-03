@@ -10,7 +10,7 @@ namespace RealEstate.Models.Authentication
         private string _new_password = "";
         private string _repeat_new_password = "";
 
-        [Required(ErrorMessage = "Email is reqired!")]
+        [Required(ErrorMessage = "Email is required!")]
         [EmailAddress(ErrorMessage = "Invalid email address!")]
         public string Email
         {
@@ -24,18 +24,19 @@ namespace RealEstate.Models.Authentication
             set => _token = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "NewPassword is required!")]
         [DataType(DataType.Password)]
-        [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
+        [MinLength(8, ErrorMessage = "The newPassword must be more than 8 characters!")]
         public string NewPassword
         {
             get => _new_password;
             set => _new_password = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "RepeatNewPassword is required!")]
         [DataType(DataType.Password)]
-        [Compare("NewPassword", ErrorMessage = "The Password and Repeat New Password do not match!")]
+        [MinLength(8, ErrorMessage = "The repeatNewPassword must be more than 8 characters!")]
+        [Compare("NewPassword", ErrorMessage = "The newPassword and repeatNewPassword do not match!")]
         public string RepeatNewPassword
         {
             get => _repeat_new_password;

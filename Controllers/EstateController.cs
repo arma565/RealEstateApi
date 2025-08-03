@@ -27,7 +27,7 @@ namespace RealEstate.Controllers
         /// <param name="images">Array of image files to upload.</param>
         /// <returns>Returns a list of uploaded image URLs if successful.</returns>
         [HttpPost("asset/upload/{assetID}")]
-        public async Task<IActionResult> AssetImageUpload(string assetID, [FromForm] IFormFile[] images)
+        public async Task<IActionResult> UploadAssetImages(string assetID, [FromForm] IFormFile[] images)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace RealEstate.Controllers
                     return BadRequest("AssetID is empty!");
 
                 if (!Guid.TryParse(assetID, out Guid realEstateAssetID))
-                    return BadRequest("assetID must be a valid GUID!");
+                    return BadRequest("AssetID must be a valid GUID!");
 
                 var asset = await _service.GetAsset(realEstateAssetID).ConfigureAwait(false);
 
@@ -59,7 +59,7 @@ namespace RealEstate.Controllers
 
                 return Ok(new
                 {
-                    Message = "Images added successfully",
+                    Message = "Images uploaded successfully",
                     ImageUrls = imageUrlList
                 });
             }
@@ -89,6 +89,7 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+
         /// <summary>
         /// Downloads an asset image by its file name.
         /// </summary>
@@ -154,24 +155,28 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+
         /// <summary>
         /// Gets the list of assets in descending order.
         /// </summary>
         /// <returns>Returns a list of assets ordered descendingly.</returns>
         [HttpGet("asset/desc")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDescending() => Ok(await _service.GetAssetListDescending().ConfigureAwait(false));
+
         /// <summary>
         /// Gets the list of assets in ascending order.
         /// </summary>
         /// <returns>Returns a list of assets ordered ascendingly.</returns>
         [HttpGet("asset/asc")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListAscending() => Ok(await _service.GetAssetListAscending().ConfigureAwait(false));
+
         /// <summary>
         /// Gets the list of assets ordered by date modified.
         /// </summary>
         /// <returns>Returns a list of assets ordered by date modified.</returns>
         [HttpGet("asset/date")]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDateModified() => Ok(await _service.GetAssetListDateModified().ConfigureAwait(false));
+
         /// <summary>
         /// Gets a specific asset by its ID.
         /// </summary>
@@ -183,15 +188,15 @@ namespace RealEstate.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(assetID))
-                    return BadRequest("Invalid assetID!");
+                    return BadRequest("AssetID is empty!");
 
                 if (!Guid.TryParse(assetID, out Guid realEstateAssetID))
-                    return BadRequest("assetID must be a valid GUID!");
+                    return BadRequest("AssetID must be a valid GUID!");
 
                 Asset? asset = await _service.GetAsset(realEstateAssetID).ConfigureAwait(false);
 
                 if (asset is null)
-                    return NotFound("Asset not found!");
+                    return NotFound("No such asset found!");
 
                 return Ok(asset);
 
@@ -222,6 +227,7 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+
         /// <summary>
         /// Adds a new asset.
         /// </summary>
@@ -268,7 +274,7 @@ namespace RealEstate.Controllers
                 bool? isAssetExists = await _service.IsAssetExist(newAsset.PlatesNumber!).ConfigureAwait(false);
 
                 if (isAssetExists == true)
-                    return BadRequest("Asset with this plates number is already exist!");
+                    return BadRequest("Asset is already exist!");
 
                 var allAssets = await _service.GetAssetListAscending().ConfigureAwait(false);
 
@@ -315,6 +321,7 @@ namespace RealEstate.Controllers
             }
 
         }
+
         /// <summary>
         /// Updates an existing asset.
         /// </summary>
@@ -331,7 +338,7 @@ namespace RealEstate.Controllers
                 Asset? asset = await _service.GetAsset(updateAsset.Id).ConfigureAwait(false);
 
                 if (asset is null)
-                    return NotFound("Asset not found!");
+                    return NotFound("No such asset found!");
 
                 updateAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 updateAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
@@ -370,6 +377,7 @@ namespace RealEstate.Controllers
             }
 
         }
+
         /// <summary>
         /// Deletes a specific asset by its ID.
         /// </summary>
@@ -380,13 +388,16 @@ namespace RealEstate.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(assetID))
+                    return BadRequest("AssetID is empty!");
+
                 if (!Guid.TryParse(assetID, out Guid realEstateID))
                     return BadRequest("Id must be a valid GUID!");
 
                 Asset? asset = await _service.GetAsset(realEstateID).ConfigureAwait(false);
 
                 if (asset is null)
-                    return NotFound("Asset not found!");
+                    return NotFound("No such asset found!");
 
                 _service.DeleteAsset(asset);
 
@@ -418,6 +429,7 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+
         /// <summary>
         /// Deletes all assets.
         /// </summary>
@@ -436,18 +448,21 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <param name="assetImageID">The GUID of the asset image to delete.</param>
         /// <returns>Returns a success message if deleted, or an error message if not found or invalid.</returns>
-        [HttpDelete("assetImage/delete/{assetImageID}")]
+        [HttpDelete("asset/assetImage/delete/{assetImageID}")]
         public async Task<IActionResult> DeleteAssetImage(string assetImageID)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(assetImageID))
+                    return BadRequest("AssetImageID is empty!");
+
                 if (!Guid.TryParse(assetImageID, out Guid realEstateAssetImageID))
-                    return BadRequest("Id must be a valid GUID!");
+                    return BadRequest("AssetImageID must be a valid GUID!");
 
                 AssetImage? assetImage = await _service.GetAssetImage(realEstateAssetImageID).ConfigureAwait(false);
 
                 if (assetImage is null)
-                    return NotFound("AssetImage not found!");
+                    return NotFound("No such assetImage found!");
 
                 _service.DeleteAssetImage(assetImage);
 
@@ -487,7 +502,8 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <returns>Returns a list of all persons.</returns>
         [HttpGet("person")]
-        public async Task<IEnumerable<Person>> GetPersonsList() => await _service.GetPersonsList().ConfigureAwait(false);
+        public async Task<ActionResult<IEnumerable<Person>>> GetPersonsList() => Ok(await _service.GetPersonsList().ConfigureAwait(false));
+
         /// <summary>
         /// Gets a specific person by their ID.
         /// </summary>
@@ -499,15 +515,15 @@ namespace RealEstate.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(id))
-                    return BadRequest("id is empty!");
+                    return BadRequest("ID is empty!");
 
-                if (!Guid.TryParse(id, out Guid personID))
-                    return BadRequest("id must be a valid GUID!");
+                if (!Guid.TryParse(id, out Guid realEstatePersonID))
+                    return BadRequest("ID must be a valid GUID!");
 
-                Person? person = await _service.GetPerson(personID).ConfigureAwait(false);
+                Person? person = await _service.GetPerson(realEstatePersonID).ConfigureAwait(false);
 
                 if (person is null)
-                    return NotFound("Person not found!");
+                    return NotFound("No such person found!");
 
                 return person;
             }
@@ -537,6 +553,7 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+
         /// <summary>
         /// Adds a new person.
         /// </summary>
@@ -551,15 +568,16 @@ namespace RealEstate.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existAsset = await _service.GetAsset(newPerson.AssetID).ConfigureAwait(false);
+            bool? isPersonExists = await _service.IsPersonExist(newPerson.PersonID).ConfigureAwait(false);
 
-            if (existAsset is null)
-                return NotFound("AssetID is incorrect or Asset not found!");
+            if (isPersonExists == true)
+                return BadRequest("Person is already exist!");
 
             var addedPerson = await _service.AddPerson(newPerson).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
         }
+
         /// <summary>
         /// Updates an existing person.
         /// </summary>
@@ -571,23 +589,19 @@ namespace RealEstate.Controllers
             if (updatePerson == null)
                 return BadRequest("Failed to retreive parameter!");
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var existAsset = await _service.GetAsset(updatePerson.AssetID).ConfigureAwait(false);
-
-            if (existAsset is null)
-                return NotFound("AssetID is incorrect or Asset not found!");
-
             Person? existPerson = await _service.GetPerson(updatePerson.Id).ConfigureAwait(false);
 
             if (existPerson is null)
-                return NotFound("Person not found!");
+                return NotFound("No such person found!");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var updatedPerson = await _service.UpdatePerson(updatePerson).ConfigureAwait(false);
 
-            return Ok(updatedPerson);
+            return NoContent();
         }
+
         /// <summary>
         /// Deletes a specific person by their ID.
         /// </summary>
@@ -599,15 +613,15 @@ namespace RealEstate.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(id))
-                    return BadRequest("id is empty!");
+                    return BadRequest("ID is empty!");
 
                 if (!Guid.TryParse(id, out Guid personID))
-                    return BadRequest("id must be a valid GUID!");
+                    return BadRequest("ID must be a valid GUID!");
 
                 Person? person = await _service.GetPerson(personID).ConfigureAwait(false);
 
                 if (person is null)
-                    return NotFound("Person not found!");
+                    return NotFound("No such person found!");
 
                 _service.DeletePerson(person);
 
@@ -639,6 +653,7 @@ namespace RealEstate.Controllers
                 return StatusCode(403, "Access denied.");
             }
         }
+
         /// <summary>
         /// Deletes all persons.
         /// </summary>

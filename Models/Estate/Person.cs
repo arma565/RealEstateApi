@@ -29,7 +29,7 @@ namespace RealEstate.Models.Estate
             set => _id = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Person name is required!")]
         public string Name
         {
             get => _name;
@@ -41,7 +41,7 @@ namespace RealEstate.Models.Estate
             set => _fatherName = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "BirthCertificateNumber is required!")]
         public long BirthCertificateNumber
         {
             get => _birthCertificateNumber;
@@ -53,7 +53,7 @@ namespace RealEstate.Models.Estate
             set => _birthCertificateIssued = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "PersonID is required!")]
         public long PersonID
         {
             get => _personID;
@@ -65,14 +65,14 @@ namespace RealEstate.Models.Estate
             set => _born = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Address is required!")]
         public string Address
         {
             get => _address;
             set => _address = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Phone is required!")]
         public string Phone
         {
             get => _phone;

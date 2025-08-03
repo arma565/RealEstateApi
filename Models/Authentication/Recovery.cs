@@ -7,8 +7,8 @@ namespace RealEstate.Models.Authentication
     {
         private string _email = "";
 
-        [Required(ErrorMessage = "Email is reqired!")]
-        [EmailAddress(ErrorMessage = "Invalid email address!")]
+        [Required(ErrorMessage = "Email is required!")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email
         {
             get => _email;

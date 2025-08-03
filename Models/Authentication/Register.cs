@@ -26,7 +26,7 @@ namespace RealEstate.Models.Authentication
             set => _email = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Password is required!")]
         [DataType(DataType.Password)]
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
         public string Password
@@ -35,7 +35,7 @@ namespace RealEstate.Models.Authentication
             set => _password = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "RepeatPassword is required!")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The Password and Confirm Password do not match!")]
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
@@ -45,7 +45,6 @@ namespace RealEstate.Models.Authentication
             set => _repeat_password = value;
         }
 
-        [Required]
         [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the terms and conditions!")]
         public bool AcceptTerms
         {

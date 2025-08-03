@@ -38,7 +38,7 @@ namespace RealEstate.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(userID))
-                    return BadRequest("userID can not be empty!");
+                    return BadRequest("UserID can not be empty!");
 
                 var user = await _service.GetUserByID(userID).ConfigureAwait(false);
 
@@ -188,7 +188,7 @@ namespace RealEstate.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(userName))
-                    return BadRequest("User id can not be empty!");
+                    return BadRequest("User name can not be empty!");
 
                 var user = await _service.GetUserByUserName(userName).ConfigureAwait(false);
 
@@ -244,7 +244,7 @@ namespace RealEstate.Controllers
                 var res = await _service.RegisterUser(registerUser).ConfigureAwait(false);
 
                 if (res.Succeeded)
-                    return Ok("User registered successfully");
+                    return CreatedAtAction("User registered successfully",registerUser);
 
                 return BadRequest(res.Errors);
             }    
@@ -410,11 +410,12 @@ namespace RealEstate.Controllers
                 if (recovery == null)
                     return BadRequest("Failed to retreive parameter!");
 
-                if (string.IsNullOrWhiteSpace(recovery.Email) || !new EmailHelper().IsValidEmail(recovery.Email))
-                    return BadRequest("Invalid email format.");
-
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
+
+                if (!new EmailHelper().IsValidEmail(recovery.Email))
+                    return BadRequest("Invalid email format.");
+
 
                 var user = await _service.FindUserByEmail(recovery.Email).ConfigureAwait(false);
 
@@ -471,7 +472,7 @@ namespace RealEstate.Controllers
                 var result = await _service.ResetPassword(user, model.Token, model.NewPassword).ConfigureAwait(false);
 
                 if (result.Succeeded)
-                    return Ok("Password reset was successful");
+                    return Ok("Reset password  was successful");
 
                 return BadRequest(result.Errors);
             }
@@ -518,7 +519,7 @@ namespace RealEstate.Controllers
                 if (user == null)
                     return NotFound("No such user found!");
 
-                var result = await _service.ChangePassword(user, model.CurrentPassword, model.NewPassword).ConfigureAwait(false);
+                var result = await _service.ChangePassword(user, model.OldPassword, model.NewPassword).ConfigureAwait(false);
 
                 if (result.Succeeded)
                     return Ok("Password has been changed");
@@ -650,7 +651,7 @@ namespace RealEstate.Controllers
 
                 _service.DeleteProfileImage(profileImage);
 
-                return Ok("Profile image successfully deleted");
+                return NoContent();
             }
             catch (ArgumentNullException ex)
             {

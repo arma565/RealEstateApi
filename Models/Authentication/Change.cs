@@ -6,42 +6,43 @@ namespace RealEstate.Models.Authentication
     public sealed class Change
     {
         private string _user_name = "";
-        private string _current_password = "";
+        private string _old_password = "";
         private string _new_password = "";
-        private string _repeat_password = "";
+        private string _repeat_new_password = "";
 
-        [Required]
+        [Required(ErrorMessage = "UserName is required!")]
         public string UserName
         {
             get => _user_name;
             set => _user_name = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "OldPassword is required!")]
         [DataType(DataType.Password)]
-        public string CurrentPassword
+        [MinLength(8, ErrorMessage = "The oldPassword must be more than 8 characters!")]
+        public string OldPassword
         {
-            get => _current_password;
-            set => _current_password = value;
+            get => _old_password;
+            set => _old_password = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "NewPassword is required!")]
         [DataType(DataType.Password)]
-        [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
+        [MinLength(8, ErrorMessage = "The newPassword must be more than 8 characters!")]
         public string NewPassword
         {
             get => _new_password;
             set => _new_password = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "RepeatNewPassword is required!")]
         [DataType(DataType.Password)]
-        [Compare("NewPassword", ErrorMessage = "The Password and Repeat New Password do not match!")]
-        [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
-        public string RepeatPassword
+        [Compare("NewPassword", ErrorMessage = "The newPassword and repeatNewPassword do not match!")]
+        [MinLength(8, ErrorMessage = "The repeatNewPassword must be more than 8 characters!")]
+        public string RepeatNewPassword
         {
-            get => _repeat_password;
-            set => _repeat_password = value;
+            get => _repeat_new_password;
+            set => _repeat_new_password = value;
         }
     }
 }

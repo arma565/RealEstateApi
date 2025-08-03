@@ -9,14 +9,14 @@ namespace RealEstate.Models.Authentication
 
        private string _password = "";
 
-        [Required]
+        [Required(ErrorMessage = "UserName is required!")]
         public string UserName
         {
             get => _user_name;
             set => _user_name = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Password is required!")]
         [MinLength(8,ErrorMessage = "The password must be more than 8 characters!")]
         [DataType(DataType.Password)]
         public string Password

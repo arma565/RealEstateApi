@@ -392,9 +392,8 @@ namespace RealEstate.Services
             _context.Persons.ExecuteDelete();
             _context.SaveChanges();
         }
-
-        private IEnumerable<Person> GetPersonList() =>
-            [.. _context.Persons.AsNoTracking().OrderByDescending(pers => pers.Id)];
+        public async Task<bool> IsPersonExist(long personID) =>
+          await _context.Persons.AsNoTracking().AnyAsync(pers => pers.PersonID == personID).ConfigureAwait(false);
         #endregion
 
     }

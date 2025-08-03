@@ -45,35 +45,35 @@ namespace RealEstate.Models.Estate.Assets
             set => _orderID = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Asset name is required!")]
         public string? Name
         {
             get => _name;
             set => _name = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "PlatesNumber is required!")]
         public string? PlatesNumber
         {
             get => _platesNumber;
             set => _platesNumber = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Area is required!")]
         public string? Area
         {
             get => _area;
             set => _area = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "ConstructionYear is required!")]
         public string? ConstructionYear
         {
             get => _constructionYear;
             set => _constructionYear = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Price is required!")]
         public string? Price
         {
             get => _price;
@@ -92,14 +92,14 @@ namespace RealEstate.Models.Estate.Assets
             set => _rentAmount = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Payment is required!")]
         public string? Payment
         {
             get => _payment;
             set => _payment = value;
         }
 
-        [Required]
+        [Required(ErrorMessage = "Address is required!")]
         public string? Address
         {
             get => _address;
@@ -120,7 +120,7 @@ namespace RealEstate.Models.Estate.Assets
             get => _date;
             set => _date = value;
         }
-        [Required]
+        [Required(ErrorMessage = "Type is required!")]
         public string? Type
         {
             get => _type;
