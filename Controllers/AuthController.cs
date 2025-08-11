@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Authentication.Users;
+using RealEstate.Models.Estate.Assets;
 using RealEstate.Services;
 using System.Security;
 using System.Text.RegularExpressions;
@@ -98,50 +100,46 @@ namespace RealEstate.Controllers
         /// <summary>
         /// Downloads the profile image for the specified user.
         /// </summary>
-        /// <param name="userID">The ID of the user.</param>
+        /// <param name="imageFileName">The file name of the image to download.</param>
         /// <returns>Returns the image file if found, 404 NotFound if not found, 400 BadRequest for invalid input, or 500/403 for errors.</returns>
-        [HttpGet("user/download/{userID}")]
-        public async Task<IActionResult> DownloadProfileImage(string userID)
+        [HttpGet("user/download/{imageFileName}")]
+        public async Task<IActionResult> DownloadProfileImage(string imageFileName)
         {
             try
             {
-                if (string.IsNullOrEmpty(userID))
-                    return BadRequest("User id can not be empty!");
+                if (string.IsNullOrWhiteSpace(imageFileName))
+                    return BadRequest("Image file name is empty!");
 
-                var user = await _service.GetUserByID(userID).ConfigureAwait(false);
+                List<ProfileImage> profileImagesList = await _service.GetUserProfileImageList().ConfigureAwait(false);
 
-                if (user == null)
-                    return NotFound("No such user found!");
+                var profileImage = profileImagesList.FirstOrDefault(profileImg => profileImg.ProfileImageName == imageFileName);
 
-                if (user.ProfileImage!.ProfileImageName.IsNullOrEmpty())
-                    return NotFound("No image found!");
-
-                var profileImg = user.ProfileImage!.ProfileImageName;
-
-                if (!Regex.IsMatch(Path.GetFileNameWithoutExtension(profileImg), @"^[a-zA-Z0-9_-]+$"))
-                    return BadRequest("Invalid file name format.");
+                if (profileImage == null)
+                    return NotFound("No such image found!");
 
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-                var extension = Path.GetExtension(profileImg);
+                var extension = Path.GetExtension(profileImage.ProfileImageName);
                 if (string.IsNullOrWhiteSpace(extension) || !allowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
                     return BadRequest("Unsupported image file type.");
 
-
                 var environmentPath = _imageService.GetLocalImagesFullPath("auth");
-                var combinedPath = Path.Combine(environmentPath, profileImg);
-                var normalizedPath = Path.GetFullPath(combinedPath);
 
-                if (!normalizedPath.StartsWith(environmentPath, StringComparison.OrdinalIgnoreCase))
-                    return BadRequest("Invalid file path.");
+                var fullPath = Path.Combine(environmentPath, profileImage.ProfileImageName);
 
-                if (!System.IO.File.Exists(normalizedPath))
+                var normalizedPath = Path.GetFullPath(fullPath);
+                var basePath = Path.GetFullPath(environmentPath);
+                if (!normalizedPath.StartsWith(basePath, StringComparison.OrdinalIgnoreCase))
+                    return BadRequest("Invalid file path access.");
+
+                if (!System.IO.File.Exists(fullPath))
                     return NotFound("Image file not found!");
 
                 var provider = new FileExtensionContentTypeProvider();
 
-                var contentType = provider.TryGetContentType(normalizedPath, out var type) ? type : "application/octet-stream";
+                if (!provider.TryGetContentType(fullPath, out var contentType))
+                    contentType = "application/octet-stream";
 
-                return PhysicalFile(normalizedPath, contentType, Path.GetFileName(normalizedPath));
+                return PhysicalFile(fullPath, contentType, Path.GetFileName(fullPath));
             }
             catch (IOException ex)
             {
@@ -230,6 +228,9 @@ namespace RealEstate.Controllers
         {
             try
             {
+                if (registerUser == null)
+                    return BadRequest("Failed to retreive parameter!");
+
                 var allUsers = await _service.GetAllUsers().ConfigureAwait(false);
 
                 if (allUsers.Any(u => u.UserName == registerUser.UserName))
@@ -243,9 +244,9 @@ namespace RealEstate.Controllers
 
                 var res = await _service.RegisterUser(registerUser).ConfigureAwait(false);
 
-                if (res.Succeeded)
-                    return CreatedAtAction("User registered successfully",registerUser);
-
+                if (res.Succeeded) 
+                    return CreatedAtAction(nameof(GetUserByUserName), new { userName = registerUser.UserName }, registerUser);
+                
                 return BadRequest(res.Errors);
             }    
             catch (ArgumentNullException ex)
@@ -522,7 +523,9 @@ namespace RealEstate.Controllers
                 var result = await _service.ChangePassword(user, model.OldPassword, model.NewPassword).ConfigureAwait(false);
 
                 if (result.Succeeded)
-                    return Ok("Password has been changed");
+                    return Ok(new {
+                        Message = "Password has been changed"
+                    });
 
                 return BadRequest(result.Errors);
             }
@@ -559,7 +562,7 @@ namespace RealEstate.Controllers
             try
             {
                 if (updateUser == null)
-                    return BadRequest("User ID is required!");
+                    return BadRequest("User is null!");
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
@@ -569,30 +572,20 @@ namespace RealEstate.Controllers
                 if (user == null)
                     return NotFound("No such user found!");
 
-                if (!updateUser.UserName.IsNullOrEmpty()|| !updateUser.Email.IsNullOrEmpty())
-                {
-                    var allUsers = await _service.GetAllUsers().ConfigureAwait(false);
-
-                    if (allUsers.Any(u => u.UserName == updateUser.UserName))
-                        return BadRequest("Username is already taken!");
-
-                    if (allUsers.Any(u => u.Email == updateUser.Email))
-                        return BadRequest("Email is already taken!");
-
-                    user.UserName = updateUser.UserName;
-                    user.Email = updateUser.Email;
-                }
-                else
+                if (updateUser.UserName.IsNullOrEmpty() || updateUser.Email.IsNullOrEmpty())
                 {
                     user.UserName = user.UserName;
                     user.Email = user.Email;
                 }
-
-                user.PhoneNumber = updateUser.PhoneNumber;
+                else { 
+                    user.UserName = updateUser.UserName;
+                    user.Email = updateUser.Email;
+                }
+                
                 user.FirstName = updateUser.FirstName;
                 user.LastName = updateUser.LastName;
+                user.PhoneNumber = updateUser.PhoneNumber;
                 user.AcceptTerms = user.AcceptTerms;
-                user.RememberMe = updateUser.RememberMe;
 
                 var result = await _service.EditUserProfile(user).ConfigureAwait(false);
 

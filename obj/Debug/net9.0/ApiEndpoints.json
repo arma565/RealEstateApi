@@ -91,13 +91,13 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "DownloadProfileImage",
-    "RelativePath": "Auth/user/download/{userID}",
+    "RelativePath": "Auth/user/download/{imageFileName}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userID",
+        "Name": "imageFileName",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -299,6 +299,22 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
+    "Method": "DeleteAssetImage",
+    "RelativePath": "Estate/asset/assetImage/delete/{assetImageID}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "assetImageID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.EstateController",
     "Method": "GetAssetListDateModified",
     "RelativePath": "Estate/asset/date",
     "HttpMethod": "GET",
@@ -397,7 +413,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "AssetImageUpload",
+    "Method": "UploadAssetImages",
     "RelativePath": "Estate/asset/upload/{assetID}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -412,22 +428,6 @@
         "Name": "images",
         "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
         "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "DeleteAssetImage",
-    "RelativePath": "Estate/assetImage/delete/{assetImageID}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "assetImageID",
-        "Type": "System.String",
-        "IsRequired": true
       }
     ],
     "ReturnTypes": []

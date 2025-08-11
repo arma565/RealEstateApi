@@ -47,14 +47,14 @@
         }
       }
     },
-    "/Auth/user/download/{userID}": {
+    "/Auth/user/download/{imageFileName}": {
       "get": {
         "tags": [
           "Auth"
         ],
         "parameters": [
           {
-            "name": "userID",
+            "name": "imageFileName",
             "in": "path",
             "required": true,
             "schema": {
@@ -769,7 +769,7 @@
         }
       }
     },
-    "/Estate/assetImage/delete/{assetImageID}": {
+    "/Estate/asset/assetImage/delete/{assetImageID}": {
       "delete": {
         "tags": [
           "Estate"
@@ -1108,9 +1108,9 @@
       },
       "Change": {
         "required": [
-          "currentPassword",
           "newPassword",
-          "repeatPassword",
+          "oldPassword",
+          "repeatNewPassword",
           "userName"
         ],
         "type": "object",
@@ -1119,8 +1119,8 @@
             "minLength": 1,
             "type": "string"
           },
-          "currentPassword": {
-            "minLength": 1,
+          "oldPassword": {
+            "minLength": 8,
             "type": "string",
             "format": "password"
           },
@@ -1129,7 +1129,7 @@
             "type": "string",
             "format": "password"
           },
-          "repeatPassword": {
+          "repeatNewPassword": {
             "minLength": 8,
             "type": "string",
             "format": "password"
@@ -1159,9 +1159,7 @@
       "Person": {
         "required": [
           "address",
-          "birthCertificateNumber",
           "name",
-          "personID",
           "phone"
         ],
         "type": "object",
@@ -1179,6 +1177,7 @@
             "nullable": true
           },
           "birthCertificateNumber": {
+            "minimum": 10,
             "type": "integer",
             "format": "int64"
           },
@@ -1187,6 +1186,7 @@
             "nullable": true
           },
           "personID": {
+            "minimum": 10,
             "type": "integer",
             "format": "int64"
           },
@@ -1253,7 +1253,6 @@
       },
       "Register": {
         "required": [
-          "acceptTerms",
           "email",
           "password",
           "repeatPassword",
@@ -1309,7 +1308,7 @@
             "format": "password"
           },
           "repeatNewPassword": {
-            "minLength": 1,
+            "minLength": 8,
             "type": "string",
             "format": "password"
           }
@@ -1388,9 +1387,6 @@
             "nullable": true
           },
           "acceptTerms": {
-            "type": "boolean"
-          },
-          "rememberMe": {
             "type": "boolean"
           },
           "profileImage": {

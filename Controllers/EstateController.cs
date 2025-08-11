@@ -466,7 +466,7 @@ namespace RealEstate.Controllers
 
                 _service.DeleteAssetImage(assetImage);
 
-                return Ok("AssetImage successfully deleted");
+                return NoContent();
             }
             catch (IOException ex)
             {

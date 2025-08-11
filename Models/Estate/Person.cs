@@ -21,7 +21,7 @@ namespace RealEstate.Models.Estate
         private string _role = "";
         private Guid _assetID;
         private readonly Asset? _asset;
-       
+
         [Key]
         public Guid Id
         {
@@ -40,20 +40,20 @@ namespace RealEstate.Models.Estate
             get => _fatherName;
             set => _fatherName = value;
         }
-
-        [Required(ErrorMessage = "BirthCertificateNumber is required!")]
+        [Range(10,long.MaxValue , ErrorMessage =("Birth Certificate Number must be greater than 10!"))]
         public long BirthCertificateNumber
         {
             get => _birthCertificateNumber;
             set => _birthCertificateNumber = value;
         }
+
         public string BirthCertificateIssued
         {
             get => _birthCertificateIssued;
             set => _birthCertificateIssued = value;
         }
 
-        [Required(ErrorMessage = "PersonID is required!")]
+        [Range(10, long.MaxValue, ErrorMessage = ("PersonID must be greater than 10!"))]
         public long PersonID
         {
             get => _personID;

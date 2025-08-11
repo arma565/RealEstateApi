@@ -14,7 +14,6 @@ namespace RealEstate.Models.Authentication.Users
         private string _firstName = "";
         private string _lastName = "";
         private bool _acceptTerms;
-        private bool _rememberMe;
         private ProfileImage? _profileImage;
 
         [Key]
@@ -59,12 +58,6 @@ namespace RealEstate.Models.Authentication.Users
         {
             get => _acceptTerms;
             set => _acceptTerms = value;
-        }
-
-        public bool RememberMe
-        {
-            get => _rememberMe;
-            set => _rememberMe = value;
         }
 
         public ProfileImage? ProfileImage
