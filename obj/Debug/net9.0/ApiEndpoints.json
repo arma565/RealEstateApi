@@ -70,18 +70,13 @@
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
     "Method": "DeleteUser",
-    "RelativePath": "Auth/user/delete/{userName}/{password}",
+    "RelativePath": "Auth/user/delete/{userName}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "userName",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "password",
         "Type": "System.String",
         "IsRequired": true
       }

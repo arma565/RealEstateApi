@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -102,13 +103,14 @@ namespace RealEstate.Services
         /// <returns></returns>
         public async Task<IdentityResult> DeleteUser(User user)
         {
-            var environmentPath = _imageService.GetLocalImagesFullPath("auth");
+            if (user?.ProfileImage != null && user.ProfileImage.ProfileImageName != null) {
+                var environmentPath = _imageService.GetLocalImagesFullPath("auth");
 
-            var filePath = Path.Combine(environmentPath, user?.ProfileImage?.ProfileImageName ?? "");
+                var filePath = Path.Combine(environmentPath, user.ProfileImage.ProfileImageName);
 
-            if (File.Exists(filePath))
-                File.Delete(filePath);
-
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+            }
             return await _userManager.DeleteAsync(user!).ConfigureAwait(false);
         }
 

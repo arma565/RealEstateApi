@@ -5,10 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\projects\\realestate\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\projects\\realestate\\controllers\\estatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:controllers\\estatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,28 +22,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EstateController.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Controllers\\EstateController.cs",
-              "RelativeDocumentMoniker": "Controllers\\EstateController.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Controllers\\EstateController.cs",
-              "RelativeToolTip": "Controllers\\EstateController.cs",
-              "ViewState": "AgIAAF4AAAAAAAAAAAAQwH4AAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T19:38:22.715Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "AuthController.cs",
               "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Controllers\\AuthController.cs*",
-              "RelativeToolTip": "Controllers\\AuthController.cs*",
-              "ViewState": "AgIAAF8AAAAAAAAAAAAAAI0AAABXAAAAAAAAAA==",
+              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAAFMBAAAAAAAAAAAAAGsBAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T19:37:41.155Z",
+              "WhenOpened": "2025-08-12T16:37:45.107Z",
               "EditorCaption": ""
             }
           ]

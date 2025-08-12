@@ -353,21 +353,15 @@ namespace RealEstate.Controllers
         /// <param name="userName">The username of the user.</param>
         /// <param name="password">The password of the user.</param>
         /// <returns>Returns 204 NoContent if successful, 400 BadRequest for invalid input or incorrect password, 404 NotFound if user not found.</returns>
-        [HttpDelete("user/delete/{userName}/{password}")]
-        public async Task<IActionResult> DeleteUser(string userName, string password)
+        [HttpDelete("user/delete/{userName}")]
+        public async Task<IActionResult> DeleteUser(string userName)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
-                    return BadRequest("userName or password is empty!");
-
-                var user = await _service.FindUserByUserName(userName).ConfigureAwait(false);
+                var user = await _service.GetUserByUserName(userName).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
-
-                if (!_passwordHelper.VerifyPassword(user, user.PasswordHash!, password))
-                    return BadRequest("Password is not correct!");
 
                 var res = await _service.DeleteUser(user).ConfigureAwait(false);
 

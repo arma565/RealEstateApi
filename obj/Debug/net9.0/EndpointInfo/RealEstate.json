@@ -230,7 +230,7 @@
         }
       }
     },
-    "/Auth/user/delete/{userName}/{password}": {
+    "/Auth/user/delete/{userName}": {
       "delete": {
         "tags": [
           "Auth"
@@ -238,14 +238,6 @@
         "parameters": [
           {
             "name": "userName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
             "in": "path",
             "required": true,
             "schema": {
