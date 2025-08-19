@@ -966,7 +966,7 @@
         }
       }
     },
-    "/Support/support/upload/{supportID}": {
+    "/Support/upload/{supportID}": {
       "post": {
         "tags": [
           "Support"
@@ -1008,7 +1008,7 @@
         }
       }
     },
-    "/Support/support/download/{imageFileName}": {
+    "/Support/download/{imageFileName}": {
       "get": {
         "tags": [
           "Support"
@@ -1030,7 +1030,7 @@
         }
       }
     },
-    "/Support/support": {
+    "/Support/list": {
       "get": {
         "tags": [
           "Support"
@@ -1068,7 +1068,7 @@
         }
       }
     },
-    "/Support/support/{supportID}": {
+    "/Support/{supportID}": {
       "get": {
         "tags": [
           "Support"
@@ -1107,7 +1107,7 @@
         }
       }
     },
-    "/Support/support/add": {
+    "/Support/add": {
       "post": {
         "tags": [
           "Support"
@@ -1143,7 +1143,7 @@
         }
       }
     },
-    "/Support/support/update": {
+    "/Support/update": {
       "post": {
         "tags": [
           "Support"
@@ -1179,7 +1179,7 @@
         }
       }
     },
-    "/Support/support/delete/{supportID}": {
+    "/Support/delete/{supportID}": {
       "delete": {
         "tags": [
           "Support"
@@ -1201,7 +1201,7 @@
         }
       }
     },
-    "/Support/support/delete-all": {
+    "/Support/delete-all": {
       "delete": {
         "tags": [
           "Support"

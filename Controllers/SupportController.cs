@@ -22,7 +22,7 @@ namespace RealEstate.Controllers
         /// <param name="supportID">The ID of the support.</param>
         /// <param name="image">The image file to upload.</param>
         /// <returns>Returns 200 OK if successful, 400 BadRequest for invalid input, 404 NotFound if support not found, or 500/403 for errors.</returns>
-        [HttpPost("support/upload/{supportID}")]
+        [HttpPost("upload/{supportID}")]
         public async Task<IActionResult> UploadSupportImage(string supportID, IFormFile image)
         {
             try
@@ -88,7 +88,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <param name="imageFileName">The file name of the image to download.</param>
         /// <returns>Returns the image file if found, 404 NotFound if not found, 400 BadRequest for invalid input, or 500/403 for errors.</returns>
-        [HttpGet("support/download/{imageFileName}")]
+        [HttpGet("download/{imageFileName}")]
         public async Task<IActionResult> DownloadSupportImage(string imageFileName)
         {
             try
@@ -158,7 +158,7 @@ namespace RealEstate.Controllers
         /// Retrieves all supports.
         /// </summary>
         /// <returns>Returns a list of all supports.</returns>
-        [HttpGet("support")]
+        [HttpGet("list")]
         public async Task<ActionResult<List<Support>>> GetAllSupports() => Ok(await _service.GetSupportList().ConfigureAwait(false));
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <param name="supportID">The id of the support.</param>
         /// <returns>Returns the support if found, 404 NotFound if not found, or 400 BadRequest for invalid input.</returns>
-        [HttpGet("support/{supportID}")]
+        [HttpGet("{supportID}")]
         public async Task<ActionResult<Support>> GetSupport(string supportID)
         {
             try
@@ -212,7 +212,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <param name="support">New support to add.</param>
         /// <returns>Returns 201 Created if successful</returns>
-        [HttpPost("support/add")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddSupport([FromBody] Support support)
         {
             try
@@ -253,7 +253,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <param name="support">The support model to update</param>
         /// <returns>Returns 204 NoContent if successful</returns>
-        [HttpPost("support/update")]
+        [HttpPost("update")]
         public async Task<IActionResult> UpdateSupport([FromBody] Support support)
         {
             try
@@ -292,7 +292,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <param name="supportID">The id of the support.</param>
         /// <returns>Returns 204 NoContent if successful, 404 NotFound if user not found.</returns>
-        [HttpDelete("support/delete/{supportID}")]
+        [HttpDelete("delete/{supportID}")]
         public async Task<IActionResult> DeleteSupport(string supportID)
         {
             try
@@ -337,7 +337,7 @@ namespace RealEstate.Controllers
         /// Deletes all supports.
         /// </summary>
         /// <returns>Returns 204 NoContent if successful</returns>
-        [HttpDelete("support/delete-all")]
+        [HttpDelete("delete-all")]
         public async Task<IActionResult> DeleteAllSupports()
         {
             try

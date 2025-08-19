@@ -533,8 +533,92 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "GetSupport",
+    "RelativePath": "Support/{supportID}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Models.Support.Support",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "AddSupport",
+    "RelativePath": "Support/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "support",
+        "Type": "RealEstate.Models.Support.Support",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "DeleteAllSupports",
+    "RelativePath": "Support/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "DeleteSupport",
+    "RelativePath": "Support/delete/{supportID}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "DownloadSupportImage",
+    "RelativePath": "Support/download/{imageFileName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageFileName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
     "Method": "GetAllSupports",
-    "RelativePath": "Support/support",
+    "RelativePath": "Support/list",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -569,92 +653,8 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "GetSupport",
-    "RelativePath": "Support/support/{supportID}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "supportID",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "RealEstate.Models.Support.Support",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "AddSupport",
-    "RelativePath": "Support/support/add",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "support",
-        "Type": "RealEstate.Models.Support.Support",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "DeleteAllSupports",
-    "RelativePath": "Support/support/delete-all",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "DeleteSupport",
-    "RelativePath": "Support/support/delete/{supportID}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "supportID",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "DownloadSupportImage",
-    "RelativePath": "Support/support/download/{imageFileName}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageFileName",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
     "Method": "UpdateSupport",
-    "RelativePath": "Support/support/update",
+    "RelativePath": "Support/update",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -670,7 +670,7 @@
   {
     "ContainingType": "RealEstate.Controllers.SupportController",
     "Method": "UploadSupportImage",
-    "RelativePath": "Support/support/upload/{supportID}",
+    "RelativePath": "Support/upload/{supportID}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
