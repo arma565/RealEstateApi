@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿#pragma warning disable CA1515
 namespace RealEstate.Models.Authentication.Users
 {
-#pragma warning disable CA1515
+
     public sealed class ProfileImage
     {
    

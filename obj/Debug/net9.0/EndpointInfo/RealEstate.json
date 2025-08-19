@@ -965,6 +965,275 @@
           }
         }
       }
+    },
+    "/Support/support/upload/{supportID}": {
+      "post": {
+        "tags": [
+          "Support"
+        ],
+        "parameters": [
+          {
+            "name": "supportID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "image": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Support/support/download/{imageFileName}": {
+      "get": {
+        "tags": [
+          "Support"
+        ],
+        "parameters": [
+          {
+            "name": "imageFileName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Support/support": {
+      "get": {
+        "tags": [
+          "Support"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Support"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Support"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Support"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Support/support/{supportID}": {
+      "get": {
+        "tags": [
+          "Support"
+        ],
+        "parameters": [
+          {
+            "name": "supportID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Support"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Support"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Support"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Support/support/add": {
+      "post": {
+        "tags": [
+          "Support"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Support/support/update": {
+      "post": {
+        "tags": [
+          "Support"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Support"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Support/support/delete/{supportID}": {
+      "delete": {
+        "tags": [
+          "Support"
+        ],
+        "parameters": [
+          {
+            "name": "supportID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Support/support/delete-all": {
+      "delete": {
+        "tags": [
+          "Support"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Support/support-image/delete/{supportImageID}": {
+      "delete": {
+        "tags": [
+          "Support"
+        ],
+        "parameters": [
+          {
+            "name": "supportImageID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1303,6 +1572,48 @@
             "minLength": 8,
             "type": "string",
             "format": "password"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Support": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "supportImage": {
+            "$ref": "#/components/schemas/SupportImage"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SupportImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "supportImageFileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "supportId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "support": {
+            "$ref": "#/components/schemas/Support"
           }
         },
         "additionalProperties": false

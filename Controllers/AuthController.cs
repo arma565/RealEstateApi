@@ -19,14 +19,11 @@ namespace RealEstate.Controllers
     [Route("[controller]")]
     public sealed class AuthController(
         RepositoryService service,
-        ImageService imageService,
-        PasswordHelper passwordHelper
+        ImageService imageService
         ) : ControllerBase
     {
         private readonly RepositoryService _service = service;
         private readonly ImageService _imageService = imageService;
-        private readonly PasswordHelper _passwordHelper = passwordHelper;
-
         #region Auth
         /// <summary>
         /// Uploads a profile image for the specified user.

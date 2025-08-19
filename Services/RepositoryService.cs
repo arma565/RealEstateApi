@@ -7,6 +7,7 @@ using RealEstate.Models.Authentication;
 using RealEstate.Models.Authentication.Users;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
+using RealEstate.Models.Support;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 #pragma warning disable CA1515
@@ -87,8 +88,9 @@ namespace RealEstate.Services
             {
                 await _userManager.DeleteAsync(user).ConfigureAwait(false);
             }
-            if (Directory.Exists(Path.Combine("wwwroot/images/auth"))) {
-                var files = Directory.GetFiles(Path.Combine("wwwroot/images/auth"));
+            var environmentPath = _imageService.GetLocalImagesFullPath("auth");
+            if (Directory.Exists(environmentPath)) {
+                var files = Directory.GetFiles(environmentPath);
                 foreach (var file in files)
                 {
                     File.Delete(file);
@@ -220,16 +222,15 @@ namespace RealEstate.Services
 
         public void DeleteProfileImage(ProfileImage userProfileImage)
         {
-            if (userProfileImage == null)
+            if (userProfileImage == null || userProfileImage.ProfileImageName == null)
                 return;
-
-            if (userProfileImage.ProfileImageName != null)
+            var environmentPath = _imageService.GetLocalImagesFullPath("auth");
+            var profileImagePath = Path.Combine(environmentPath, userProfileImage.ProfileImageName);
+            var filesDir = Directory.GetFiles(environmentPath);
+            foreach (var filePath in filesDir)
             {
-                var files = Directory.GetFiles(Path.Combine("wwwroot/images/auth"));
-                foreach (var file in files)
-                {
-                    File.Delete(file);
-                }
+                if(filePath == profileImagePath)
+                    File.Delete(filePath);
             }
             _context.UserProfileImages.Remove(userProfileImage);
             _context.SaveChanges();
@@ -273,41 +274,37 @@ namespace RealEstate.Services
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return newAsset;
         }
-        public async Task UpdateAsset(Asset updateAsset)
+        public async Task UpdateAsset(Asset asset)
         {
-            _context.Assets.Update(updateAsset);
+            _context.Assets.Update(asset);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public void DeleteAsset(Asset deleteAsset)
+        public void DeleteAsset(Asset asset)
         {
-            if (deleteAsset == null)
+            if (asset == null || asset.AssetImages == null)
                 return;
-               
-            if (deleteAsset.AssetImages != null) {
-                var files = Directory.GetFiles(Path.Combine("wwwroot/images/Asset"));
-                foreach (var file in files)
-                {
-                    if (deleteAsset.AssetImages.Any(assetImg => assetImg.FileName == file))
-                    {
-                        File.Delete(file);
-                    }
-                }
+
+            var environmentPath = _imageService.GetLocalImagesFullPath("asset");
+            foreach (var assetImg in asset.AssetImages)
+            {
+                File.Delete(Path.Combine(environmentPath, assetImg.FileName));
             }
-            _context.Assets.Remove(deleteAsset);
+            _context.Assets.Remove(asset);
             _context.SaveChanges();
         }
         public void DeleteAllAssets()
         {
-            _context.Assets.ExecuteDelete();
-            _context.SaveChanges();
-            if (Directory.Exists(Path.Combine("wwwroot/images/Asset")))
+            var environmentPath = _imageService.GetLocalImagesFullPath("asset");
+            if (Directory.Exists(environmentPath))
             {
-                var files = Directory.GetFiles(Path.Combine("wwwroot/images/Asset"));
-                foreach (var file in files)
+                var filesDir = Directory.GetFiles(environmentPath);
+                foreach (var file in filesDir)
                 {
                     File.Delete(file);
                 }
             }
+            _context.Assets.ExecuteDelete();
+            _context.SaveChanges();
         }
         public async Task<Asset?> FindAssetByPlatesNumber(string platesNumber)
         {
@@ -336,23 +333,19 @@ namespace RealEstate.Services
             await _context.AssetImages.AddAsync(assetImage).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public void DeleteAssetImage(AssetImage deleteAssetImage)
+        public void DeleteAssetImage(AssetImage assetImage)
         {
-            if (deleteAssetImage == null)
+            if (assetImage == null || assetImage.FileName == null)
                 return;
-
-            if (deleteAssetImage.FileName != null)
+            var environmentPath = _imageService.GetLocalImagesFullPath("asset");
+            var filesDir = Directory.GetFiles(environmentPath);
+            foreach (var filePath in filesDir)
             {
-                var files = Directory.GetFiles(Path.Combine("wwwroot/images/Asset"));
-                foreach (var file in files)
-                {
-                    if (deleteAssetImage.FileName == file)
-                    {
-                        File.Delete(file);
-                    }
-                }
+                var assetImgPath = Path.Combine(environmentPath, assetImage.FileName);
+                if (assetImgPath == filePath)
+                    File.Delete(filePath);
             }
-            _context.AssetImages.Remove(deleteAssetImage);
+            _context.AssetImages.Remove(assetImage);
             _context.SaveChanges();
         }
         #endregion
@@ -396,6 +389,110 @@ namespace RealEstate.Services
         }
         public async Task<bool> IsPersonExist(long personID) =>
           await _context.Persons.AsNoTracking().AnyAsync(pers => pers.PersonID == personID).ConfigureAwait(false);
+        #endregion
+
+        #region Support
+        public async Task<IEnumerable<Support>> GetSupportList() =>
+           await _context
+          .Supports
+          .AsNoTracking()
+          .Include(support => support.SupportImage)
+          .ToListAsync().ConfigureAwait(false);
+
+        public async Task<Support?> GetSupport(Guid supportID) =>
+          await _context
+              .Supports.AsNoTracking()
+              .Include(sups => sups.SupportImage)
+              .SingleOrDefaultAsync(sup => sup.Id == supportID)
+              .ConfigureAwait(false);
+
+        public async Task<Support> AddSupport(Support newSupport)
+        {
+            await _context.Supports.AddAsync(newSupport).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return newSupport;
+        }
+
+        public async Task UpdateSupport(Support updateSupport)
+        {
+            _context.Supports.Update(updateSupport);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+        public void DeleteSupport(Support support)
+        {
+            if (support == null)
+                return;
+
+            if (support.SupportImage != null)
+            {
+                var environmentPath = _imageService.GetLocalImagesFullPath("support");
+                var filesDir = Directory.GetFiles(environmentPath);
+                var supImagePath = Path.Combine(environmentPath, support.SupportImage.SupportImageFileName);
+                foreach (var filePath in filesDir)
+                {
+                    if (supImagePath == filePath)
+                        File.Delete(filePath);
+                }
+            }
+            _context.Supports.Remove(support);
+            _context.SaveChanges();
+        }
+        public void DeleteAllSupports()
+        {
+            var environmentPath = _imageService.GetLocalImagesFullPath("support");
+            if (Directory.Exists(environmentPath))
+            {
+                var filesPath = Directory.GetFiles(environmentPath);
+                foreach (var filePath in filesPath)
+                {
+                    File.Delete(filePath);
+                }
+            }
+            _context.Supports.ExecuteDelete();
+            _context.SaveChanges();
+        }
+        #endregion
+
+        #region SupportImage
+        public async Task<List<SupportImage>> GetSupportImageList() =>
+          await _context
+          .SupportImages
+          .ToListAsync()
+          .ConfigureAwait(false);
+
+        public async Task<SupportImage?> GetSupportImage(Guid supportImageID) =>
+           await _context
+          .SupportImages.AsNoTracking()
+          .SingleOrDefaultAsync(supImage => supImage.Id == supportImageID)
+          .ConfigureAwait(false);
+
+        public async Task AddSupportImage(SupportImage supportImage)
+        {
+            await _context.SupportImages.AddAsync(supportImage).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task UpdateSupportImage(SupportImage supportImage)
+        {
+            _context.SupportImages.Update(supportImage);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public void DeleteSupportImage(SupportImage supportImage)
+        {
+            if (supportImage == null || supportImage.SupportImageFileName == null)
+                return;
+            var environmentPath = _imageService.GetLocalImagesFullPath("support");
+            var supImgPath = Path.Combine(environmentPath, supportImage.SupportImageFileName);
+            var filesPath = Directory.GetFiles(environmentPath);
+            foreach (var filePath in filesPath)
+            {
+                if(supImgPath == filePath)
+                    File.Delete(filePath);
+            }
+            _context.SupportImages.Remove(supportImage);
+            _context.SaveChanges();
+        }
         #endregion
 
     }

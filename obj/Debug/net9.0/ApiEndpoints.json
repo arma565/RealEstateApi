@@ -530,5 +530,162 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "GetAllSupports",
+    "RelativePath": "Support/support",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[RealEstate.Models.Support.Support, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "DeleteProfileImage",
+    "RelativePath": "Support/support-image/delete/{supportImageID}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportImageID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "GetSupport",
+    "RelativePath": "Support/support/{supportID}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Models.Support.Support",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "AddSupport",
+    "RelativePath": "Support/support/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "support",
+        "Type": "RealEstate.Models.Support.Support",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "DeleteAllSupports",
+    "RelativePath": "Support/support/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "DeleteSupport",
+    "RelativePath": "Support/support/delete/{supportID}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportID",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "DownloadSupportImage",
+    "RelativePath": "Support/support/download/{imageFileName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageFileName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "UpdateSupport",
+    "RelativePath": "Support/support/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "support",
+        "Type": "RealEstate.Models.Support.Support",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.SupportController",
+    "Method": "UploadSupportImage",
+    "RelativePath": "Support/support/upload/{supportID}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportID",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

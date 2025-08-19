@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:5068")
+                .WithOrigins("http://0.0.0.0:5068")
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod();
@@ -34,7 +34,7 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<RepositoryService>();
 builder.Services.AddScoped<ImageService>();
-builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<PasswordHelper>();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();

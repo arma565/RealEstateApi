@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RealEstate.Models.Authentication.Users;
 using RealEstate.Models.Estate;
 using RealEstate.Models.Estate.Assets;
+using RealEstate.Models.Support;
 using System.Reflection.Emit;
 
 
@@ -12,11 +13,11 @@ namespace RealEstate.Data
     public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User>(options)
     {
         public required DbSet<Asset> Assets { get; set; }
-
         public required DbSet<AssetImage> AssetImages { get; set; }
-        public required DbSet<ProfileImage> UserProfileImages { get; set; }
-
         public required DbSet<Person> Persons { get; set; }
+        public required DbSet<ProfileImage> UserProfileImages { get; set; }
+        public required DbSet<Support> Supports { get; set; }
+        public required DbSet<SupportImage> SupportImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -52,6 +53,19 @@ namespace RealEstate.Data
             builder.Entity<ProfileImage>()
             .HasIndex(p => p.UserID)
             .IsUnique();
+
+            builder
+                .Entity<Support>()
+                .HasOne(support => support.SupportImage)
+                .WithOne(supportImg => supportImg.Support)
+                .HasForeignKey<SupportImage>(supportImg => supportImg.SupportId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .Entity<SupportImage>()
+                .HasIndex(supportImg => supportImg.SupportId)
+                .IsUnique();
         }
     }
 }

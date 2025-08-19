@@ -3,15 +3,10 @@ using Microsoft.IdentityModel.Tokens;
 #pragma warning disable CA1515
 namespace RealEstate.Services
 {
-    internal interface IImageService
-    {
-        Task<string> UploadProfileImage(IFormFile image);
-        FileStream ReadProfileImage(string filePath);
-    }
 
     public sealed class ImageService(
         IWebHostEnvironment environment
-        ) : IImageService
+        )
     {
         private readonly IWebHostEnvironment _environment = environment;
 
@@ -24,7 +19,7 @@ namespace RealEstate.Services
         /// image to upload
         /// </param>
         /// <returns></returns>
-        public async Task<string> UploadProfileImage(IFormFile image)
+       public async Task<string> UploadProfileImage(IFormFile image)
         {
             if (image is null)
                 return "";
@@ -52,21 +47,6 @@ namespace RealEstate.Services
             }
 
             return fileName;
-        }
-
-        public string GetFullImagePath(string userProfileImageName) {
-
-            var environmentPath = GetLocalImagesFullPath("auth");
-
-            // Normalize and sanitize the path
-            var fileName = Path.GetFileName(userProfileImageName); // strips any path traversal
-
-            var fullPath = Path.Combine(environmentPath, fileName);
-
-            if (!File.Exists(fullPath))
-                return "";
-
-            return fullPath;
         }
 
         /// <summary>
@@ -112,31 +92,34 @@ namespace RealEstate.Services
             return fileNameList;
         }
 
-        /// <summary>
-        /// Use this to download image from server
-        /// </summary>
-        /// <param name="filePath">
-        /// file path of image file
-        /// </param>
-        /// <returns></returns>
-        /// <exception cref="IOException"></exception>
-        public FileStream ReadProfileImage(string filePath)
+       public async Task<string> UploadSupportImage(IFormFile image)
         {
-            try
+            if (image is null)
+                return "";
+
+            if (!IsValidImage(image))
+                throw new InvalidOperationException("Invalid image file.");
+
+            var webRootPath = _environment.WebRootPath;
+
+            var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+
+            if (!Directory.Exists(webRootPath))
+                Directory.CreateDirectory(webRootPath); // Recreate wwwroot
+
+            var uploadsFolder = Path.Combine(webRootPath, "images/support");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                return new FileStream(
-                    filePath,
-                    FileMode.Open,
-                    FileAccess.Read,
-                    FileShare.Read,
-                    4096,
-                    useAsync: true
-                );
+                await image.CopyToAsync(stream).ConfigureAwait(false);
             }
-            catch (IOException ex)
-            {
-                throw new IOException("Error reading the file. Error =" + ex.Message);
-            }
+
+            return fileName;
         }
 
         private static bool IsValidImage(IFormFile image)
@@ -159,7 +142,6 @@ namespace RealEstate.Services
 
         public string GetLocalImagesFullPath(string requestedModelPath)
         {
-
             if (requestedModelPath.IsNullOrEmpty())
                 return "";
 
@@ -168,10 +150,13 @@ namespace RealEstate.Services
             if (!Directory.Exists(webRootPath))
                 return "";
 
-            if (requestedModelPath == "asset")
-                return Path.Combine(webRootPath, "images\\asset");
-            else
-                return Path.Combine(webRootPath, "images\\auth");
+            return requestedModelPath switch
+            {
+                "asset" => Path.Combine(webRootPath, "images\\asset"),
+                "auth" => Path.Combine(webRootPath, "images\\auth"),
+                "support" => Path.Combine(webRootPath, "images\\support"),
+                _ => Path.Combine(webRootPath, "images"),
+            };
         }
     }
 }
