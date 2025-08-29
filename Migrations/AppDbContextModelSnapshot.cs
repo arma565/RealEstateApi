@@ -267,7 +267,15 @@ namespace RealEstate.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AssetType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConstructionYear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContractType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -285,10 +293,6 @@ namespace RealEstate.Migrations
 
                     b.Property<bool>("Gas")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
@@ -312,10 +316,6 @@ namespace RealEstate.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Time")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Water")
@@ -402,7 +402,14 @@ namespace RealEstate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
+                    b.PrimitiveCollection<string>("DetailsDescriptionList")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsSubtitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsTitle")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

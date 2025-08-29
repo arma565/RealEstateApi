@@ -252,6 +252,7 @@ namespace RealEstate.Services
                 .AsNoTracking()
                 .Include(prop => prop.Persons)
                 .Include(assetImg => assetImg.AssetImages)
+                .OrderBy(prop => prop.OrderID)
                 .ToListAsync().ConfigureAwait(false);
         public async Task<IEnumerable<Asset>> GetAssetListDateModified() =>
             await _context

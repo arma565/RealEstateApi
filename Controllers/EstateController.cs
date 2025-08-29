@@ -342,6 +342,7 @@ namespace RealEstate.Controllers
 
                 updateAsset.Date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 updateAsset.Time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                updateAsset.OrderID = asset.OrderID;
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);

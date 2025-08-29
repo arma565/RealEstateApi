@@ -11,7 +11,7 @@ namespace RealEstate.Models.Estate.Assets
 
         private Guid _id;
         private int _orderID;
-        private string? _name = "";
+        private string? _assetType = "";
         private string? _platesNumber = "";
         private string? _area = "";
         private string? _constructionYear = "";
@@ -23,7 +23,7 @@ namespace RealEstate.Models.Estate.Assets
         private string? _description = "";
         private string? _time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
         private string? _date = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-        private string? _type = "";
+        private string? _contractType = "";
         private bool _water;
         private bool _electricity;
         private bool _gas;
@@ -46,10 +46,10 @@ namespace RealEstate.Models.Estate.Assets
         }
 
         [Required(ErrorMessage = "Asset name is required!")]
-        public string? Name
+        public string? AssetType
         {
-            get => _name;
-            set => _name = value;
+            get => _assetType;
+            set => _assetType = value;
         }
 
         [Required(ErrorMessage = "PlatesNumber is required!")]
@@ -120,11 +120,11 @@ namespace RealEstate.Models.Estate.Assets
             get => _date;
             set => _date = value;
         }
-        [Required(ErrorMessage = "Type is required!")]
-        public string? Type
+        [Required(ErrorMessage = "ContractType is required!")]
+        public string? ContractType
         {
-            get => _type;
-            set => _type = value;
+            get => _contractType;
+            set => _contractType = value;
         }
 
         public bool Water

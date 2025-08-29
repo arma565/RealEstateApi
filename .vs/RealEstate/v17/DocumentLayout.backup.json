@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\projects\\realestate\\controllers\\supportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:controllers\\supportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\projects\\realestate\\models\\support\\supportimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:models\\support\\supportimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,37 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SupportController.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Controllers\\SupportController.cs",
-              "RelativeDocumentMoniker": "Controllers\\SupportController.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Controllers\\SupportController.cs*",
-              "RelativeToolTip": "Controllers\\SupportController.cs*",
-              "ViewState": "AgIAABYAAAAAAAAAAAAQwKgAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-19T17:01:37.506Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SupportImage.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Models\\Support\\SupportImage.cs",
-              "RelativeDocumentMoniker": "Models\\Support\\SupportImage.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\Models\\Support\\SupportImage.cs",
-              "RelativeToolTip": "Models\\Support\\SupportImage.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-19T16:56:41.463Z",
-              "EditorCaption": ""
             }
           ]
         }

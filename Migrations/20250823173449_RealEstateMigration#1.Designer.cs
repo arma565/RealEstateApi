@@ -12,8 +12,8 @@ using RealEstate.Data;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250819150504_RealEstateMigrations#3")]
-    partial class RealEstateMigrations3
+    [Migration("20250823173449_RealEstateMigration#1")]
+    partial class RealEstateMigration1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -405,7 +405,14 @@ namespace RealEstate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
+                    b.PrimitiveCollection<string>("DetailsDescriptionList")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsSubtitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsTitle")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

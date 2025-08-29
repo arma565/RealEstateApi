@@ -12,8 +12,8 @@ using RealEstate.Data;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250811102412_RealEstateMigrations#2")]
-    partial class RealEstateMigrations2
+    [Migration("20250828151913_RealEstateMigration#2")]
+    partial class RealEstateMigration2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -270,7 +270,15 @@ namespace RealEstate.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AssetType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConstructionYear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContractType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -288,10 +296,6 @@ namespace RealEstate.Migrations
 
                     b.Property<bool>("Gas")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
@@ -315,10 +319,6 @@ namespace RealEstate.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Time")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Water")
@@ -397,6 +397,51 @@ namespace RealEstate.Migrations
                     b.HasIndex("AssetID");
 
                     b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Support.Support", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.PrimitiveCollection<string>("DetailsDescriptionList")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsSubtitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Supports");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Support.SupportImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SupportId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SupportImageFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupportId")
+                        .IsUnique();
+
+                    b.ToTable("SupportImages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -483,6 +528,17 @@ namespace RealEstate.Migrations
                     b.Navigation("Asset");
                 });
 
+            modelBuilder.Entity("RealEstate.Models.Support.SupportImage", b =>
+                {
+                    b.HasOne("RealEstate.Models.Support.Support", "Support")
+                        .WithOne("SupportImage")
+                        .HasForeignKey("RealEstate.Models.Support.SupportImage", "SupportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Support");
+                });
+
             modelBuilder.Entity("RealEstate.Models.Authentication.Users.User", b =>
                 {
                     b.Navigation("ProfileImage");
@@ -493,6 +549,11 @@ namespace RealEstate.Migrations
                     b.Navigation("AssetImages");
 
                     b.Navigation("Persons");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.Support.Support", b =>
+                {
+                    b.Navigation("SupportImage");
                 });
 #pragma warning restore 612, 618
         }
