@@ -39,7 +39,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrWhiteSpace(userID))
                     return BadRequest("UserID can not be empty!");
 
-                var user = await _service.GetUserByID(userID).ConfigureAwait(false);
+                var user = await _service.GetUserByIDAsync(userID).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
@@ -56,13 +56,13 @@ namespace RealEstate.Controllers
                     profileImage.Id = user.ProfileImage!.Id;
                     profileImage.ProfileImageName = imageFileName;
                     profileImage.UserID = userID;
-                    await _service.UpdateProfileImage(profileImage).ConfigureAwait(false);
+                    await _service.UpdateProfileImageAsync(profileImage).ConfigureAwait(false);
                 }
                 else
                 {
                     profileImage.ProfileImageName = imageFileName;
                     profileImage.UserID = userID;
-                    await _service.AddProfileImage(profileImage).ConfigureAwait(false);
+                    await _service.AddProfileImageAsync(profileImage).ConfigureAwait(false);
                 }
 
                 return Ok("ProfileImage successfully uploaded");
@@ -107,7 +107,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrWhiteSpace(imageFileName))
                     return BadRequest("Image file name is empty!");
 
-                List<ProfileImage> profileImagesList = await _service.GetUserProfileImageList().ConfigureAwait(false);
+                List<ProfileImage> profileImagesList = await _service.GetUserProfileImageListAsync().ConfigureAwait(false);
 
                 var profileImage = profileImagesList.FirstOrDefault(profileImg => profileImg.ProfileImageName == imageFileName);
 
@@ -185,7 +185,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrWhiteSpace(userName))
                     return BadRequest("User name can not be empty!");
 
-                var user = await _service.GetUserByUserName(userName).ConfigureAwait(false);
+                var user = await _service.GetUserByUserNameAsync(userName).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
@@ -239,7 +239,7 @@ namespace RealEstate.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var res = await _service.RegisterUser(registerUser).ConfigureAwait(false);
+                var res = await _service.RegisterUserAsync(registerUser).ConfigureAwait(false);
 
                 if (res.Succeeded) 
                     return CreatedAtAction(nameof(GetUserByUserName), new { userName = registerUser.UserName }, registerUser);
@@ -281,7 +281,7 @@ namespace RealEstate.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _service.LoginUser(userLoginInfo).ConfigureAwait(false);
+                var result = await _service.LoginUserAsync(userLoginInfo).ConfigureAwait(false);
 
                 if (result.Succeeded)
                     return Ok("Login successful");
@@ -319,7 +319,7 @@ namespace RealEstate.Controllers
         {
             try
             {
-                await _service.DeleteAllUsers().ConfigureAwait(false);
+                await _service.DeleteAllUsersAsync().ConfigureAwait(false);
                 return Ok("Users has been deleted");
             }
             catch (ArgumentNullException ex)
@@ -355,12 +355,12 @@ namespace RealEstate.Controllers
         {
             try
             {
-                var user = await _service.GetUserByUserName(userName).ConfigureAwait(false);
+                var user = await _service.GetUserByUserNameAsync(userName).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
 
-                var res = await _service.DeleteUser(user).ConfigureAwait(false);
+                var res = await _service.DeleteUserAsync(user).ConfigureAwait(false);
 
                 if (res.Succeeded)
                     return NoContent();
@@ -409,12 +409,12 @@ namespace RealEstate.Controllers
                     return BadRequest("Invalid email format.");
 
 
-                var user = await _service.FindUserByEmail(recovery.Email).ConfigureAwait(false);
+                var user = await _service.FindUserByEmailAsync(recovery.Email).ConfigureAwait(false);
 
                 if (user == null)
                     return BadRequest("No such user found!");
 
-                var generatedToken = await _service.GenerateTokenToRecoverUser(user).ConfigureAwait(false);
+                var generatedToken = await _service.GenerateTokenToRecoverUserAsync(user).ConfigureAwait(false);
 
                 return Ok(generatedToken);
             }
@@ -456,12 +456,12 @@ namespace RealEstate.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var user = await _service.FindUserByEmail(model.Email).ConfigureAwait(false);
+                var user = await _service.FindUserByEmailAsync(model.Email).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
 
-                var result = await _service.ResetPassword(user, model.Token, model.NewPassword).ConfigureAwait(false);
+                var result = await _service.ResetPasswordAsync(user, model.Token, model.NewPassword).ConfigureAwait(false);
 
                 if (result.Succeeded)
                     return Ok("Reset password  was successful");
@@ -506,17 +506,15 @@ namespace RealEstate.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var user = await _service.FindUserByUserName(model.UserName).ConfigureAwait(false);
+                var user = await _service.FindUserByUserNameAsync(model.UserName).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
 
-                var result = await _service.ChangePassword(user, model.OldPassword, model.NewPassword).ConfigureAwait(false);
+                var result = await _service.ChangePasswordAsync(user, model.OldPassword, model.NewPassword).ConfigureAwait(false);
 
                 if (result.Succeeded)
-                    return Ok(new {
-                        Message = "Password has been changed"
-                    });
+                    return Ok("Password has been changed");
 
                 return BadRequest(result.Errors);
             }
@@ -558,7 +556,7 @@ namespace RealEstate.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var user = await _service.FindUserByID(updateUser.Id).ConfigureAwait(false);
+                var user = await _service.FindUserByIDAsync(updateUser.Id).ConfigureAwait(false);
 
                 if (user == null)
                     return NotFound("No such user found!");
@@ -578,7 +576,7 @@ namespace RealEstate.Controllers
                 user.PhoneNumber = updateUser.PhoneNumber;
                 user.AcceptTerms = user.AcceptTerms;
 
-                var result = await _service.EditUserProfile(user).ConfigureAwait(false);
+                var result = await _service.EditUserProfileAsync(user).ConfigureAwait(false);
 
                 if (result.Succeeded)
                     return Ok("User profile has been updated");
@@ -628,12 +626,12 @@ namespace RealEstate.Controllers
                 if (!Guid.TryParse(profileImageID, out Guid realEstateProfileImageID))
                     return BadRequest("Id must be a valid GUID!");
 
-                ProfileImage? profileImage = await _service.GetProfileImage(realEstateProfileImageID).ConfigureAwait(false);
+                ProfileImage? profileImage = await _service.GetProfileImageAsync(realEstateProfileImageID).ConfigureAwait(false);
 
                 if (profileImage is null)
                     return NotFound("Image not found!");
 
-                _service.DeleteProfileImage(profileImage);
+                await _service.DeleteProfileImageAsync(profileImage).ConfigureAwait(false);
 
                 return NoContent();
             }

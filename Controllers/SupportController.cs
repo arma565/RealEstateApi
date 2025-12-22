@@ -33,7 +33,7 @@ namespace RealEstate.Controllers
                 if (!Guid.TryParse(supportID, out Guid realEstateSupportID))
                     return BadRequest("SupportID must be a valid GUID!");
 
-                var support = await _service.GetSupport(realEstateSupportID).ConfigureAwait(false);
+                var support = await _service.GetSupportAsync(realEstateSupportID).ConfigureAwait(false);
 
                 if (support == null)
                     return NotFound("No such support found!");
@@ -48,7 +48,7 @@ namespace RealEstate.Controllers
                     SupportImageFileName = imageUrl,
                     SupportId = realEstateSupportID
                 };
-                await _service.AddSupportImage(supportImage).ConfigureAwait(false);
+                await _service.AddSupportImageAsync(supportImage).ConfigureAwait(false);
 
                 return Ok(new
                 {
@@ -96,7 +96,7 @@ namespace RealEstate.Controllers
                 if (string.IsNullOrWhiteSpace(imageFileName))
                     return BadRequest("Image file name is empty!");
 
-                var supportImageList = await _service.GetSupportImageList().ConfigureAwait(false);
+                var supportImageList = await _service.GetSupportImageListAsync().ConfigureAwait(false);
 
                 var supportImage = supportImageList.FirstOrDefault(supportImg => supportImg.SupportImageFileName == imageFileName);
 
@@ -159,7 +159,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <returns>Returns a list of all supports.</returns>
         [HttpGet("list")]
-        public async Task<ActionResult<List<Support>>> GetAllSupports() => Ok(await _service.GetSupportList().ConfigureAwait(false));
+        public async Task<ActionResult<List<Support>>> GetAllSupports() => Ok(await _service.GetSupportListAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Retrieves a support by Id.
@@ -177,7 +177,7 @@ namespace RealEstate.Controllers
                 if (!Guid.TryParse(supportID, out Guid realEstateSupportID))
                     return BadRequest("SupportID must be a valid GUID!");
 
-                var support = await _service.GetSupport(realEstateSupportID).ConfigureAwait(false);
+                var support = await _service.GetSupportAsync(realEstateSupportID).ConfigureAwait(false);
 
                 if (support == null)
                     return NotFound("No such support found!");
@@ -220,9 +220,9 @@ namespace RealEstate.Controllers
                 if (support == null)
                     return BadRequest("Failed to retreive parameter!");
 
-                var allSupports = await _service.GetSupportList().ConfigureAwait(false);
+                var allSupports = await _service.GetSupportListAsync().ConfigureAwait(false);
 
-                Support addedSupport = await _service.AddSupport(support).ConfigureAwait(false);
+                Support addedSupport = await _service.AddSupportAsync(support).ConfigureAwait(false);
 
                 return CreatedAtAction(nameof(GetSupport), new { SupportID = addedSupport.Id}, addedSupport);
             }
@@ -261,7 +261,7 @@ namespace RealEstate.Controllers
                 if (support == null) 
                     return BadRequest("Failed to retreive parameter!");
 
-                await _service.UpdateSupport(support).ConfigureAwait(false);
+                await _service.UpdateSupportAsync(support).ConfigureAwait(false);
 
                 return NoContent();
             }
@@ -303,12 +303,12 @@ namespace RealEstate.Controllers
                 if (!Guid.TryParse(supportID, out Guid realEstateSupportID))
                     return BadRequest("SupportID must be a valid GUID!");
 
-                var support = await _service.GetSupport(realEstateSupportID).ConfigureAwait(false);
+                var support = await _service.GetSupportAsync(realEstateSupportID).ConfigureAwait(false);
 
                 if (support == null)
                     return NotFound("No such support found!");
 
-                _service.DeleteSupport(support);
+                await _service.DeleteSupportAsync(support).ConfigureAwait(false);
                 return NoContent();
             }
             catch (ArgumentNullException ex)
@@ -342,8 +342,8 @@ namespace RealEstate.Controllers
         {
             try
             {
-                _service.DeleteAllSupports();
-                await _service.GetSupportList().ConfigureAwait(false);
+               await _service.DeleteAllSupportsAsync().ConfigureAwait(false);
+                await _service.GetSupportListAsync().ConfigureAwait(false);
                 return NoContent();
             }
             catch (ArgumentNullException ex)
@@ -388,12 +388,12 @@ namespace RealEstate.Controllers
                 if (!Guid.TryParse(supportImageID, out Guid realEstateSupportImageID))
                     return BadRequest("SupportImageID must be a valid GUID!");
 
-                SupportImage? supportImage = await _service.GetSupportImage(realEstateSupportImageID).ConfigureAwait(false);
+                SupportImage? supportImage = await _service.GetSupportImageAsync(realEstateSupportImageID).ConfigureAwait(false);
 
                 if (supportImage is null)
                     return NotFound("Image not found!");
 
-                _service.DeleteSupportImage(supportImage);
+                await _service.DeleteSupportImageAsync(supportImage).ConfigureAwait(false);
 
                 return NoContent();
             }

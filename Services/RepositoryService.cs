@@ -35,7 +35,7 @@ namespace RealEstate.Services
         /// This function return a user using id
         /// </summary>
         /// <returns> User associated to user ID </returns>
-        public async Task<User?> GetUserByID(string userID) =>
+        public async Task<User?> GetUserByIDAsync(string userID) =>
              await _userManager
                  .Users.AsNoTracking()
                  .Include(user => user.ProfileImage)
@@ -46,7 +46,7 @@ namespace RealEstate.Services
         /// This function return a user using userName
         /// </summary>
         /// <returns> User associated to userName </returns>
-        public async Task<User?> GetUserByUserName(string userName) =>
+        public async Task<User?> GetUserByUserNameAsync(string userName) =>
              await _userManager
                  .Users.AsNoTracking()
                  .Include(user => user.ProfileImage)
@@ -58,7 +58,7 @@ namespace RealEstate.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<IdentityResult> RegisterUser(Register userRegister)
+        public async Task<IdentityResult> RegisterUserAsync(Register userRegister)
         {
             if (userRegister is null)
                 return IdentityResult.Failed(new IdentityError
@@ -81,7 +81,7 @@ namespace RealEstate.Services
         /// This function delete all users
         /// </summary>
         /// <returns></returns>
-        public async Task DeleteAllUsers()
+        public async Task DeleteAllUsersAsync()
         {
             var users = await _userManager.Users.ToListAsync().ConfigureAwait(false);
            foreach (var user in users)
@@ -103,7 +103,7 @@ namespace RealEstate.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<IdentityResult> DeleteUser(User user)
+        public async Task<IdentityResult> DeleteUserAsync(User user)
         {
             if (user?.ProfileImage != null && user.ProfileImage.ProfileImageName != null) {
                 var environmentPath = _imageService.GetLocalImagesFullPath("auth");
@@ -123,7 +123,7 @@ namespace RealEstate.Services
         /// Login model containing username and password
         /// </param>
         /// <returns></returns>
-        public async Task<SignInResult> LoginUser(Login model)
+        public async Task<SignInResult> LoginUserAsync(Login model)
         {
             if (model is null)
             {
@@ -144,7 +144,7 @@ namespace RealEstate.Services
         /// User account which needs reset
         /// </param>
         /// <returns></returns>
-        public async Task<string> GenerateTokenToRecoverUser(User user)
+        public async Task<string> GenerateTokenToRecoverUserAsync(User user)
         {
             return await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
         }
@@ -162,7 +162,7 @@ namespace RealEstate.Services
         /// new password of account
         /// </param>
         /// <returns></returns>
-        public async Task<IdentityResult> ResetPassword(
+        public async Task<IdentityResult> ResetPasswordAsync(
             User user,
             string token,
             string newPassword
@@ -171,7 +171,7 @@ namespace RealEstate.Services
             return await _userManager.ResetPasswordAsync(user, token, newPassword).ConfigureAwait(false);
         }
 
-        public async Task<IdentityResult> ChangePassword(User user, string currentPassword, string newPassword)
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
         {
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
@@ -183,18 +183,18 @@ namespace RealEstate.Services
         /// user account
         /// </param>
         /// <returns></returns>
-        public async Task<IdentityResult> EditUserProfile(User updateUser) => await _userManager.UpdateAsync(updateUser).ConfigureAwait(false);
+        public async Task<IdentityResult> EditUserProfileAsync(User updateUser) => await _userManager.UpdateAsync(updateUser).ConfigureAwait(false);
 
-        public async Task<User?> FindUserByEmail(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
+        public async Task<User?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
-        public async Task<User?> FindUserByUserName(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
-        public async Task<User?> FindUserByID(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+        public async Task<User?> FindUserByUserNameAsync(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
+        public async Task<User?> FindUserByIDAsync(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
-        public async Task<bool> isUserExist(string userID) => await _userManager.Users.AsNoTracking().AnyAsync(user => user.Id == userID).ConfigureAwait(false);
+        public async Task<bool> IsUserExistAsync(string userID) => await _userManager.Users.AsNoTracking().AnyAsync(user => user.Id == userID).ConfigureAwait(false);
         #endregion
 
         #region UserProfileImage
-        public async Task<List<ProfileImage>> GetUserProfileImageList() =>
+        public async Task<List<ProfileImage>> GetUserProfileImageListAsync() =>
           await _context
           .UserProfileImages
           .AsNoTracking()
@@ -202,25 +202,25 @@ namespace RealEstate.Services
           .ToListAsync()
           .ConfigureAwait(false);
 
-        public async Task<ProfileImage?> GetProfileImage(Guid userProfileImageID) =>
+        public async Task<ProfileImage?> GetProfileImageAsync(Guid userProfileImageID) =>
        await _context
       .UserProfileImages.AsNoTracking()
       .SingleOrDefaultAsync(userProfileImg => userProfileImg.Id == userProfileImageID)
       .ConfigureAwait(false);
 
-        public async Task AddProfileImage(ProfileImage userProfileImage)
+        public async Task AddProfileImageAsync(ProfileImage userProfileImage)
         {
             await _context.UserProfileImages.AddAsync(userProfileImage).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public async Task UpdateProfileImage(ProfileImage profileImage)
+        public async Task UpdateProfileImageAsync(ProfileImage profileImage)
         {
             _context.UserProfileImages.Update(profileImage);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void DeleteProfileImage(ProfileImage userProfileImage)
+        public async Task DeleteProfileImageAsync(ProfileImage userProfileImage)
         {
             if (userProfileImage == null || userProfileImage.ProfileImageName == null)
                 return;
@@ -232,13 +232,13 @@ namespace RealEstate.Services
                 if(filePath == profileImagePath)
                     File.Delete(filePath);
             }
-            _context.UserProfileImages.Remove(userProfileImage);
-            _context.SaveChanges();
+           _context.UserProfileImages.Remove(userProfileImage);
+           await _context.SaveChangesAsync().ConfigureAwait(false);
         }
         #endregion
 
         #region Asset
-        public async Task<IEnumerable<Asset>> GetAssetListDescending() =>
+        public async Task<IEnumerable<Asset>> GetAssetListDescendingAsync() =>
             await _context
                 .Assets
                 .AsNoTracking()
@@ -246,7 +246,7 @@ namespace RealEstate.Services
                 .Include(assetImg => assetImg.AssetImages)
                 .OrderByDescending(prop => prop.OrderID)
                 .ToListAsync().ConfigureAwait(false);
-        public async Task<IEnumerable<Asset>> GetAssetListAscending() =>
+        public async Task<IEnumerable<Asset>> GetAssetListAscendingAsync() =>
             await _context
                 .Assets
                 .AsNoTracking()
@@ -254,7 +254,7 @@ namespace RealEstate.Services
                 .Include(assetImg => assetImg.AssetImages)
                 .OrderBy(prop => prop.OrderID)
                 .ToListAsync().ConfigureAwait(false);
-        public async Task<IEnumerable<Asset>> GetAssetListDateModified() =>
+        public async Task<IEnumerable<Asset>> GetAssetListDateModifiedAsync() =>
             await _context
                 .Assets
                 .AsNoTracking()
@@ -262,25 +262,25 @@ namespace RealEstate.Services
                 .Include(assetImg => assetImg.AssetImages)
                 .OrderBy(prop => prop.Date)
                 .ToListAsync().ConfigureAwait(false);
-        public async Task<Asset?> GetAsset(Guid assetID) =>
+        public async Task<Asset?> GetAssetAsync(Guid assetID) =>
             await _context
                 .Assets.AsNoTracking()
                 .Include(prop => prop.Persons)
                 .Include(assetImg => assetImg.AssetImages)
                 .SingleOrDefaultAsync(prop => prop.Id == assetID)
                 .ConfigureAwait(false);
-        public async Task<Asset?> AddAsset(Asset newAsset)
+        public async Task<Asset?> AddAssetAsync(Asset newAsset)
         {
             await _context.Assets.AddAsync(newAsset).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return newAsset;
         }
-        public async Task UpdateAsset(Asset asset)
+        public async Task UpdateAssetAsync(Asset asset)
         {
             _context.Assets.Update(asset);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public void DeleteAsset(Asset asset)
+        public async Task DeleteAssetAsync(Asset asset)
         {
             if (asset == null || asset.AssetImages == null)
                 return;
@@ -291,9 +291,9 @@ namespace RealEstate.Services
                 File.Delete(Path.Combine(environmentPath, assetImg.FileName));
             }
             _context.Assets.Remove(asset);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public void DeleteAllAssets()
+        public async Task DeleteAllAssetsAsync()
         {
             var environmentPath = _imageService.GetLocalImagesFullPath("asset");
             if (Directory.Exists(environmentPath))
@@ -304,12 +304,12 @@ namespace RealEstate.Services
                     File.Delete(file);
                 }
             }
-            _context.Assets.ExecuteDelete();
-            _context.SaveChanges();
+            await _context.Assets.ExecuteDeleteAsync().ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public async Task<Asset?> FindAssetByPlatesNumber(string platesNumber)
+        public async Task<Asset?> FindAssetByPlatesNumberAsync(string platesNumber)
         {
-            var assetList = await GetAssetListDescending().ConfigureAwait(false);
+            var assetList = await GetAssetListDescendingAsync().ConfigureAwait(false);
             return assetList.FirstOrDefault(asset => asset.PlatesNumber == platesNumber);
         }
         public async Task<bool> IsAssetExist(string plateNumber) =>
@@ -317,24 +317,24 @@ namespace RealEstate.Services
         #endregion
 
         #region AssetImage
-        public async Task<List<AssetImage>> GetAssetImageList() =>
+        public async Task<List<AssetImage>> GetAssetImageListAsync() =>
            await _context
            .AssetImages
            .AsNoTracking()
            .OrderByDescending(assetImg => assetImg.Id)
            .ToListAsync()
            .ConfigureAwait(false);
-        public async Task<AssetImage?> GetAssetImage(Guid assetImageID) =>
+        public async Task<AssetImage?> GetAssetImageAsync(Guid assetImageID) =>
          await _context
         .AssetImages.AsNoTracking()
         .SingleOrDefaultAsync(assetImg => assetImg.Id == assetImageID)
         .ConfigureAwait(false);
-        public async Task AddAssetImage(AssetImage assetImage)
+        public async Task AddAssetImageAsync(AssetImage assetImage)
         {
             await _context.AssetImages.AddAsync(assetImage).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public void DeleteAssetImage(AssetImage assetImage)
+        public async Task DeleteAssetImage(AssetImage assetImage)
         {
             if (assetImage == null || assetImage.FileName == null)
                 return;
@@ -347,79 +347,79 @@ namespace RealEstate.Services
                     File.Delete(filePath);
             }
             _context.AssetImages.Remove(assetImage);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
         #endregion
 
         #region Person
-        public async Task<IEnumerable<Person>> GetPersonsList() =>
+        public async Task<IEnumerable<Person>> GetPersonsListAsync() =>
             await _context
                 .Persons.AsNoTracking()
                 .OrderByDescending(per => per.Id)
                 .ToListAsync().ConfigureAwait(false);
-        public async Task<Person?> GetPerson(Guid id) =>
+        public async Task<Person?> GetPersonAsync(Guid id) =>
             await _context.Persons.AsNoTracking().SingleOrDefaultAsync(pers => pers.Id == id).ConfigureAwait(false);
 
-        public async Task<bool> GetPersonByPersonID(long personID) =>
+        public async Task<bool> GetPersonByPersonIDAsync(long personID) =>
             await _context.Persons.AsNoTracking().AnyAsync(pers => pers.PersonID == personID).ConfigureAwait(false);
 
-        public async Task<Person> AddPerson(Person newPerson)
+        public async Task<Person> AddPersonAsync(Person newPerson)
         {
             await _context.Persons.AddAsync(newPerson).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return newPerson;
         }
 
-        public async Task<Person> UpdatePerson(Person updatePerson)
+        public async Task<Person> UpdatePersonAsync(Person updatePerson)
         {
             _context.Persons.Update(updatePerson);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return updatePerson;
         }
 
-        public void DeletePerson(Person deletePerson)
+        public async Task DeletePersonAsync(Person deletePerson)
         {
             _context.Persons.Remove(deletePerson);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void DeleteAllPersons()
+        public async Task DeleteAllPersonsAsync()
         {
             _context.Persons.ExecuteDelete();
-            _context.SaveChanges();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public async Task<bool> IsPersonExist(long personID) =>
+        public async Task<bool> IsPersonExistAsync(long personID) =>
           await _context.Persons.AsNoTracking().AnyAsync(pers => pers.PersonID == personID).ConfigureAwait(false);
         #endregion
 
         #region Support
-        public async Task<IEnumerable<Support>> GetSupportList() =>
+        public async Task<IEnumerable<Support>> GetSupportListAsync() =>
            await _context
           .Supports
           .AsNoTracking()
           .Include(support => support.SupportImage)
           .ToListAsync().ConfigureAwait(false);
 
-        public async Task<Support?> GetSupport(Guid supportID) =>
+        public async Task<Support?> GetSupportAsync(Guid supportID) =>
           await _context
               .Supports.AsNoTracking()
               .Include(sups => sups.SupportImage)
               .SingleOrDefaultAsync(sup => sup.Id == supportID)
               .ConfigureAwait(false);
 
-        public async Task<Support> AddSupport(Support newSupport)
+        public async Task<Support> AddSupportAsync(Support newSupport)
         {
             await _context.Supports.AddAsync(newSupport).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return newSupport;
         }
 
-        public async Task UpdateSupport(Support updateSupport)
+        public async Task UpdateSupportAsync(Support updateSupport)
         {
             _context.Supports.Update(updateSupport);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public void DeleteSupport(Support support)
+        public async Task DeleteSupportAsync(Support support)
         {
             if (support == null)
                 return;
@@ -436,9 +436,9 @@ namespace RealEstate.Services
                 }
             }
             _context.Supports.Remove(support);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
-        public void DeleteAllSupports()
+        public async Task DeleteAllSupportsAsync()
         {
             var environmentPath = _imageService.GetLocalImagesFullPath("support");
             if (Directory.Exists(environmentPath))
@@ -450,36 +450,36 @@ namespace RealEstate.Services
                 }
             }
             _context.Supports.ExecuteDelete();
-            _context.SaveChanges();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
         #endregion
 
         #region SupportImage
-        public async Task<List<SupportImage>> GetSupportImageList() =>
+        public async Task<List<SupportImage>> GetSupportImageListAsync() =>
           await _context
           .SupportImages
           .ToListAsync()
           .ConfigureAwait(false);
 
-        public async Task<SupportImage?> GetSupportImage(Guid supportImageID) =>
+        public async Task<SupportImage?> GetSupportImageAsync(Guid supportImageID) =>
            await _context
           .SupportImages.AsNoTracking()
           .SingleOrDefaultAsync(supImage => supImage.Id == supportImageID)
           .ConfigureAwait(false);
 
-        public async Task AddSupportImage(SupportImage supportImage)
+        public async Task AddSupportImageAsync(SupportImage supportImage)
         {
             await _context.SupportImages.AddAsync(supportImage).ConfigureAwait(false);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public async Task UpdateSupportImage(SupportImage supportImage)
+        public async Task UpdateSupportImageAsync(SupportImage supportImage)
         {
             _context.SupportImages.Update(supportImage);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void DeleteSupportImage(SupportImage supportImage)
+        public async Task DeleteSupportImageAsync(SupportImage supportImage)
         {
             if (supportImage == null || supportImage.SupportImageFileName == null)
                 return;
@@ -492,7 +492,7 @@ namespace RealEstate.Services
                     File.Delete(filePath);
             }
             _context.SupportImages.Remove(supportImage);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
         #endregion
 

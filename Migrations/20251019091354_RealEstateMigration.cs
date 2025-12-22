@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RealEstate.Migrations
 {
     /// <inheritdoc />
-    public partial class RealEstateMigration1 : Migration
+    public partial class RealEstateMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,7 +59,7 @@ namespace RealEstate.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderID = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AssetType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlatesNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Area = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ConstructionYear = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -71,7 +71,7 @@ namespace RealEstate.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContractType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Water = table.Column<bool>(type: "bit", nullable: false),
                     Electricity = table.Column<bool>(type: "bit", nullable: false),
                     Gas = table.Column<bool>(type: "bit", nullable: false),

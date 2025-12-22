@@ -12,8 +12,8 @@ using RealEstate.Data;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250823173449_RealEstateMigration#1")]
-    partial class RealEstateMigration1
+    [Migration("20251019091354_RealEstateMigration")]
+    partial class RealEstateMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -270,7 +270,15 @@ namespace RealEstate.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AssetType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConstructionYear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContractType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -288,10 +296,6 @@ namespace RealEstate.Migrations
 
                     b.Property<bool>("Gas")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
@@ -315,10 +319,6 @@ namespace RealEstate.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Time")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Water")
