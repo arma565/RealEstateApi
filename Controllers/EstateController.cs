@@ -17,6 +17,8 @@ namespace RealEstate.Controllers
     {
         private readonly RepositoryService _service = service;
         private readonly ImageService _imageService = imageService;
+
+
         #region Asset
         /// <summary>
         /// Uploads one or more images for a specific asset.
@@ -25,7 +27,7 @@ namespace RealEstate.Controllers
         /// <param name="images">Array of image files to upload.</param>
         /// <returns>Returns a list of uploaded image URLs if successful.</returns>
         [HttpPost("asset/upload/{assetID}")]
-        public async Task<IActionResult> UploadAssetImagesAsync(string assetID, [FromForm] IFormFile[] images)
+        public async Task<IActionResult> UploadAssetImages(string assetID, [FromForm] IFormFile[] images)
         {
             try
             {
@@ -90,7 +92,7 @@ namespace RealEstate.Controllers
         /// <param name="imageFileName">The file name of the image to download.</param>
         /// <returns>Returns the image file if found.</returns>
         [HttpGet("asset/download/{imageFileName}")]
-        public async Task<IActionResult> DownloadAssetImageAsync(string imageFileName)
+        public async Task<IActionResult> DownloadAssetImage(string imageFileName)
         {
             try
             {
@@ -155,21 +157,21 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <returns>Returns a list of assets ordered descendingly.</returns>
         [HttpGet("asset/desc")]
-        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDescendingAsync() => Ok(await _service.GetAssetListDescendingAsync().ConfigureAwait(false));
+        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDescending() => Ok(await _service.GetAssetListDescendingAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Gets the list of assets in ascending order.
         /// </summary>
         /// <returns>Returns a list of assets ordered ascendingly.</returns>
         [HttpGet("asset/asc")]
-        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListAscendingAsync() => Ok(await _service.GetAssetListAscendingAsync().ConfigureAwait(false));
+        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListAscending() => Ok(await _service.GetAssetListAscendingAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Gets the list of assets ordered by date modified.
         /// </summary>
         /// <returns>Returns a list of assets ordered by date modified.</returns>
         [HttpGet("asset/date")]
-        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDateModifiedAsync() => Ok(await _service.GetAssetListDateModifiedAsync().ConfigureAwait(false));
+        public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDateModified() => Ok(await _service.GetAssetListDateModifiedAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Gets a specific asset by its ID.
@@ -177,7 +179,7 @@ namespace RealEstate.Controllers
         /// <param name="assetID">The GUID of the asset.</param>
         /// <returns>Returns the asset if found.</returns>
         [HttpGet("asset/{assetID}")]
-        public async Task<ActionResult<Asset>> GetAssetAsync(string assetID)
+        public async Task<ActionResult<Asset>> GetAsset(string assetID)
         {
             try
             {
@@ -228,7 +230,7 @@ namespace RealEstate.Controllers
         /// <param name="newAsset">The asset object to add.</param>
         /// <returns>Returns the created asset with its location.</returns>
         [HttpPost("asset/add")]
-        public async Task<IActionResult> AddAssetAsync([FromBody] Asset newAsset)
+        public async Task<IActionResult> AddAsset([FromBody] Asset newAsset)
         {
             try
             {
@@ -265,7 +267,7 @@ namespace RealEstate.Controllers
                         break;
                 }
 
-                bool? isAssetExists = await _service.IsAssetExist(newAsset.PlatesNumber!).ConfigureAwait(false);
+                bool? isAssetExists = await _service.IsAssetExistAsync(newAsset.PlatesNumber!).ConfigureAwait(false);
 
                 if (isAssetExists == true)
                     return BadRequest("Asset is already exist!");
@@ -282,11 +284,7 @@ namespace RealEstate.Controllers
 
                 Asset? addedAsset = await _service.AddAssetAsync(newAsset).ConfigureAwait(false);
 
-                return CreatedAtAction(
-                    nameof(GetAssetAsync),
-                    new { AssetID = addedAsset!.Id },
-                    addedAsset
-                );
+                return CreatedAtAction(nameof(GetAsset),new { assetID = newAsset.Id },newAsset);
             }
             catch (IOException ex)
             {
@@ -322,7 +320,7 @@ namespace RealEstate.Controllers
         /// <param name="updateAsset">The asset object with updated values.</param>
         /// <returns>Returns no content if update is successful.</returns>
         [HttpPut("asset/update")]
-        public async Task<IActionResult> UpdateAssetAsync([FromBody] Asset updateAsset)
+        public async Task<IActionResult> UpdateAsset([FromBody] Asset updateAsset)
         {
             try
             {
@@ -379,7 +377,7 @@ namespace RealEstate.Controllers
         /// <param name="assetID">The GUID of the asset to delete.</param>
         /// <returns>Returns a success message if deleted.</returns>
         [HttpDelete("asset/delete/{assetID}")]
-        public async Task<IActionResult> DeleteAssetAsync(string assetID)
+        public async Task<IActionResult> DeleteAsset(string assetID)
         {
             try
             {
@@ -430,7 +428,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <returns>Returns a success message after deleting all assets.</returns>
         [HttpDelete("asset/delete-all")]
-        public async Task<IActionResult> DeleteAllAssetsAsync()
+        public async Task<IActionResult> DeleteAllAssets()
         {
             await _service.DeleteAllAssetsAsync().ConfigureAwait(false);
             return Ok("All assets has been deleted!");
@@ -444,7 +442,7 @@ namespace RealEstate.Controllers
         /// <param name="assetImageID">The GUID of the asset image to delete.</param>
         /// <returns>Returns a success message if deleted, or an error message if not found or invalid.</returns>
         [HttpDelete("asset/assetImage/delete/{assetImageID}")]
-        public async Task<IActionResult> DeleteAssetImageAsync(string assetImageID)
+        public async Task<IActionResult> DeleteAssetImage(string assetImageID)
         {
             try
             {
@@ -497,7 +495,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <returns>Returns a list of all persons.</returns>
         [HttpGet("person")]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPersonsListAsync() => Ok(await _service.GetPersonsListAsync().ConfigureAwait(false));
+        public async Task<ActionResult<IEnumerable<Person>>> GetPersonsList() => Ok(await _service.GetPersonsListAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Gets a specific person by their ID.
@@ -505,7 +503,7 @@ namespace RealEstate.Controllers
         /// <param name="id">The GUID of the person.</param>
         /// <returns>Returns the person if found, otherwise an error message.</returns>
         [HttpGet("person/{id}")]
-        public async Task<ActionResult<Person>> GetPersonAsync(string id)
+        public async Task<ActionResult<Person>> GetPerson(string id)
         {
             try
             {
@@ -555,7 +553,7 @@ namespace RealEstate.Controllers
         /// <param name="newPerson">The person object to add.</param>
         /// <returns>Returns the created person with its location.</returns>
         [HttpPost("person/add")]
-        public async Task<IActionResult> AddPersonAsync([FromBody] Person newPerson)
+        public async Task<IActionResult> AddPerson([FromBody] Person newPerson)
         {
             if (newPerson == null)
                 return BadRequest("Failed to retreive parameter!");
@@ -570,7 +568,7 @@ namespace RealEstate.Controllers
 
             var addedPerson = await _service.AddPersonAsync(newPerson).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetPersonAsync), new { id = addedPerson.Id }, addedPerson);
+            return CreatedAtAction(nameof(GetPerson), new { id = addedPerson.Id }, addedPerson);
         }
 
         /// <summary>
@@ -579,7 +577,7 @@ namespace RealEstate.Controllers
         /// <param name="updatePerson">The person object with updated values.</param>
         /// <returns>Returns the updated person if successful.</returns>
         [HttpPut("person/update")]
-        public async Task<IActionResult> UpdatePersonAsync([FromBody] Person updatePerson)
+        public async Task<IActionResult> UpdatePerson([FromBody] Person updatePerson)
         {
             if (updatePerson == null)
                 return BadRequest("Failed to retreive parameter!");
@@ -603,7 +601,7 @@ namespace RealEstate.Controllers
         /// <param name="id">The GUID of the person to delete.</param>
         /// <returns>Returns a success message if deleted, or an error message if not found or invalid.</returns>
         [HttpDelete("person/delete/{id}")]
-        public async Task<IActionResult> DeletePersonAsync(string id)
+        public async Task<IActionResult> DeletePerson(string id)
         {
             try
             {
@@ -654,7 +652,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <returns>Returns a success message after deleting all persons.</returns>
         [HttpDelete("person/delete-all")]
-        public async Task<IActionResult> DeleteAllPersonsAsync()
+        public async Task<IActionResult> DeleteAllPersons()
         {
             await _service.DeleteAllPersonsAsync().ConfigureAwait(false);
             return Ok("All persons has been deleted!");

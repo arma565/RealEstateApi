@@ -7998,11 +7998,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
+      "projectUniqueName": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\RealEstate.csproj",
       "projectName": "RealEstate",
-      "projectPath": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\RealEstate.csproj",
+      "projectPath": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\RealEstate.csproj",
       "packagesPath": "C:\\Users\\MSP\\.nuget\\packages\\",
-      "outputPath": "M:\\Applications\\WebProgramming\\NetCore\\Projects\\RealEstate\\obj\\",
+      "outputPath": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -8036,7 +8036,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -8098,7 +8098,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

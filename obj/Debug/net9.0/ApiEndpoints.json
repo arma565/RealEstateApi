@@ -330,7 +330,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.EstateController",
-    "Method": "DeleteAssets",
+    "Method": "DeleteAllAssets",
     "RelativePath": "Estate/asset/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,

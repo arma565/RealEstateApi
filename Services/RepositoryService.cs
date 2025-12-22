@@ -29,7 +29,7 @@ namespace RealEstate.Services
         /// This function return all registered users
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<User>> GetAllUsers() => [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
+        public async Task<IEnumerable<User>> GetAllUsersAsync() => [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
 
         /// <summary>
         /// This function return a user using id
@@ -264,7 +264,8 @@ namespace RealEstate.Services
                 .ToListAsync().ConfigureAwait(false);
         public async Task<Asset?> GetAssetAsync(Guid assetID) =>
             await _context
-                .Assets.AsNoTracking()
+                .Assets
+                .AsNoTracking()
                 .Include(prop => prop.Persons)
                 .Include(assetImg => assetImg.AssetImages)
                 .SingleOrDefaultAsync(prop => prop.Id == assetID)
@@ -312,7 +313,7 @@ namespace RealEstate.Services
             var assetList = await GetAssetListDescendingAsync().ConfigureAwait(false);
             return assetList.FirstOrDefault(asset => asset.PlatesNumber == platesNumber);
         }
-        public async Task<bool> IsAssetExist(string plateNumber) =>
+        public async Task<bool> IsAssetExistAsync(string plateNumber) =>
            await _context.Assets.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
         #endregion
 

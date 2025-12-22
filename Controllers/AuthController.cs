@@ -170,7 +170,7 @@ namespace RealEstate.Controllers
         /// </summary>
         /// <returns>Returns a list of all users.</returns>
         [HttpGet("user/users")]
-        public async Task<ActionResult<List<User>>> GetAllUsers() => Ok(await _service.GetAllUsers().ConfigureAwait(false));
+        public async Task<ActionResult<List<User>>> GetAllUsers() => Ok(await _service.GetAllUsersAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Retrieves a user by their userName.
@@ -228,7 +228,7 @@ namespace RealEstate.Controllers
                 if (registerUser == null)
                     return BadRequest("Failed to retreive parameter!");
 
-                var allUsers = await _service.GetAllUsers().ConfigureAwait(false);
+                var allUsers = await _service.GetAllUsersAsync().ConfigureAwait(false);
 
                 if (allUsers.Any(u => u.UserName == registerUser.UserName))
                     return BadRequest("Username is already taken!");
