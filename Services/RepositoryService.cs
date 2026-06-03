@@ -29,7 +29,7 @@ public sealed class RepositoryService(AppDbContext context,
     /// This function return all registered users
     /// </summary>
     /// <returns></returns>
-    public async Task<IEnumerable<User>> GetAllUsersAsync() => [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
+    public async Task<IEnumerable<User>> GetUsersAsync() => [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
 
     /// <summary>
     /// This function return a user using id

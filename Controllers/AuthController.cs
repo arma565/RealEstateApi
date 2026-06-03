@@ -182,7 +182,7 @@ public sealed class AuthController(
     /// </summary>
     /// <returns>Returns a list of all users.</returns>
     [HttpGet("user/users")]
-    public async Task<ActionResult<List<User>>> GetAllUsers() => Ok(await _service.GetAllUsersAsync().ConfigureAwait(false));
+    public async Task<ActionResult<List<User>>> GetUsers() => Ok(await _service.GetUsersAsync().ConfigureAwait(false));
 
     /// <summary>
     /// Retrieves a user by their userName.
@@ -235,31 +235,31 @@ public sealed class AuthController(
     /// <summary>
     /// Registers a new user.
     /// </summary>
-    /// <param name="registerUser">The registration model containing user details.</param>
+    /// <param name="registerUserModel">The registration model containing user details.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest for validation errors or if username/email is taken.</returns>
     [HttpPost("user/register")]
-    public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUser)
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUserModel)
     {
         try
         {
-            if (registerUser == null)
+            if (registerUserModel == null)
                 return BadRequest("Failed to retreive parameter!");
 
-            var allUsers = await _service.GetAllUsersAsync().ConfigureAwait(false);
+            var allUsers = await _service.GetUsersAsync().ConfigureAwait(false);
 
-            if (allUsers.Any(u => u.UserName == registerUser.UserName))
+            if (allUsers.Any(u => u.UserName == registerUserModel.UserName))
                 return BadRequest("Username is already taken!");
 
-            if (allUsers.Any(u => u.Email == registerUser.Email))
+            if (allUsers.Any(u => u.Email == registerUserModel.Email))
                 return BadRequest("Email is already taken!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var res = await _service.RegisterUserAsync(registerUser).ConfigureAwait(false);
+            var res = await _service.RegisterUserAsync(registerUserModel).ConfigureAwait(false);
 
             if (res.Succeeded)
-                return CreatedAtAction(nameof(GetUserByUserName), new { userName = registerUser.UserName }, registerUser);
+                return CreatedAtAction(nameof(FetchUser), new { userName = registerUserModel.UserName }, registerUserModel);
 
             return BadRequest(res.Errors);
         }
@@ -293,17 +293,17 @@ public sealed class AuthController(
     /// <summary>
     /// Login a user.
     /// </summary>
-    /// <param name="userLoginInfo">The userLoginInfo containing username and password.</param>
+    /// <param name="loginUserModel">The userLoginInfo containing username and password.</param>
     /// <returns>Returns 200 OK if successful, 401 Unauthorized if credentials are incorrect, or 400 BadRequest for validation errors.</returns>
     [HttpPost("user/login")]
-    public async Task<IActionResult> LoginUser([FromBody] LoginUser userLoginInfo)
+    public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUserModel)
     {
         try
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _service.LoginUserAsync(userLoginInfo).ConfigureAwait(false);
+            var result = await _service.LoginUserAsync(loginUserModel).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("Login successful");
@@ -342,7 +342,7 @@ public sealed class AuthController(
     /// </summary>
     /// <returns>Returns 200 OK if successful, or 500 for errors.</returns>
     [HttpDelete("user/delete-all")]
-    public async Task<IActionResult> DeleteAllUsers()
+    public async Task<IActionResult> DeleteUsers()
     {
         try
         {
@@ -429,26 +429,26 @@ public sealed class AuthController(
     /// <summary>
     /// Generates a recovery token for a user to reset their account.
     /// </summary>
-    /// <param name="recovery">The recovery model containing the user's email.</param>
+    /// <param name="recoverAccountModel">The recovery model containing the user's email.</param>
     /// <returns>Returns the generated token if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/recover/account")]
-    public async Task<ActionResult<string>> RecoverUser([FromBody] RecoverAccount recovery)
+    public async Task<ActionResult<string>> RecoverAccount([FromBody] RecoverAccount recoverAccountModel)
     {
         try
         {
-            if (recovery == null)
+            if (recoverAccountModel == null)
                 return BadRequest("Failed to retreive parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (string.IsNullOrWhiteSpace(recovery.Email))
+            if (string.IsNullOrWhiteSpace(recoverAccountModel.Email))
                 return BadRequest("Email is required!");
 
-            if (!new EmailHelper().IsValidEmail(recovery.Email))
+            if (!new EmailHelper().IsValidEmail(recoverAccountModel.Email))
                 return BadRequest("Invalid email format.");
 
-            var user = await _service.FindUserByEmailAsync(recovery.Email).ConfigureAwait(false);
+            var user = await _service.FindUserByEmailAsync(recoverAccountModel.Email).ConfigureAwait(false);
 
             if (user == null)
                 return BadRequest("No such user found!");
@@ -487,25 +487,25 @@ public sealed class AuthController(
     /// <summary>
     /// Resets the password for a user using a token.
     /// </summary>
-    /// <param name="model">The reset model containing email, token, and new password.</param>
+    /// <param name="resetPasswordModel">The reset model containing email, token, and new password.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/reset/password")]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPassword model)
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPassword resetPasswordModel)
     {
         try
         {
-            if (model == null)
+            if (resetPasswordModel == null)
                 return BadRequest("Failed to retreive parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _service.FindUserByEmailAsync(model.Email).ConfigureAwait(false);
+            var user = await _service.FindUserByEmailAsync(resetPasswordModel.Email).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("No such user found!");
 
-            var result = await _service.ResetPasswordAsync(user, model.Token, model.NewPassword).ConfigureAwait(false);
+            var result = await _service.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.NewPassword).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("Reset password  was successful");
@@ -542,25 +542,25 @@ public sealed class AuthController(
     /// <summary>
     /// Changes the password for a user.
     /// </summary>
-    /// <param name="model">The change model containing username, current password, and new password.</param>
+    /// <param name="changePasswordModel">The change model containing username, current password, and new password.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/change/password")]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePassword changePasswordModel)
     {
         try
         {
-            if (model == null)
+            if (changePasswordModel == null)
                 return BadRequest("Failed to retreive parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _service.FindUserByUserNameAsync(model.UserName).ConfigureAwait(false);
+            var user = await _service.FindUserByUserNameAsync(changePasswordModel.UserName).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("No such user found!");
 
-            var result = await _service.ChangePasswordAsync(user, model.OldPassword, model.NewPassword).ConfigureAwait(false);
+            var result = await _service.ChangePasswordAsync(user, changePasswordModel.OldPassword, changePasswordModel.NewPassword).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("Password has been changed");
@@ -597,38 +597,38 @@ public sealed class AuthController(
     /// <summary>
     /// Edits the profile of a user.
     /// </summary>
-    /// <param name="updateUser">The user model with updated information.</param>
+    /// <param name="updateUserProfileModel">The user model with updated information.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPut("user/edit/profile")]
-    public async Task<IActionResult> EditUserProfile([FromBody] User updateUser)
+    public async Task<IActionResult> UpdateUserProfile([FromBody] User updateUserProfileModel)
     {
         try
         {
-            if (updateUser == null)
+            if (updateUserProfileModel == null)
                 return BadRequest("User is null!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _service.FindUserByIDAsync(updateUser.Id).ConfigureAwait(false);
+            var user = await _service.FindUserByIDAsync(updateUserProfileModel.Id).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("No such user found!");
 
-            if (updateUser.UserName.IsNullOrEmpty() || updateUser.Email.IsNullOrEmpty())
+            if (updateUserProfileModel.UserName.IsNullOrEmpty() || updateUserProfileModel.Email.IsNullOrEmpty())
             {
                 user.UserName = user.UserName;
                 user.Email = user.Email;
             }
             else
             {
-                user.UserName = updateUser.UserName;
-                user.Email = updateUser.Email;
+                user.UserName = updateUserProfileModel.UserName;
+                user.Email = updateUserProfileModel.Email;
             }
 
-            user.FirstName = updateUser.FirstName;
-            user.LastName = updateUser.LastName;
-            user.PhoneNumber = updateUser.PhoneNumber;
+            user.FirstName = updateUserProfileModel.FirstName;
+            user.LastName = updateUserProfileModel.LastName;
+            user.PhoneNumber = updateUserProfileModel.PhoneNumber;
             user.AcceptTerms = user.AcceptTerms;
 
             var result = await _service.EditUserProfileAsync(user).ConfigureAwait(false);
