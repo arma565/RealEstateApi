@@ -343,7 +343,6 @@ M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\n
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\staticwebassets.build.json.cache
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\staticwebassets.development.json
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\swae.build.ex.cache
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\RealEstate.csproj.Up2Date
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\RealEstate.dll
