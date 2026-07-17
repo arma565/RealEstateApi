@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 #pragma warning disable CA1515
 namespace RealEstate.Models.Authentication.Users;
 
-public sealed class User : IdentityUser
+public class User : IdentityUser
 {
     private string _id = "";
     private string? _userName = "";

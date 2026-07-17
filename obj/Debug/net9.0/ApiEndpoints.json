@@ -50,8 +50,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "model",
-        "Type": "RealEstate.Models.Authentication.Change",
+        "Name": "changePasswordModel",
+        "Type": "RealEstate.Models.Authentication.ChangePassword",
         "IsRequired": true
       }
     ],
@@ -59,7 +59,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
-    "Method": "DeleteAllUsers",
+    "Method": "DeleteUsers",
     "RelativePath": "Auth/user/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -101,14 +101,14 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
-    "Method": "EditUserProfile",
+    "Method": "UpdateUserProfile",
     "RelativePath": "Auth/user/edit/profile",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "updateUser",
+        "Name": "updateUserProfileModel",
         "Type": "RealEstate.Models.Authentication.Users.User",
         "IsRequired": true
       }
@@ -124,8 +124,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userLoginInfo",
-        "Type": "RealEstate.Models.Authentication.Login",
+        "Name": "loginUserModel",
+        "Type": "RealEstate.Models.Authentication.LoginUser",
         "IsRequired": true
       }
     ],
@@ -133,15 +133,15 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
-    "Method": "RecoverUser",
+    "Method": "RecoverAccount",
     "RelativePath": "Auth/user/recover/account",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "recovery",
-        "Type": "RealEstate.Models.Authentication.Recovery",
+        "Name": "recoverAccountModel",
+        "Type": "RealEstate.Models.Authentication.RecoverAccount",
         "IsRequired": true
       }
     ],
@@ -166,8 +166,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "registerUser",
-        "Type": "RealEstate.Models.Authentication.Register",
+        "Name": "registerUserModel",
+        "Type": "RealEstate.Models.Authentication.RegisterUser",
         "IsRequired": true
       }
     ],
@@ -182,8 +182,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "model",
-        "Type": "RealEstate.Models.Authentication.Reset",
+        "Name": "resetPasswordModel",
+        "Type": "RealEstate.Models.Authentication.ResetPassword",
         "IsRequired": true
       }
     ],
@@ -212,7 +212,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.AuthController",
-    "Method": "GetAllUsers",
+    "Method": "GetUsers",
     "RelativePath": "Auth/user/users",
     "HttpMethod": "GET",
     "IsController": true,

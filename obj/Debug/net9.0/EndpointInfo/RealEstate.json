@@ -155,22 +155,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/Register"
+                "$ref": "#/components/schemas/RegisterUser"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Register"
+                "$ref": "#/components/schemas/RegisterUser"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Register"
+                "$ref": "#/components/schemas/RegisterUser"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Register"
+                "$ref": "#/components/schemas/RegisterUser"
               }
             }
           }
@@ -191,22 +191,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/Login"
+                "$ref": "#/components/schemas/LoginUser"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Login"
+                "$ref": "#/components/schemas/LoginUser"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Login"
+                "$ref": "#/components/schemas/LoginUser"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Login"
+                "$ref": "#/components/schemas/LoginUser"
               }
             }
           }
@@ -261,22 +261,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/Recovery"
+                "$ref": "#/components/schemas/RecoverAccount"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Recovery"
+                "$ref": "#/components/schemas/RecoverAccount"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Recovery"
+                "$ref": "#/components/schemas/RecoverAccount"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Recovery"
+                "$ref": "#/components/schemas/RecoverAccount"
               }
             }
           }
@@ -314,22 +314,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/Reset"
+                "$ref": "#/components/schemas/ResetPassword"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Reset"
+                "$ref": "#/components/schemas/ResetPassword"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Reset"
+                "$ref": "#/components/schemas/ResetPassword"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Reset"
+                "$ref": "#/components/schemas/ResetPassword"
               }
             }
           }
@@ -350,22 +350,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/Change"
+                "$ref": "#/components/schemas/ChangePassword"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Change"
+                "$ref": "#/components/schemas/ChangePassword"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Change"
+                "$ref": "#/components/schemas/ChangePassword"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Change"
+                "$ref": "#/components/schemas/ChangePassword"
               }
             }
           }
@@ -1367,7 +1367,7 @@
         },
         "additionalProperties": false
       },
-      "Change": {
+      "ChangePassword": {
         "required": [
           "newPassword",
           "oldPassword",
@@ -1398,7 +1398,7 @@
         },
         "additionalProperties": false
       },
-      "Login": {
+      "LoginUser": {
         "required": [
           "password",
           "userName"
@@ -1498,7 +1498,7 @@
         },
         "additionalProperties": false
       },
-      "Recovery": {
+      "RecoverAccount": {
         "required": [
           "email"
         ],
@@ -1512,7 +1512,7 @@
         },
         "additionalProperties": false
       },
-      "Register": {
+      "RegisterUser": {
         "required": [
           "email",
           "password",
@@ -1546,7 +1546,7 @@
         },
         "additionalProperties": false
       },
-      "Reset": {
+      "ResetPassword": {
         "required": [
           "email",
           "newPassword",

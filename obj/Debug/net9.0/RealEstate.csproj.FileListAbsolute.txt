@@ -350,3 +350,4 @@ M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\n
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\RealEstate.pdb
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\RealEstate.genruntimeconfig.cache
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\ref\RealEstate.dll
+M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net9.0\swae.build.ex.cache

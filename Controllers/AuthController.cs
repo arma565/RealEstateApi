@@ -5,10 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Authentication.Users;
-using RealEstate.Models.Estate.Assets;
 using RealEstate.Services;
 using System.Security;
-using System.Text.RegularExpressions;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 #pragma warning disable CA1515
@@ -27,6 +25,8 @@ public sealed class AuthController(
     private readonly ImageService _imageService = imageService;
 
     #region Auth
+
+    #region ProfileImage
     /// <summary>
     /// Uploads a profile image for the specified user.
     /// </summary>
@@ -178,6 +178,61 @@ public sealed class AuthController(
     }
 
     /// <summary>
+    /// Deletes a profile image by its ID.
+    /// </summary>
+    /// <param name="profileImageID">The GUID of the profile image to delete.</param>
+    /// <returns>
+    /// Returns 200 OK if the image was successfully deleted,
+    /// 400 BadRequest if the ID is invalid,
+    /// 404 NotFound if the image does not exist,
+    /// or 500/403 for errors.
+    /// </returns>
+    [HttpDelete("profile/delete/{profileImageID}")]
+    public async Task<IActionResult> DeleteProfileImage(string profileImageID)
+    {
+        try
+        {
+            if (!Guid.TryParse(profileImageID, out Guid realEstateProfileImageID))
+                return BadRequest("Id must be a valid GUID!");
+
+            ProfileImage? profileImage = await _service.GetProfileImageAsync(realEstateProfileImageID).ConfigureAwait(false);
+
+            if (profileImage is null)
+                return NotFound("Image not found!");
+
+            await _service.DeleteProfileImageAsync(profileImage).ConfigureAwait(false);
+
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (FormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Unexpected format error.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(403, "Access denied.");
+        }
+    }
+    #endregion
+
+    /// <summary>
     /// Retrieves all registered users.
     /// </summary>
     /// <returns>Returns a list of all users.</returns>
@@ -259,7 +314,7 @@ public sealed class AuthController(
             var res = await _service.RegisterUserAsync(registerUserModel).ConfigureAwait(false);
 
             if (res.Succeeded)
-                return CreatedAtAction(nameof(FetchUser), new { userName = registerUserModel.UserName }, registerUserModel);
+                return CreatedAtAction(nameof(GetUserByUserName), new { userName = registerUserModel.UserName }, registerUserModel);
 
             return BadRequest(res.Errors);
         }
@@ -600,35 +655,35 @@ public sealed class AuthController(
     /// <param name="updateUserProfileModel">The user model with updated information.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPut("user/edit/profile")]
-    public async Task<IActionResult> UpdateUserProfile([FromBody] User updateUserProfileModel)
+    public async Task<IActionResult> EditUserProfile([FromBody] User editUserProfileModel)
     {
         try
         {
-            if (updateUserProfileModel == null)
+            if (editUserProfileModel == null)
                 return BadRequest("User is null!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _service.FindUserByIDAsync(updateUserProfileModel.Id).ConfigureAwait(false);
+            var user = await _service.FindUserByIDAsync(editUserProfileModel.Id).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("No such user found!");
 
-            if (updateUserProfileModel.UserName.IsNullOrEmpty() || updateUserProfileModel.Email.IsNullOrEmpty())
+            if (editUserProfileModel.UserName.IsNullOrEmpty() || editUserProfileModel.Email.IsNullOrEmpty())
             {
                 user.UserName = user.UserName;
                 user.Email = user.Email;
             }
             else
             {
-                user.UserName = updateUserProfileModel.UserName;
-                user.Email = updateUserProfileModel.Email;
+                user.UserName = editUserProfileModel.UserName;
+                user.Email = editUserProfileModel.Email;
             }
 
-            user.FirstName = updateUserProfileModel.FirstName;
-            user.LastName = updateUserProfileModel.LastName;
-            user.PhoneNumber = updateUserProfileModel.PhoneNumber;
+            user.FirstName = editUserProfileModel.FirstName;
+            user.LastName = editUserProfileModel.LastName;
+            user.PhoneNumber = editUserProfileModel.PhoneNumber;
             user.AcceptTerms = user.AcceptTerms;
 
             var result = await _service.EditUserProfileAsync(user).ConfigureAwait(false);
@@ -667,61 +722,6 @@ public sealed class AuthController(
     }
     #endregion
 
-    #region ProfileImage
-    /// <summary>
-    /// Deletes a profile image by its ID.
-    /// </summary>
-    /// <param name="profileImageID">The GUID of the profile image to delete.</param>
-    /// <returns>
-    /// Returns 200 OK if the image was successfully deleted,
-    /// 400 BadRequest if the ID is invalid,
-    /// 404 NotFound if the image does not exist,
-    /// or 500/403 for errors.
-    /// </returns>
-    [HttpDelete("profile/delete/{profileImageID}")]
-    public async Task<IActionResult> DeleteProfileImage(string profileImageID)
-    {
-        try
-        {
-            if (!Guid.TryParse(profileImageID, out Guid realEstateProfileImageID))
-                return BadRequest("Id must be a valid GUID!");
-
-            ProfileImage? profileImage = await _service.GetProfileImageAsync(realEstateProfileImageID).ConfigureAwait(false);
-
-            if (profileImage is null)
-                return NotFound("Image not found!");
-
-            await _service.DeleteProfileImageAsync(profileImage).ConfigureAwait(false);
-
-            return NoContent();
-        }
-        catch (ArgumentNullException ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (FormatException ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Unexpected format error.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "An invalid operation occurred.");
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(403, "Access denied.");
-        }
-        catch (SecurityException ex)
-        {
-            Console.WriteLine(ex.Message);
-            return StatusCode(403, "Access denied.");
-        }
-    }
-    #endregion
 
     
 }

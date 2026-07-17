@@ -10,6 +10,10 @@ using RealEstate.Models.Estate.Assets;
 using RealEstate.Models.Support;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
+//Null check should be apply
+// Asset should be change to valid objects(Home,territory,...)
+//Check Functions names and class names
+//Events(like delete) must be async void 
 #pragma warning disable CA1515
 namespace RealEstate.Services;
 
@@ -183,7 +187,7 @@ public sealed class RepositoryService(AppDbContext context,
     /// user account
     /// </param>
     /// <returns></returns>
-    public async Task<IdentityResult> EditUserProfileAsync(User updateUser) => await _userManager.UpdateAsync(updateUser).ConfigureAwait(false);
+    public async Task<IdentityResult> EditUserProfileAsync(User editUser) => await _userManager.UpdateAsync(editUser).ConfigureAwait(false);
 
     public async Task<User?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
