@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Models.Support;
 
-public sealed class Support
+public sealed class SupportApp
 {
     private Guid _id;
     private string? _title = "";

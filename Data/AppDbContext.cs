@@ -16,7 +16,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : Ident
     public required DbSet<AssetImage> AssetImages { get; set; }
     public required DbSet<Person> Persons { get; set; }
     public required DbSet<ProfileImage> UserProfileImages { get; set; }
-    public required DbSet<Support> Supports { get; set; }
+    public required DbSet<SupportApp> Supports { get; set; }
     public required DbSet<SupportImage> SupportImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -55,7 +55,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : Ident
         .IsUnique();
 
         builder
-            .Entity<Support>()
+            .Entity<SupportApp>()
             .HasOne(support => support.SupportImage)
             .WithOne(supportImg => supportImg.Support)
             .HasForeignKey<SupportImage>(supportImg => supportImg.SupportId)

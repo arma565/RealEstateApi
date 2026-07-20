@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RealEstate.Migrations
 {
+    #pragma warning disable CA1515
     /// <inheritdoc />
     public partial class RealEstateMigration1 : Migration
     {

@@ -288,7 +288,7 @@ public sealed class EstateController(RepositoryService service, ImageService ima
 
             var allAssets = await _service.GetAssetListAscendingAsync().ConfigureAwait(false);
 
-            if (!allAssets.IsNullOrEmpty())
+            if (allAssets != null && allAssets.Any())
             {
                 var lastAssetOrderID = allAssets.Last().OrderID;
                 newAsset.OrderID = lastAssetOrderID + 1;

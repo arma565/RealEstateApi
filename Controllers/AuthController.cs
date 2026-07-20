@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using RealEstate.Authentication;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication;
 using RealEstate.Models.Authentication.Users;
@@ -15,12 +16,16 @@ namespace RealEstate.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public sealed class AuthController(
     RepositoryService service,
+    TokenService tokenService,
     ImageService imageService
     ) : ControllerBase
 {
     private readonly RepositoryService _service = service;
+
+    private readonly TokenService _tokenService = tokenService;
 
     private readonly ImageService _imageService = imageService;
 
@@ -34,6 +39,7 @@ public sealed class AuthController(
     /// <param name="image">The image file to upload.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest for invalid input, 404 NotFound if user not found, or 500/403 for errors.</returns>
     [HttpPost("user/upload/{userID}")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> UploadProfileImage(string userID, IFormFile image)
     {
         try
@@ -107,6 +113,7 @@ public sealed class AuthController(
     /// <param name="imageFileName">The file name of the image to download.</param>
     /// <returns>Returns the image file if found, 404 NotFound if not found, 400 BadRequest for invalid input, or 500/403 for errors.</returns>
     [HttpGet("user/download/{imageFileName}")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> DownloadProfileImage(string imageFileName)
     {
         try
@@ -188,6 +195,7 @@ public sealed class AuthController(
     /// or 500/403 for errors.
     /// </returns>
     [HttpDelete("profile/delete/{profileImageID}")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> DeleteProfileImage(string profileImageID)
     {
         try
@@ -237,6 +245,7 @@ public sealed class AuthController(
     /// </summary>
     /// <returns>Returns a list of all users.</returns>
     [HttpGet("user/users")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<List<User>>> GetUsers() => Ok(await _service.GetUsersAsync().ConfigureAwait(false));
 
     /// <summary>
@@ -245,6 +254,7 @@ public sealed class AuthController(
     /// <param name="userName">The userName of the user.</param>
     /// <returns>Returns the user if found, 404 NotFound if not found, or 400 BadRequest for invalid input.</returns>
     [HttpGet("user/{userName}")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<ActionResult<User>> GetUserByUserName(string userName)
     {
         try
@@ -293,6 +303,8 @@ public sealed class AuthController(
     /// <param name="registerUserModel">The registration model containing user details.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest for validation errors or if username/email is taken.</returns>
     [HttpPost("user/register")]
+    [Authorize(Policy = "AdminOrUser")]
+    [AllowAnonymous]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUser registerUserModel)
     {
         try
@@ -351,17 +363,29 @@ public sealed class AuthController(
     /// <param name="loginUserModel">The userLoginInfo containing username and password.</param>
     /// <returns>Returns 200 OK if successful, 401 Unauthorized if credentials are incorrect, or 400 BadRequest for validation errors.</returns>
     [HttpPost("user/login")]
+    [Authorize(Policy = "AuthenticatedUser")]
+    [Authorize(Policy = "AdminOrUser")]
+    [AllowAnonymous]
     public async Task<IActionResult> LoginUser([FromBody] LoginUser loginUserModel)
     {
         try
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return Unauthorized(ModelState);
+
+            if (loginUserModel == null || loginUserModel.UserName == null || loginUserModel.Password == null)
+                return Unauthorized("Username and password are required.");
 
             var result = await _service.LoginUserAsync(loginUserModel).ConfigureAwait(false);
 
-            if (result.Succeeded)
-                return Ok("Login successful");
+            if (result.Succeeded) {
+
+                var user = await _service.GetUserByUserNameAsync(loginUserModel.UserName).ConfigureAwait(false);
+                var token = await _tokenService.CreateAccessTokenAsync(user!).ConfigureAwait(false);
+
+                return Ok(token);
+            }
+               
 
             return Unauthorized("Username or password is not correct! please try again");
         }
@@ -397,6 +421,7 @@ public sealed class AuthController(
     /// </summary>
     /// <returns>Returns 200 OK if successful, or 500 for errors.</returns>
     [HttpDelete("user/delete-all")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteUsers()
     {
         try
@@ -438,6 +463,7 @@ public sealed class AuthController(
     /// <param name="password">The password of the user.</param>
     /// <returns>Returns 204 NoContent if successful, 400 BadRequest for invalid input or incorrect password, 404 NotFound if user not found.</returns>
     [HttpDelete("user/delete/{userName}")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> DeleteUser(string userName)
     {
         try
@@ -487,6 +513,7 @@ public sealed class AuthController(
     /// <param name="recoverAccountModel">The recovery model containing the user's email.</param>
     /// <returns>Returns the generated token if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/recover/account")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<ActionResult<string>> RecoverAccount([FromBody] RecoverAccount recoverAccountModel)
     {
         try
@@ -545,6 +572,7 @@ public sealed class AuthController(
     /// <param name="resetPasswordModel">The reset model containing email, token, and new password.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/reset/password")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPassword resetPasswordModel)
     {
         try
@@ -600,6 +628,7 @@ public sealed class AuthController(
     /// <param name="changePasswordModel">The change model containing username, current password, and new password.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/change/password")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePassword changePasswordModel)
     {
         try
@@ -655,6 +684,7 @@ public sealed class AuthController(
     /// <param name="updateUserProfileModel">The user model with updated information.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPut("user/edit/profile")]
+    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> EditUserProfile([FromBody] User editUserProfileModel)
     {
         try
@@ -670,7 +700,7 @@ public sealed class AuthController(
             if (user == null)
                 return NotFound("No such user found!");
 
-            if (editUserProfileModel.UserName.IsNullOrEmpty() || editUserProfileModel.Email.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(editUserProfileModel.UserName) || string.IsNullOrEmpty(editUserProfileModel.Email))
             {
                 user.UserName = user.UserName;
                 user.Email = user.Email;

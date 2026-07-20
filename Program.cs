@@ -1,9 +1,15 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using RealEstate.Authentication;
+using RealEstate.Authorization;
 using RealEstate.Data;
 using RealEstate.Helper;
 using RealEstate.Models.Authentication.Users;
 using RealEstate.Services;
+using System.Text;
 
 var MyAllowSpecificOrigins = "_estatePolicy";
 var builder = WebApplication.CreateBuilder(args);
@@ -26,29 +32,80 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PropertyConnection"))
 );
+
 builder
     .Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => {
+        var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
+
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwt!.Issuer,
+            ValidAudience = jwt!.Audience,
+
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Secret))
+        };
+    });
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole(Roles.Admin));
+    options.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
+    options.AddPolicy("AdminOrUser", policy => policy.RequireRole(Roles.Admin, Roles.User));
+});
+
 builder.Services.AddScoped<RepositoryService>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<PasswordHelper>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter JWT token",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header
+    });
+
+    options.AddSecurityRequirement(document =>
+    {
+
+        return new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+        };
+    });
+});
+
 var app = builder.Build();
+
 //middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseStaticFiles();

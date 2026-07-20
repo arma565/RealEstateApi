@@ -399,33 +399,33 @@ public sealed class RepositoryService(AppDbContext context,
     #endregion
 
     #region Support
-    public async Task<IEnumerable<Support>> GetSupportListAsync() =>
+    public async Task<IEnumerable<SupportApp>> GetSupportListAsync() =>
        await _context
       .Supports
       .AsNoTracking()
       .Include(support => support.SupportImage)
       .ToListAsync().ConfigureAwait(false);
 
-    public async Task<Support?> GetSupportAsync(Guid supportID) =>
+    public async Task<SupportApp?> GetSupportAsync(Guid supportID) =>
       await _context
           .Supports.AsNoTracking()
           .Include(sups => sups.SupportImage)
           .SingleOrDefaultAsync(sup => sup.Id == supportID)
           .ConfigureAwait(false);
 
-    public async Task<Support> AddSupportAsync(Support newSupport)
+    public async Task<SupportApp> AddSupportAsync(SupportApp newSupport)
     {
         await _context.Supports.AddAsync(newSupport).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
         return newSupport;
     }
 
-    public async Task UpdateSupportAsync(Support updateSupport)
+    public async Task UpdateSupportAsync(SupportApp updateSupport)
     {
         _context.Supports.Update(updateSupport);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
-    public async Task DeleteSupportAsync(Support support)
+    public async Task DeleteSupportAsync(SupportApp support)
     {
         if (support == null)
             return;

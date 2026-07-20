@@ -169,7 +169,7 @@ public sealed class SupportController(RepositoryService service, ImageService im
     /// </summary>
     /// <returns>Returns a list of all supports.</returns>
     [HttpGet("list")]
-    public async Task<ActionResult<List<Support>>> GetAllSupports() => Ok(await _service.GetSupportListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<List<SupportApp>>> GetAllSupports() => Ok(await _service.GetSupportListAsync().ConfigureAwait(false));
 
     /// <summary>
     /// Retrieves a support by Id.
@@ -177,7 +177,7 @@ public sealed class SupportController(RepositoryService service, ImageService im
     /// <param name="supportID">The id of the support.</param>
     /// <returns>Returns the support if found, 404 NotFound if not found, or 400 BadRequest for invalid input.</returns>
     [HttpGet("{supportID}")]
-    public async Task<ActionResult<Support>> GetSupport(string supportID)
+    public async Task<ActionResult<SupportApp>> GetSupport(string supportID)
     {
         try
         {
@@ -228,7 +228,7 @@ public sealed class SupportController(RepositoryService service, ImageService im
     /// <param name="support">New support to add.</param>
     /// <returns>Returns 201 Created if successful</returns>
     [HttpPost("add")]
-    public async Task<IActionResult> AddSupport([FromBody] Support support)
+    public async Task<IActionResult> AddSupport([FromBody] SupportApp support)
     {
         try
         {
@@ -237,7 +237,7 @@ public sealed class SupportController(RepositoryService service, ImageService im
 
             var allSupports = await _service.GetSupportListAsync().ConfigureAwait(false);
 
-            Support addedSupport = await _service.AddSupportAsync(support).ConfigureAwait(false);
+            SupportApp addedSupport = await _service.AddSupportAsync(support).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetSupport), new { SupportID = addedSupport.Id }, addedSupport);
         }
@@ -274,7 +274,7 @@ public sealed class SupportController(RepositoryService service, ImageService im
     /// <param name="support">The support model to update</param>
     /// <returns>Returns 204 NoContent if successful</returns>
     [HttpPost("update")]
-    public async Task<IActionResult> UpdateSupport([FromBody] Support support)
+    public async Task<IActionResult> UpdateSupport([FromBody] SupportApp support)
     {
         try
         {

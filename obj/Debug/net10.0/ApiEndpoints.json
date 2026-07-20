@@ -547,7 +547,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Models.Support.Support",
+        "Type": "RealEstate.Models.Support.SupportApp",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -567,7 +567,7 @@
     "Parameters": [
       {
         "Name": "support",
-        "Type": "RealEstate.Models.Support.Support",
+        "Type": "RealEstate.Models.Support.SupportApp",
         "IsRequired": true
       }
     ],
@@ -625,7 +625,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[RealEstate.Models.Support.Support, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[RealEstate.Models.Support.SupportApp, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -661,7 +661,7 @@
     "Parameters": [
       {
         "Name": "support",
-        "Type": "RealEstate.Models.Support.Support",
+        "Type": "RealEstate.Models.Support.SupportApp",
         "IsRequired": true
       }
     ],

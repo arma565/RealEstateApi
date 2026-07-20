@@ -61,7 +61,7 @@ public sealed class ImageService(
     {
         var fileNameList = new List<string>();
 
-        if (images.IsNullOrEmpty())
+        if (images == null || images.Length == 0)
             return fileNameList;
 
         foreach (var image in images)
@@ -141,7 +141,7 @@ public sealed class ImageService(
 
     public string GetLocalImagesFullPath(string requestedModelPath)
     {
-        if (requestedModelPath.IsNullOrEmpty())
+        if (string.IsNullOrEmpty(requestedModelPath))
             return "";
 
         var webRootPath = _environment.WebRootPath;
