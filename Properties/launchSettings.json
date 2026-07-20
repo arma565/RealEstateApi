@@ -3,8 +3,8 @@
   "profiles": {
     "RealEstateHttp": {
       "commandName": "Project",
-      "launchBrowser": false,
-      //"launchUrl": "swagger",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -13,8 +13,8 @@
     },
     "RealEstateHttps": {
       "commandName": "Project",
-      "launchBrowser": false,
-      //"launchUrl": "swagger",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
