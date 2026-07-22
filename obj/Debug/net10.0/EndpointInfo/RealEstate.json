@@ -55,6 +55,28 @@
         }
       }
     },
+    "/Admin/user/delete/{userName}": {
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Asset/asset/upload/{assetID}": {
       "post": {
         "tags": [
@@ -966,21 +988,35 @@
         }
       }
     },
-    "/User/user/delete/{userName}": {
+    "/User/user/delete": {
       "delete": {
         "tags": [
           "User"
         ],
-        "parameters": [
-          {
-            "name": "userName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1060,7 +1096,7 @@
         }
       }
     },
-    "/User/user/recover/account": {
+    "/User/user/forgot/password": {
       "post": {
         "tags": [
           "User"
@@ -1069,22 +1105,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRecoverAccount"
+                "$ref": "#/components/schemas/UserForgotPassword"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRecoverAccount"
+                "$ref": "#/components/schemas/UserForgotPassword"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRecoverAccount"
+                "$ref": "#/components/schemas/UserForgotPassword"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRecoverAccount"
+                "$ref": "#/components/schemas/UserForgotPassword"
               }
             }
           }
@@ -1593,6 +1629,20 @@
         },
         "additionalProperties": false
       },
+      "UserForgotPassword": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
       "UserLoginRequest": {
         "required": [
           "password",
@@ -1629,20 +1679,6 @@
           },
           "user": {
             "$ref": "#/components/schemas/User"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserRecoverAccount": {
-        "required": [
-          "email"
-        ],
-        "type": "object",
-        "properties": {
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
           }
         },
         "additionalProperties": false

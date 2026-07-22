@@ -7,6 +7,7 @@ using RealEstate.Helper;
 using RealEstate.Models.Users;
 using RealEstate.Services.Images;
 using RealEstate.Services.Users.AdminRepository;
+using RealEstate.Services.Users.UserRepository;
 using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -18,12 +19,13 @@ namespace RealEstate.Controllers;
 [Route("[controller]")]
 [Authorize]
 public sealed class AdminController(
-    AdminRepositoryService adminService
+    AdminRepositoryService adminService,
+    UserRepositoryService userService
     ) : ControllerBase
 {
     private readonly AdminRepositoryService _adminService = adminService;
+    private readonly UserRepositoryService _userService = userService;
 
-    #region AdminServices
     /// <summary>
     /// Retrieves all registered users.
     /// </summary>
@@ -71,7 +73,58 @@ public sealed class AdminController(
             return StatusCode(403, "Access denied.");
         }
     }
-    #endregion
+
+    /// <summary>
+    /// Deletes a user by username and password.
+    /// </summary>
+    /// <param name="username">The username of the user.</param>
+    /// <param name="password">The password of the user.</param>
+    /// <returns>Returns 204 NoContent if successful, 400 BadRequest for invalid input or incorrect password, 404 NotFound if user not found.</returns>
+    [HttpDelete("user/delete/{userName}")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> DeleteUserAsync(string userName)
+    {
+        try
+        {
+
+            var user = await _userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            var res = await _userService.DeleteUserAsync(user!).ConfigureAwait(false);
+
+            if (!res.Succeeded)
+                return BadRequest(res.Errors);
+
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (FormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "Unexpected format error.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(403, "Access denied.");
+        }
+    }
 }
 
 

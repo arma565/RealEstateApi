@@ -45,11 +45,12 @@ namespace RealEstate.Services.Users.AdminRepository
             }
         }
 
-        public async Task<IdentityResult> AssignRole(User user, IEnumerable<User> users) {
+        public async Task<IdentityResult> AssignRole(User user, IEnumerable<User> users)
+        {
             bool userFlagged = false;
-            if (users.Count() == 1) 
+            if (users.Count() == 1)
                 userFlagged = true;
-            return await _userManager.AddToRoleAsync(user, userFlagged ? Roles.User : Roles.Admin ).ConfigureAwait(false);
+            return await _userManager.AddToRoleAsync(user, userFlagged ? Roles.Admin : Roles.User).ConfigureAwait(false);
         }
 
         public async Task<List<UserProfileImage>> GetUserProfileImageListAsync() =>

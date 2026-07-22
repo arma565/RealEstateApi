@@ -11,6 +11,22 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.AdminController",
+    "Method": "DeleteUserAsync",
+    "RelativePath": "Admin/user/delete/{userName}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.AdminController",
     "Method": "GetUsersAsync",
     "RelativePath": "Admin/user/users",
     "HttpMethod": "GET",
@@ -538,7 +554,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "changePasswordModel",
+        "Name": "model",
         "Type": "RealEstate.Models.Users.UserChangePassword",
         "IsRequired": true
       }
@@ -548,14 +564,14 @@
   {
     "ContainingType": "RealEstate.Controllers.UserController",
     "Method": "DeleteUserAsync",
-    "RelativePath": "User/user/delete/{userName}",
+    "RelativePath": "User/user/delete",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userName",
-        "Type": "System.String",
+        "Name": "model",
+        "Type": "RealEstate.Models.Users.UserLoginRequest",
         "IsRequired": true
       }
     ],
@@ -595,31 +611,15 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "LoginUserAsync",
-    "RelativePath": "User/user/login",
+    "Method": "ForgotPasswordAsync",
+    "RelativePath": "User/user/forgot/password",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "loginUserModel",
-        "Type": "RealEstate.Models.Users.UserLoginRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "RecoverAccountAsync",
-    "RelativePath": "User/user/recover/account",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "recoverAccountModel",
-        "Type": "RealEstate.Models.Users.UserRecoverAccount",
+        "Name": "model",
+        "Type": "RealEstate.Models.Users.UserForgotPassword",
         "IsRequired": true
       }
     ],
@@ -637,6 +637,22 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.UserController",
+    "Method": "LoginUserAsync",
+    "RelativePath": "User/user/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "RealEstate.Models.Users.UserLoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.UserController",
     "Method": "RegisterUserAsync",
     "RelativePath": "User/user/register",
     "HttpMethod": "POST",
@@ -644,7 +660,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "registerUserModel",
+        "Name": "model",
         "Type": "RealEstate.Models.Users.UserRegisterAccount",
         "IsRequired": true
       }
@@ -660,7 +676,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "resetPasswordModel",
+        "Name": "model",
         "Type": "RealEstate.Models.Users.UserResetPassword",
         "IsRequired": true
       }

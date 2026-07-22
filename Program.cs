@@ -72,7 +72,6 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole(Roles.Admin));
     options.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
-    options.AddPolicy("AdminOrUser", policy => policy.RequireRole(Roles.Admin, Roles.User));
 });
 
 builder.Services.AddScoped<AssetRepositoryService>();

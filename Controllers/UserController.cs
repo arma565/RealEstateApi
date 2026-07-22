@@ -88,32 +88,32 @@ public sealed class UserController(
     /// <returns>Returns 200 OK if successful, 400 BadRequest for validation errors or if username/email is taken.</returns>
     [HttpPost("user/register")]
     [AllowAnonymous]
-    public async Task<IActionResult> RegisterUserAsync([FromBody] UserRegisterAccount registerUserModel)
+    public async Task<IActionResult> RegisterUserAsync([FromBody] UserRegisterAccount model)
     {
         try
         {
-            if (registerUserModel == null)
+            if (model == null)
                 return BadRequest("Failed to retreive parameter!");
 
             var allUsers = await _adminService.GetUsersAsync().ConfigureAwait(false);
 
-            if (allUsers.Any(u => u.UserName == registerUserModel.UserName))
+            if (allUsers.Any(u => u.UserName == model.UserName))
                 return BadRequest("Username is already taken!");
 
-            if (allUsers.Any(u => u.Email == registerUserModel.Email))
+            if (allUsers.Any(u => u.Email == model.Email))
                 return BadRequest("Email is already taken!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var registerResult = await _userService.RegisterUserAsync(registerUserModel).ConfigureAwait(false);
+            var registerResult = await _userService.RegisterUserAsync(model).ConfigureAwait(false);
 
             if (!registerResult.Succeeded)
                 return BadRequest(registerResult.Errors);
 
-            var registeredUser = await _userService.FindUserByUserNameAsync(registerUserModel.UserName).ConfigureAwait(false);
-            var assignResult = await _adminService.AssignRole(registeredUser!,allUsers).ConfigureAwait(false);
-            if(!assignResult.Succeeded)
+            var registeredUser = await _userService.FindUserByUserNameAsync(model.UserName).ConfigureAwait(false);
+            var assignResult = await _adminService.AssignRole(registeredUser!, allUsers).ConfigureAwait(false);
+            if (!assignResult.Succeeded)
                 return BadRequest(assignResult.Errors);
             return Created();
         }
@@ -152,21 +152,26 @@ public sealed class UserController(
     [HttpPost("user/login")]
     [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
-    public async Task<IActionResult> LoginUserAsync([FromBody] UserLoginRequest loginUserModel)
+    public async Task<IActionResult> LoginUserAsync([FromBody] UserLoginRequest model)
     {
         try
         {
             if (!ModelState.IsValid)
                 return Unauthorized(ModelState);
 
-            if (loginUserModel == null || loginUserModel.UserName == null || loginUserModel.Password == null)
+            if (model == null || model.UserName == null || model.Password == null)
                 return Unauthorized("Username and password are required.");
 
-            var result = await _userService.LoginUserAsync(loginUserModel).ConfigureAwait(false);
+            var user = await _userService.GetUserByUserNameAsync(model.UserName).ConfigureAwait(false);
 
-            if (result.Succeeded) {
-                var user = await _userService.GetUserByUserNameAsync(loginUserModel.UserName).ConfigureAwait(false);
-                var token = await _tokenService.CreateAccessTokenAsync(user!).ConfigureAwait(false);
+            if (user == null)
+                return NotFound("User not found.");
+
+            var result = await _userService.LoginUserAsync(model).ConfigureAwait(false);
+
+            if (result.Succeeded)
+            {
+                 var token = await _tokenService.CreateAccessTokenAsync(user).ConfigureAwait(false);
 
                 return Ok(token);
             }
@@ -206,23 +211,32 @@ public sealed class UserController(
     /// <param name="username">The username of the user.</param>
     /// <param name="password">The password of the user.</param>
     /// <returns>Returns 204 NoContent if successful, 400 BadRequest for invalid input or incorrect password, 404 NotFound if user not found.</returns>
-    [HttpDelete("user/delete/{userName}")]
-    [Authorize(Policy = "AdminOrUser")]
-    public async Task<IActionResult> DeleteUserAsync(string userName)
+    [HttpDelete("user/delete")]
+    [Authorize(Policy = "AuthenticatedUser")]
+    [AllowAnonymous]
+    public async Task<IActionResult> DeleteUserAsync([FromBody] UserLoginRequest model)
     {
         try
         {
-            var user = await _userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+            if (!ModelState.IsValid)
+                return Unauthorized(ModelState);
 
-            if (user == null)
-                return NotFound("No such user found!");
+            if (model == null || model.UserName == null || model.Password == null)
+                return Unauthorized("Username and password are required.");
 
-            var res = await _userService.DeleteUserAsync(user).ConfigureAwait(false);
+            var result = await _userService.LoginUserAsync(model).ConfigureAwait(false);
 
-            if (res.Succeeded)
-                return NoContent();
+            if (!result.Succeeded)
+                return Unauthorized("Invalid username or password.");
 
-            return BadRequest(res.Errors);
+            var user = await _userService.FindUserByUserNameAsync(model.UserName).ConfigureAwait(false);
+
+            var res = await _userService.DeleteUserAsync(user!).ConfigureAwait(false);
+
+            if (!res.Succeeded)
+                return BadRequest(res.Errors);
+
+            return NoContent();
         }
         catch (ArgumentNullException ex)
         {
@@ -257,23 +271,22 @@ public sealed class UserController(
     /// <param name="resetPasswordModel">The reset model containing email, token, and new password.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/reset/password")]
-    [Authorize(Policy = "AdminOrUser")]
-    public async Task<IActionResult> ResetPasswordAsync([FromBody] UserResetPassword resetPasswordModel)
+    public async Task<IActionResult> ResetPasswordAsync([FromBody] UserResetPassword model)
     {
         try
         {
-            if (resetPasswordModel == null)
+            if (model == null)
                 return BadRequest("Failed to retreive parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userService.FindUserByEmailAsync(resetPasswordModel.Email).ConfigureAwait(false);
+            var user = await _userService.FindUserByEmailAsync(model.Email).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("No such user found!");
 
-            var result = await _userService.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.NewPassword).ConfigureAwait(false);
+            var result = await _userService.ResetPasswordAsync(user, model.Token, model.NewPassword).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("Reset password  was successful");
@@ -313,23 +326,22 @@ public sealed class UserController(
     /// <param name="changePasswordModel">The change model containing username, current password, and new password.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPost("user/change/password")]
-    [Authorize(Policy = "AdminOrUser")]
-    public async Task<IActionResult> ChangePasswordAsync([FromBody] UserChangePassword changePasswordModel)
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] UserChangePassword model)
     {
         try
         {
-            if (changePasswordModel == null)
+            if (model == null)
                 return BadRequest("Failed to retreive parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userService.FindUserByUserNameAsync(changePasswordModel.UserName).ConfigureAwait(false);
+            var user = await _userService.FindUserByUserNameAsync(model.UserName).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("No such user found!");
 
-            var result = await _userService.ChangePasswordAsync(user, changePasswordModel.OldPassword, changePasswordModel.NewPassword).ConfigureAwait(false);
+            var result = await _userService.ChangePasswordAsync(user, model.OldPassword, model.NewPassword).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("Password has been changed");
@@ -368,27 +380,26 @@ public sealed class UserController(
     /// </summary>
     /// <param name="recoverAccountModel">The recovery model containing the user's email.</param>
     /// <returns>Returns the generated token if successful, 400 BadRequest or 404 NotFound for errors.</returns>
-    [HttpPost("user/recover/account")]
-    [Authorize(Policy = "AdminOrUser")]
-    public async Task<ActionResult<string>> RecoverAccountAsync([FromBody] UserRecoverAccount recoverAccountModel)
+    [HttpPost("user/forgot/password")]
+    public async Task<ActionResult<string>> ForgotPasswordAsync([FromBody] UserForgotPassword model)
     {
         try
         {
-            if (recoverAccountModel == null)
+            if (model == null)
                 return BadRequest("Failed to retreive parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (string.IsNullOrWhiteSpace(recoverAccountModel.Email))
-                return BadRequest("Email is required!");
+            //if (string.IsNullOrWhiteSpace(model.Email))
+            //    return BadRequest("Email is required!");
 
-            if (!new EmailHelper().IsValidEmail(recoverAccountModel.Email))
-                return BadRequest("Invalid email format.");
+            //if (!new EmailHelper().IsValidEmail(model.Email))
+            //    return BadRequest("Invalid email format.");
 
-            var user = await _userService.FindUserByEmailAsync(recoverAccountModel.Email).ConfigureAwait(false);
+            var user = await _userService.FindUserByEmailAsync(model.Email).ConfigureAwait(false);
 
-            if (user == null)
+            if (user == null) 
                 return BadRequest("No such user found!");
 
             var generatedToken = await _userService.GenerateTokenToRecoverUserAsync(user).ConfigureAwait(false);
@@ -428,7 +439,6 @@ public sealed class UserController(
     /// <param name="updateUserProfileModel">The user model with updated information.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPut("user/edit/profile")]
-    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> EditUserProfile([FromBody] User editUserProfileModel)
     {
         try
@@ -504,7 +514,6 @@ public sealed class UserController(
     /// <param name="image">The image file to upload.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest for invalid input, 404 NotFound if user not found, or 500/403 for errors.</returns>
     [HttpPost("user/upload/{userID}")]
-    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> UploadProfileImage(string userID, IFormFile image)
     {
         try
@@ -578,7 +587,6 @@ public sealed class UserController(
     /// <param name="imageFileName">The file name of the image to download.</param>
     /// <returns>Returns the image file if found, 404 NotFound if not found, 400 BadRequest for invalid input, or 500/403 for errors.</returns>
     [HttpGet("user/download/{imageFileName}")]
-    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> DownloadProfileImage(string imageFileName)
     {
         try
@@ -660,7 +668,6 @@ public sealed class UserController(
     /// or 500/403 for errors.
     /// </returns>
     [HttpDelete("profile/delete/{profileImageID}")]
-    [Authorize(Policy = "AdminOrUser")]
     public async Task<IActionResult> DeleteProfileImage(string profileImageID)
     {
         try

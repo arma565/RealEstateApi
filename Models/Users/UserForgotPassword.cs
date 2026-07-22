@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 #pragma warning disable CA1515
 namespace RealEstate.Models.Users;
 
-public sealed class UserRecoverAccount
+public sealed class UserForgotPassword
 {
     private string _email = "";
 

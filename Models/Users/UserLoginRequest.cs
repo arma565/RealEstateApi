@@ -5,15 +5,15 @@ namespace RealEstate.Models.Users;
 
 public sealed class UserLoginRequest
 {
-   private string _user_name = "";
+   private string _userName = "";
 
    private string _password = "";
 
     [Required(ErrorMessage = "UserName is required!")]
     public string UserName
     {
-        get => _user_name;
-        set => _user_name = value;
+        get => _userName;
+        set => _userName = value;
     }
 
     [Required(ErrorMessage = "Password is required!")]

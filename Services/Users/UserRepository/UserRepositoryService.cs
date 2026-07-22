@@ -73,17 +73,16 @@ namespace RealEstate.Services.Users.UserRepository
         /// Login model containing username and password
         /// </param>
         /// <returns></returns>
-        public async Task<SignInResult> LoginUserAsync(UserLoginRequest model)
+        public async Task<SignInResult> LoginUserAsync(UserLoginRequest userRequest)
         {
-            if (model is null)
-            {
+            if (userRequest is null)
                 return SignInResult.Failed;
-            }
+            
             return await _signInManager.PasswordSignInAsync(
-                model.UserName,
-                model.Password,
-                false,
-                false
+               userRequest.UserName,
+               userRequest.Password,
+               false,
+               false
             ).ConfigureAwait(false);
         }
 
@@ -113,11 +112,8 @@ namespace RealEstate.Services.Users.UserRepository
         /// User account which needs reset
         /// </param>
         /// <returns></returns>
-        public async Task<string> GenerateTokenToRecoverUserAsync(User user)
-        {
-            return await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
-        }
-
+        public async Task<string> GenerateTokenToRecoverUserAsync(User user) => await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+        
         /// <summary>
         /// Reset the user account password
         /// </summary>
@@ -167,9 +163,10 @@ namespace RealEstate.Services.Users.UserRepository
         public async Task<User?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
         public async Task<User?> FindUserByUserNameAsync(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
+
         public async Task<User?> FindUserByIDAsync(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
-        public async Task<bool> IsUserExistAsync(string userID) => await _userManager.Users.AsNoTracking().AnyAsync(user => user.Id == userID).ConfigureAwait(false);
+        public async Task<bool> IsEmailConfirmed(User user) => await _userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false);
 
         #endregion
 
