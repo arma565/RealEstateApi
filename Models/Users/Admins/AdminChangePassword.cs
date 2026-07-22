@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
 #pragma warning disable CA1515
-namespace RealEstate.Models.Authentication;
+namespace RealEstate.Models.Users;
 
-public sealed class ChangePassword
+public sealed class AdminChangePassword
 {
     private string _user_name = "";
     private string _old_password = "";

@@ -1,9 +1,10 @@
+using RealEstate.Models.Persons;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
 #pragma warning disable CA1515
-namespace RealEstate.Models.Estate.Assets;
+namespace RealEstate.Models.Assets;
 
 public sealed class Asset
 {

@@ -1,31 +1,26 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.Models.Authentication.Users;
-using RealEstate.Models.Estate;
-using RealEstate.Models.Estate.Assets;
+using RealEstate.Models.Assets;
+using RealEstate.Models.Persons;
 using RealEstate.Models.Support;
-using System.Reflection.Emit;
-
 
 #pragma warning disable CA1515
 namespace RealEstate.Data;
 
-public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User>(options)
+public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public required DbSet<Asset> Assets { get; set; }
     public required DbSet<AssetImage> AssetImages { get; set; }
     public required DbSet<Person> Persons { get; set; }
-    public required DbSet<ProfileImage> UserProfileImages { get; set; }
     public required DbSet<SupportApp> Supports { get; set; }
     public required DbSet<SupportImage> SupportImages { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(modelBuilder);
 
-        base.OnModelCreating(builder);
+        base.OnModelCreating(modelBuilder);
 
-        builder
+        modelBuilder
             .Entity<Asset>()
             .HasMany(asset => asset.Persons)
             .WithOne(pers => pers.Asset)
@@ -34,7 +29,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : Ident
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder
+        modelBuilder
             .Entity<Asset>()
             .HasMany(asset => asset.AssetImages)
             .WithOne(assetImg => assetImg.Asset)
@@ -43,18 +38,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : Ident
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<User>()
-            .HasOne(user => user.ProfileImage)
-            .WithOne(profileImg => profileImg.User)
-            .HasForeignKey<ProfileImage>(profileImg => profileImg.UserID)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<ProfileImage>()
-        .HasIndex(p => p.UserID)
-        .IsUnique();
-
-        builder
+        modelBuilder
             .Entity<SupportApp>()
             .HasOne(support => support.SupportImage)
             .WithOne(supportImg => supportImg.Support)
@@ -62,7 +46,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : Ident
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder
+        modelBuilder
             .Entity<SupportImage>()
             .HasIndex(supportImg => supportImg.SupportId)
             .IsUnique();

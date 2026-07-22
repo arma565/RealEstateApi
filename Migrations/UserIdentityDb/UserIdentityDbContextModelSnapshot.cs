@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.Data;
 
 #nullable disable
 
-namespace RealEstate.Migrations
+namespace RealEstate.Migrations.UserIdentityDb
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20260715070502_RealEstateMigration#1")]
-    partial class RealEstateMigration1
+    [DbContext(typeof(UserIdentityDbContext))]
+    partial class UserIdentityDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,29 +155,7 @@ namespace RealEstate.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Authentication.Users.ProfileImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProfileImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserID")
-                        .IsUnique();
-
-                    b.ToTable("UserProfileImages");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Authentication.Users.User", b =>
+            modelBuilder.Entity("RealEstate.Models.Users.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -256,192 +231,26 @@ namespace RealEstate.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Estate.Assets.Asset", b =>
+            modelBuilder.Entity("RealEstate.Models.Users.UserProfileImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("ProfileImageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Area")
+                    b.Property<string>("UserID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AssetType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConstructionYear")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContractType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Deposit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Electricity")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Gas")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Payment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Phone")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PlatesNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Price")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RentAmount")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Time")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Water")
-                        .HasColumnType("bit");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Assets");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Estate.Assets.AssetImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AssetID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetID");
-
-                    b.ToTable("AssetImages");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Estate.Person", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("AssetID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("BirthCertificateIssued")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("BirthCertificateNumber")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Born")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FatherName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("PersonID")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetID");
-
-                    b.ToTable("Persons");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Support.Support", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.PrimitiveCollection<string>("DetailsDescriptionList")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DetailsSubtitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DetailsTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Supports");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Support.SupportImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SupportId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SupportImageFileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupportId")
+                    b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("SupportImages");
+                    b.ToTable("UserProfileImages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -455,7 +264,7 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
+                    b.HasOne("RealEstate.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -464,7 +273,7 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
+                    b.HasOne("RealEstate.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -479,7 +288,7 @@ namespace RealEstate.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
+                    b.HasOne("RealEstate.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -488,72 +297,27 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("RealEstate.Models.Authentication.Users.User", null)
+                    b.HasOne("RealEstate.Models.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Authentication.Users.ProfileImage", b =>
+            modelBuilder.Entity("RealEstate.Models.Users.UserProfileImage", b =>
                 {
-                    b.HasOne("RealEstate.Models.Authentication.Users.User", "User")
+                    b.HasOne("RealEstate.Models.Users.User", "User")
                         .WithOne("ProfileImage")
-                        .HasForeignKey("RealEstate.Models.Authentication.Users.ProfileImage", "UserID")
+                        .HasForeignKey("RealEstate.Models.Users.UserProfileImage", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RealEstate.Models.Estate.Assets.AssetImage", b =>
-                {
-                    b.HasOne("RealEstate.Models.Estate.Assets.Asset", "Asset")
-                        .WithMany("AssetImages")
-                        .HasForeignKey("AssetID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Asset");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Estate.Person", b =>
-                {
-                    b.HasOne("RealEstate.Models.Estate.Assets.Asset", "Asset")
-                        .WithMany("Persons")
-                        .HasForeignKey("AssetID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Asset");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Support.SupportImage", b =>
-                {
-                    b.HasOne("RealEstate.Models.Support.Support", "Support")
-                        .WithOne("SupportImage")
-                        .HasForeignKey("RealEstate.Models.Support.SupportImage", "SupportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Support");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Authentication.Users.User", b =>
+            modelBuilder.Entity("RealEstate.Models.Users.User", b =>
                 {
                     b.Navigation("ProfileImage");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Estate.Assets.Asset", b =>
-                {
-                    b.Navigation("AssetImages");
-
-                    b.Navigation("Persons");
-                });
-
-            modelBuilder.Entity("RealEstate.Models.Support.Support", b =>
-                {
-                    b.Navigation("SupportImage");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.IdentityModel.Tokens;
-using RealEstate.Models.Estate;
-using RealEstate.Models.Estate.Assets;
-using RealEstate.Services;
+using RealEstate.Models.Assets;
+using RealEstate.Models.Persons;
+using RealEstate.Services.Assets;
+using RealEstate.Services.Images;
 using System.Globalization;
 using System.Security;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ namespace RealEstate.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public sealed class EstateController(RepositoryService service, ImageService imageService) : ControllerBase
+public sealed class AssetController(AssetRepositoryService service, ImageService imageService) : ControllerBase
 {
-    private readonly RepositoryService _service = service;
+    private readonly AssetRepositoryService _service = service;
     private readonly ImageService _imageService = imageService;
 
     #region Asset

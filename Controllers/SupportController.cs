@@ -1,18 +1,18 @@
 ﻿#pragma warning disable CA1515
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using RealEstate.Models.Authentication.Users;
 using RealEstate.Models.Support;
-using RealEstate.Services;
+using RealEstate.Services.Assets;
+using RealEstate.Services.Images;
 using System.Security;
 
 namespace RealEstate.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public sealed class SupportController(RepositoryService service, ImageService imageService) : ControllerBase
+public sealed class SupportController(AssetRepositoryService service, ImageService imageService) : ControllerBase
 {
-    private readonly RepositoryService _service = service;
+    private readonly AssetRepositoryService _service = service;
     private readonly ImageService _imageService = imageService;
 
     #region Support

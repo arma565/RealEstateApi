@@ -7,8 +7,11 @@ using RealEstate.Authentication;
 using RealEstate.Authorization;
 using RealEstate.Data;
 using RealEstate.Helper;
-using RealEstate.Models.Authentication.Users;
-using RealEstate.Services;
+using RealEstate.Models.Users;
+using RealEstate.Services.Assets;
+using RealEstate.Services.Images;
+using RealEstate.Services.Users.AdminRepository;
+using RealEstate.Services.Users.UserRepository;
 using System.Text;
 
 var MyAllowSpecificOrigins = "_estatePolicy";
@@ -37,13 +40,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PropertyConnection"))
 );
 
+builder.Services.AddDbContext<UserIdentityDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PropertyConnection"))
+);
+
 builder
     .Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
+    .AddEntityFrameworkStores<UserIdentityDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => {
+    .AddJwtBearer(options =>
+    {
         var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 
         options.TokenValidationParameters = new TokenValidationParameters()
@@ -60,13 +68,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization(options => {
+builder.Services.AddAuthorization(options =>
+{
     options.AddPolicy("AdminOnly", policy => policy.RequireRole(Roles.Admin));
     options.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
     options.AddPolicy("AdminOrUser", policy => policy.RequireRole(Roles.Admin, Roles.User));
 });
 
-builder.Services.AddScoped<RepositoryService>();
+builder.Services.AddScoped<AssetRepositoryService>();
+builder.Services.AddScoped<UserRepositoryService>();
+builder.Services.AddScoped<AdminRepositoryService>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<PasswordHelper>();
 builder.Services.AddScoped<TokenService>();
@@ -98,6 +109,20 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roles = { Roles.Admin, Roles.User };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role).ConfigureAwait(false))
+            await roleManager.CreateAsync(new IdentityRole(role)).ConfigureAwait(false);
+    }
+};
+
+
 
 //middleware
 if (app.Environment.IsDevelopment())

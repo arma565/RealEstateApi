@@ -1,8 +1,7 @@
-﻿#pragma warning disable CA1515
-using RealEstate.Models.Authentication.Users;
-
+﻿
 namespace RealEstate.Models.Support;
 
+#pragma warning disable CA1515
 public sealed class SupportImage
 {
     private Guid _id;

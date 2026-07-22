@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
 #pragma warning disable CA1515
-namespace RealEstate.Models.Authentication;
+namespace RealEstate.Models.Users;
 
-public sealed class RegisterUser
+public sealed class UserRegisterAccount
 {
     private string _user_name = "";
     private string _email = "";

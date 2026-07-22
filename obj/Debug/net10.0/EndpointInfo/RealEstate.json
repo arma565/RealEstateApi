@@ -5,96 +5,10 @@
     "version": "1.0"
   },
   "paths": {
-    "/Auth/user/upload/{userID}": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "parameters": [
-          {
-            "name": "userID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "image": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "image": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/user/download/{imageFileName}": {
+    "/Admin/user/users": {
       "get": {
         "tags": [
-          "Auth"
-        ],
-        "parameters": [
-          {
-            "name": "imageFileName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/profile/delete/{profileImageID}": {
-      "delete": {
-        "tags": [
-          "Auth"
-        ],
-        "parameters": [
-          {
-            "name": "profileImageID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/user/users": {
-      "get": {
-        "tags": [
-          "Auth"
+          "Admin"
         ],
         "responses": {
           "200": {
@@ -129,121 +43,10 @@
         }
       }
     },
-    "/Auth/user/{userName}": {
-      "get": {
-        "tags": [
-          "Auth"
-        ],
-        "parameters": [
-          {
-            "name": "userName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Auth/user/register": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterUser"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterUser"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterUser"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterUser"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/user/login": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginUser"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginUser"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginUser"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginUser"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/user/delete-all": {
+    "/Admin/user/delete-all": {
       "delete": {
         "tags": [
-          "Auth"
+          "Admin"
         ],
         "responses": {
           "200": {
@@ -252,193 +55,10 @@
         }
       }
     },
-    "/Auth/user/delete/{userName}": {
-      "delete": {
-        "tags": [
-          "Auth"
-        ],
-        "parameters": [
-          {
-            "name": "userName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/user/recover/account": {
+    "/Asset/asset/upload/{assetID}": {
       "post": {
         "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RecoverAccount"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RecoverAccount"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RecoverAccount"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RecoverAccount"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Auth/user/reset/password": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResetPassword"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResetPassword"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResetPassword"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResetPassword"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/user/change/password": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePassword"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePassword"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePassword"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangePassword"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Auth/user/edit/profile": {
-      "put": {
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Estate/asset/upload/{assetID}": {
-      "post": {
-        "tags": [
-          "Estate"
+          "Asset"
         ],
         "parameters": [
           {
@@ -480,10 +100,10 @@
         }
       }
     },
-    "/Estate/asset/download/{imageFileName}": {
+    "/Asset/asset/download/{imageFileName}": {
       "get": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "parameters": [
           {
@@ -502,10 +122,10 @@
         }
       }
     },
-    "/Estate/asset/desc": {
+    "/Asset/asset/desc": {
       "get": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "responses": {
           "200": {
@@ -540,10 +160,10 @@
         }
       }
     },
-    "/Estate/asset/asc": {
+    "/Asset/asset/asc": {
       "get": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "responses": {
           "200": {
@@ -578,10 +198,10 @@
         }
       }
     },
-    "/Estate/asset/date": {
+    "/Asset/asset/date": {
       "get": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "responses": {
           "200": {
@@ -616,10 +236,10 @@
         }
       }
     },
-    "/Estate/asset/{assetID}": {
+    "/Asset/asset/{assetID}": {
       "get": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "parameters": [
           {
@@ -655,10 +275,10 @@
         }
       }
     },
-    "/Estate/asset/add": {
+    "/Asset/asset/add": {
       "post": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "requestBody": {
           "content": {
@@ -691,10 +311,10 @@
         }
       }
     },
-    "/Estate/asset/update": {
+    "/Asset/asset/update": {
       "put": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "requestBody": {
           "content": {
@@ -727,10 +347,10 @@
         }
       }
     },
-    "/Estate/asset/delete/{assetID}": {
+    "/Asset/asset/delete/{assetID}": {
       "delete": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "parameters": [
           {
@@ -749,10 +369,10 @@
         }
       }
     },
-    "/Estate/asset/delete-all": {
+    "/Asset/asset/delete-all": {
       "delete": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "responses": {
           "200": {
@@ -761,10 +381,10 @@
         }
       }
     },
-    "/Estate/asset/assetImage/delete/{assetImageID}": {
+    "/Asset/asset/assetImage/delete/{assetImageID}": {
       "delete": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "parameters": [
           {
@@ -783,10 +403,10 @@
         }
       }
     },
-    "/Estate/person": {
+    "/Asset/person": {
       "get": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "responses": {
           "200": {
@@ -821,10 +441,10 @@
         }
       }
     },
-    "/Estate/person/{id}": {
+    "/Asset/person/{id}": {
       "get": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "parameters": [
           {
@@ -860,10 +480,10 @@
         }
       }
     },
-    "/Estate/person/add": {
+    "/Asset/person/add": {
       "post": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "requestBody": {
           "content": {
@@ -896,10 +516,10 @@
         }
       }
     },
-    "/Estate/person/update": {
+    "/Asset/person/update": {
       "put": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "requestBody": {
           "content": {
@@ -932,10 +552,10 @@
         }
       }
     },
-    "/Estate/person/delete/{id}": {
+    "/Asset/person/delete/{id}": {
       "delete": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "parameters": [
           {
@@ -954,10 +574,10 @@
         }
       }
     },
-    "/Estate/person/delete-all": {
+    "/Asset/person/delete-all": {
       "delete": {
         "tags": [
-          "Estate"
+          "Asset"
         ],
         "responses": {
           "200": {
@@ -1234,6 +854,386 @@
           }
         }
       }
+    },
+    "/User/user/{userName}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/user/register": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegisterAccount"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegisterAccount"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegisterAccount"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegisterAccount"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/user/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/user/delete/{userName}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/user/reset/password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResetPassword"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResetPassword"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResetPassword"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserResetPassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/user/change/password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserChangePassword"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserChangePassword"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserChangePassword"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserChangePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/user/recover/account": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRecoverAccount"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRecoverAccount"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRecoverAccount"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRecoverAccount"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/user/edit/profile": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/user/upload/{userID}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "image": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/user/download/{imageFileName}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "imageFileName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/User/profile/delete/{profileImageID}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "profileImageID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1367,56 +1367,6 @@
         },
         "additionalProperties": false
       },
-      "ChangePassword": {
-        "required": [
-          "newPassword",
-          "oldPassword",
-          "repeatNewPassword",
-          "userName"
-        ],
-        "type": "object",
-        "properties": {
-          "userName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "oldPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "newPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "repeatNewPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          }
-        },
-        "additionalProperties": false
-      },
-      "LoginUser": {
-        "required": [
-          "password",
-          "userName"
-        ],
-        "type": "object",
-        "properties": {
-          "userName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "password": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          }
-        },
-        "additionalProperties": false
-      },
       "Person": {
         "required": [
           "address",
@@ -1475,105 +1425,6 @@
           },
           "asset": {
             "$ref": "#/components/schemas/Asset"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProfileImage": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "profileImageName": {
-            "type": "string",
-            "nullable": true
-          },
-          "userID": {
-            "type": "string",
-            "nullable": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RecoverAccount": {
-        "required": [
-          "email"
-        ],
-        "type": "object",
-        "properties": {
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RegisterUser": {
-        "required": [
-          "email",
-          "password",
-          "repeatPassword",
-          "userName"
-        ],
-        "type": "object",
-        "properties": {
-          "userName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          },
-          "password": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "repeatPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "acceptTerms": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ResetPassword": {
-        "required": [
-          "email",
-          "newPassword",
-          "repeatNewPassword"
-        ],
-        "type": "object",
-        "properties": {
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          },
-          "token": {
-            "type": "string",
-            "nullable": true
-          },
-          "newPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "repeatNewPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
           }
         },
         "additionalProperties": false
@@ -1706,7 +1557,156 @@
             "type": "boolean"
           },
           "profileImage": {
-            "$ref": "#/components/schemas/ProfileImage"
+            "$ref": "#/components/schemas/UserProfileImage"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserChangePassword": {
+        "required": [
+          "newPassword",
+          "oldPassword",
+          "repeatNewPassword",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "oldPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "newPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "repeatNewPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserLoginRequest": {
+        "required": [
+          "password",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserProfileImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profileImageName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userID": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserRecoverAccount": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserRegisterAccount": {
+        "required": [
+          "email",
+          "password",
+          "repeatPassword",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "repeatPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "acceptTerms": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserResetPassword": {
+        "required": [
+          "email",
+          "newPassword",
+          "repeatNewPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "token": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "repeatNewPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
           }
         },
         "additionalProperties": false
@@ -1728,13 +1728,16 @@
   ],
   "tags": [
     {
-      "name": "Auth"
+      "name": "Admin"
     },
     {
-      "name": "Estate"
+      "name": "Asset"
     },
     {
       "name": "Support"
+    },
+    {
+      "name": "User"
     }
   ]
 }

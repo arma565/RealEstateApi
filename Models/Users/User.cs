@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 #pragma warning disable CA1515
-namespace RealEstate.Models.Authentication.Users;
+namespace RealEstate.Models.Users;
 
 public class User : IdentityUser
 {
@@ -14,7 +14,7 @@ public class User : IdentityUser
     private string _firstName = "";
     private string _lastName = "";
     private bool _acceptTerms;
-    private ProfileImage? _profileImage;
+    private UserProfileImage? _profileImage;
 
     [Key]
     public override string Id
@@ -60,7 +60,7 @@ public class User : IdentityUser
         set => _acceptTerms = value;
     }
 
-    public ProfileImage? ProfileImage
+    public UserProfileImage? ProfileImage
     {
         get => _profileImage;
         set => _profileImage = value;

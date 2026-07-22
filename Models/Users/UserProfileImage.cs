@@ -1,7 +1,7 @@
 ﻿#pragma warning disable CA1515
-namespace RealEstate.Models.Authentication.Users;
+namespace RealEstate.Models.Users;
 
-public sealed class ProfileImage
+public sealed class UserProfileImage
 {
 
     private Guid _id;

@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Identity;
-using RealEstate.Models.Authentication.Users;
+using RealEstate.Models.Users;
+
+
+
 
 #pragma warning disable CA1515
 namespace RealEstate.Helper;

@@ -1,7 +1,7 @@
 using Microsoft.IdentityModel.Tokens;
 
 #pragma warning disable CA1515
-namespace RealEstate.Services;
+namespace RealEstate.Services.Images;
 
 public sealed class ImageService(
     IWebHostEnvironment environment

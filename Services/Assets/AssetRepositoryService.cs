@@ -1,256 +1,62 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using RealEstate.Data;
-using RealEstate.Models.Authentication;
-using RealEstate.Models.Authentication.Users;
-using RealEstate.Models.Estate;
-using RealEstate.Models.Estate.Assets;
+using RealEstate.Models.Assets;
+using RealEstate.Models.Persons;
 using RealEstate.Models.Support;
-using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using RealEstate.Services.Images;
 
-//Null check should be apply
-// Asset should be change to valid objects(Home,territory,...)
-//Check Functions names and class names
-//Events(like delete) must be async void 
 #pragma warning disable CA1515
-namespace RealEstate.Services;
+namespace RealEstate.Services.Assets;
 
-public sealed class RepositoryService(AppDbContext context,
-                                        UserManager<User> userManager,
-                                        SignInManager<User> signInManager,
-                                        ImageService imageService)
+  interface IAssetRepositoryService
+{
+    #region Asset
+    Task<IEnumerable<Asset>> GetAssetListDescendingAsync();
+    Task<IEnumerable<Asset>> GetAssetListAscendingAsync();
+    Task<IEnumerable<Asset>> GetAssetListDateModifiedAsync();
+    Task<Asset?> GetAssetAsync(Guid assetID);
+    Task<Asset?> AddAssetAsync(Asset newAsset);
+    Task UpdateAssetAsync(Asset asset);
+    Task DeleteAssetAsync(Asset asset);
+    Task DeleteAllAssetsAsync();
+    Task<Asset?> FindAssetByPlatesNumberAsync(string platesNumber);
+    Task<bool> IsAssetExistAsync(string plateNumber);
+    #endregion
+    #region AssetImage
+    Task<List<AssetImage>> GetAssetImageListAsync();
+    Task<AssetImage?> GetAssetImageAsync(Guid assetImageID);
+    Task AddAssetImageAsync(AssetImage assetImage);
+    Task DeleteAssetImage(AssetImage assetImage);
+    #endregion
+    #region Person
+    Task<IEnumerable<Person>> GetPersonsListAsync();
+    Task<Person?> GetPersonAsync(Guid id);
+    Task<bool> GetPersonByPersonIDAsync(long personID);
+    Task<Person> AddPersonAsync(Person newPerson);
+    Task<Person> UpdatePersonAsync(Person updatePerson);
+    Task DeletePersonAsync(Person deletePerson);
+    Task DeleteAllPersonsAsync();
+    Task<bool> IsPersonExistAsync(long personID);
+    #endregion
+}
+
+public sealed class AssetRepositoryService(AppDbContext context,
+                                        ImageService imageService) : IAssetRepositoryService
 {
     private readonly AppDbContext _context = context;
-    private readonly UserManager<User> _userManager = userManager;
-    private readonly SignInManager<User> _signInManager = signInManager;
+
     private readonly ImageService _imageService = imageService;
-
-    #region Authentication
-
-    /// <summary>
-    /// This function return all registered users
-    /// </summary>
-    /// <returns></returns>
-    public async Task<IEnumerable<User>> GetUsersAsync() => [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
-
-    /// <summary>
-    /// This function return a user using id
-    /// </summary>
-    /// <returns> User associated to user ID </returns>
-    public async Task<User?> GetUserByIDAsync(string userID) =>
-         await _userManager
-             .Users.AsNoTracking()
-             .Include(user => user.ProfileImage)
-             .SingleOrDefaultAsync(user => user.Id == userID)
-             .ConfigureAwait(false);
-
-    /// <summary>
-    /// This function return a user using userName
-    /// </summary>
-    /// <returns> User associated to userName </returns>
-    public async Task<User?> GetUserByUserNameAsync(string userName) =>
-         await _userManager
-             .Users.AsNoTracking()
-             .Include(user => user.ProfileImage)
-             .SingleOrDefaultAsync(user => user.UserName == userName)
-             .ConfigureAwait(false);
-
-    /// <summary>
-    /// This function register a user in database
-    /// </summary>
-    /// <param name="model"></param>
-    /// <returns></returns>
-    public async Task<IdentityResult> RegisterUserAsync(RegisterUser userRegister)
-    {
-        if (userRegister is null)
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = "userRegister Null",
-                Description = "Failed to retrieve parameter!"
-            });
-
-        return await _userManager.CreateAsync(new User
-        {
-            UserName = userRegister.UserName,
-            Email = userRegister.Email,
-            AcceptTerms = userRegister.AcceptTerms
-        }, userRegister.Password).ConfigureAwait(false);
-
-    }
-
-
-    /// <summary>
-    /// This function delete all users
-    /// </summary>
-    /// <returns></returns>
-    public async Task DeleteAllUsersAsync()
-    {
-        var users = await _userManager.Users.ToListAsync().ConfigureAwait(false);
-       foreach (var user in users)
-        {
-            await _userManager.DeleteAsync(user).ConfigureAwait(false);
-        }
-        var environmentPath = _imageService.GetLocalImagesFullPath("auth");
-        if (Directory.Exists(environmentPath)) {
-            var files = Directory.GetFiles(environmentPath);
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
-    }
-
-    /// <summary>
-    /// This function Delete a user from identity store
-    /// </summary>
-    /// <param name="user"></param>
-    /// <returns></returns>
-    public async Task<IdentityResult> DeleteUserAsync(User user)
-    {
-        if (user?.ProfileImage != null && user.ProfileImage.ProfileImageName != null) {
-            var environmentPath = _imageService.GetLocalImagesFullPath("auth");
-
-            var filePath = Path.Combine(environmentPath, user.ProfileImage.ProfileImageName);
-
-            if (File.Exists(filePath))
-                File.Delete(filePath);
-        }
-        return await _userManager.DeleteAsync(user!).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Login user using username and password
-    /// </summary>
-    /// <param name="model">
-    /// Login model containing username and password
-    /// </param>
-    /// <returns></returns>
-    public async Task<SignInResult> LoginUserAsync(LoginUser model)
-    {
-        if (model is null)
-        {
-            return SignInResult.Failed;
-        }
-        return await _signInManager.PasswordSignInAsync(
-            model.UserName,
-            model.Password,
-            false,
-            false
-        ).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// This function create a token to reset password
-    /// </summary>
-    /// <param name="user">
-    /// User account which needs reset
-    /// </param>
-    /// <returns></returns>
-    public async Task<string> GenerateTokenToRecoverUserAsync(User user)
-    {
-        return await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Reset the user account password
-    /// </summary>
-    /// <param name="user">
-    /// user account
-    /// </param>
-    /// <param name="token">
-    /// Tokeen reset password
-    /// </param>
-    /// <param name="newPassword">
-    /// new password of account
-    /// </param>
-    /// <returns></returns>
-    public async Task<IdentityResult> ResetPasswordAsync(
-        User user,
-        string token,
-        string newPassword
-    )
-    {
-        return await _userManager.ResetPasswordAsync(user, token, newPassword).ConfigureAwait(false);
-    }
-
-    public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
-    {
-        return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// This function is useful to edit profile
-    /// </summary>
-    /// <param name="user">
-    /// user account
-    /// </param>
-    /// <returns></returns>
-    public async Task<IdentityResult> EditUserProfileAsync(User editUser) => await _userManager.UpdateAsync(editUser).ConfigureAwait(false);
-
-    public async Task<User?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-
-    public async Task<User?> FindUserByUserNameAsync(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
-    public async Task<User?> FindUserByIDAsync(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
-
-    public async Task<bool> IsUserExistAsync(string userID) => await _userManager.Users.AsNoTracking().AnyAsync(user => user.Id == userID).ConfigureAwait(false);
-
-    #endregion
-
-    #region UserProfileImage
-    public async Task<List<ProfileImage>> GetUserProfileImageListAsync() =>
-      await _context
-      .UserProfileImages
-      .AsNoTracking()
-      .OrderByDescending(userProfileImg => userProfileImg.Id)
-      .ToListAsync()
-      .ConfigureAwait(false);
-
-    public async Task<ProfileImage?> GetProfileImageAsync(Guid userProfileImageID) =>
-   await _context
-  .UserProfileImages.AsNoTracking()
-  .SingleOrDefaultAsync(userProfileImg => userProfileImg.Id == userProfileImageID)
-  .ConfigureAwait(false);
-
-    public async Task AddProfileImageAsync(ProfileImage userProfileImage)
-    {
-        await _context.UserProfileImages.AddAsync(userProfileImage).ConfigureAwait(false);
-        await _context.SaveChangesAsync().ConfigureAwait(false);
-    }
-
-    public async Task UpdateProfileImageAsync(ProfileImage profileImage)
-    {
-        _context.UserProfileImages.Update(profileImage);
-        await _context.SaveChangesAsync().ConfigureAwait(false);
-    }
-
-    public async Task DeleteProfileImageAsync(ProfileImage userProfileImage)
-    {
-        if (userProfileImage == null || userProfileImage.ProfileImageName == null)
-            return;
-        var environmentPath = _imageService.GetLocalImagesFullPath("auth");
-        var profileImagePath = Path.Combine(environmentPath, userProfileImage.ProfileImageName);
-        var filesDir = Directory.GetFiles(environmentPath);
-        foreach (var filePath in filesDir)
-        {
-            if(filePath == profileImagePath)
-                File.Delete(filePath);
-        }
-       _context.UserProfileImages.Remove(userProfileImage);
-       await _context.SaveChangesAsync().ConfigureAwait(false);
-    }
-    #endregion
 
     #region Asset
     public async Task<IEnumerable<Asset>> GetAssetListDescendingAsync() =>
-        await _context
+          await _context
             .Assets
             .AsNoTracking()
             .Include(prop => prop.Persons)
             .Include(assetImg => assetImg.AssetImages)
             .OrderByDescending(prop => prop.OrderID)
             .ToListAsync().ConfigureAwait(false);
+
     public async Task<IEnumerable<Asset>> GetAssetListAscendingAsync() =>
         await _context
             .Assets
@@ -259,6 +65,7 @@ public sealed class RepositoryService(AppDbContext context,
             .Include(assetImg => assetImg.AssetImages)
             .OrderBy(prop => prop.OrderID)
             .ToListAsync().ConfigureAwait(false);
+
     public async Task<IEnumerable<Asset>> GetAssetListDateModifiedAsync() =>
         await _context
             .Assets
@@ -267,6 +74,7 @@ public sealed class RepositoryService(AppDbContext context,
             .Include(assetImg => assetImg.AssetImages)
             .OrderBy(prop => prop.Date)
             .ToListAsync().ConfigureAwait(false);
+
     public async Task<Asset?> GetAssetAsync(Guid assetID) =>
         await _context
             .Assets
@@ -275,17 +83,20 @@ public sealed class RepositoryService(AppDbContext context,
             .Include(assetImg => assetImg.AssetImages)
             .SingleOrDefaultAsync(prop => prop.Id == assetID)
             .ConfigureAwait(false);
+
     public async Task<Asset?> AddAssetAsync(Asset newAsset)
     {
         await _context.Assets.AddAsync(newAsset).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
         return newAsset;
     }
+
     public async Task UpdateAssetAsync(Asset asset)
     {
         _context.Assets.Update(asset);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
     public async Task DeleteAssetAsync(Asset asset)
     {
         if (asset == null || asset.AssetImages == null)
@@ -299,6 +110,7 @@ public sealed class RepositoryService(AppDbContext context,
         _context.Assets.Remove(asset);
        await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
     public async Task DeleteAllAssetsAsync()
     {
         var environmentPath = _imageService.GetLocalImagesFullPath("asset");
@@ -313,11 +125,13 @@ public sealed class RepositoryService(AppDbContext context,
         await _context.Assets.ExecuteDeleteAsync().ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
     public async Task<Asset?> FindAssetByPlatesNumberAsync(string platesNumber)
     {
         var assetList = await GetAssetListDescendingAsync().ConfigureAwait(false);
         return assetList.FirstOrDefault(asset => asset.PlatesNumber == platesNumber);
     }
+
     public async Task<bool> IsAssetExistAsync(string plateNumber) =>
        await _context.Assets.AsNoTracking().AnyAsync(prop => prop.PlatesNumber == plateNumber).ConfigureAwait(false);
     #endregion
@@ -330,16 +144,19 @@ public sealed class RepositoryService(AppDbContext context,
        .OrderByDescending(assetImg => assetImg.Id)
        .ToListAsync()
        .ConfigureAwait(false);
+
     public async Task<AssetImage?> GetAssetImageAsync(Guid assetImageID) =>
      await _context
     .AssetImages.AsNoTracking()
     .SingleOrDefaultAsync(assetImg => assetImg.Id == assetImageID)
     .ConfigureAwait(false);
+
     public async Task AddAssetImageAsync(AssetImage assetImage)
     {
         await _context.AssetImages.AddAsync(assetImage).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
     public async Task DeleteAssetImage(AssetImage assetImage)
     {
         if (assetImage == null || assetImage.FileName == null)
@@ -363,6 +180,7 @@ public sealed class RepositoryService(AppDbContext context,
             .Persons.AsNoTracking()
             .OrderByDescending(per => per.Id)
             .ToListAsync().ConfigureAwait(false);
+
     public async Task<Person?> GetPersonAsync(Guid id) =>
         await _context.Persons.AsNoTracking().SingleOrDefaultAsync(pers => pers.Id == id).ConfigureAwait(false);
 
@@ -394,6 +212,7 @@ public sealed class RepositoryService(AppDbContext context,
         _context.Persons.ExecuteDelete();
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
     public async Task<bool> IsPersonExistAsync(long personID) =>
       await _context.Persons.AsNoTracking().AnyAsync(pers => pers.PersonID == personID).ConfigureAwait(false);
     #endregion
@@ -425,6 +244,7 @@ public sealed class RepositoryService(AppDbContext context,
         _context.Supports.Update(updateSupport);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
     public async Task DeleteSupportAsync(SupportApp support)
     {
         if (support == null)
@@ -503,3 +323,6 @@ public sealed class RepositoryService(AppDbContext context,
     #endregion
 
 }
+
+
+
