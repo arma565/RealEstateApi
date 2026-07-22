@@ -106,14 +106,16 @@ public sealed class UserController(
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.RegisterUserAsync(registerUserModel).ConfigureAwait(false);
+            var registerResult = await _userService.RegisterUserAsync(registerUserModel).ConfigureAwait(false);
 
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            if (!registerResult.Succeeded)
+                return BadRequest(registerResult.Errors);
 
             var registeredUser = await _userService.FindUserByUserNameAsync(registerUserModel.UserName).ConfigureAwait(false);
-            await _adminService.AssignRole(registeredUser!).ConfigureAwait(false);
-            return CreatedAtAction(nameof(GetUserAsync), new { userName = registeredUser!.UserName }, registeredUser);
+            var assignResult = await _adminService.AssignRole(registeredUser!,allUsers).ConfigureAwait(false);
+            if(!assignResult.Succeeded)
+                return BadRequest(assignResult.Errors);
+            return Created();
         }
         catch (ArgumentNullException ex)
         {

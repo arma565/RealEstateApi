@@ -112,17 +112,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    string[] roles = { Roles.Admin, Roles.User };
-
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role).ConfigureAwait(false))
-            await roleManager.CreateAsync(new IdentityRole(role)).ConfigureAwait(false);
-    }
+    await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider).ConfigureAwait(false);
 };
-
-
 
 //middleware
 if (app.Environment.IsDevelopment())
@@ -138,4 +129,4 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+await app.RunAsync().ConfigureAwait(false);
