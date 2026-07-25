@@ -5,7 +5,28 @@
     "version": "1.0"
   },
   "paths": {
-    "/Admin/user/users": {
+    "/Admin/admin/promote": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users": {
       "get": {
         "tags": [
           "Admin"
@@ -43,7 +64,7 @@
         }
       }
     },
-    "/Admin/user/delete-all": {
+    "/delete-users": {
       "delete": {
         "tags": [
           "Admin"
@@ -55,7 +76,7 @@
         }
       }
     },
-    "/Admin/user/delete/{userName}": {
+    "/delete/{userName}": {
       "delete": {
         "tags": [
           "Admin"
@@ -877,7 +898,7 @@
         }
       }
     },
-    "/User/user/{userName}": {
+    "/{userName}": {
       "get": {
         "tags": [
           "User"
@@ -916,7 +937,7 @@
         }
       }
     },
-    "/User/user/register": {
+    "/register": {
       "post": {
         "tags": [
           "User"
@@ -952,7 +973,7 @@
         }
       }
     },
-    "/User/user/login": {
+    "/login": {
       "post": {
         "tags": [
           "User"
@@ -988,7 +1009,7 @@
         }
       }
     },
-    "/User/user/delete": {
+    "/delete": {
       "delete": {
         "tags": [
           "User"
@@ -1024,7 +1045,7 @@
         }
       }
     },
-    "/User/user/reset/password": {
+    "/reset-password": {
       "post": {
         "tags": [
           "User"
@@ -1060,7 +1081,7 @@
         }
       }
     },
-    "/User/user/change/password": {
+    "/change-password": {
       "post": {
         "tags": [
           "User"
@@ -1096,7 +1117,7 @@
         }
       }
     },
-    "/User/user/forgot/password": {
+    "/forgot-password": {
       "post": {
         "tags": [
           "User"
@@ -1149,7 +1170,7 @@
         }
       }
     },
-    "/User/user/edit/profile": {
+    "/edit-profile": {
       "put": {
         "tags": [
           "User"

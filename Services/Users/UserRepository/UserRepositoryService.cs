@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RealEstate.Authorization;
 using RealEstate.Data;
 using RealEstate.Models.Users;
 using RealEstate.Services.Images;

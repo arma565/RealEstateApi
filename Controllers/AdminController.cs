@@ -1,11 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
-using RealEstate.Authentication;
-using RealEstate.Helper;
 using RealEstate.Models.Users;
-using RealEstate.Services.Images;
 using RealEstate.Services.Users.AdminRepository;
 using RealEstate.Services.Users.UserRepository;
 using System.Security;
@@ -26,11 +21,28 @@ public sealed class AdminController(
     private readonly AdminRepositoryService _adminService = adminService;
     private readonly UserRepositoryService _userService = userService;
 
+    [HttpPost("/promote")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<IActionResult> PromoteUser(string userName) {
+
+        var user = await _userService.FindUserByUserNameAsync(userName).ConfigureAwait(false);
+
+        if (user == null)
+            return NotFound("User not found!");
+
+        var promoteResult = await _adminService.PromoteUser(user).ConfigureAwait(false);
+
+        if (!promoteResult.Succeeded)
+            return StatusCode(500);
+
+        return Ok("User is admin now");
+    }
+
     /// <summary>
     /// Retrieves all registered users.
     /// </summary>
     /// <returns>Returns a list of all users.</returns>
-    [HttpGet("user/users")]
+    [HttpGet("/users")]
     [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult<List<User>>> GetUsersAsync() => Ok(await _adminService.GetUsersAsync().ConfigureAwait(false));
 
@@ -38,7 +50,7 @@ public sealed class AdminController(
     /// Deletes all users.
     /// </summary>
     /// <returns>Returns 200 OK if successful, or 500 for errors.</returns>
-    [HttpDelete("user/delete-all")]
+    [HttpDelete("/delete-users")]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteUsersAsync()
     {
@@ -75,24 +87,27 @@ public sealed class AdminController(
     }
 
     /// <summary>
-    /// Deletes a user by username and password.
+    /// Delete admin by username.
     /// </summary>
     /// <param name="username">The username of the user.</param>
-    /// <param name="password">The password of the user.</param>
     /// <returns>Returns 204 NoContent if successful, 400 BadRequest for invalid input or incorrect password, 404 NotFound if user not found.</returns>
-    [HttpDelete("user/delete/{userName}")]
+    [HttpDelete("/delete/{userName}")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> DeleteUserAsync(string userName)
+    public async Task<IActionResult> DeleteAdminAsync(string userName)
     {
         try
         {
+            var adminUser = await _userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
 
-            var user = await _userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+            if (adminUser == null)
+                return NotFound("Admin user not found!");
 
-            if (user == null)
-                return NotFound("User not found.");
+            var isAdmin = await _adminService.IsAdmin(adminUser).ConfigureAwait(false);
 
-            var res = await _userService.DeleteUserAsync(user!).ConfigureAwait(false);
+            if (!isAdmin)
+                return Unauthorized("This user is not an admin!");
+
+            var res = await _userService.DeleteUserAsync(adminUser).ConfigureAwait(false);
 
             if (!res.Succeeded)
                 return BadRequest(res.Errors);
