@@ -1,11 +1,11 @@
-﻿namespace RealEstate.Models.Property.Enums.Payment
+﻿namespace RealEstate.Models.Property.Enums.Payment;
+
+#pragma warning disable CA1515
+public enum PaymentStatus
 {
-    public enum PaymentStatus
-    {
-        Pending,
-        Completed,
-        Failed,
-        Cancelled,
-        Refunded
-    }
+    Pending,
+    Completed,
+    Failed,
+    Cancelled,
+    Refunded
 }

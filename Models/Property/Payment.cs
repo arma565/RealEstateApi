@@ -1,17 +1,22 @@
-﻿namespace RealEstate.Models.Property
+﻿using RealEstate.Models.Property.Enums.Payment;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+
+namespace RealEstate.Models.Property;
+
+#pragma warning disable CA1515
+public class Payment
 {
-    public class Payment
-    {
-        public Guid Id { get; set; }
-
-        public Guid LeaseId { get; set; }
-
-        public decimal Amount { get; set; }
-
-        public DateTime PaidAt { get; set; }
-
-        public PaymentType Type { get; set; }
-
-        public PaymentStatus Status { get; set; }
-    }
+    [Key]
+    public Guid Id { get; set; }
+    [DefaultValue(0.0)]
+    public decimal Amount { get; set; }
+    public DateTime PaidAt { get; set; } = DateTime.Parse(DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+    [DefaultValue(PaymentType.Deposit)]
+    public PaymentType Type { get; set; }
+    [DefaultValue(PaymentStatus.Pending)]
+    public PaymentStatus Status { get; set; }
+    public Guid LeaseId { get; set; }
+    public Lease lease { get; set; } = default!;
 }

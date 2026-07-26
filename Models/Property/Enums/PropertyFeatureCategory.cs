@@ -1,10 +1,10 @@
-﻿namespace RealEstate.Models.Property.Enums
+﻿namespace RealEstate.Models.Property.Enums;
+
+#pragma warning disable CA1515  
+public enum PropertyFeatureCategory
 {
-    public enum PropertyFeatureCategory
-    {
-        Interior,
-        Exterior,
-        Security,
-        Utilities
-    }
+    Interior,
+    Exterior,
+    Security,
+    Utilities
 }

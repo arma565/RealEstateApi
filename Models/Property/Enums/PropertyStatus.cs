@@ -1,11 +1,11 @@
-﻿namespace RealEstate.Models.Property.Enums
+﻿namespace RealEstate.Models.Property.Enums;
+
+#pragma warning disable CA1515
+public enum PropertyStatus
 {
-    public enum PropertyStatus
-    {
-        ForSale = 1,
-        ForRent = 2,
-        Sold = 3,
-        Rented = 4,
-        Pending = 5
-    }
+    ForSale = 0,
+    ForRent = 1,
+    Sold = 2,
+    Rented = 3,
+    Pending = 4
 }
