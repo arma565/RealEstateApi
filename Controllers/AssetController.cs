@@ -49,7 +49,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
 
             foreach (var img in imageUrlList)
             {
-                var assetImage = new AssetImage()
+                var assetImage = new PropertyImage()
                 {
                     FileName = img,
                     AssetID = realEstateAssetID
@@ -104,7 +104,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
             if (string.IsNullOrWhiteSpace(imageFileName))
                 return BadRequest("Image file name is empty!");
 
-            List<AssetImage> assetImagesList = await _service.GetAssetImageListAsync().ConfigureAwait(false);
+            List<PropertyImage> assetImagesList = await _service.GetAssetImageListAsync().ConfigureAwait(false);
 
             var assetImage = assetImagesList.FirstOrDefault(assetImg => assetImg.FileName == imageFileName);
 
@@ -167,21 +167,21 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
     /// </summary>
     /// <returns>Returns a list of assets ordered descendingly.</returns>
     [HttpGet("asset/desc")]
-    public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDescending() => Ok(await _service.GetAssetListDescendingAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<RealEstateProperty>>> GetAssetListDescending() => Ok(await _service.GetAssetListDescendingAsync().ConfigureAwait(false));
 
     /// <summary>
     /// Gets the list of assets in ascending order.
     /// </summary>
     /// <returns>Returns a list of assets ordered ascendingly.</returns>
     [HttpGet("asset/asc")]
-    public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListAscending() => Ok(await _service.GetAssetListAscendingAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<RealEstateProperty>>> GetAssetListAscending() => Ok(await _service.GetAssetListAscendingAsync().ConfigureAwait(false));
 
     /// <summary>
     /// Gets the list of assets ordered by date modified.
     /// </summary>
     /// <returns>Returns a list of assets ordered by date modified.</returns>
     [HttpGet("asset/date")]
-    public async Task<ActionResult<IEnumerable<Asset>>> GetAssetListDateModified() => Ok(await _service.GetAssetListDateModifiedAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<RealEstateProperty>>> GetAssetListDateModified() => Ok(await _service.GetAssetListDateModifiedAsync().ConfigureAwait(false));
 
     /// <summary>
     /// Gets a specific asset by its ID.
@@ -189,7 +189,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
     /// <param name="assetID">The GUID of the asset.</param>
     /// <returns>Returns the asset if found.</returns>
     [HttpGet("asset/{assetID}")]
-    public async Task<ActionResult<Asset>> GetAsset(string assetID)
+    public async Task<ActionResult<RealEstateProperty>> GetAsset(string assetID)
     {
         try
         {
@@ -199,7 +199,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
             if (!Guid.TryParse(assetID, out Guid realEstateAssetID))
                 return BadRequest("AssetID must be a valid GUID!");
 
-            Asset? asset = await _service.GetAssetAsync(realEstateAssetID).ConfigureAwait(false);
+            RealEstateProperty? asset = await _service.GetAssetAsync(realEstateAssetID).ConfigureAwait(false);
 
             if (asset is null)
                 return NotFound("No such asset found!");
@@ -245,7 +245,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
     /// <param name="newAsset">The asset object to add.</param>
     /// <returns>Returns the created asset with its location.</returns>
     [HttpPost("asset/add")]
-    public async Task<IActionResult> AddAsset([FromBody] Asset newAsset)
+    public async Task<IActionResult> AddAsset([FromBody] RealEstateProperty newAsset)
     {
         try
         {
@@ -297,7 +297,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
             else newAsset.OrderID = 1;
 
 
-            Asset? addedAsset = await _service.AddAssetAsync(newAsset).ConfigureAwait(false);
+            RealEstateProperty? addedAsset = await _service.AddAssetAsync(newAsset).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsset), new { assetID = newAsset.Id }, newAsset);
         }
@@ -340,14 +340,14 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
     /// <param name="updateAsset">The asset object with updated values.</param>
     /// <returns>Returns no content if update is successful.</returns>
     [HttpPut("asset/update")]
-    public async Task<IActionResult> UpdateAsset([FromBody] Asset updateAsset)
+    public async Task<IActionResult> UpdateAsset([FromBody] RealEstateProperty updateAsset)
     {
         try
         {
             if (updateAsset == null)
                 return BadRequest("Failed to retrieve parameter!");
 
-            Asset? asset = await _service.GetAssetAsync(updateAsset.Id).ConfigureAwait(false);
+            RealEstateProperty? asset = await _service.GetAssetAsync(updateAsset.Id).ConfigureAwait(false);
 
             if (asset is null)
                 return NotFound("No such asset found!");
@@ -412,7 +412,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
             if (!Guid.TryParse(assetID, out Guid realEstateID))
                 return BadRequest("Id must be a valid GUID!");
 
-            Asset? asset = await _service.GetAssetAsync(realEstateID).ConfigureAwait(false);
+            RealEstateProperty? asset = await _service.GetAssetAsync(realEstateID).ConfigureAwait(false);
 
             if (asset is null)
                 return NotFound("No such asset found!");
@@ -482,7 +482,7 @@ public sealed class AssetController(AssetRepositoryService service, ImageService
             if (!Guid.TryParse(assetImageID, out Guid realEstateAssetImageID))
                 return BadRequest("AssetImageID must be a valid GUID!");
 
-            AssetImage? assetImage = await _service.GetAssetImageAsync(realEstateAssetImageID).ConfigureAwait(false);
+            PropertyImage? assetImage = await _service.GetAssetImageAsync(realEstateAssetImageID).ConfigureAwait(false);
 
             if (assetImage is null)
                 return NotFound("No such assetImage found!");

@@ -11,22 +11,22 @@ namespace RealEstate.Services.Assets;
   interface IAssetRepositoryService
 {
     #region Asset
-    Task<IEnumerable<Asset>> GetAssetListDescendingAsync();
-    Task<IEnumerable<Asset>> GetAssetListAscendingAsync();
-    Task<IEnumerable<Asset>> GetAssetListDateModifiedAsync();
-    Task<Asset?> GetAssetAsync(Guid assetID);
-    Task<Asset?> AddAssetAsync(Asset newAsset);
-    Task UpdateAssetAsync(Asset asset);
-    Task DeleteAssetAsync(Asset asset);
+    Task<IEnumerable<RealEstateProperty>> GetAssetListDescendingAsync();
+    Task<IEnumerable<RealEstateProperty>> GetAssetListAscendingAsync();
+    Task<IEnumerable<RealEstateProperty>> GetAssetListDateModifiedAsync();
+    Task<RealEstateProperty?> GetAssetAsync(Guid assetID);
+    Task<RealEstateProperty?> AddAssetAsync(RealEstateProperty newAsset);
+    Task UpdateAssetAsync(RealEstateProperty asset);
+    Task DeleteAssetAsync(RealEstateProperty asset);
     Task DeleteAllAssetsAsync();
-    Task<Asset?> FindAssetByPlatesNumberAsync(string platesNumber);
+    Task<RealEstateProperty?> FindAssetByPlatesNumberAsync(string platesNumber);
     Task<bool> IsAssetExistAsync(string plateNumber);
     #endregion
     #region AssetImage
-    Task<List<AssetImage>> GetAssetImageListAsync();
-    Task<AssetImage?> GetAssetImageAsync(Guid assetImageID);
-    Task AddAssetImageAsync(AssetImage assetImage);
-    Task DeleteAssetImage(AssetImage assetImage);
+    Task<List<PropertyImage>> GetAssetImageListAsync();
+    Task<PropertyImage?> GetAssetImageAsync(Guid assetImageID);
+    Task AddAssetImageAsync(PropertyImage assetImage);
+    Task DeleteAssetImage(PropertyImage assetImage);
     #endregion
     #region Person
     Task<IEnumerable<Person>> GetPersonsListAsync();
@@ -48,62 +48,62 @@ public sealed class AssetRepositoryService(AppDbContext context,
     private readonly ImageService _imageService = imageService;
 
     #region Asset
-    public async Task<IEnumerable<Asset>> GetAssetListDescendingAsync() =>
+    public async Task<IEnumerable<RealEstateProperty>> GetAssetListDescendingAsync() =>
           await _context
             .Assets
             .AsNoTracking()
             .Include(prop => prop.Persons)
-            .Include(assetImg => assetImg.AssetImages)
+            .Include(assetImg => assetImg.PropertyImages)
             .OrderByDescending(prop => prop.OrderID)
             .ToListAsync().ConfigureAwait(false);
 
-    public async Task<IEnumerable<Asset>> GetAssetListAscendingAsync() =>
+    public async Task<IEnumerable<RealEstateProperty>> GetAssetListAscendingAsync() =>
         await _context
             .Assets
             .AsNoTracking()
             .Include(prop => prop.Persons)
-            .Include(assetImg => assetImg.AssetImages)
+            .Include(assetImg => assetImg.PropertyImages)
             .OrderBy(prop => prop.OrderID)
             .ToListAsync().ConfigureAwait(false);
 
-    public async Task<IEnumerable<Asset>> GetAssetListDateModifiedAsync() =>
+    public async Task<IEnumerable<RealEstateProperty>> GetAssetListDateModifiedAsync() =>
         await _context
             .Assets
             .AsNoTracking()
             .Include(prop => prop.Persons)
-            .Include(assetImg => assetImg.AssetImages)
+            .Include(assetImg => assetImg.PropertyImages)
             .OrderBy(prop => prop.Date)
             .ToListAsync().ConfigureAwait(false);
 
-    public async Task<Asset?> GetAssetAsync(Guid assetID) =>
+    public async Task<RealEstateProperty?> GetAssetAsync(Guid assetID) =>
         await _context
             .Assets
             .AsNoTracking()
             .Include(prop => prop.Persons)
-            .Include(assetImg => assetImg.AssetImages)
+            .Include(assetImg => assetImg.PropertyImages)
             .SingleOrDefaultAsync(prop => prop.Id == assetID)
             .ConfigureAwait(false);
 
-    public async Task<Asset?> AddAssetAsync(Asset newAsset)
+    public async Task<RealEstateProperty?> AddAssetAsync(RealEstateProperty newAsset)
     {
         await _context.Assets.AddAsync(newAsset).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
         return newAsset;
     }
 
-    public async Task UpdateAssetAsync(Asset asset)
+    public async Task UpdateAssetAsync(RealEstateProperty asset)
     {
         _context.Assets.Update(asset);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task DeleteAssetAsync(Asset asset)
+    public async Task DeleteAssetAsync(RealEstateProperty asset)
     {
-        if (asset == null || asset.AssetImages == null)
+        if (asset == null || asset.PropertyImages == null)
             return;
 
         var environmentPath = _imageService.GetLocalImagesFullPath("asset");
-        foreach (var assetImg in asset.AssetImages)
+        foreach (var assetImg in asset.PropertyImages)
         {
             File.Delete(Path.Combine(environmentPath, assetImg.FileName));
         }
@@ -126,7 +126,7 @@ public sealed class AssetRepositoryService(AppDbContext context,
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task<Asset?> FindAssetByPlatesNumberAsync(string platesNumber)
+    public async Task<RealEstateProperty?> FindAssetByPlatesNumberAsync(string platesNumber)
     {
         var assetList = await GetAssetListDescendingAsync().ConfigureAwait(false);
         return assetList.FirstOrDefault(asset => asset.PlatesNumber == platesNumber);
@@ -137,7 +137,7 @@ public sealed class AssetRepositoryService(AppDbContext context,
     #endregion
 
     #region AssetImage
-    public async Task<List<AssetImage>> GetAssetImageListAsync() =>
+    public async Task<List<PropertyImage>> GetAssetImageListAsync() =>
        await _context
        .AssetImages
        .AsNoTracking()
@@ -145,19 +145,19 @@ public sealed class AssetRepositoryService(AppDbContext context,
        .ToListAsync()
        .ConfigureAwait(false);
 
-    public async Task<AssetImage?> GetAssetImageAsync(Guid assetImageID) =>
+    public async Task<PropertyImage?> GetAssetImageAsync(Guid assetImageID) =>
      await _context
     .AssetImages.AsNoTracking()
     .SingleOrDefaultAsync(assetImg => assetImg.Id == assetImageID)
     .ConfigureAwait(false);
 
-    public async Task AddAssetImageAsync(AssetImage assetImage)
+    public async Task AddAssetImageAsync(PropertyImage assetImage)
     {
         await _context.AssetImages.AddAsync(assetImage).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task DeleteAssetImage(AssetImage assetImage)
+    public async Task DeleteAssetImage(PropertyImage assetImage)
     {
         if (assetImage == null || assetImage.FileName == null)
             return;

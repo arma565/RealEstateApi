@@ -8,8 +8,8 @@ namespace RealEstate.Data;
 
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public required DbSet<Asset> Assets { get; set; }
-    public required DbSet<AssetImage> AssetImages { get; set; }
+    public required DbSet<RealEstateProperty> Assets { get; set; }
+    public required DbSet<PropertyImage> AssetImages { get; set; }
     public required DbSet<Person> Persons { get; set; }
     public required DbSet<SupportApp> Supports { get; set; }
     public required DbSet<SupportImage> SupportImages { get; set; }
@@ -21,7 +21,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
         base.OnModelCreating(modelBuilder);
 
         modelBuilder
-            .Entity<Asset>()
+            .Entity<RealEstateProperty>()
             .HasMany(asset => asset.Persons)
             .WithOne(pers => pers.Asset)
             .HasForeignKey(pers => pers.AssetID)
@@ -30,8 +30,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder
-            .Entity<Asset>()
-            .HasMany(asset => asset.AssetImages)
+            .Entity<RealEstateProperty>()
+            .HasMany(asset => asset.PropertyImages)
             .WithOne(assetImg => assetImg.Asset)
             .HasForeignKey(assetImg => assetImg.AssetID)
             .HasPrincipalKey(asset => asset.Id)

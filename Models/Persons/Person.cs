@@ -20,7 +20,7 @@ public sealed class Person
     private string _phone = "";
     private string _role = "";
     private Guid _assetID;
-    private readonly Asset? _asset;
+    private readonly RealEstateProperty? _asset;
 
     [Key]
     public Guid Id
@@ -88,6 +88,6 @@ public sealed class Person
         get => _assetID;
         set => _assetID = value;
     }
-    public Asset? Asset => _asset;
+    public RealEstateProperty? Asset => _asset;
 }
 
