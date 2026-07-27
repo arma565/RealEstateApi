@@ -1,4 +1,4 @@
-﻿namespace RealEstate.Models.Property.Enums.Payment;
+﻿namespace RealEstate.Models.Enums.Properties.Payment;
 
 #pragma warning disable CA1515
 public enum PaymentType

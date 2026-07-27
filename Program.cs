@@ -8,10 +8,6 @@ using RealEstate.Authorization;
 using RealEstate.Data;
 using RealEstate.Helper;
 using RealEstate.Models.Users;
-using RealEstate.Services.Assets;
-using RealEstate.Services.Images;
-using RealEstate.Services.Users.AdminRepository;
-using RealEstate.Services.Users.UserRepository;
 using System.Text;
 
 var MyAllowSpecificOrigins = "_estatePolicy";
@@ -40,13 +36,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PropertyConnection"))
 );
 
-builder.Services.AddDbContext<UserIdentityDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PropertyConnection"))
-);
-
 builder
-    .Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<UserIdentityDbContext>()
+    .Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -74,10 +66,10 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
 });
 
-builder.Services.AddScoped<AssetRepositoryService>();
-builder.Services.AddScoped<UserRepositoryService>();
-builder.Services.AddScoped<AdminRepositoryService>();
-builder.Services.AddScoped<ImageService>();
+//builder.Services.AddScoped<ProeprtyRepositoryService>();
+//builder.Services.AddScoped<UserRepositoryService>();
+//builder.Services.AddScoped<AdminRepositoryService>();
+//builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<PasswordHelper>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));

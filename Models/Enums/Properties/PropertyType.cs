@@ -1,4 +1,4 @@
-﻿namespace RealEstate.Models.Property.Enums;
+﻿namespace RealEstate.Models.Enums.Properties;
 
 #pragma warning disable CA1515
 public enum PropertyType

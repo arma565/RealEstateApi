@@ -9,14 +9,14 @@ namespace RealEstate.Services.Users.UserRepository
 {
 #pragma warning disable CA1515
     public class UserRepositoryService(UserIdentityDbContext userIdentityContext,
-                                        UserManager<User> userManager,
-                                        SignInManager<User> signInManager,
+                                        UserManager<ApplicationUser> userManager,
+                                        SignInManager<ApplicationUser> signInManager,
                                         ImageService imageService)
     {
 
         private readonly UserIdentityDbContext _userIdentityContext = userIdentityContext;
-        private readonly UserManager<User> _userManager = userManager;
-        private readonly SignInManager<User> _signInManager = signInManager;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly ImageService _imageService = imageService;
 
         #region UserServices
@@ -25,7 +25,7 @@ namespace RealEstate.Services.Users.UserRepository
         /// This function return a user using id
         /// </summary>
         /// <returns> User associated to user ID </returns>
-        public async Task<User?> GetUserByIDAsync(string userID) =>
+        public async Task<ApplicationUser?> GetUserByIDAsync(string userID) =>
              await _userManager
                  .Users.AsNoTracking()
                  .Include(user => user.ProfileImage)
@@ -36,7 +36,7 @@ namespace RealEstate.Services.Users.UserRepository
         /// This function return a user using userName
         /// </summary>
         /// <returns> User associated to userName </returns>
-        public async Task<User?> GetUserByUserNameAsync(string userName) =>
+        public async Task<ApplicationUser?> GetUserByUserNameAsync(string userName) =>
              await _userManager
                  .Users
                  .AsNoTracking()
@@ -58,7 +58,7 @@ namespace RealEstate.Services.Users.UserRepository
                     Description = "Failed to retrieve parameter!"
                 });
 
-            return await _userManager.CreateAsync(new User
+            return await _userManager.CreateAsync(new ApplicationUser
             {
                 UserName = userRegister.UserName,
                 Email = userRegister.Email,
@@ -92,7 +92,7 @@ namespace RealEstate.Services.Users.UserRepository
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<IdentityResult> DeleteUserAsync(User user)
+        public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
         {
             if (user?.ProfileImage != null && user.ProfileImage.ProfileImageName != null)
             {
@@ -113,7 +113,7 @@ namespace RealEstate.Services.Users.UserRepository
         /// User account which needs reset
         /// </param>
         /// <returns></returns>
-        public async Task<string> GenerateTokenToRecoverUserAsync(User user) => await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+        public async Task<string> GenerateTokenToRecoverUserAsync(ApplicationUser user) => await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
         
         /// <summary>
         /// Reset the user account password
@@ -129,7 +129,7 @@ namespace RealEstate.Services.Users.UserRepository
         /// </param>
         /// <returns></returns>
         public async Task<IdentityResult> ResetPasswordAsync(
-            User user,
+            ApplicationUser user,
             string token,
             string newPassword
         ) => await _userManager.ResetPasswordAsync(user, token, newPassword).ConfigureAwait(false);
@@ -147,7 +147,7 @@ namespace RealEstate.Services.Users.UserRepository
         /// New password for the account
         /// </param>
         /// <returns></returns>
-        public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
+        public async Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
         {
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
@@ -159,15 +159,15 @@ namespace RealEstate.Services.Users.UserRepository
         /// user account
         /// </param>
         /// <returns></returns>
-        public async Task<IdentityResult> EditUserProfileAsync(User editUser) => await _userManager.UpdateAsync(editUser).ConfigureAwait(false);
+        public async Task<IdentityResult> EditUserProfileAsync(ApplicationUser editUser) => await _userManager.UpdateAsync(editUser).ConfigureAwait(false);
 
-        public async Task<User?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
+        public async Task<ApplicationUser?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
-        public async Task<User?> FindUserByUserNameAsync(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
+        public async Task<ApplicationUser?> FindUserByUserNameAsync(string userName) => await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
 
-        public async Task<User?> FindUserByIDAsync(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+        public async Task<ApplicationUser?> FindUserByIDAsync(string userId) => await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
-        public async Task<bool> IsEmailConfirmed(User user) => await _userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false);
+        public async Task<bool> IsEmailConfirmed(ApplicationUser user) => await _userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false);
 
         #endregion
 

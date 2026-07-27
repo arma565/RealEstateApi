@@ -1,34 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
-using RealEstate.Models.Assets;
 using RealEstate.Models.Persons;
 using RealEstate.Models.Support;
 using RealEstate.Services.Images;
 
 #pragma warning disable CA1515
-namespace RealEstate.Services.Assets;
+namespace RealEstate.Services.Persons;
 
-  interface IAssetRepositoryService
+  interface IPersonRepositoryService
 {
-    #region Asset
-    Task<IEnumerable<RealEstateProperty>> GetAssetListDescendingAsync();
-    Task<IEnumerable<RealEstateProperty>> GetAssetListAscendingAsync();
-    Task<IEnumerable<RealEstateProperty>> GetAssetListDateModifiedAsync();
-    Task<RealEstateProperty?> GetAssetAsync(Guid assetID);
-    Task<RealEstateProperty?> AddAssetAsync(RealEstateProperty newAsset);
-    Task UpdateAssetAsync(RealEstateProperty asset);
-    Task DeleteAssetAsync(RealEstateProperty asset);
-    Task DeleteAllAssetsAsync();
-    Task<RealEstateProperty?> FindAssetByPlatesNumberAsync(string platesNumber);
-    Task<bool> IsAssetExistAsync(string plateNumber);
-    #endregion
-    #region AssetImage
-    Task<List<PropertyImage>> GetAssetImageListAsync();
-    Task<PropertyImage?> GetAssetImageAsync(Guid assetImageID);
-    Task AddAssetImageAsync(PropertyImage assetImage);
-    Task DeleteAssetImage(PropertyImage assetImage);
-    #endregion
-    #region Person
     Task<IEnumerable<Person>> GetPersonsListAsync();
     Task<Person?> GetPersonAsync(Guid id);
     Task<bool> GetPersonByPersonIDAsync(long personID);
@@ -37,17 +17,16 @@ namespace RealEstate.Services.Assets;
     Task DeletePersonAsync(Person deletePerson);
     Task DeleteAllPersonsAsync();
     Task<bool> IsPersonExistAsync(long personID);
-    #endregion
 }
 
-public sealed class AssetRepositoryService(AppDbContext context,
-                                        ImageService imageService) : IAssetRepositoryService
+public sealed class ProeprtyRepositoryService(AppDbContext context,
+                                        ImageService imageService) : IPersonRepositoryService
 {
     private readonly AppDbContext _context = context;
 
     private readonly ImageService _imageService = imageService;
 
-    #region Asset
+    #region Property
     public async Task<IEnumerable<RealEstateProperty>> GetAssetListDescendingAsync() =>
           await _context
             .Assets

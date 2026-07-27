@@ -1,93 +1,51 @@
-using RealEstate.Models.Assets;
+
+using RealEstate.Models.Enums.Persons;
+using RealEstate.Models.Property;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 #pragma warning disable CA1515
-#pragma warning disable CS0649
 namespace RealEstate.Models.Persons;
 
-public sealed class Person
+public class Person()
 {
-    public Person() { }
-
-    private Guid _id;
-    private string _name = "";
-    private string _fatherName = "";
-    private long _birthCertificateNumber;
-    private string _birthCertificateIssued = "";
-    private long _personID;
-    private string _born = "";
-    private string _address = "";
-    private string _phone = "";
-    private string _role = "";
-    private Guid _assetID;
-    private readonly RealEstateProperty? _asset;
-
     [Key]
-    public Guid Id
-    {
-        get => _id;
-        set => _id = value;
-    }
+    public Guid Id { get; set; }
 
-    [Required(ErrorMessage = "Person name is required!")]
-    public string Name
-    {
-        get => _name;
-        set => _name = value;
-    }
-    public string FatherName
-    {
-        get => _fatherName;
-        set => _fatherName = value;
-    }
-    [Range(10,long.MaxValue , ErrorMessage =("Birth Certificate Number must be greater than 10!"))]
-    public long BirthCertificateNumber
-    {
-        get => _birthCertificateNumber;
-        set => _birthCertificateNumber = value;
-    }
+    [Required(ErrorMessage = "First name is required!")]
+    public string? FirstName { get; set; } = default;
 
-    public string BirthCertificateIssued
-    {
-        get => _birthCertificateIssued;
-        set => _birthCertificateIssued = value;
-    }
+    [Required(ErrorMessage = "Last name is required!")]
+    public string? LastName { get; set; } = default;
 
-    [Range(10, long.MaxValue, ErrorMessage = ("PersonID must be greater than 10!"))]
-    public long PersonID
-    {
-        get => _personID;
-        set => _personID = value;
-    }
-    public string Born
-    {
-        get => _born;
-        set => _born = value;
-    }
+    [Required(ErrorMessage = "Father's name is required!")]
+    public string? FatherName { get; set; } = default;
 
-    [Required(ErrorMessage = "Address is required!")]
-    public string Address
-    {
-        get => _address;
-        set => _address = value;
-    }
+    [Required(ErrorMessage = "Birth certificate number is required!")]
+    [Range(10, long.MaxValue, ErrorMessage = ("Birth Certificate Number must be greater than 10 numbers!"))]
+    public long BirthCertificateNumber { get; set; } = default;
+
+    public string? BirthCertificateIssued { get; set; } = default!;
+
+    [Required(ErrorMessage = "National ID is required!")]
+    [Range(10, long.MaxValue, ErrorMessage = ("NationalId must be greater than 10 numbers!"))]
+    public long NationalId { get; set; } = default;
+
+    public string Born { get; set; } = default!;
 
     [Required(ErrorMessage = "Phone is required!")]
-    public string Phone
-    {
-        get => _phone;
-        set => _phone = value;
-    }
-    public string Role
-    {
-        get => _role;
-        set => _role = value;
-    }
-    public Guid AssetID
-    {
-        get => _assetID;
-        set => _assetID = value;
-    }
-    public RealEstateProperty? Asset => _asset;
+    public string Phone { get; set; } = default!;
+
+    [Required(ErrorMessage = "Address is required!")]
+    public string Address { get; set; } = default!;
+
+    [DefaultValue(PersonRoles.LandLord)]
+    public PersonRoles Role { get; set; } = default!;
+
+    public Guid PropertyId { get; set; }
+    public RealEstateProperty Property { get; set; } = default!;
+
+    public Guid LeaseId { get; set; } = default!;
+    public Lease Lease { get; set; } = default!;
 }
 

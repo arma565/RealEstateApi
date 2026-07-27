@@ -41,7 +41,7 @@ public sealed class UserController(
     /// <param name="userName">The userName of the user.</param>
     /// <returns>Returns the user if found, 404 NotFound if not found, or 400 BadRequest for invalid input.</returns>
     [HttpGet("/{userName}")]
-    public async Task<ActionResult<User>> GetUserAsync(string userName)
+    public async Task<ActionResult<ApplicationUser>> GetUserAsync(string userName)
     {
         try
         {
@@ -448,7 +448,7 @@ public sealed class UserController(
     /// <param name="updateUserProfileModel">The user model with updated information.</param>
     /// <returns>Returns 200 OK if successful, 400 BadRequest or 404 NotFound for errors.</returns>
     [HttpPut("/edit-profile")]
-    public async Task<IActionResult> EditUserProfile([FromBody] User editUserProfileModel)
+    public async Task<IActionResult> EditUserProfile([FromBody] ApplicationUser editUserProfileModel)
     {
         try
         {

@@ -10,9 +10,9 @@ namespace RealEstate.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public sealed class SupportController(AssetRepositoryService service, ImageService imageService) : ControllerBase
+public sealed class SupportController(ProeprtyRepositoryService service, ImageService imageService) : ControllerBase
 {
-    private readonly AssetRepositoryService _service = service;
+    private readonly ProeprtyRepositoryService _service = service;
     private readonly ImageService _imageService = imageService;
 
     #region Support

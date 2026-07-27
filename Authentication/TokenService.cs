@@ -11,14 +11,14 @@ namespace RealEstate.Authentication
     #pragma warning disable CA1515
     interface ITokenService
     {
-        Task<string> CreateAccessTokenAsync(User user);
+        Task<string> CreateAccessTokenAsync(ApplicationUser user);
     }
-    public class TokenService(UserManager<User> userManager, IOptions<JwtOptions> options) : ITokenService
+    public class TokenService(UserManager<ApplicationUser> userManager, IOptions<JwtOptions> options) : ITokenService
     {
-        private readonly UserManager<User> _userManager = userManager;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly JwtOptions _jwt = options.Value;
 
-        public async Task<string> CreateAccessTokenAsync(User user)
+        public async Task<string> CreateAccessTokenAsync(ApplicationUser user)
         {
             ArgumentNullException.ThrowIfNull(user);
 

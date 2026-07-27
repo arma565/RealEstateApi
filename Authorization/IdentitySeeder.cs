@@ -11,7 +11,7 @@ namespace RealEstate.Authorization
             string[] roles =
             [
             Roles.Admin,
-            Roles.User
+            Roles.Agent
             ];
 
             foreach (var role in roles)

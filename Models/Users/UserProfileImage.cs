@@ -1,35 +1,19 @@
 ﻿#pragma warning disable CA1515
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 namespace RealEstate.Models.Users;
 
-public sealed class UserProfileImage
+public class UserProfileImage
 {
+    [Key]
+    public Guid Id { get; set; }
 
-    private Guid _id;
-    private string _profileImageName = "";
-    private string userId = "";
-    private User? _user;
+    [DefaultValue("")]
+    public string? ProfileImageName { get; set; } = default;
 
-    public Guid Id
-    {
-        get => _id;
-        set => _id = value;
-    }
+    [DefaultValue("")]
+    public string? UserId { get; set; } = default;
 
-    public string ProfileImageName
-    {
-        get => _profileImageName;
-        set => _profileImageName = value;
-    }
-
-    public string UserID
-    {
-        get => userId;
-        set => userId = value;
-    }
-
-    public User? User
-    {
-        get => _user;
-        set => _user = value;
-    }
+    public ApplicationUser User { get; set; } = null!;
 }

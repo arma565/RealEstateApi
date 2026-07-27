@@ -1,28 +1,18 @@
 ﻿
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 namespace RealEstate.Models.Support;
 
 #pragma warning disable CA1515
-public sealed class SupportImage
+public class SupportImage
 {
-    private Guid _id;
-    private string _supportImageFileName = "";
-    private Guid supportId;
-    private SupportApp? _support;
+    [Key]
+    public Guid Id { get; set; }
 
-    public Guid Id {
-        get => _id;
-        set => _id = value; 
-    }
-    public string SupportImageFileName { 
-        get => _supportImageFileName;
-        set => _supportImageFileName = value;
-    }
-    public Guid SupportId {
-        get => supportId;
-        set => supportId = value;
-    }
-    public SupportApp? Support {
-        get => _support; 
-        set => _support = value;
-    }
+    [DefaultValue("")]
+    public string? SupportImageFileName { get; set; } = default;
+
+    public Guid SupportId { get; set; }
+    public SupportApp Support { get; set; } = null!;
 }

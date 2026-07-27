@@ -6,6 +6,9 @@ namespace RealEstate.Models.Property.Addresses;
 #pragma warning disable CA1515
 public class PropertyAddress
 {
+    [Key]
+    public Guid Id { get; set; }
+
     [Required(ErrorMessage = "Country is required!")]
     public string? Country { get; set; } = default;
 
@@ -14,6 +17,7 @@ public class PropertyAddress
 
     [Required(ErrorMessage = "City is required!")]
     public string? City { get; set; } = default;
+
     [DefaultValue("")]
     public string? District { get; set; } = default!;
 
@@ -22,6 +26,7 @@ public class PropertyAddress
 
     [Required(ErrorMessage = "PlatesNumber is required!")]
     public int PlatesNumber { get; set; } = default;
+
     [DefaultValue("")]
     public string? PostalCode { get; set; } = default!;
 }

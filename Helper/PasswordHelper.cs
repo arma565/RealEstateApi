@@ -9,14 +9,14 @@ namespace RealEstate.Helper;
 
 public sealed class PasswordHelper
 {
-    private readonly PasswordHasher<User> _passwordHasher;
+    private readonly PasswordHasher<ApplicationUser> _passwordHasher;
 
     public PasswordHelper()
     {
-        _passwordHasher = new PasswordHasher<User>();
+        _passwordHasher = new PasswordHasher<ApplicationUser>();
     }
 
-    public bool VerifyPassword(User user, string hashedPassword, string inputPassword)
+    public bool VerifyPassword(ApplicationUser user, string hashedPassword, string inputPassword)
     {
         // Verify the password
         return _passwordHasher.VerifyHashedPassword(user, hashedPassword, inputPassword)

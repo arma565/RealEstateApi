@@ -44,7 +44,7 @@ public sealed class AdminController(
     /// <returns>Returns a list of all users.</returns>
     [HttpGet("/users")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<ActionResult<List<User>>> GetUsersAsync() => Ok(await _adminService.GetUsersAsync().ConfigureAwait(false));
+    public async Task<ActionResult<List<ApplicationUser>>> GetUsersAsync() => Ok(await _adminService.GetUsersAsync().ConfigureAwait(false));
 
     /// <summary>
     /// Deletes all users.
