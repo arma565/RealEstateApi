@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using RealEstate.Models.Images;
 using RealEstate.Models.Property;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -33,8 +34,8 @@ public class ApplicationUser : IdentityUser
 
     public ICollection<RealEstateProperty> Properties => [];
 
-    public Guid ProfileImageId { get; set; }
-    public UserProfileImage ProfileImage { get; set; } = default!;
+    public Guid ImageId { get; set; }
+    public RealEstateImage ProfileImage { get; set; } = default!;
 
 }
 

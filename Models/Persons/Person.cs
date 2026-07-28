@@ -1,5 +1,5 @@
 
-using RealEstate.Models.Enums.Persons;
+using RealEstate.Enums.Persons;
 using RealEstate.Models.Property;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -43,7 +43,7 @@ public class Person()
     public PersonRoles Role { get; set; } = default!;
 
     public Guid PropertyId { get; set; }
-    public RealEstateProperty Property { get; set; } = default!;
+    public RealEstateProperty? Property { get; set; } = null!;
 
     public Guid LeaseId { get; set; } = default!;
     public Lease Lease { get; set; } = default!;

@@ -1,17 +1,19 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RealEstate.Models.Images;
 using RealEstate.Models.Persons;
 using RealEstate.Models.Property;
 using RealEstate.Models.Property.Documents;
-using RealEstate.Models.Support;
+using RealEstate.Models.Supports;
 using RealEstate.Models.Users;
+using static System.Net.Mime.MediaTypeNames;
 
 #pragma warning disable CA1515
 namespace RealEstate.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public required DbSet<UserProfileImage> UserProfileImages { get; set; }
+    public required DbSet<RealEstateImage> Images { get; set; }
 
     public required DbSet<Person> Persons { get; set; }
 
@@ -23,13 +25,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
     public required DbSet<PropertyFeature> PropertyFeatures { get; set; }
 
-    public required DbSet<PropertyImage> PropertyImages { get; set; }
-
     public required DbSet<RealEstateProperty> Properties { get; set; }
 
-    public required DbSet<SupportApp> Supports { get; set; }
-
-    public required DbSet<SupportImage> SupportImages { get; set; }
+    public required DbSet<RealEstateSupport> Supports { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -38,82 +36,92 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         base.OnModelCreating(builder);
 
         builder.Entity<ApplicationUser>()
-              .HasOne(user => user.ProfileImage)
-              .WithOne(profileImg => profileImg.User)
-              .HasForeignKey<UserProfileImage>(profileImg => profileImg.UserId)
-              .HasPrincipalKey<ApplicationUser>(user => user.Id)
+              .HasOne(applicationUser => applicationUser.ProfileImage)
+              .WithOne(image => image.User)
+              .HasForeignKey<RealEstateImage>(image => image.UserId)
+              .HasPrincipalKey<ApplicationUser>(applicationUser => applicationUser.Id)
               .IsRequired()
               .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<ApplicationUser>()
-            .HasMany(user => user.Properties)
-            .WithOne(property => property.Agent)
-            .HasForeignKey(property => property.AgentId)
-            .HasPrincipalKey(property => property.Id)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+               .HasMany(applicationUser => applicationUser.Properties)
+               .WithOne(property => property.Agent)
+               .HasPrincipalKey(applicationUser => applicationUser.Id)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Cascade);
 
-        builder
-            .Entity<Person>()
-            .HasOne(person => person.Property)
-            .WithOne(property => property.Owner)
-            .HasForeignKey<Person>(person => person.PropertyId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<RealEstateImage>()
+           .HasOne(realEstateImage => realEstateImage.Support)
+           .WithOne(realEstateSupport => realEstateSupport.Image)
+           .HasForeignKey<RealEstateSupport>(realEstateSupport => realEstateSupport.ImageId)
+           .HasPrincipalKey<RealEstateImage>(realEstateImage => realEstateImage.Id)
+           .IsRequired()
+           .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Person>()
-            .HasOne(person => person.Lease)
-            .WithMany(lease => lease.Persons)
-            .HasForeignKey(person => person.LeaseId)
-            .HasPrincipalKey(person => person.Id)
+           .HasOne(person => person.Property)
+           .WithOne(property => property.Owner)
+           .HasForeignKey<RealEstateProperty>(property => property.OwnerId)
+           .HasPrincipalKey<Person>(person => person.Id)
+           .IsRequired()
+           .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<PropertyDeed>()
+            .HasOne(propertyDeed => propertyDeed.Image)
+            .WithOne(image => image.Deed)
+            .HasForeignKey<RealEstateImage>(image => image.PropertyDeedId)
+            .HasPrincipalKey<PropertyDeed>(propertyDeed => propertyDeed.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<PropertyDeed>()
             .HasOne(propertyDeed => propertyDeed.Property)
             .WithOne(property => property.PropertyDeed)
-            .HasForeignKey<PropertyDeed>(propertyDeed => propertyDeed.PropertyId)
+            .HasForeignKey<RealEstateProperty>(property => property.PropertyDeedId)
+            .HasPrincipalKey<PropertyDeed>(propertyDeed => propertyDeed.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Lease>()
             .HasOne(lease => lease.Property)
             .WithOne(property => property.Lease)
-            .HasForeignKey<Lease>(lease => lease.PropertyId)
+            .HasForeignKey<RealEstateProperty>(property => property.LeaseId)
+            .HasPrincipalKey<Lease>(lease => lease.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<Payment>()
-            .HasOne(payment => payment.Lease)
-            .WithMany(lease => lease.Payments)
-            .HasForeignKey(payment => payment.LeaseId)
-            .HasPrincipalKey(payment => payment.Id)
+        builder.Entity<Lease>()
+            .HasMany(lease => lease.Persons)
+            .WithOne(person => person.Lease)
+            .HasPrincipalKey(lease => lease.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<PropertyFeature>()
-            .HasOne(propertyFeature => propertyFeature.Property)
-            .WithMany(property => property.Features)
-            .HasForeignKey(propertyFeature => propertyFeature.PropertyId)
-            .HasPrincipalKey(propertyFeature => propertyFeature.Id)
+        builder.Entity<Lease>()
+            .HasMany(lease => lease.Payments)
+            .WithOne(payment => payment.Lease)
+            .HasPrincipalKey(lease => lease.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<PropertyImage>()
-            .HasOne(propertyImage => propertyImage.Property)
-            .WithMany(property => property.PropertyImages)
-            .HasForeignKey(propertyImage => propertyImage.PropertyId)
-            .HasPrincipalKey(propertyImage => propertyImage.Id)
+        builder.Entity<RealEstateProperty>()
+            .HasMany(property => property.Features)
+            .WithOne(feature => feature.Property)
+            .HasPrincipalKey(property => property.Id)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<RealEstateProperty>()
+           .HasMany(property => property.Images)
+           .WithOne(image => image.Property)
+           .HasPrincipalKey(property => property.Id)
+           .IsRequired()
+           .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .Entity<SupportApp>()
-            .HasOne(support => support.SupportImage)
-            .WithOne(supportImg => supportImg.Support)
-            .HasForeignKey<SupportImage>(supportImg => supportImg.SupportId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .Entity<RealEstateProperty>()
+            .HasIndex(property => property.PlatesNumber)
+            .IsUnique();
     }
 }
 

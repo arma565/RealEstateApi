@@ -1,4 +1,5 @@
-using Microsoft.IdentityModel.Tokens;
+using RealEstate.Models.Images;
+using RealEstate.Models.Property;
 
 #pragma warning disable CA1515
 namespace RealEstate.Services.Images;
@@ -11,58 +12,11 @@ public sealed class ImageService(
 
     private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
 
-    /// <summary>
-    /// Use this function to upload profile image to server
-    /// </summary>
-    /// <param name="image">
-    /// image to upload
-    /// </param>
-    /// <returns></returns>
-   public async Task<string> UploadProfileImage(IFormFile image)
-    {
-        if (image is null)
-            return "";
-
-        if (!IsValidImage(image))
-            throw new InvalidOperationException("Invalid image file.");
-
-        var webRootPath = _environment.WebRootPath;
-
-        var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-
-        if (!Directory.Exists(webRootPath))
-            Directory.CreateDirectory(webRootPath); // Recreate wwwroot
-
-        var uploadsFolder = Path.Combine(webRootPath, "images/auth");
-
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
-
-        var filePath = Path.Combine(uploadsFolder, fileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await image.CopyToAsync(stream).ConfigureAwait(false);
-        }
-
-        return fileName;
-    }
-
-    /// <summary>
-    /// Use this function to upload list of images to server
-    /// </summary>
-    /// <param name="images">
-    /// list of images to upload
-    /// </param>
-    /// <returns>
-    /// list of images as string
-    /// </returns>
-    public async Task<List<string>> UploadImages(IFormFile[] images)
+    public async Task<List<string>> SaveImages(IFormFile[] images, string path)
     {
         var fileNameList = new List<string>();
 
-        if (images == null || images.Length == 0)
-            return fileNameList;
+        ArgumentNullException.ThrowIfNull(images);
 
         foreach (var image in images)
         {
@@ -70,17 +24,15 @@ public sealed class ImageService(
                 throw new InvalidOperationException("Invalid image file.");
         }
 
-        var webRootPath = _environment.WebRootPath;
+        var saveFolderPath = Path.Combine(_environment.WebRootPath, path);
 
-        var uploadsFolder = Path.Combine(_environment.WebRootPath, "images/asset");
-
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
+        if (!Directory.Exists(saveFolderPath))
+            Directory.CreateDirectory(saveFolderPath);
 
         foreach (var image in images)
         {
             var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-            var filePath = Path.Combine(uploadsFolder, fileName);
+            var filePath = Path.Combine(saveFolderPath, fileName);
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await image.CopyToAsync(stream).ConfigureAwait(false);
@@ -91,39 +43,49 @@ public sealed class ImageService(
         return fileNameList;
     }
 
-   public async Task<string> UploadSupportImage(IFormFile image)
+    public async Task DeleteImages(IEnumerable<RealEstateImage> Images)
     {
-        if (image is null)
-            return "";
+        if(Images == null)
+            ArgumentNullException.ThrowIfNull(Images);
 
-        if (!IsValidImage(image))
-            throw new InvalidOperationException("Invalid image file.");
+        var environmentPath = _environment.WebRootPath;
 
+        foreach (var img in Images)
+        {
+            string imageFileName = $"{img.ImageFileName}";
+            string thumbnailFileName = $"{img.ThumbnailFileName}";
+            string fileName;
+            if (!string.IsNullOrEmpty(imageFileName))
+                fileName = imageFileName;
+            else if (string.IsNullOrEmpty(thumbnailFileName))
+                fileName = thumbnailFileName;
+            else
+                fileName = "";
+            string filePath = Path.Combine(environmentPath, fileName);
+            if (Directory.Exists(filePath))
+                File.Delete(filePath);
+            else
+                continue;
+        }
+    }
+
+    public string GetImagePath(string modelName)
+    {
         var webRootPath = _environment.WebRootPath;
 
-        var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-
-        if (!Directory.Exists(webRootPath))
-            Directory.CreateDirectory(webRootPath); // Recreate wwwroot
-
-        var uploadsFolder = Path.Combine(webRootPath, "images/support");
-
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
-
-        var filePath = Path.Combine(uploadsFolder, fileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        return modelName switch
         {
-            await image.CopyToAsync(stream).ConfigureAwait(false);
-        }
-
-        return fileName;
+            "property" => Path.Combine(webRootPath, "images\\property"),
+            "user" => Path.Combine(webRootPath, "images\\user"),
+            "support" => Path.Combine(webRootPath, "images\\support"),
+            "" => Path.Combine(webRootPath, "images"),
+            _ => Path.Combine(webRootPath)
+        };
     }
 
     private static bool IsValidImage(IFormFile image)
     {
-        if (image == null || image.Length == 0)
+        if (image.Length == 0)
             return false;
 
         if (image.Length > MaxFileSize)
@@ -139,23 +101,6 @@ public sealed class ImageService(
         return true;
     }
 
-    public string GetLocalImagesFullPath(string requestedModelPath)
-    {
-        if (string.IsNullOrEmpty(requestedModelPath))
-            return "";
 
-        var webRootPath = _environment.WebRootPath;
-
-        if (!Directory.Exists(webRootPath))
-            return "";
-
-        return requestedModelPath switch
-        {
-            "asset" => Path.Combine(webRootPath, "images\\asset"),
-            "auth" => Path.Combine(webRootPath, "images\\auth"),
-            "support" => Path.Combine(webRootPath, "images\\support"),
-            _ => Path.Combine(webRootPath, "images"),
-        };
-    }
 }
 
