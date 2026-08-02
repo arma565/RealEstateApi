@@ -1,11 +1,12 @@
-﻿using RealEstate.Enums.Properties;
-using RealEstate.Models.Property;
+﻿using RealEstate.Services.Enums.Properties;
+using RealEstate.Services.Models.Properties;
 
 namespace RealEstate.Services.Filters;
 
 interface IPropertyFilterService {
     Task<IEnumerable<RealEstateProperty>> SortPropertyListAsync(SortType type, IEnumerable<RealEstateProperty> propertyList);
 }
+
 #pragma warning disable CA1515
 public class PropertyFilterService : IPropertyFilterService
 {

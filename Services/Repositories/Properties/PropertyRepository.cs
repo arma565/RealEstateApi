@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
-using RealEstate.Models.Property;
 using RealEstate.Services.Images;
+using RealEstate.Services.Models.Properties;
 
 namespace RealEstate.Services.Repositories.Properties;
 
@@ -29,12 +29,14 @@ public class PropertyRepository(AppDbContext context,
          await _context
             .Properties
             .AsNoTracking()
+            .Include(property => property.Address)
+            .Include(property => property.Location)
             .Include(property => property.Owner)
             .Include(property => property.Agent)
             .Include(property => property.PropertyDeed)
             .Include(property => property.Lease)
             .Include(property => property.Features)
-            .Include(propertyImg => propertyImg.PropertyImages)
+            .Include(propertyImg => propertyImg.Images)
             .ToListAsync()
             .ConfigureAwait(false);
 
@@ -42,12 +44,14 @@ public class PropertyRepository(AppDbContext context,
         await _context
             .Properties
             .AsNoTracking()
+             .Include(property => property.Address)
+            .Include(property => property.Location)
             .Include(property => property.Owner)
             .Include(property => property.Agent)
             .Include(property => property.PropertyDeed)
             .Include(property => property.Lease)
             .Include(property => property.Features)
-            .Include(propertyImg => propertyImg.PropertyImages)
+            .Include(propertyImg => propertyImg.Images)
             .SingleOrDefaultAsync(property => property.Id == id)
             .ConfigureAwait(false);
 

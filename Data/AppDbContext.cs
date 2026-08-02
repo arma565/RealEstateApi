@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.Models.Images;
-using RealEstate.Models.Persons;
-using RealEstate.Models.Property;
-using RealEstate.Models.Property.Documents;
-using RealEstate.Models.Supports;
-using RealEstate.Models.Users;
-using static System.Net.Mime.MediaTypeNames;
+using RealEstate.Services.Models.Images;
+using RealEstate.Services.Models.Persons;
+using RealEstate.Services.Models.Properties;
+using RealEstate.Services.Models.Properties.Addresses;
+using RealEstate.Services.Models.Properties.Addresses.Map;
+using RealEstate.Services.Models.Properties.Documents;
+using RealEstate.Services.Models.Properties.Features;
+using RealEstate.Services.Models.Properties.Leases;
+using RealEstate.Services.Models.Properties.Payments;
+using RealEstate.Services.Models.Supports;
+using RealEstate.Services.Models.Users;
 
 #pragma warning disable CA1515
 namespace RealEstate.Data;
@@ -16,6 +20,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public required DbSet<RealEstateImage> Images { get; set; }
 
     public required DbSet<Person> Persons { get; set; }
+
+    public required DbSet<PropertyAddress> Addresses { get; set; }
+
+    public required DbSet<PropertyLocation> Locations { get; set; }
 
     public required DbSet<PropertyDeed> PropertyDeeds { get; set; }
 
@@ -49,14 +57,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
                .HasPrincipalKey(applicationUser => applicationUser.Id)
                .IsRequired()
                .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<RealEstateImage>()
-           .HasOne(realEstateImage => realEstateImage.Support)
-           .WithOne(realEstateSupport => realEstateSupport.Image)
-           .HasForeignKey<RealEstateSupport>(realEstateSupport => realEstateSupport.ImageId)
-           .HasPrincipalKey<RealEstateImage>(realEstateImage => realEstateImage.Id)
-           .IsRequired()
-           .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Person>()
            .HasOne(person => person.Property)
@@ -105,6 +105,22 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<RealEstateProperty>()
+           .HasOne(property => property.Address)
+           .WithOne(address => address.Property)
+           .HasForeignKey<PropertyAddress>(address => address.PropertyId)
+           .HasPrincipalKey<RealEstateProperty>(property => property.Id)
+           .IsRequired()
+           .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<RealEstateProperty>()
+           .HasOne(property => property.Location)
+           .WithOne(location => location.Property)
+           .HasForeignKey<PropertyLocation>(location => location.PropertyId)
+           .HasPrincipalKey<RealEstateProperty>(property => property.Id)
+           .IsRequired()
+           .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<RealEstateProperty>()
             .HasMany(property => property.Features)
             .WithOne(feature => feature.Property)
             .HasPrincipalKey(property => property.Id)
@@ -115,6 +131,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
            .HasMany(property => property.Images)
            .WithOne(image => image.Property)
            .HasPrincipalKey(property => property.Id)
+           .IsRequired()
+           .OnDelete(DeleteBehavior.Cascade);
+
+
+        builder.Entity<RealEstateSupport>()
+           .HasOne(realEstatesupport => realEstatesupport.Image)
+           .WithOne(realEstateImage => realEstateImage.Support)
+           .HasForeignKey<RealEstateImage>(realEstateImage => realEstateImage.SupportId)
+           .HasPrincipalKey<RealEstateSupport>(realEstatesupport => realEstatesupport.Id)
            .IsRequired()
            .OnDelete(DeleteBehavior.Cascade);
 

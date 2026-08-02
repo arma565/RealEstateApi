@@ -1,0 +1,12 @@
+﻿namespace RealEstate.Services.Enums.Properties.Payments;
+
+#pragma warning disable CA1515
+public enum PaymentType
+{
+    Rent,
+    Deposit,
+    Utility,
+    Maintenance,
+    Penalty,
+    Other
+}

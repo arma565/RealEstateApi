@@ -1,9 +1,8 @@
-using RealEstate.Models.Images;
-using RealEstate.Models.Property;
+using RealEstate.Services.Models.Images;
 
-#pragma warning disable CA1515
 namespace RealEstate.Services.Images;
 
+#pragma warning disable CA1515
 public sealed class ImageService(
     IWebHostEnvironment environment
     )
@@ -52,8 +51,8 @@ public sealed class ImageService(
 
         foreach (var img in Images)
         {
-            string imageFileName = $"{img.ImageFileName}";
-            string thumbnailFileName = $"{img.ThumbnailFileName}";
+            string imageFileName = $"{img.ImageFileUrl}";
+            string thumbnailFileName = $"{img.ThumbnailFileUrl}";
             string fileName;
             if (!string.IsNullOrEmpty(imageFileName))
                 fileName = imageFileName;

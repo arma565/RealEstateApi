@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\models\\images\\realestateimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:models\\images\\realestateimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\services\\repositories\\users\\adminrepository\\adminrepositoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:services\\repositories\\users\\adminrepository\\adminrepositoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\services\\repositories\\properties\\propertyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:services\\repositories\\properties\\propertyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\services\\repositories\\properties\\documents\\deedrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:services\\repositories\\properties\\documents\\deedrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -43,40 +35,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "RealEstateImage.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Models\\Images\\RealEstateImage.cs",
-              "RelativeDocumentMoniker": "Models\\Images\\RealEstateImage.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Models\\Images\\RealEstateImage.cs",
-              "RelativeToolTip": "Models\\Images\\RealEstateImage.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAowCcAAAAoAAAAAAAAAA==",
+              "Title": "DeedRepository.cs",
+              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Repositories\\Properties\\Documents\\DeedRepository.cs",
+              "RelativeDocumentMoniker": "Services\\Repositories\\Properties\\Documents\\DeedRepository.cs",
+              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Repositories\\Properties\\Documents\\DeedRepository.cs",
+              "RelativeToolTip": "Services\\Repositories\\Properties\\Documents\\DeedRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T19:52:52.208Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "PropertyRepository.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Repositories\\Properties\\PropertyRepository.cs",
-              "RelativeDocumentMoniker": "Services\\Repositories\\Properties\\PropertyRepository.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Repositories\\Properties\\PropertyRepository.cs",
-              "RelativeToolTip": "Services\\Repositories\\Properties\\PropertyRepository.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAgwFAAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T19:49:27.385Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AdminRepositoryService.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Repositories\\Users\\AdminRepository\\AdminRepositoryService.cs",
-              "RelativeDocumentMoniker": "Services\\Repositories\\Users\\AdminRepository\\AdminRepositoryService.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Repositories\\Users\\AdminRepository\\AdminRepositoryService.cs",
-              "RelativeToolTip": "Services\\Repositories\\Users\\AdminRepository\\AdminRepositoryService.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwCMAAABHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T19:48:17.938Z",
+              "WhenOpened": "2026-08-02T13:49:14.01Z",
               "EditorCaption": ""
             }
           ]

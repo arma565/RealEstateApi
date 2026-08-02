@@ -1,0 +1,11 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace RealEstate.Controllers.Properties.Addresses.Maps
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LocationController : ControllerBase
+    {
+    }
+}

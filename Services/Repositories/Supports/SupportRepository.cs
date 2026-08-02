@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
-using RealEstate.Models.Supports;
 using RealEstate.Services.Images;
+using RealEstate.Services.Models.Supports;
 
 
 namespace RealEstate.Services.Repositories.Supports;
@@ -55,8 +55,8 @@ public class SupportRepository(AppDbContext context,
     {
         var support = await _context.Supports.FindAsync(id).ConfigureAwait(false);
 
-        if (support == null)
-            ArgumentNullException.ThrowIfNull(support);
+        if (support == null || support.Image == null)
+            ArgumentNullException.ThrowIfNull(support!.Image);
 
         await _imageService.DeleteImages([support.Image]).ConfigureAwait(false);
         _context.Supports.Remove(support);
@@ -68,6 +68,8 @@ public class SupportRepository(AppDbContext context,
         var supports = await GetListAsync().ConfigureAwait(false);
         foreach (var support in supports)
         {
+            if (support == null || support.Image == null)
+                continue;
             await _imageService.DeleteImages([support.Image]).ConfigureAwait(false);
         }
         _context.Supports.ExecuteDelete();
