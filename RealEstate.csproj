@@ -10,6 +10,25 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controllers\Persons\**" />
+	  <Compile Remove="Controllers\Properties\**" />
+	  <Compile Remove="Controllers\Supports\**" />
+	  <Compile Remove="Controllers\Users\**" />
+	  <Content Remove="Controllers\Persons\**" />
+	  <Content Remove="Controllers\Properties\**" />
+	  <Content Remove="Controllers\Supports\**" />
+	  <Content Remove="Controllers\Users\**" />
+	  <EmbeddedResource Remove="Controllers\Persons\**" />
+	  <EmbeddedResource Remove="Controllers\Properties\**" />
+	  <EmbeddedResource Remove="Controllers\Supports\**" />
+	  <EmbeddedResource Remove="Controllers\Users\**" />
+	  <None Remove="Controllers\Persons\**" />
+	  <None Remove="Controllers\Properties\**" />
+	  <None Remove="Controllers\Supports\**" />
+	  <None Remove="Controllers\Users\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.10" />
@@ -23,12 +42,14 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="SkiaSharp" Version="4.151.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.2.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Data\Migrations\" />
+	  <Folder Include="Uploads\" />
 	  <Folder Include="wwwroot\" />
 	</ItemGroup>
 

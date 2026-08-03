@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Services.Images;
 using RealEstate.Services.Models.Supports;
+using RealEstate.Services.Repositories.Images;
 
 
 namespace RealEstate.Services.Repositories.Supports;
@@ -19,11 +20,11 @@ interface ISupportRepository
 
 #pragma warning disable CA1515
 public class SupportRepository(AppDbContext context,
-                                        ImageService imageService) : ISupportRepository
+                                        ImageRepository imageRepository) : ISupportRepository
 {
     private readonly AppDbContext _context = context;
 
-    private readonly ImageService _imageService = imageService;
+    private readonly ImageRepository _imageRepository = imageRepository;
 
     public async Task<IEnumerable<RealEstateSupport>> GetListAsync() =>
        await _context
@@ -58,7 +59,8 @@ public class SupportRepository(AppDbContext context,
         if (support == null || support.Image == null)
             ArgumentNullException.ThrowIfNull(support!.Image);
 
-        await _imageService.DeleteImages([support.Image]).ConfigureAwait(false);
+        await _imageRepository.DeleteAsync(support.Image.Id).ConfigureAwait(false);
+
         _context.Supports.Remove(support);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
@@ -70,7 +72,7 @@ public class SupportRepository(AppDbContext context,
         {
             if (support == null || support.Image == null)
                 continue;
-            await _imageService.DeleteImages([support.Image]).ConfigureAwait(false);
+            await _imageRepository.DeleteAsync(support.Image.Id).ConfigureAwait(false);
         }
         _context.Supports.ExecuteDelete();
         await _context.SaveChangesAsync().ConfigureAwait(false);

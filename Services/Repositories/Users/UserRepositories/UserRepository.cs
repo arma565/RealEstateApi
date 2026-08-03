@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Services.Images;
 using RealEstate.Services.Models.Users;
+using RealEstate.Services.Repositories.Images;
 
 namespace RealEstate.Services.Repositories.Users.UserRepositories;
 
@@ -26,11 +27,11 @@ interface IUserRepository
 public class UserRepository(
                                     UserManager<ApplicationUser> userManager,
                                     SignInManager<ApplicationUser> signInManager,
-                                    ImageService imageService) : IUserRepository
+                                    ImageRepository imageRepository) : IUserRepository
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-    private readonly ImageService _imageService = imageService;
+    private readonly ImageRepository _imageRepository = imageRepository;
 
     public async Task<ApplicationUser?> GetByIDAsync(string userId) =>
          await _userManager
@@ -85,7 +86,7 @@ public class UserRepository(
         if (user == null)
             ArgumentNullException.ThrowIfNull(user);
 
-        await _imageService.DeleteImages([user.ProfileImage]).ConfigureAwait(false);
+        await _imageRepository.DeleteAsync(user.ProfileImage.Id).ConfigureAwait(false);
 
         return await _userManager.DeleteAsync(user).ConfigureAwait(false);
     }

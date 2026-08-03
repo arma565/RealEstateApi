@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace RealEstate.Services.Models.Users;
 
 #pragma warning disable CA1515
-public sealed class UserLoginRequestDTO
+public class UserLoginRequestDTO
 {
    private string _userName = "";
 

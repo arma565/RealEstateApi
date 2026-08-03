@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace RealEstate.Services.Models.Users;
 
 #pragma warning disable CA1515
-public sealed class UserRegisterAccountDTO
+public class UserRegisterAccountDTO
 {
     private string _user_name = "";
     private string _email = "";

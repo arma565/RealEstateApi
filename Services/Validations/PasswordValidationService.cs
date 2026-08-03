@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using RealEstate.Services.Models.Users;
 
-namespace RealEstate.Services.Helpers;
+namespace RealEstate.Services.Validations;
 
 #pragma warning disable CA1515
-public sealed class PasswordValidationService
+public class PasswordValidationService
 {
     private readonly PasswordHasher<ApplicationUser> _passwordHasher;
 

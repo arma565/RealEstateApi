@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
-using RealEstate.Services.Images;
 using RealEstate.Services.Models.Properties;
+using RealEstate.Services.Repositories.Images;
 
 namespace RealEstate.Services.Repositories.Properties;
 
@@ -19,11 +19,11 @@ interface IPropertyRepository
 
 #pragma warning disable CA1515
 public class PropertyRepository(AppDbContext context,
-                                        ImageService imageService) : IPropertyRepository
+                                        ImageRepository imageRepository) : IPropertyRepository
 {
     private readonly AppDbContext _context = context;
 
-    private readonly ImageService _imageService = imageService;
+    private readonly ImageRepository _imageRepository = imageRepository;
 
     public async Task<IEnumerable<RealEstateProperty>> GetListAsync() =>
          await _context
@@ -74,8 +74,10 @@ public class PropertyRepository(AppDbContext context,
         if (property == null)
             ArgumentNullException.ThrowIfNull(property);
 
-        await _imageService.DeleteImages(property.Images).ConfigureAwait(false);
-
+        foreach (var img in property.Images)
+        {
+            await _imageRepository.DeleteAsync(img.Id).ConfigureAwait(false);
+        }
         _context.Properties.Remove(property);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
@@ -83,9 +85,15 @@ public class PropertyRepository(AppDbContext context,
     public async Task DeleteAllAsync()
     {
         var properties = await GetListAsync().ConfigureAwait(false);
+
         foreach (var property in properties)
         {
-            await _imageService.DeleteImages(property.Images).ConfigureAwait(false);
+            if (property == null)
+                continue;
+            foreach (var img in property.Images)
+            {
+                await _imageRepository.DeleteAsync(img.Id).ConfigureAwait(false);
+            }
         }
         await _context.Properties.ExecuteDeleteAsync().ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace RealEstate.Services.Models.Users;
 
 #pragma warning disable CA1515
-public sealed class UserChangePasswordDTO
+public class UserChangePasswordDTO
 {
     private string _user_name = "";
     private string _old_password = "";

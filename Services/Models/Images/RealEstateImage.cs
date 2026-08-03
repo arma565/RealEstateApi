@@ -13,13 +13,16 @@ public class RealEstateImage
     [Key]
     public Guid Id { get; set; }
 
-    [DefaultValue("")]
-    public Uri? ImageFileUrl { get; set; } = default;
+    [DefaultValue(0)]
+    public int Order { get; set; } = default;
 
     [DefaultValue("")]
-    public Uri? ThumbnailFileUrl { get; set; } = default;
+    public string? ImageFilePath { get; set; } = default;
 
-    [DefaultValue(true)]
+    [DefaultValue("")]
+    public string? ThumbnailFilePath { get; set; } = default;
+
+    [DefaultValue(false)]
     public bool IsCoverImage { get; set; } = default;
 
     #region Relationships

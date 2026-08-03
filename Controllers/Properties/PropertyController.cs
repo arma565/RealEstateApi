@@ -1,22 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.IdentityModel.Tokens;
-using RealEstate.Models.Assets;
-using RealEstate.Models.Persons;
-using RealEstate.Services.Assets;
 using RealEstate.Services.Images;
+using RealEstate.Services.Repositories.Properties;
 using System.Globalization;
 using System.Security;
-using System.Threading.Tasks;
 
-#pragma warning disable CA1515
+
 namespace RealEstate.Controllers.Properties;
 
+#pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public sealed class PropertyController(ProeprtyRepositoryService service, ImageService imageService) : ControllerBase
+public sealed class PropertyController(PropertyRepository service, ImageService imageService) : ControllerBase
 {
-    private readonly ProeprtyRepositoryService _service = service;
+    private readonly PropertyRepository _service = service;
     private readonly ImageService _imageService = imageService;
 
     #region Asset

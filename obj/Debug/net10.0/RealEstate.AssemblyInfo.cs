@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RealEstate")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a9250396af935f0afc21244138f3a40b4b8f0bca")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5f431bb0d3ad5ea3a8e84e98773c6a021c7352ed")]
 [assembly: System.Reflection.AssemblyProductAttribute("RealEstate")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RealEstate")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

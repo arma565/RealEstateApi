@@ -1,4 +1,4 @@
-﻿namespace RealEstate.Services.Helpers;
+﻿namespace RealEstate.Services.Validations;
 
 #pragma warning disable CA1515
 public class EmailValidationService

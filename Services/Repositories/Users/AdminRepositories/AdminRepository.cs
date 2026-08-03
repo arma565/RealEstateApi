@@ -5,6 +5,7 @@ using RealEstate.Services.Authorization;
 using RealEstate.Services.Images;
 using RealEstate.Services.Models.Images;
 using RealEstate.Services.Models.Users;
+using RealEstate.Services.Repositories.Images;
 
 namespace RealEstate.Services.Repositories.Users.AdminRepositories;
 
@@ -20,10 +21,10 @@ interface IAdminRepository
 #pragma warning disable CA1515
 public class AdminRepository(AppDbContext context,
                                     UserManager<ApplicationUser> userManager,
-                                    ImageService imageService) : IAdminRepository
+                                    ImageRepository imageRepository) : IAdminRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly ImageService _imageService = imageService;
+    private readonly ImageRepository _imageRepository = imageRepository;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     public async Task<IEnumerable<ApplicationUser>> GetUsersListAsync() => [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
@@ -35,7 +36,7 @@ public class AdminRepository(AppDbContext context,
         {
             if (await _userManager.IsInRoleAsync(user, Roles.Agent).ConfigureAwait(false))
             {
-                await _imageService.DeleteImages([user.ProfileImage]).ConfigureAwait(false);
+                await _imageRepository.DeleteAsync(user.ProfileImage.Id).ConfigureAwait(false);
                 await _userManager.DeleteAsync(user).ConfigureAwait(false);
             }
         }
