@@ -7,10 +7,11 @@ namespace RealEstate.Services.Repositories.Properties.Addresses.Maps;
 interface ILocationRepository
 {
     Task<IEnumerable<PropertyLocation>> GetListAsync();
-    Task<PropertyLocation?> GetByIdAsync(Guid id);
+    Task<PropertyLocation?> GetAsync(Guid id);
     Task AddAsync(PropertyLocation location);
     Task UpdateAsync(PropertyLocation location);
     Task DeleteAsync(Guid id);
+    Task<bool> IsLocationExistAsync(Guid id);
 }
 
 #pragma warning disable CA1515
@@ -26,7 +27,7 @@ public class LocationRepository(AppDbContext context) : ILocationRepository
         .ToListAsync()
         .ConfigureAwait(false);
 
-    public async Task<PropertyLocation?> GetByIdAsync(Guid id) =>
+    public async Task<PropertyLocation?> GetAsync(Guid id) =>
        await _context
          .Locations
          .AsNoTracking()
@@ -56,4 +57,7 @@ public class LocationRepository(AppDbContext context) : ILocationRepository
         _context.Locations.Remove(location);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
+    public async Task<bool> IsLocationExistAsync(Guid id) =>
+        await _context.Locations.AsNoTracking().AnyAsync(location => location.Id == id).ConfigureAwait(false);
 }

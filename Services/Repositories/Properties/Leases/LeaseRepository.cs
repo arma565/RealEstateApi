@@ -7,11 +7,12 @@ namespace RealEstate.Services.Repositories.Properties.Leases;
 interface ILeaseRepository
 {
     Task<IEnumerable<Lease>> GetListAsync();
-    Task<Lease?> GetByIdAsync(Guid id);
+    Task<Lease?> GetAsync(Guid id);
     Task AddAsync(Lease lease);
     Task UpdateAsync(Lease lease);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
+    Task<bool> IsLeaseExistAsync(Guid id);
 }
 
 #pragma warning disable CA1515
@@ -29,7 +30,7 @@ public class LeaseRepository(AppDbContext context) : ILeaseRepository
         .ToListAsync()
         .ConfigureAwait(false);
 
-    public async Task<Lease?> GetByIdAsync(Guid id) =>
+    public async Task<Lease?> GetAsync(Guid id) =>
     await _context
        .Leases
        .AsNoTracking()
@@ -68,5 +69,6 @@ public class LeaseRepository(AppDbContext context) : ILeaseRepository
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-
+    public async Task<bool> IsLeaseExistAsync(Guid id) =>
+       await _context.Leases.AsNoTracking().AnyAsync(lease => lease.Id == id).ConfigureAwait(false);
 }

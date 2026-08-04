@@ -7,10 +7,11 @@ namespace RealEstate.Services.Repositories.Properties.Documents;
 interface IDeedRepository
 {
     Task<IEnumerable<PropertyDeed>> GetListAsync();
-    Task<PropertyDeed?> GetByIdAsync(Guid id);
+    Task<PropertyDeed?> GetAsync(Guid id);
     Task AddAsync(PropertyDeed deed);
     Task UpdateAsync(PropertyDeed deed);
     Task DeleteAsync(Guid id);
+    Task<bool> IsDeedExistAsync(Guid id);
 }
 
 #pragma warning disable CA1515
@@ -27,7 +28,7 @@ public class DeedRepository(AppDbContext context) : IDeedRepository
         .ToListAsync()
         .ConfigureAwait(false);
 
-    public async Task<PropertyDeed?> GetByIdAsync(Guid id) =>
+    public async Task<PropertyDeed?> GetAsync(Guid id) =>
     await _context
        .PropertyDeeds
        .AsNoTracking()
@@ -58,5 +59,8 @@ public class DeedRepository(AppDbContext context) : IDeedRepository
         _context.PropertyDeeds.Remove(deed);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
+    public async Task<bool> IsDeedExistAsync(Guid id) =>
+      await _context.PropertyDeeds.AsNoTracking().AnyAsync(deed => deed.Id == id).ConfigureAwait(false);
 
 }

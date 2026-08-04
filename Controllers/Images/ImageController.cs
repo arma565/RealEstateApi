@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Services.Models.Images;
 using RealEstate.Services.Repositories.Images;
+using RealEstate.Services.Validations;
 using System.Security;
 
 namespace RealEstate.Controllers.Images;
@@ -101,7 +102,13 @@ public class ImageController(ImageRepository service, ILogger logger) : Controll
     {
         try
         {
-            var realEstateImage = await _service.GetByIdAsync(Guid.Parse(imageId)).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(imageId))
+                return BadRequest("ImageId is empty!");
+
+            if (!Guid.TryParse(imageId, out Guid realEstateImageid))
+                return BadRequest("ImageId must be a valid GUID!");
+
+            var realEstateImage = await _service.GetByIdAsync(realEstateImageid).ConfigureAwait(false);
             ArgumentNullException.ThrowIfNull(realEstateImage);
             return realEstateImage;
         }
@@ -181,12 +188,4 @@ public class ImageController(ImageRepository service, ILogger logger) : Controll
         }
 
     }
-}
-
-public static partial class LogMessages
-{
-    [LoggerMessage(EventId = 1, Level = LogLevel.Error, Message = "An unexpected error occurred.")]
-    public static partial void UnexpectedError(
-        ILogger logger,
-        Exception ex);
 }

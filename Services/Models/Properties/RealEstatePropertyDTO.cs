@@ -7,6 +7,9 @@ namespace RealEstate.Services.Models.Properties;
 #pragma warning disable CA1515
 public class RealEstatePropertyDTO()
 {
+    [DefaultValue(1)]
+    public int OrderId { get; set; } = default;
+
     [Required(ErrorMessage = "Title is required!")]
     public string Title { get; set; } = default!;
 

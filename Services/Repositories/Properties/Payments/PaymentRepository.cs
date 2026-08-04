@@ -7,10 +7,11 @@ namespace RealEstate.Services.Repositories.Properties.Payments;
 interface IPaymentRepository
 {
     Task<IEnumerable<Payment>> GetListAsync();
-    Task<Payment?> GetByIdAsync(Guid id);
+    Task<Payment?> GetAsync(Guid id);
     Task AddAsync(Payment payment);
     Task UpdateAsync(Payment payment);
     Task DeleteAsync(Guid id);
+    Task<bool> IsPaymentExistAsync(Guid id);
 }
 
 #pragma warning disable CA1515
@@ -26,7 +27,7 @@ public class PaymentRepository(AppDbContext context) : IPaymentRepository
         .ToListAsync()
         .ConfigureAwait(false);
 
-    public async Task<Payment?> GetByIdAsync(Guid id) =>
+    public async Task<Payment?> GetAsync(Guid id) =>
     await _context
        .Payments
        .AsNoTracking()
@@ -57,4 +58,6 @@ public class PaymentRepository(AppDbContext context) : IPaymentRepository
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    public async Task<bool> IsPaymentExistAsync(Guid id) =>
+       await _context.Payments.AsNoTracking().AnyAsync(payment => payment.Id == id).ConfigureAwait(false);
 }

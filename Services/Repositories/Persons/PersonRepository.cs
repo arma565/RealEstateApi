@@ -8,7 +8,7 @@ namespace RealEstate.Services.Repositories.Persons;
 {
     Task<IEnumerable<Person>> GetListAsync();
     Task<Person?> GetByIdAsync(Guid id);
-    Task<bool> GetByPersonIDAsync(long nationalId);
+    Task<Person?> GetByNationalIdAsync(long nationalId);
     Task AddAsync(Person person);
     Task UpdateAsync(Person person);
     Task DeleteAsync(Guid id);
@@ -28,10 +28,10 @@ public class PersonRepository(AppDbContext context) : IPersonRepository
             .ToListAsync().ConfigureAwait(false);
 
     public async Task<Person?> GetByIdAsync(Guid id) =>
-        await _context.Persons.AsNoTracking().SingleOrDefaultAsync(pers => pers.Id == id).ConfigureAwait(false);
+        await _context.Persons.AsNoTracking().SingleOrDefaultAsync(person => person.Id == id).ConfigureAwait(false);
 
-    public async Task<bool> GetByPersonIDAsync(long nationalId) =>
-        await _context.Persons.AsNoTracking().AnyAsync(person => person.NationalId == nationalId).ConfigureAwait(false);
+    public async Task<Person?> GetByNationalIdAsync(long nationalId) =>
+        await _context.Persons.AsNoTracking().SingleOrDefaultAsync(person => person.NationalId == nationalId).ConfigureAwait(false);
 
     public async Task AddAsync(Person person)
     {

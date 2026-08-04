@@ -13,10 +13,10 @@ public class PaymentDTO
     public DateTime PaidAt { get; set; } = DateTime.Parse(DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
     [DefaultValue(PaymentType.Deposit)]
-    public PaymentType Type { get; set; }
+    public PaymentType PaymentType { get; set; }
 
     [DefaultValue(PaymentStatus.Pending)]
-    public PaymentStatus Status { get; set; }
+    public PaymentStatus PaymentStatus { get; set; }
 
     #region Relationships
 

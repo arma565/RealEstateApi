@@ -7,10 +7,11 @@ namespace RealEstate.Services.Repositories.Properties.Features;
 interface IFeatureRepository
 {
     Task<IEnumerable<PropertyFeature>> GetListAsync();
-    Task<PropertyFeature?> GetByIdAsync(Guid id);
+    Task<PropertyFeature?> GetAsync(Guid id);
     Task AddAsync(PropertyFeature feature);
     Task UpdateAsync(PropertyFeature feature);
     Task DeleteAsync(Guid id);
+    Task<bool> IsFeatureExistAsync(Guid id);
 }
 
 #pragma warning disable CA1515
@@ -26,7 +27,7 @@ public class FeatureRepository(AppDbContext context) : IFeatureRepository
         .ToListAsync()
         .ConfigureAwait(false);
 
-    public async Task<PropertyFeature?> GetByIdAsync(Guid id) =>
+    public async Task<PropertyFeature?> GetAsync(Guid id) =>
     await _context
        .PropertyFeatures
        .AsNoTracking()
@@ -51,10 +52,13 @@ public class FeatureRepository(AppDbContext context) : IFeatureRepository
         var feature = await _context.PropertyFeatures.FindAsync(id).ConfigureAwait(false);
 
         if (feature == null)
-            ArgumentNullException.ThrowIfNull(feature);    
+            ArgumentNullException.ThrowIfNull(feature);
 
         _context.PropertyFeatures.Remove(feature);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
+    public async Task<bool> IsFeatureExistAsync(Guid id) =>
+        await _context.PropertyFeatures.AsNoTracking().AnyAsync(feature => feature.Id == id).ConfigureAwait(false);
 
 }

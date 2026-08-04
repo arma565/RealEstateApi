@@ -8,13 +8,15 @@ namespace RealEstate.Services.Repositories.Properties;
 interface IPropertyRepository
 {
     Task<IEnumerable<RealEstateProperty>> GetListAsync();
-    Task<RealEstateProperty?> GetByIdAsync(Guid id);
+    Task<RealEstateProperty?> GetAsync(Guid id);
     Task AddAsync(RealEstateProperty property);
     Task UpdateAsync(RealEstateProperty property);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
     Task<RealEstateProperty?> FindByPlatesNumberAsync(int platesNumber);
     Task<bool> IsPropertyExistAsync(int plateNumber);
+    Task<bool> IsPropertyExistAsync(Guid id);
+    Task<RealEstateProperty> LastProperty();
 }
 
 #pragma warning disable CA1515
@@ -40,7 +42,7 @@ public class PropertyRepository(AppDbContext context,
             .ToListAsync()
             .ConfigureAwait(false);
 
-    public async Task<RealEstateProperty?> GetByIdAsync(Guid id) =>
+    public async Task<RealEstateProperty?> GetAsync(Guid id) =>
         await _context
             .Properties
             .AsNoTracking()
@@ -104,6 +106,13 @@ public class PropertyRepository(AppDbContext context,
 
     public async Task<bool> IsPropertyExistAsync(int plateNumber) =>
        (await GetListAsync().ConfigureAwait(false)).Any(property => property.PlatesNumber == plateNumber);
+
+    public async Task<bool> IsPropertyExistAsync(Guid id) =>
+       await _context.Properties.AsNoTracking().AnyAsync(property => property.Id == id).ConfigureAwait(false);
+
+    public async Task<RealEstateProperty> LastProperty() =>
+        (await GetListAsync().ConfigureAwait(false)).LastOrDefault() ?? throw new ArgumentNullException(nameof(LastProperty));
+   
 }
 
 

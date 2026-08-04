@@ -7,10 +7,11 @@ namespace RealEstate.Services.Repositories.Properties.Addresses;
 interface IAddressRepository
 {
     Task<IEnumerable<PropertyAddress>> GetListAsync();
-    Task<PropertyAddress?> GetByIdAsync(Guid id);
+    Task<PropertyAddress?> GetAsync(Guid id);
     Task AddAsync(PropertyAddress address);
     Task UpdateAsync(PropertyAddress address);
     Task DeleteAsync(Guid id);
+    Task<bool> IsAddressExistAsync(Guid id);
 }
 
 #pragma warning disable CA1515
@@ -26,7 +27,7 @@ public class AddressRepository(AppDbContext context) : IAddressRepository
         .ToListAsync()
         .ConfigureAwait(false);
 
-    public async Task<PropertyAddress?> GetByIdAsync(Guid id) =>
+    public async Task<PropertyAddress?> GetAsync(Guid id) =>
     await _context
        .Addresses
        .AsNoTracking()
@@ -56,5 +57,8 @@ public class AddressRepository(AppDbContext context) : IAddressRepository
         _context.Addresses.Remove(address);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
+
+    public async Task<bool> IsAddressExistAsync(Guid id) =>
+        await _context.Addresses.AsNoTracking().AnyAsync(address => address.Id == id).ConfigureAwait(false);
 
 }

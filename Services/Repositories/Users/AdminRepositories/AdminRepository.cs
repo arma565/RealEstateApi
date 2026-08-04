@@ -13,8 +13,8 @@ interface IAdminRepository
 {
     Task<IEnumerable<ApplicationUser>> GetUsersListAsync();
     Task DeleteUsersAsync();
-    Task<IdentityResult> AssignUserRole(ApplicationUser user);
-    Task<IdentityResult> PromoteUser(ApplicationUser user);
+    Task<IdentityResult> AssignRoleAsync(ApplicationUser user);
+    Task<IdentityResult> PromoteUserAsync(ApplicationUser user);
     Task<List<RealEstateImage>> GetUserProfileImageListAsync();
 }
 
@@ -42,7 +42,7 @@ public class AdminRepository(AppDbContext context,
         }
     }
 
-    public async Task<IdentityResult> AssignUserRole(ApplicationUser user)
+    public async Task<IdentityResult> AssignRoleAsync(ApplicationUser user)
     {
         var allUsers = await GetUsersListAsync().ConfigureAwait(false);
         bool userFlagged = false;
@@ -51,7 +51,7 @@ public class AdminRepository(AppDbContext context,
         return await _userManager.AddToRoleAsync(user, userFlagged ? Roles.Admin : Roles.Agent).ConfigureAwait(false);
     }
 
-    public async Task<IdentityResult> PromoteUser(ApplicationUser user)
+    public async Task<IdentityResult> PromoteUserAsync(ApplicationUser user)
     {
         var result = await _userManager.AddToRoleAsync(user, Roles.Admin).ConfigureAwait(false);
         if (!result.Succeeded)

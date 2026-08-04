@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
-using RealEstate.Services.Images;
 using RealEstate.Services.Models.Supports;
 using RealEstate.Services.Repositories.Images;
 
@@ -10,7 +9,7 @@ namespace RealEstate.Services.Repositories.Supports;
 interface ISupportRepository
 {
     Task<IEnumerable<RealEstateSupport>> GetListAsync();
-    Task<RealEstateSupport?> GetByIdAsync(Guid id);
+    Task<RealEstateSupport?> GetAsync(Guid id);
     Task AddAsync(RealEstateSupport support);
     Task UpdateAsync(RealEstateSupport support);
     Task DeleteAsync(Guid id);
@@ -33,7 +32,7 @@ public class SupportRepository(AppDbContext context,
       .Include(support => support.Image)
       .ToListAsync().ConfigureAwait(false);
 
-    public async Task<RealEstateSupport?> GetByIdAsync(Guid id) =>
+    public async Task<RealEstateSupport?> GetAsync(Guid id) =>
       await _context
           .Supports.AsNoTracking()
           .Include(sups => sups.Image)
