@@ -33,10 +33,11 @@ public class ApplicationUser : IdentityUser
 
     #region Relationships
 
-    public ICollection<RealEstateProperty> Properties => [];
-
     public Guid ImageId { get; set; }
     public RealEstateImage ProfileImage { get; set; } = default!;
+
+    public ICollection<RealEstateProperty> Properties { get; } = [];
+
     #endregion
 
 }

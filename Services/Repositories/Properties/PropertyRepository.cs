@@ -9,13 +9,10 @@ interface IPropertyRepository
 {
     Task<IEnumerable<RealEstateProperty>> GetListAsync();
     Task<RealEstateProperty?> GetAsync(Guid id);
-    Task AddAsync(RealEstateProperty property);
-    Task UpdateAsync(RealEstateProperty property);
+    Task<RealEstateProperty> AddAsync(RealEstatePropertyDTO realEstatePropertyDTO);
+    Task UpdateAsync(Guid id , RealEstatePropertyDTO realEstatePropertyDTO);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
-    Task<RealEstateProperty?> FindByPlatesNumberAsync(int platesNumber);
-    Task<bool> IsPropertyExistAsync(int plateNumber);
-    Task<bool> IsPropertyExistAsync(Guid id);
     Task<RealEstateProperty> LastProperty();
 }
 
@@ -34,7 +31,6 @@ public class PropertyRepository(AppDbContext context,
             .Include(property => property.Address)
             .Include(property => property.Location)
             .Include(property => property.Owner)
-            .Include(property => property.Agent)
             .Include(property => property.PropertyDeed)
             .Include(property => property.Lease)
             .Include(property => property.Features)
@@ -49,7 +45,6 @@ public class PropertyRepository(AppDbContext context,
              .Include(property => property.Address)
             .Include(property => property.Location)
             .Include(property => property.Owner)
-            .Include(property => property.Agent)
             .Include(property => property.PropertyDeed)
             .Include(property => property.Lease)
             .Include(property => property.Features)
@@ -57,29 +52,83 @@ public class PropertyRepository(AppDbContext context,
             .SingleOrDefaultAsync(property => property.Id == id)
             .ConfigureAwait(false);
 
-    public async Task AddAsync(RealEstateProperty property)
+    public async Task<RealEstateProperty> AddAsync(RealEstatePropertyDTO realEstatePropertyDTO)
     {
-        await _context.Properties.AddAsync(property).ConfigureAwait(false);
+
+        ArgumentNullException.ThrowIfNull(realEstatePropertyDTO);
+
+        var lastProperty = await LastProperty().ConfigureAwait(false);
+
+        if (lastProperty == null)
+            realEstatePropertyDTO.OrderId = 1;
+        else
+            realEstatePropertyDTO.OrderId++;
+
+        var realEstateProperty = new RealEstateProperty
+        {
+            OrderId = realEstatePropertyDTO.OrderId,
+            Title = realEstatePropertyDTO.Title,
+            Description = realEstatePropertyDTO.Description,
+            PlatesNumber = realEstatePropertyDTO.PlatesNumber,
+            PropertyType = realEstatePropertyDTO.PropertyType,
+            PropertyStatus = realEstatePropertyDTO.PropertyStatus,
+            Price = realEstatePropertyDTO.Price,
+            Currency = realEstatePropertyDTO.Currency,
+            YearBuilt = realEstatePropertyDTO.YearBuilt,
+            LandArea = realEstatePropertyDTO.LandArea,
+            BuildingArea = realEstatePropertyDTO.BuildingArea,
+            AddressId = realEstatePropertyDTO.AddressId,
+            LocationId = realEstatePropertyDTO.LocationId,
+            OwnerId = realEstatePropertyDTO.OwnerId,
+            AgentId = realEstatePropertyDTO.AgentId,
+            PropertyDeedId = realEstatePropertyDTO.PropertyDeedId,
+            LeaseId = realEstatePropertyDTO.LeaseId
+        };
+        await _context.Properties.AddAsync(realEstateProperty).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+        return realEstateProperty;
     }
 
-    public async Task UpdateAsync(RealEstateProperty property)
+    public async Task UpdateAsync(Guid id, RealEstatePropertyDTO realEstatePropertyDTO)
     {
+        ArgumentNullException.ThrowIfNull(realEstatePropertyDTO);
+
+        var property = new RealEstateProperty
+        {
+            Id = id,
+            OrderId = realEstatePropertyDTO.OrderId,
+            Title = realEstatePropertyDTO.Title,
+            Description = realEstatePropertyDTO.Description,
+            PlatesNumber = realEstatePropertyDTO.PlatesNumber,
+            PropertyType = realEstatePropertyDTO.PropertyType,
+            PropertyStatus = realEstatePropertyDTO.PropertyStatus,
+            Price = realEstatePropertyDTO.Price,
+            Currency = realEstatePropertyDTO.Currency,
+            YearBuilt = realEstatePropertyDTO.YearBuilt,
+            LandArea = realEstatePropertyDTO.LandArea,
+            BuildingArea = realEstatePropertyDTO.BuildingArea,
+            AddressId = realEstatePropertyDTO.AddressId,
+            LocationId = realEstatePropertyDTO.LocationId,
+            OwnerId = realEstatePropertyDTO.OwnerId,
+            AgentId = realEstatePropertyDTO.AgentId,
+            PropertyDeedId = realEstatePropertyDTO.PropertyDeedId,
+            LeaseId = realEstatePropertyDTO.LeaseId
+        };
+
         _context.Properties.Update(property);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var property = await _context.Properties.FindAsync(id).ConfigureAwait(false);
-
-        if (property == null)
-            ArgumentNullException.ThrowIfNull(property);
+        var property = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(property);
 
         foreach (var img in property.Images)
         {
             await _imageRepository.DeleteAsync(img.Id).ConfigureAwait(false);
         }
+
         _context.Properties.Remove(property);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
@@ -100,15 +149,6 @@ public class PropertyRepository(AppDbContext context,
         await _context.Properties.ExecuteDeleteAsync().ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
-
-    public async Task<RealEstateProperty?> FindByPlatesNumberAsync(int platesNumber) =>
-        (await GetListAsync().ConfigureAwait(false)).SingleOrDefault(property => property.PlatesNumber == platesNumber);
-
-    public async Task<bool> IsPropertyExistAsync(int plateNumber) =>
-       (await GetListAsync().ConfigureAwait(false)).Any(property => property.PlatesNumber == plateNumber);
-
-    public async Task<bool> IsPropertyExistAsync(Guid id) =>
-       await _context.Properties.AsNoTracking().AnyAsync(property => property.Id == id).ConfigureAwait(false);
 
     public async Task<RealEstateProperty> LastProperty() =>
         (await GetListAsync().ConfigureAwait(false)).LastOrDefault() ?? throw new ArgumentNullException(nameof(LastProperty));

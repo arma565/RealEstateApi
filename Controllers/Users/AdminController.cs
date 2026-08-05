@@ -17,14 +17,14 @@ namespace RealEstate.Controllers.Users;
 public sealed class AdminController(
     AdminRepository adminService,
     UserRepository userService,
-    ILogger logger
+    ILogger<AdminController> logger
     ) : ControllerBase
 {
     private readonly AdminRepository _adminService = adminService;
 
     private readonly UserRepository _userService = userService;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<AdminController> _logger = logger;
 
     [HttpPost("promote")]
     [Authorize(Policy = "AdminOnly")]

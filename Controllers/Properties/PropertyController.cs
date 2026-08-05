@@ -10,16 +10,16 @@ namespace RealEstate.Controllers.Properties;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public sealed class PropertyController(PropertyRepository service, ILogger logger) : ControllerBase
+public sealed class PropertyController(PropertyRepository service, ILogger<PropertyController> logger) : ControllerBase
 {
     private readonly PropertyRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<PropertyController> _logger = logger;
 
-    [HttpGet("/")]
+    [HttpGet("get-list")]
     public async Task<ActionResult<IEnumerable<RealEstateProperty>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("/{propertyId}")]
+    [HttpGet("get/{propertyId}")]
     public async Task<ActionResult<RealEstateProperty>> GetAsync(string propertyId)
     {
         try
@@ -27,10 +27,10 @@ public sealed class PropertyController(PropertyRepository service, ILogger logge
             if (string.IsNullOrWhiteSpace(propertyId))
                 return BadRequest("PropertyId is empty!");
 
-            if (!Guid.TryParse(propertyId, out Guid realEstatePropertyId))
+            if (!Guid.TryParse(propertyId, out Guid id))
                 return BadRequest("PropertyId must be a valid GUID!");
 
-            var property = await _service.GetAsync(realEstatePropertyId).ConfigureAwait(false);
+            var property = await _service.GetAsync(id).ConfigureAwait(false);
 
             return property == null ? NotFound() : Ok(property);
 
@@ -68,41 +68,7 @@ public sealed class PropertyController(PropertyRepository service, ILogger logge
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            bool? isPropertyExists = await _service.IsPropertyExistAsync(realEstatePropertyDTO.PlatesNumber!).ConfigureAwait(false);
-
-            if (isPropertyExists == true)
-                return BadRequest("Property is already exist!");
-
-            var lastProperty = await _service.LastProperty().ConfigureAwait(false);
-
-            if (lastProperty == null)
-                realEstatePropertyDTO.OrderId = 1;
-            else
-                realEstatePropertyDTO.OrderId++;
-
-            var realEstateProperty = new RealEstateProperty
-            {
-                OrderId = realEstatePropertyDTO.OrderId,
-                Title = realEstatePropertyDTO.Title,
-                Description = realEstatePropertyDTO.Description,
-                PlatesNumber = realEstatePropertyDTO.PlatesNumber,
-                PropertyType = realEstatePropertyDTO.PropertyType,
-                PropertyStatus = realEstatePropertyDTO.PropertyStatus,
-                Price = realEstatePropertyDTO.Price,
-                Currency = realEstatePropertyDTO.Currency,
-                YearBuilt = realEstatePropertyDTO.YearBuilt,
-                LandArea = realEstatePropertyDTO.LandArea,
-                BuildingArea = realEstatePropertyDTO.BuildingArea,
-                AddressId = realEstatePropertyDTO.AddressId,
-                LocationId = realEstatePropertyDTO.LocationId,
-                OwnerId = realEstatePropertyDTO.OwnerId,
-                AgentId = realEstatePropertyDTO.AgentId,
-                PropertyDeedId = realEstatePropertyDTO.PropertyDeedId,
-                LeaseId = realEstatePropertyDTO.LeaseId
-            };
-
-
-            await _service.AddAsync(realEstateProperty).ConfigureAwait(false);
+           var realEstateProperty = await _service.AddAsync(realEstatePropertyDTO).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsync), new { assetID = realEstateProperty.Id }, realEstateProperty);
         }
@@ -130,50 +96,20 @@ public sealed class PropertyController(PropertyRepository service, ILogger logge
     }
 
     [HttpPut("update/{propertyId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] RealEstatePropertyDTO realEstatePropertyDTO, string propertyId)
+    public async Task<IActionResult> UpdateAsync(string propertyId, [FromBody] RealEstatePropertyDTO realEstatePropertyDTO)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(propertyId))
                 return BadRequest("PropertyId is empty!");
 
-            if (!Guid.TryParse(propertyId, out Guid realEstatePropertyId))
+            if (!Guid.TryParse(propertyId, out Guid id))
                 return BadRequest("PropertyId must be a valid GUID!");
-
-            if (realEstatePropertyDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingProperty = await _service.IsPropertyExistAsync(realEstatePropertyId).ConfigureAwait(false);
-
-            if (!existingProperty)
-                return NotFound("Property not found!");
-
-            var property = new RealEstateProperty
-            {
-                Id = realEstatePropertyId,
-                OrderId = realEstatePropertyDTO.OrderId,
-                Title = realEstatePropertyDTO.Title,
-                Description = realEstatePropertyDTO.Description,
-                PlatesNumber = realEstatePropertyDTO.PlatesNumber,
-                PropertyType = realEstatePropertyDTO.PropertyType,
-                PropertyStatus = realEstatePropertyDTO.PropertyStatus,
-                Price = realEstatePropertyDTO.Price,
-                Currency = realEstatePropertyDTO.Currency,
-                YearBuilt = realEstatePropertyDTO.YearBuilt,
-                LandArea = realEstatePropertyDTO.LandArea,
-                BuildingArea = realEstatePropertyDTO.BuildingArea,
-                AddressId = realEstatePropertyDTO.AddressId,
-                LocationId = realEstatePropertyDTO.LocationId,
-                OwnerId = realEstatePropertyDTO.OwnerId,
-                AgentId = realEstatePropertyDTO.AgentId,
-                PropertyDeedId = realEstatePropertyDTO.PropertyDeedId,
-                LeaseId = realEstatePropertyDTO.LeaseId
-            };
-
-            await _service.UpdateAsync(property).ConfigureAwait(false);
+            await _service.UpdateAsync(id,realEstatePropertyDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -208,15 +144,10 @@ public sealed class PropertyController(PropertyRepository service, ILogger logge
             if (string.IsNullOrWhiteSpace(propertyId))
                 return BadRequest("PropertyId is empty!");
 
-            if (!Guid.TryParse(propertyId, out Guid realEstatePropertyId))
+            if (!Guid.TryParse(propertyId, out Guid id))
                 return BadRequest("PropertyId must be a valid GUID!");
 
-            var existingProperty = await _service.IsPropertyExistAsync(realEstatePropertyId).ConfigureAwait(false);
-
-            if (!existingProperty)
-                return NotFound("Property not found!");
-
-            await _service.DeleteAsync(realEstatePropertyId).ConfigureAwait(false);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -248,7 +179,7 @@ public sealed class PropertyController(PropertyRepository service, ILogger logge
         try
         {
             await _service.DeleteAllAsync().ConfigureAwait(false);
-            return Ok("All assets has been deleted!");
+            return Ok("All properties has been deleted!");
         }
         catch (ArgumentNullException ex)
         {

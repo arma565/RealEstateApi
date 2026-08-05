@@ -8,10 +8,10 @@ interface IAddressRepository
 {
     Task<IEnumerable<PropertyAddress>> GetListAsync();
     Task<PropertyAddress?> GetAsync(Guid id);
-    Task AddAsync(PropertyAddress address);
-    Task UpdateAsync(PropertyAddress address);
+    Task<PropertyAddress> AddAsync(PropertyAddressDTO propertyAddressDTO);
+    Task UpdateAsync(Guid id, PropertyAddressDTO propertyAddressDTO);
     Task DeleteAsync(Guid id);
-    Task<bool> IsAddressExistAsync(Guid id);
+    Task DeleteAllAsync();
 }
 
 #pragma warning disable CA1515
@@ -23,7 +23,6 @@ public class AddressRepository(AppDbContext context) : IAddressRepository
      await _context
         .Addresses
         .AsNoTracking()
-        .Include(address => address.Property)
         .ToListAsync()
         .ConfigureAwait(false);
 
@@ -31,34 +30,66 @@ public class AddressRepository(AppDbContext context) : IAddressRepository
     await _context
        .Addresses
        .AsNoTracking()
-       .Include(address => address.Property)
        .SingleOrDefaultAsync(address => address.Id == id)
        .ConfigureAwait(false);
 
-    public async Task AddAsync(PropertyAddress address)
+    public async Task<PropertyAddress> AddAsync(PropertyAddressDTO propertyAddressDTO)
     {
+
+        ArgumentNullException.ThrowIfNull(propertyAddressDTO);
+
+        var address = new PropertyAddress
+        {
+            Country = propertyAddressDTO.Country,
+            Province = propertyAddressDTO.Province,
+            City = propertyAddressDTO.City,
+            District = propertyAddressDTO.District,
+            Street = propertyAddressDTO.Street,
+            PlatesNumber = propertyAddressDTO.PlatesNumber,
+            PostalCode = propertyAddressDTO.PostalCode,
+            PropertyId = propertyAddressDTO.PropertyId
+        };
+
         await _context.Addresses.AddAsync(address).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+        return address;
     }
 
-    public async Task UpdateAsync(PropertyAddress address)
+    public async Task UpdateAsync(Guid id, PropertyAddressDTO propertyAddressDTO)
     {
+        ArgumentNullException.ThrowIfNull(propertyAddressDTO);
+
+        var address = new PropertyAddress
+        {
+            Id = id,
+            Country = propertyAddressDTO.Country,
+            Province = propertyAddressDTO.Province,
+            City = propertyAddressDTO.City,
+            District = propertyAddressDTO.District,
+            Street = propertyAddressDTO.Street,
+            PlatesNumber = propertyAddressDTO.PlatesNumber,
+            PostalCode = propertyAddressDTO.PostalCode,
+            PropertyId = propertyAddressDTO.PropertyId
+        };
+
         _context.Addresses.Update(address);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var address = await _context.Addresses.FindAsync(id).ConfigureAwait(false);
+        var address = await GetAsync(id).ConfigureAwait(false);
 
-        if (address == null)
-            ArgumentNullException.ThrowIfNull(address);
+        ArgumentNullException.ThrowIfNull(address);
 
         _context.Addresses.Remove(address);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task<bool> IsAddressExistAsync(Guid id) =>
-        await _context.Addresses.AsNoTracking().AnyAsync(address => address.Id == id).ConfigureAwait(false);
+    public async Task DeleteAllAsync()
+    {
+        await _context.Addresses.ExecuteDeleteAsync().ConfigureAwait(false);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
+    }
 
 }

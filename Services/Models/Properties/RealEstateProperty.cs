@@ -1,5 +1,6 @@
 using RealEstate.Services.Enums.Properties;
 using RealEstate.Services.Models.Images;
+using RealEstate.Services.Models.Images.Properties;
 using RealEstate.Services.Models.Persons;
 using RealEstate.Services.Models.Properties.Addresses;
 using RealEstate.Services.Models.Properties.Addresses.Map;
@@ -72,9 +73,9 @@ public class RealEstateProperty()
     public Guid? LeaseId { get; set; } = null!;
     public Lease? Lease { get; set; } = null!;
 
-    public ICollection<PropertyFeature> Features => [];
+    public ICollection<PropertyFeature> Features { get; } = [];
 
-    public ICollection<RealEstateImage> Images => [];
+    public ICollection<PropertyImage> Images { get; } = [];
     #endregion
 
 }

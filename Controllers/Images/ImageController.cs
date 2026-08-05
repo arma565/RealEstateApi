@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using RealEstate.Services.Models.Images;
 using RealEstate.Services.Repositories.Images;
 using RealEstate.Services.Validations;
@@ -9,26 +10,26 @@ namespace RealEstate.Controllers.Images;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public class ImageController(ImageRepository service, ILogger logger) : ControllerBase
+public class ImageController(ImageRepository service, ILogger<ImageController> logger) : ControllerBase
 {
     private readonly ImageRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<ImageController> _logger = logger;
 
     [HttpPost("upload/{imageId}")]
-    public async Task<IActionResult> UploadAsync([FromForm] IFormFile image, string imageId)
+    public async Task<IActionResult> UploadAsync(string imageId, RealEstateImageDTO realEstateImageDTO ,IFormFile image)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(imageId))
                 return BadRequest("ImageId is empty!");
 
-            if (!Guid.TryParse(imageId, out Guid realEstateImageid))
+            if (!Guid.TryParse(imageId, out Guid id))
                 return BadRequest("ImageId must be a valid GUID!");
 
-            await _service.UploadAsync(image, realEstateImageid).ConfigureAwait(false);
+            await _service.UpdateAsync(id , realEstateImageDTO, image).ConfigureAwait(false);
 
-            return Ok("Images uploaded successfully");
+            return Ok("Image uploaded successfully");
         }
         catch (IOException ex)
         {
@@ -65,10 +66,20 @@ public class ImageController(ImageRepository service, ILogger logger) : Controll
             if (string.IsNullOrWhiteSpace(imageId))
                 return BadRequest("ImageId is empty!");
 
-            if (!Guid.TryParse(imageId, out Guid realEstateImageid))
+            if (!Guid.TryParse(imageId, out Guid id))
                 return BadRequest("ImageId must be a valid GUID!");
 
-            return Ok(await _service.DownloadAsync(realEstateImageid).ConfigureAwait(false));
+            var fullPath = await _service.GetPathAsync(id).ConfigureAwait(false);
+
+            if(fullPath == null || fullPath.FullOriginalPath == null)
+                return NotFound("Image not found!");
+
+            var provider = new FileExtensionContentTypeProvider();
+
+            if (!provider.TryGetContentType(fullPath.FullOriginalPath, out var contentType))
+                contentType = "application/octet-stream";
+
+            return PhysicalFile(fullPath.FullOriginalPath, contentType, Path.GetFileName(fullPath.FullOriginalPath));
         }
         catch (IOException ex)
         {
@@ -97,7 +108,7 @@ public class ImageController(ImageRepository service, ILogger logger) : Controll
         }
     }
 
-    [HttpGet("{imageId}")]
+    [HttpGet("get/{imageId}")]
     public async Task<ActionResult<RealEstateImage>> GetAsync(string imageId)
     {
         try
@@ -108,7 +119,7 @@ public class ImageController(ImageRepository service, ILogger logger) : Controll
             if (!Guid.TryParse(imageId, out Guid realEstateImageid))
                 return BadRequest("ImageId must be a valid GUID!");
 
-            var realEstateImage = await _service.GetByIdAsync(realEstateImageid).ConfigureAwait(false);
+            var realEstateImage = await _service.GetAsync(realEstateImageid).ConfigureAwait(false);
             ArgumentNullException.ThrowIfNull(realEstateImage);
             return realEstateImage;
         }
@@ -175,6 +186,37 @@ public class ImageController(ImageRepository service, ILogger logger) : Controll
         {
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllAsync()
+    {
+        try
+        {
+            await _service.DeleteAllAsync().ConfigureAwait(false);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "An invalid operation occurred.");
         }
         catch (UnauthorizedAccessException ex)
         {

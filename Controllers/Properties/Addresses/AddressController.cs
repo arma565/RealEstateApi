@@ -9,16 +9,16 @@ namespace RealEstate.Controllers.Properties.Addresses;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class AddressController(AddressRepository service, ILogger logger) : ControllerBase
+public class AddressController(AddressRepository service, ILogger<AddressController> logger) : ControllerBase
 {
     private readonly AddressRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<AddressController> _logger = logger;
 
-    [HttpGet("/")]
-    public async Task<IEnumerable<PropertyAddress>> GetListAsync() => [.. await _service.GetListAsync().ConfigureAwait(false)];
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<PropertyAddress>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("/{addressId}")]
+    [HttpGet("get/{addressId}")]
     public async Task<ActionResult<PropertyAddress>> GetAsync(string addressId)
     {
         try
@@ -66,19 +66,7 @@ public class AddressController(AddressRepository service, ILogger logger) : Cont
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var address = new PropertyAddress
-            {
-                Country = propertyAddressDTO.Country,
-                Province = propertyAddressDTO.Province,
-                City = propertyAddressDTO.City,
-                District = propertyAddressDTO.District,
-                Street = propertyAddressDTO.Street,
-                PlatesNumber = propertyAddressDTO.PlatesNumber,
-                PostalCode = propertyAddressDTO.PostalCode,
-                PropertyId = propertyAddressDTO.PropertyId
-            };
-
-            await _service.AddAsync(address).ConfigureAwait(false);
+           var address = await _service.AddAsync(propertyAddressDTO).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsync), new { addressId = address.Id }, address);
         }
@@ -105,41 +93,20 @@ public class AddressController(AddressRepository service, ILogger logger) : Cont
     }
 
     [HttpPut("update/{addressId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] PropertyAddressDTO propertyAddressDTO, string addressId)
+    public async Task<IActionResult> UpdateAsync(string addressId, [FromBody] PropertyAddressDTO propertyAddressDTO)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(addressId))
                 return BadRequest("AddressId is empty!");
 
-            if (!Guid.TryParse(addressId, out Guid realEstateAddressId))
+            if (!Guid.TryParse(addressId, out Guid id))
                 return BadRequest("AddressId must be a valid GUID!");
-
-            if (propertyAddressDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingAddress = await _service.IsAddressExistAsync(realEstateAddressId).ConfigureAwait(false);
-
-            if (!existingAddress)
-                return NotFound("Address not found!");
-
-            var address = new PropertyAddress
-            {
-                Id = realEstateAddressId,
-                Country = propertyAddressDTO.Country,
-                Province = propertyAddressDTO.Province,
-                City = propertyAddressDTO.City,
-                District = propertyAddressDTO.District,
-                Street = propertyAddressDTO.Street,
-                PlatesNumber = propertyAddressDTO.PlatesNumber,
-                PostalCode = propertyAddressDTO.PostalCode,
-                PropertyId = propertyAddressDTO.PropertyId
-            };
-
-            await _service.UpdateAsync(address).ConfigureAwait(false);
+            await _service.UpdateAsync(id , propertyAddressDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -177,11 +144,6 @@ public class AddressController(AddressRepository service, ILogger logger) : Cont
             if (!Guid.TryParse(addressId, out Guid realEstateAddressId))
                 return BadRequest("AddressId must be a valid GUID!");
 
-            var existingAddress = await _service.IsAddressExistAsync(realEstateAddressId).ConfigureAwait(false);
-
-            if (!existingAddress)
-                return NotFound("Address not found!");
-
             await _service.DeleteAsync(realEstateAddressId).ConfigureAwait(false);
 
             return NoContent();
@@ -206,5 +168,36 @@ public class AddressController(AddressRepository service, ILogger logger) : Cont
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(403, "Access denied.");
         }
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllAsync()
+    {
+        try
+        {
+            await _service.DeleteAllAsync().ConfigureAwait(false);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+
     }
 }

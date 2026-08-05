@@ -9,16 +9,16 @@ namespace RealEstate.Controllers.Properties.Leases;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class LeaseController(LeaseRepository service,ILogger logger) : ControllerBase
+public class LeaseController(LeaseRepository service,ILogger<LeaseController> logger) : ControllerBase
 {
     private readonly LeaseRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<LeaseController> _logger = logger;
 
-    [HttpGet("/")]
-    public async Task<IEnumerable<Lease>> GetListAsync() => [.. await _service.GetListAsync().ConfigureAwait(false)];
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<Lease>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("/{leaseId}")]
+    [HttpGet("get/{leaseId}")]
     public async Task<ActionResult<Lease>> GetAsync(string leaseId)
     {
         try
@@ -26,10 +26,10 @@ public class LeaseController(LeaseRepository service,ILogger logger) : Controlle
             if (string.IsNullOrWhiteSpace(leaseId))
                 return BadRequest("LeaseId is empty!");
 
-            if (!Guid.TryParse(leaseId, out Guid realEstateLeaseId))
+            if (!Guid.TryParse(leaseId, out Guid id))
                 return BadRequest("LeaseId must be a valid GUID!");
 
-            var lease = await _service.GetAsync(realEstateLeaseId).ConfigureAwait(false);
+            var lease = await _service.GetAsync(id).ConfigureAwait(false);
 
             return lease == null ? NotFound() : Ok(lease);
         }
@@ -66,18 +66,7 @@ public class LeaseController(LeaseRepository service,ILogger logger) : Controlle
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var lease = new Lease
-            {
-                MonthlyRent = leaseDTO.MonthlyRent,
-                DepositAmount = leaseDTO.DepositAmount,
-                StartTime = leaseDTO.StartTime ?? TimeOnly.MinValue,
-                EndTime = leaseDTO.EndTime,
-                StartDate = leaseDTO.StartDate,
-                EndDate = leaseDTO.EndDate,
-                PropertyId = leaseDTO.PropertyId
-            };
-
-            await _service.AddAsync(lease).ConfigureAwait(false);
+            var lease = await _service.AddAsync(leaseDTO).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsync), new { leaseId = lease.Id }, lease);
         }
@@ -104,40 +93,20 @@ public class LeaseController(LeaseRepository service,ILogger logger) : Controlle
     }
 
     [HttpPut("update/{leaseId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] LeaseDTO leaseDTO, string leaseId)
+    public async Task<IActionResult> UpdateAsync(string leaseId, [FromBody] LeaseDTO leaseDTO)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(leaseId))
                 return BadRequest("LeaseId is empty!");
 
-            if (!Guid.TryParse(leaseId, out Guid realEstateLeaseId))
+            if (!Guid.TryParse(leaseId, out Guid id))
                 return BadRequest("LeaseId must be a valid GUID!");
-
-            if (leaseDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingLease = await _service.IsLeaseExistAsync(realEstateLeaseId).ConfigureAwait(false);
-
-            if (!existingLease)
-                return NotFound("Lease not found!");
-
-            var lease = new Lease
-            {
-                Id = realEstateLeaseId,
-                MonthlyRent = leaseDTO.MonthlyRent,
-                DepositAmount = leaseDTO.DepositAmount,
-                StartTime = leaseDTO.StartTime ?? TimeOnly.MinValue,
-                EndTime = leaseDTO.EndTime,
-                StartDate = leaseDTO.StartDate,
-                EndDate = leaseDTO.EndDate,
-                PropertyId = leaseDTO.PropertyId
-            };
-
-            await _service.UpdateAsync(lease).ConfigureAwait(false);
+            await _service.UpdateAsync(id,leaseDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -171,15 +140,10 @@ public class LeaseController(LeaseRepository service,ILogger logger) : Controlle
             if (string.IsNullOrWhiteSpace(leaseId))
                 return BadRequest("LeaseId is empty!");
 
-            if (!Guid.TryParse(leaseId, out Guid realEstateLeaseId))
+            if (!Guid.TryParse(leaseId, out Guid id))
                 return BadRequest("LeaseId must be a valid GUID!");
 
-            var existingLease = await _service.IsLeaseExistAsync(realEstateLeaseId).ConfigureAwait(false);
-
-            if (!existingLease)
-                return NotFound("Lease not found!");
-
-            await _service.DeleteAsync(realEstateLeaseId).ConfigureAwait(false);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -203,5 +167,36 @@ public class LeaseController(LeaseRepository service,ILogger logger) : Controlle
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(403, "Access denied.");
         }
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllAsync()
+    {
+        try
+        {
+            await _service.DeleteAllAsync().ConfigureAwait(false);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+
     }
 }

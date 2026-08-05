@@ -9,16 +9,16 @@ namespace RealEstate.Controllers.Supports;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public sealed class SupportController(SupportRepository service, ILogger logger) : ControllerBase
+public sealed class SupportController(SupportRepository service, ILogger<SupportController> logger) : ControllerBase
 {
     private readonly SupportRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<SupportController> _logger = logger;
 
-    [HttpGet("/")]
+    [HttpGet("get-list")]
     public async Task<ActionResult<IEnumerable<RealEstateSupport>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("{supportId}")]
+    [HttpGet("get/{supportId}")]
     public async Task<ActionResult<RealEstateSupport>> GetAsync(string supportId)
     {
         try
@@ -26,10 +26,10 @@ public sealed class SupportController(SupportRepository service, ILogger logger)
             if (string.IsNullOrWhiteSpace(supportId))
                 return BadRequest("SupportId is empty!");
 
-            if (!Guid.TryParse(supportId, out Guid realEstateSupportId))
+            if (!Guid.TryParse(supportId, out Guid id))
                 return BadRequest("SupportId must be a valid GUID!");
 
-            var support = await _service.GetAsync(realEstateSupportId).ConfigureAwait(false);
+            var support = await _service.GetAsync(id).ConfigureAwait(false);
 
             return support == null ? NotFound() : Ok(support);
 
@@ -67,15 +67,7 @@ public sealed class SupportController(SupportRepository service, ILogger logger)
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var realEstateSupport = new RealEstateSupport
-            {
-               Title = realEstateSupportDTO.Title,
-               DetailsTitle = realEstateSupportDTO.DetailsTitle,
-               DetailsSubtitle = realEstateSupportDTO.DetailsSubtitle,
-               ImageId = realEstateSupportDTO.ImageId
-            };
-
-            await _service.AddAsync(realEstateSupport).ConfigureAwait(false);
+            var realEstateSupport = await _service.AddAsync(realEstateSupportDTO).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsync), new { supportId = realEstateSupport.Id }, realEstateSupport);
         }
@@ -102,37 +94,20 @@ public sealed class SupportController(SupportRepository service, ILogger logger)
     }
 
     [HttpPost("update/{supportId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] RealEstateSupportDTO realEstateSupportDTO, string supportId)
+    public async Task<IActionResult> UpdateAsync(string supportId, [FromBody] RealEstateSupportDTO realEstateSupportDTO)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(supportId))
                 return BadRequest("SupportId is empty!");
 
-            if (!Guid.TryParse(supportId, out Guid realEstateSupportId))
+            if (!Guid.TryParse(supportId, out Guid id))
                 return BadRequest("SupportId must be a valid GUID!");
-
-            if (realEstateSupportDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingSupport = await _service.IsSupportExistAsync(realEstateSupportId).ConfigureAwait(false);
-
-            if (!existingSupport)
-                return NotFound("Support not found!");
-
-            var realEstateSupport = new RealEstateSupport
-            {
-                Id = realEstateSupportId,
-                Title = realEstateSupportDTO.Title,
-                DetailsTitle = realEstateSupportDTO.DetailsTitle,
-                DetailsSubtitle = realEstateSupportDTO.DetailsSubtitle,
-                ImageId = realEstateSupportDTO.ImageId
-            };
-
-            await _service.UpdateAsync(realEstateSupport).ConfigureAwait(false);
+            await _service.UpdateAsync(id,realEstateSupportDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -166,15 +141,10 @@ public sealed class SupportController(SupportRepository service, ILogger logger)
             if (string.IsNullOrWhiteSpace(supportId))
                 return BadRequest("SupportId is empty!");
 
-            if (!Guid.TryParse(supportId, out Guid realEstateSupportId))
+            if (!Guid.TryParse(supportId, out Guid id))
                 return BadRequest("SupportId must be a valid GUID!");
 
-            var existingSupport = await _service.IsSupportExistAsync(realEstateSupportId).ConfigureAwait(false);
-
-            if (!existingSupport)
-                return NotFound("Support not found!");
-
-            await _service.DeleteAsync(realEstateSupportId).ConfigureAwait(false);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }

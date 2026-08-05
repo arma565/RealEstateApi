@@ -4,7 +4,7 @@ namespace RealEstate.Services.Images;
 
 interface IImageService
 {
-    Task<ImagePaths> SaveAsync(IFormFile image, int lastImageOrder);
+    Task<ImagePaths> SaveAsync(IFormFile image);
 
     Task<DownloadPaths> GetPathsAsync(ImagePaths paths);
 
@@ -19,9 +19,8 @@ public class ImageService(IWebHostEnvironment environment) : IImageService
 
     private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
 
-    public async Task<ImagePaths> SaveAsync(IFormFile image, int lastImageOrder)
+    public async Task<ImagePaths> SaveAsync(IFormFile image)
     {
-
         ArgumentNullException.ThrowIfNull(image);
 
         if (!IsValidImage(image))
@@ -33,7 +32,6 @@ public class ImageService(IWebHostEnvironment environment) : IImageService
 
         var imagePaths = new ImagePaths
         {
-            Order = lastImageOrder++,
             OriginalPath = Path.Combine(relativeFolderPath, "Images", originalFileName),
             ThumbnailPath = Path.Combine(relativeFolderPath, "Thumbnails", originalFileName)
         };
@@ -139,7 +137,6 @@ public class ImageService(IWebHostEnvironment environment) : IImageService
 
 public record ImagePaths
 {
-    public int Order { get; set; }
     public string? OriginalPath { get; set; } = null!;
     public string? ThumbnailPath { get; set; } = null!;
 }

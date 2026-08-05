@@ -9,16 +9,16 @@ namespace RealEstate.Controllers.Properties.Addresses.Maps;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class LocationController(LocationRepository service, ILogger logger) : ControllerBase
+public class LocationController(LocationRepository service, ILogger<LocationController> logger) : ControllerBase
 {
     private readonly LocationRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<LocationController> _logger = logger;
 
-    [HttpGet("/")]
-    public async Task<IEnumerable<PropertyLocation>> GetListAsync() => [.. await _service.GetListAsync().ConfigureAwait(false)];
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<PropertyLocation>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("/{locationId}")]
+    [HttpGet("get/{locationId}")]
     public async Task<ActionResult<PropertyLocation>> GetAsync(string locationId)
     {
         try
@@ -66,14 +66,7 @@ public class LocationController(LocationRepository service, ILogger logger) : Co
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var location = new PropertyLocation
-            {
-                Latitude = propertyLocationDTO.Latitude,
-                Longitude = propertyLocationDTO.Longitude,
-                PropertyId = propertyLocationDTO.PropertyId,
-            };
-
-            await _service.AddAsync(location).ConfigureAwait(false);
+          var location =  await _service.AddAsync(propertyLocationDTO).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsync), new { locationId = location.Id }, location);
         }
@@ -116,20 +109,7 @@ public class LocationController(LocationRepository service, ILogger logger) : Co
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingLocation = await _service.IsLocationExistAsync(realEstateLocationId).ConfigureAwait(false);
-
-            if (!existingLocation)
-                return NotFound("Location not found!");
-
-            var location = new PropertyLocation
-            {
-                Id = realEstateLocationId,
-                Latitude = propertyLocationDTO.Latitude,
-                Longitude = propertyLocationDTO.Longitude,
-                PropertyId = propertyLocationDTO.PropertyId
-            };
-
-            await _service.UpdateAsync(location).ConfigureAwait(false);
+            await _service.UpdateAsync(propertyLocationDTO , realEstateLocationId).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -167,11 +147,6 @@ public class LocationController(LocationRepository service, ILogger logger) : Co
             if (!Guid.TryParse(locationId, out Guid realEstateLocationId))
                 return BadRequest("LocationId must be a valid GUID!");
 
-            var existingLocation = await _service.IsLocationExistAsync(realEstateLocationId).ConfigureAwait(false);
-
-            if (!existingLocation)
-                return NotFound("Location not found!");
-
             await _service.DeleteAsync(realEstateLocationId).ConfigureAwait(false);
 
             return NoContent();
@@ -196,5 +171,36 @@ public class LocationController(LocationRepository service, ILogger logger) : Co
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(403, "Access denied.");
         }
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllAsync()
+    {
+        try
+        {
+            await _service.DeleteAllAsync().ConfigureAwait(false);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+
     }
 }

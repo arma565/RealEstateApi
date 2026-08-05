@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Services.Models.Images;
+using RealEstate.Services.Models.Images.Properties;
 using RealEstate.Services.Models.Persons;
 using RealEstate.Services.Models.Properties;
 using RealEstate.Services.Models.Properties.Addresses;
@@ -18,6 +19,8 @@ namespace RealEstate.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
     public required DbSet<RealEstateImage> Images { get; set; }
+
+    public required DbSet<PropertyImage> PropertyImages { get; set; }
 
     public required DbSet<Person> Persons { get; set; }
 
@@ -48,60 +51,38 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
               .WithOne(image => image.User)
               .HasForeignKey<RealEstateImage>(image => image.UserId)
               .HasPrincipalKey<ApplicationUser>(applicationUser => applicationUser.Id)
-              .IsRequired()
-              .OnDelete(DeleteBehavior.Cascade);
+              .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<ApplicationUser>()
                .HasMany(applicationUser => applicationUser.Properties)
                .WithOne(property => property.Agent)
                .HasPrincipalKey(applicationUser => applicationUser.Id)
-               .IsRequired()
                .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Person>()
-           .HasOne(person => person.Property)
-           .WithOne(property => property.Owner)
-           .HasForeignKey<RealEstateProperty>(property => property.OwnerId)
-           .HasPrincipalKey<Person>(person => person.Id)
-           .IsRequired()
-           .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<PropertyDeed>()
             .HasOne(propertyDeed => propertyDeed.Image)
             .WithOne(image => image.Deed)
             .HasForeignKey<RealEstateImage>(image => image.PropertyDeedId)
             .HasPrincipalKey<PropertyDeed>(propertyDeed => propertyDeed.Id)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<PropertyDeed>()
-            .HasOne(propertyDeed => propertyDeed.Property)
-            .WithOne(property => property.PropertyDeed)
-            .HasForeignKey<RealEstateProperty>(property => property.PropertyDeedId)
-            .HasPrincipalKey<PropertyDeed>(propertyDeed => propertyDeed.Id)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Lease>()
             .HasOne(lease => lease.Property)
             .WithOne(property => property.Lease)
             .HasForeignKey<RealEstateProperty>(property => property.LeaseId)
             .HasPrincipalKey<Lease>(lease => lease.Id)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Lease>()
             .HasMany(lease => lease.Persons)
             .WithOne(person => person.Lease)
             .HasPrincipalKey(lease => lease.Id)
-            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Lease>()
             .HasMany(lease => lease.Payments)
             .WithOne(payment => payment.Lease)
             .HasPrincipalKey(lease => lease.Id)
-            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<RealEstateProperty>()
@@ -109,7 +90,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
            .WithOne(address => address.Property)
            .HasForeignKey<PropertyAddress>(address => address.PropertyId)
            .HasPrincipalKey<RealEstateProperty>(property => property.Id)
-           .IsRequired()
            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<RealEstateProperty>()
@@ -117,36 +97,70 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
            .WithOne(location => location.Property)
            .HasForeignKey<PropertyLocation>(location => location.PropertyId)
            .HasPrincipalKey<RealEstateProperty>(property => property.Id)
-           .IsRequired()
            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<RealEstateProperty>()
+            .HasOne(property => property.Owner)
+            .WithOne(person => person.Property)
+            .HasForeignKey<Person>(person => person.PropertyId)
+            .HasPrincipalKey<RealEstateProperty>(property => property.Id)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<RealEstateProperty>()
+        .HasOne(property => property.PropertyDeed)
+        .WithOne(deed => deed.Property)
+        .HasForeignKey<PropertyDeed>(deed => deed.PropertyId)
+        .HasPrincipalKey<RealEstateProperty>(property => property.Id)
+        .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<RealEstateProperty>()
             .HasMany(property => property.Features)
             .WithOne(feature => feature.Property)
             .HasPrincipalKey(property => property.Id)
-            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<RealEstateProperty>()
            .HasMany(property => property.Images)
            .WithOne(image => image.Property)
            .HasPrincipalKey(property => property.Id)
-           .IsRequired()
            .OnDelete(DeleteBehavior.Cascade);
-
 
         builder.Entity<RealEstateSupport>()
            .HasOne(realEstatesupport => realEstatesupport.Image)
            .WithOne(realEstateImage => realEstateImage.Support)
            .HasForeignKey<RealEstateImage>(realEstateImage => realEstateImage.SupportId)
            .HasPrincipalKey<RealEstateSupport>(realEstatesupport => realEstatesupport.Id)
-           .IsRequired()
            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .Entity<RealEstateProperty>()
             .HasIndex(property => property.PlatesNumber)
             .IsUnique();
+
+        builder.Entity<Lease>()
+            .Property(lease => lease.DepositAmount)
+            .HasPrecision(18, 2);
+
+        builder.Entity<Lease>()
+            .Property(lease => lease.MonthlyRent)
+            .HasPrecision(18, 2);
+
+        builder.Entity<Payment>()
+            .Property(payment => payment.Amount)
+            .HasPrecision(18, 2);
+
+        builder.Entity<RealEstateProperty>()
+            .Property(property => property.BuildingArea)
+            .HasPrecision(18, 2);
+
+        builder.Entity<RealEstateProperty>()
+            .Property(property => property.LandArea)
+            .HasPrecision(18, 2);
+
+        builder.Entity<RealEstateProperty>()
+            .Property(property => property.Price)
+            .HasPrecision(18, 2);
+
     }
 }
 

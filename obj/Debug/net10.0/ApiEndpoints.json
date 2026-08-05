@@ -1,21 +1,57 @@
 [
   {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "GetUserAsync",
-    "RelativePath": "{userName}",
-    "HttpMethod": "GET",
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
+    "Method": "AddAsync",
+    "RelativePath": "Address/add",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userName",
+        "Name": "propertyAddressDTO",
+        "Type": "RealEstate.Services.Models.Properties.Addresses.PropertyAddressDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Address/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Address/delete/{addressId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addressId",
         "Type": "System.String",
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
+    "Method": "GetListAsync",
+    "RelativePath": "Address/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Models.Users.User",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Addresses.PropertyAddress, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -26,9 +62,82 @@
     ]
   },
   {
-    "ContainingType": "RealEstate.Controllers.AdminController",
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
+    "Method": "GetAsync",
+    "RelativePath": "Address/get/{addressId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addressId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Properties.Addresses.PropertyAddress",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Address/update/{addressId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addressId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "propertyAddressDTO",
+        "Type": "RealEstate.Services.Models.Properties.Addresses.PropertyAddressDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.AdminController",
+    "Method": "DeleteUsersAsync",
+    "RelativePath": "Admin/delete-users",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.AdminController",
+    "Method": "DeleteAdminAsync",
+    "RelativePath": "Admin/delete/{userName}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.AdminController",
     "Method": "PromoteUser",
-    "RelativePath": "Admin/admin/promote",
+    "RelativePath": "Admin/promote",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -42,22 +151,16 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "GetAsset",
-    "RelativePath": "Asset/asset/{assetID}",
+    "ContainingType": "RealEstate.Controllers.Users.AdminController",
+    "Method": "GetUsersAsync",
+    "RelativePath": "Admin/users",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "assetID",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Models.Assets.Asset",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Users.ApplicationUser, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -68,32 +171,58 @@
     ]
   },
   {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "AddAsset",
-    "RelativePath": "Asset/asset/add",
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
+    "Method": "AddAsync",
+    "RelativePath": "Deed/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "newAsset",
-        "Type": "RealEstate.Models.Assets.Asset",
+        "Name": "propertyDeedDTO",
+        "Type": "RealEstate.Services.Models.Properties.Documents.PropertyDeedDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "GetAssetListAscending",
-    "RelativePath": "Asset/asset/asc",
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Deed/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Deed/delete/{propertyDeedId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
+    "Method": "GetListAsync",
+    "RelativePath": "Deed/get-list",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Documents.PropertyDeed, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -104,32 +233,22 @@
     ]
   },
   {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "DeleteAssetImage",
-    "RelativePath": "Asset/asset/assetImage/delete/{assetImageID}",
-    "HttpMethod": "DELETE",
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
+    "Method": "GetAsync",
+    "RelativePath": "Deed/get/{propertyDeedId}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "assetImageID",
+        "Name": "propertyDeedId",
         "Type": "System.String",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "GetAssetListDateModified",
-    "RelativePath": "Asset/asset/date",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "RealEstate.Services.Models.Properties.Documents.PropertyDeed",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -140,94 +259,916 @@
     ]
   },
   {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "DeleteAllAssets",
-    "RelativePath": "Asset/asset/delete-all",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "DeleteAsset",
-    "RelativePath": "Asset/asset/delete/{assetID}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "assetID",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "GetAssetListDescending",
-    "RelativePath": "Asset/asset/desc",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Assets.Asset, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "DownloadAssetImage",
-    "RelativePath": "Asset/asset/download/{imageFileName}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageFileName",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "UpdateAsset",
-    "RelativePath": "Asset/asset/update",
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Deed/update/{propertyDeedId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "updateAsset",
-        "Type": "RealEstate.Models.Assets.Asset",
+        "Name": "propertyDeedId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "propertyDeedDTO",
+        "Type": "RealEstate.Services.Models.Properties.Documents.PropertyDeedDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "UploadAssetImages",
-    "RelativePath": "Asset/asset/upload/{assetID}",
+    "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
+    "Method": "AddAsync",
+    "RelativePath": "Feature/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "assetID",
+        "Name": "propertyFeatureDTO",
+        "Type": "RealEstate.Services.Models.Properties.Features.PropertyFeatureDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Feature/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Feature/delete/{featureId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "featureId",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
+    "Method": "GetListAsync",
+    "RelativePath": "Feature/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Features.PropertyFeature, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
+    "Method": "GetAsync",
+    "RelativePath": "Feature/get/{featureId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "featureId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Properties.Features.PropertyFeature",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Feature/update/{featureId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyFeatureDTO",
+        "Type": "RealEstate.Services.Models.Properties.Features.PropertyFeatureDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "featureId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.ImageController",
+    "Method": "AddAsync",
+    "RelativePath": "Image/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "realEstateImageDTO",
+        "Type": "RealEstate.Services.Models.Images.RealEstateImageDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.ImageController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Image/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.ImageController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Image/delete/{imageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.ImageController",
+    "Method": "DownloadAsync",
+    "RelativePath": "Image/download/{imageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.ImageController",
+    "Method": "GetAsync",
+    "RelativePath": "Image/get/{imageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Images.RealEstateImage",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.ImageController",
+    "Method": "UploadAsync",
+    "RelativePath": "Image/upload/{imageId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imageId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "realEstateImageDTO",
+        "Type": "RealEstate.Services.Models.Images.RealEstateImageDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
+    "Method": "AddAsync",
+    "RelativePath": "Lease/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseDTO",
+        "Type": "RealEstate.Services.Models.Properties.Leases.LeaseDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Lease/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Lease/delete/{leaseId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
+    "Method": "GetListAsync",
+    "RelativePath": "Lease/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Leases.Lease, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
+    "Method": "GetAsync",
+    "RelativePath": "Lease/get/{leaseId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Properties.Leases.Lease",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Lease/update/{leaseId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "leaseDTO",
+        "Type": "RealEstate.Services.Models.Properties.Leases.LeaseDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
+    "Method": "AddAsync",
+    "RelativePath": "Location/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyLocationDTO",
+        "Type": "RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Location/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Location/delete/{locationId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "locationId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
+    "Method": "GetListAsync",
+    "RelativePath": "Location/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocation, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
+    "Method": "GetAsync",
+    "RelativePath": "Location/get/{locationId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "locationId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocation",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Location/update/{locationId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyLocationDTO",
+        "Type": "RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocationDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "locationId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "Method": "AddAsync",
+    "RelativePath": "Payment/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paymentDTO",
+        "Type": "RealEstate.Services.Models.Properties.Payments.PaymentDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Payment/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Payment/delete/{paymentId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paymentId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "Method": "GetListAsync",
+    "RelativePath": "Payment/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Payments.Payment, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "Method": "GetAsync",
+    "RelativePath": "Payment/get/{paymentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paymentId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Properties.Payments.Payment",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Payment/update/{paymentId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paymentId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "paymentDTO",
+        "Type": "RealEstate.Services.Models.Properties.Payments.PaymentDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
+    "Method": "AddAsync",
+    "RelativePath": "Person/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personDTO",
+        "Type": "RealEstate.Services.Models.Persons.PersonDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "Person/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Person/delete/{personId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
+    "Method": "GetByNationalIdAsync",
+    "RelativePath": "Person/get-by-nationalId/{nationalId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nationalId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Persons.Person",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
+    "Method": "GetListAsync",
+    "RelativePath": "Person/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Persons.Person, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
+    "Method": "GetAsync",
+    "RelativePath": "Person/get/{personId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Persons.Person",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Person/update/{personId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personDTO",
+        "Type": "RealEstate.Services.Models.Persons.PersonDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "personId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
+    "Method": "AddAsync",
+    "RelativePath": "Property/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "realEstatePropertyDTO",
+        "Type": "RealEstate.Services.Models.Properties.RealEstatePropertyDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
+    "Method": "DeleteAllAssets",
+    "RelativePath": "Property/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Property/delete/{propertyId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
+    "Method": "GetList",
+    "RelativePath": "Property/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.RealEstateProperty, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
+    "Method": "GetAsync",
+    "RelativePath": "Property/get/{propertyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Properties.RealEstateProperty",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Property/update/{propertyId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "realEstatePropertyDTO",
+        "Type": "RealEstate.Services.Models.Properties.RealEstatePropertyDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
+    "Method": "AddAsync",
+    "RelativePath": "PropertyImage/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyImageDTO",
+        "Type": "RealEstate.Services.Models.Images.Properties.PropertyImageDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
+    "Method": "DeleteAllAsync",
+    "RelativePath": "PropertyImage/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
+    "Method": "DeleteAsync",
+    "RelativePath": "PropertyImage/delete/{propertyImageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
+    "Method": "DownloadAsync",
+    "RelativePath": "PropertyImage/download/{propertyImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
+    "Method": "GetAsync",
+    "RelativePath": "PropertyImage/get/{propertyImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Images.Properties.PropertyImage",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
+    "Method": "UploadAsync",
+    "RelativePath": "PropertyImage/upload/{propertyImageId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "propertyImageDTO",
+        "Type": "RealEstate.Services.Models.Images.Properties.PropertyImageDTO",
         "IsRequired": true
       },
       {
@@ -239,301 +1180,23 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "GetPersonsList",
-    "RelativePath": "Asset/person",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Models.Persons.Person, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "GetPerson",
-    "RelativePath": "Asset/person/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "RealEstate.Models.Persons.Person",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "AddPerson",
-    "RelativePath": "Asset/person/add",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "newPerson",
-        "Type": "RealEstate.Models.Persons.Person",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "DeleteAllPersons",
-    "RelativePath": "Asset/person/delete-all",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "DeletePerson",
-    "RelativePath": "Asset/person/delete/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AssetController",
-    "Method": "UpdatePerson",
-    "RelativePath": "Asset/person/update",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "updatePerson",
-        "Type": "RealEstate.Models.Persons.Person",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "ChangePasswordAsync",
-    "RelativePath": "change-password",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "RealEstate.Models.Users.UserChangePassword",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "DeleteUserAsync",
-    "RelativePath": "delete",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "RealEstate.Models.Users.UserLoginRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AdminController",
-    "Method": "DeleteUsersAsync",
-    "RelativePath": "delete-users",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AdminController",
-    "Method": "DeleteAdminAsync",
-    "RelativePath": "delete/{userName}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userName",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "EditUserProfile",
-    "RelativePath": "edit-profile",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "editUserProfileModel",
-        "Type": "RealEstate.Models.Users.User",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "ForgotPasswordAsync",
-    "RelativePath": "forgot-password",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "RealEstate.Models.Users.UserForgotPassword",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "LoginUserAsync",
-    "RelativePath": "login",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "RealEstate.Models.Users.UserLoginRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "RegisterUserAsync",
-    "RelativePath": "register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "RealEstate.Models.Users.UserRegisterAccount",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "ResetPasswordAsync",
-    "RelativePath": "reset-password",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "RealEstate.Models.Users.UserResetPassword",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "GetSupport",
-    "RelativePath": "Support/{supportID}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "supportID",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "RealEstate.Models.Support.SupportApp",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "AddSupport",
+    "ContainingType": "RealEstate.Controllers.Supports.SupportController",
+    "Method": "Add",
     "RelativePath": "Support/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "support",
-        "Type": "RealEstate.Models.Support.SupportApp",
+        "Name": "realEstateSupportDTO",
+        "Type": "RealEstate.Services.Models.Supports.RealEstateSupportDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.SupportController",
+    "ContainingType": "RealEstate.Controllers.Supports.SupportController",
     "Method": "DeleteAllSupports",
     "RelativePath": "Support/delete-all",
     "HttpMethod": "DELETE",
@@ -543,15 +1206,15 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "DeleteSupport",
-    "RelativePath": "Support/delete/{supportID}",
+    "ContainingType": "RealEstate.Controllers.Supports.SupportController",
+    "Method": "DeleteAsync",
+    "RelativePath": "Support/delete/{supportId}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "supportID",
+        "Name": "supportId",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -559,32 +1222,16 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "DownloadSupportImage",
-    "RelativePath": "Support/download/{imageFileName}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageFileName",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "GetAllSupports",
-    "RelativePath": "Support/list",
+    "ContainingType": "RealEstate.Controllers.Supports.SupportController",
+    "Method": "GetListAsync",
+    "RelativePath": "Support/get-list",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[RealEstate.Models.Support.SupportApp, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Supports.RealEstateSupport, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -595,122 +1242,22 @@
     ]
   },
   {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "DeleteProfileImage",
-    "RelativePath": "Support/support-image/delete/{supportImageID}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "supportImageID",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "UpdateSupport",
-    "RelativePath": "Support/update",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "support",
-        "Type": "RealEstate.Models.Support.SupportApp",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.SupportController",
-    "Method": "UploadSupportImage",
-    "RelativePath": "Support/upload/{supportID}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "supportID",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "image",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "DeleteProfileImage",
-    "RelativePath": "User/profile/delete/{profileImageID}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "profileImageID",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "DownloadProfileImage",
-    "RelativePath": "User/user/download/{imageFileName}",
+    "ContainingType": "RealEstate.Controllers.Supports.SupportController",
+    "Method": "GetAsync",
+    "RelativePath": "Support/get/{supportId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "imageFileName",
+        "Name": "supportId",
         "Type": "System.String",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.UserController",
-    "Method": "UploadProfileImage",
-    "RelativePath": "User/user/upload/{userID}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userID",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "image",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.AdminController",
-    "Method": "GetUsersAsync",
-    "RelativePath": "users",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[RealEstate.Models.Users.User, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "RealEstate.Services.Models.Supports.RealEstateSupport",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -719,5 +1266,174 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Supports.SupportController",
+    "Method": "UpdateAsync",
+    "RelativePath": "Support/update/{supportId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "realEstateSupportDTO",
+        "Type": "RealEstate.Services.Models.Supports.RealEstateSupportDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "GetAsync",
+    "RelativePath": "User/{userName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Services.Models.Users.ApplicationUser",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "ChangePasswordAsync",
+    "RelativePath": "User/change-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userChangePasswordDTO",
+        "Type": "RealEstate.Services.Models.Users.UserChangePasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "DeleteAsync",
+    "RelativePath": "User/delete",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userLoginRequestDTO",
+        "Type": "RealEstate.Services.Models.Users.UserLoginRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "EditUserProfile",
+    "RelativePath": "User/edit-profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationUser",
+        "Type": "RealEstate.Services.Models.Users.ApplicationUser",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "ForgotPasswordAsync",
+    "RelativePath": "User/forgot-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userForgotPasswordDTO",
+        "Type": "RealEstate.Services.Models.Users.UserForgotPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "LoginAsync",
+    "RelativePath": "User/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userLoginRequestDTO",
+        "Type": "RealEstate.Services.Models.Users.UserLoginRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "RegisterAsync",
+    "RelativePath": "User/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userRegisterAccountDTO",
+        "Type": "RealEstate.Services.Models.Users.UserRegisterAccountDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "ResetPasswordAsync",
+    "RelativePath": "User/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userResetPasswordDTO",
+        "Type": "RealEstate.Services.Models.Users.UserResetPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

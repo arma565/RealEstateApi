@@ -9,6 +9,7 @@ using RealEstate.Services.Authorization;
 using RealEstate.Services.Images;
 using RealEstate.Services.Models.Users;
 using RealEstate.Services.Repositories.Images;
+using RealEstate.Services.Repositories.Images.Properties;
 using RealEstate.Services.Repositories.Persons;
 using RealEstate.Services.Repositories.Properties;
 using RealEstate.Services.Repositories.Properties.Addresses;
@@ -64,6 +65,7 @@ public partial class Program
 
         //Repositories services
         builder.Services.AddScoped<ImageRepository>();
+        builder.Services.AddScoped<PropertyImageRepository>();
         builder.Services.AddScoped<PersonRepository>();
         builder.Services.AddScoped<LocationRepository>();
         builder.Services.AddScoped<AddressRepository>();

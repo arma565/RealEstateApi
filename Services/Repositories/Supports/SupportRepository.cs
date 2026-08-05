@@ -10,11 +10,10 @@ interface ISupportRepository
 {
     Task<IEnumerable<RealEstateSupport>> GetListAsync();
     Task<RealEstateSupport?> GetAsync(Guid id);
-    Task AddAsync(RealEstateSupport support);
-    Task UpdateAsync(RealEstateSupport support);
+    Task<RealEstateSupport> AddAsync(RealEstateSupportDTO realEstateSupportDTO);
+    Task UpdateAsync(Guid id , RealEstateSupportDTO realEstateSupportDTO);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
-    Task<bool> IsSupportExistAsync(Guid id);
 }
 
 #pragma warning disable CA1515
@@ -35,28 +34,50 @@ public class SupportRepository(AppDbContext context,
     public async Task<RealEstateSupport?> GetAsync(Guid id) =>
       await _context
           .Supports.AsNoTracking()
-          .Include(sups => sups.Image)
+          .Include(support => support.Image)
           .SingleOrDefaultAsync(support => support.Id == id)
           .ConfigureAwait(false);
 
-    public async Task AddAsync(RealEstateSupport support)
+    public async Task<RealEstateSupport> AddAsync(RealEstateSupportDTO realEstateSupportDTO)
     {
-        await _context.Supports.AddAsync(support).ConfigureAwait(false);
+
+        ArgumentNullException.ThrowIfNull(realEstateSupportDTO);
+
+        var realEstateSupport = new RealEstateSupport
+        {
+            Title = realEstateSupportDTO.Title,
+            DetailsTitle = realEstateSupportDTO.DetailsTitle,
+            DetailsSubtitle = realEstateSupportDTO.DetailsSubtitle,
+            ImageId = realEstateSupportDTO.ImageId
+        };
+
+        await _context.Supports.AddAsync(realEstateSupport).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+        return realEstateSupport;
     }
 
-    public async Task UpdateAsync(RealEstateSupport support)
+    public async Task UpdateAsync(Guid id , RealEstateSupportDTO realEstateSupportDTO)
     {
-        _context.Supports.Update(support);
+        ArgumentNullException.ThrowIfNull(realEstateSupportDTO);
+
+        var realEstateSupport = new RealEstateSupport
+        {
+            Id = id,
+            Title = realEstateSupportDTO.Title,
+            DetailsTitle = realEstateSupportDTO.DetailsTitle,
+            DetailsSubtitle = realEstateSupportDTO.DetailsSubtitle,
+            ImageId = realEstateSupportDTO.ImageId
+        };
+
+
+        _context.Supports.Update(realEstateSupport);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var support = await _context.Supports.FindAsync(id).ConfigureAwait(false);
-
-        if (support == null || support.Image == null)
-            ArgumentNullException.ThrowIfNull(support!.Image);
+        var support = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(support!.Image);
 
         await _imageRepository.DeleteAsync(support.Image.Id).ConfigureAwait(false);
 
@@ -73,12 +94,9 @@ public class SupportRepository(AppDbContext context,
                 continue;
             await _imageRepository.DeleteAsync(support.Image.Id).ConfigureAwait(false);
         }
-        _context.Supports.ExecuteDelete();
+        await _context.Supports.ExecuteDeleteAsync().ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
-
-    public async Task<bool> IsSupportExistAsync(Guid id) =>
-   (await GetListAsync().ConfigureAwait(false)).Any(support => support.Id == id);
 
 }
 

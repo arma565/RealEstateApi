@@ -9,27 +9,27 @@ namespace RealEstate.Controllers.Properties.Documents;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class DeedController(DeedRepository service, ILogger logger) : ControllerBase
+public class DeedController(DeedRepository service, ILogger<DeedController> logger) : ControllerBase
 {
     private readonly DeedRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<DeedController> _logger = logger;
 
-    [HttpGet("/")]
-    public async Task<IEnumerable<PropertyDeed>> GetListAsync() => [.. await _service.GetListAsync().ConfigureAwait(false)];
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<PropertyDeed>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("/{deedId}")]
-    public async Task<ActionResult<PropertyDeed>> GetAsync(string deedId)
+    [HttpGet("get/{propertyDeedId}")]
+    public async Task<ActionResult<PropertyDeed>> GetAsync(string propertyDeedId)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(deedId))
-                return BadRequest("DeedId is empty!");
+            if (string.IsNullOrWhiteSpace(propertyDeedId))
+                return BadRequest("propertyDeedId is empty!");
 
-            if (!Guid.TryParse(deedId, out Guid realEstateDeedId))
-                return BadRequest("DeedId must be a valid GUID!");
+            if (!Guid.TryParse(propertyDeedId, out Guid id))
+                return BadRequest("propertyDeedId must be a valid GUID!");
 
-            var deed = await _service.GetAsync(realEstateDeedId).ConfigureAwait(false);
+            var deed = await _service.GetAsync(id).ConfigureAwait(false);
 
             return deed == null ? NotFound() : Ok(deed);
         }
@@ -66,19 +66,9 @@ public class DeedController(DeedRepository service, ILogger logger) : Controller
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var deed = new PropertyDeed
-            {
-                DeedNumber = propertyDeedDTO.DeedNumber,
-                RegistryNumber = propertyDeedDTO.RegistryNumber,
-                IssueDate = propertyDeedDTO.IssueDate,
-                IssuedBy = propertyDeedDTO.IssuedBy,
-                ImageId = propertyDeedDTO.ImageId,
-                PropertyId = propertyDeedDTO.PropertyId
-            };
+           var propertyDeed = await _service.AddAsync(propertyDeedDTO).ConfigureAwait(false);
 
-            await _service.AddAsync(deed).ConfigureAwait(false);
-
-            return CreatedAtAction(nameof(GetAsync), new { deedId = deed.Id }, deed);
+            return CreatedAtAction(nameof(GetAsync), new { id = propertyDeed.Id }, propertyDeed);
         }
         catch (ArgumentNullException ex)
         {
@@ -102,40 +92,21 @@ public class DeedController(DeedRepository service, ILogger logger) : Controller
         }
     }
 
-    [HttpPut("update/{deedId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] PropertyDeedDTO propertyDeedDTO, string deedId)
+    [HttpPut("update/{propertyDeedId}")]
+    public async Task<IActionResult> UpdateAsync(string propertyDeedId, [FromBody] PropertyDeedDTO propertyDeedDTO)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(deedId))
-                return BadRequest("DeedId is empty!");
+            if (string.IsNullOrWhiteSpace(propertyDeedId))
+                return BadRequest("propertyDeedId is empty!");
 
-            if (!Guid.TryParse(deedId, out Guid realEstateDeedId))
-                return BadRequest("DeedId must be a valid GUID!");
-
-            if (propertyDeedDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
+            if (!Guid.TryParse(propertyDeedId, out Guid id))
+                return BadRequest("propertyDeedId must be a valid GUID!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingDeed = await _service.IsDeedExistAsync(realEstateDeedId).ConfigureAwait(false);
-
-            if (!existingDeed)
-                return NotFound("Deed not found!");
-
-            var deed = new PropertyDeed
-            {
-                Id = realEstateDeedId,
-                DeedNumber = propertyDeedDTO.DeedNumber,
-                RegistryNumber = propertyDeedDTO.RegistryNumber,
-                IssueDate = propertyDeedDTO.IssueDate,
-                IssuedBy = propertyDeedDTO.IssuedBy,
-                ImageId = propertyDeedDTO.ImageId,
-                PropertyId = propertyDeedDTO.PropertyId
-            };
-
-            await _service.UpdateAsync(deed).ConfigureAwait(false);
+            await _service.UpdateAsync(id,propertyDeedDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -161,23 +132,18 @@ public class DeedController(DeedRepository service, ILogger logger) : Controller
         }
     }
 
-    [HttpDelete("delete/{deedId}")]
-    public async Task<IActionResult> DeleteAsync(string deedId)
+    [HttpDelete("delete/{propertyDeedId}")]
+    public async Task<IActionResult> DeleteAsync(string propertyDeedId)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(deedId))
+            if (string.IsNullOrWhiteSpace(propertyDeedId))
                 return BadRequest("DeedId is empty!");
 
-            if (!Guid.TryParse(deedId, out Guid realEstateDeedId))
+            if (!Guid.TryParse(propertyDeedId, out Guid id))
                 return BadRequest("DeedId must be a valid GUID!");
 
-            var existingDeed = await _service.IsDeedExistAsync(realEstateDeedId).ConfigureAwait(false);
-
-            if (!existingDeed)
-                return NotFound("Deed not found!");
-
-            await _service.DeleteAsync(realEstateDeedId).ConfigureAwait(false);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -201,5 +167,36 @@ public class DeedController(DeedRepository service, ILogger logger) : Controller
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(403, "Access denied.");
         }
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllAsync()
+    {
+        try
+        {
+            await _service.DeleteAllAsync().ConfigureAwait(false);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+
     }
 }

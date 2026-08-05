@@ -11,9 +11,6 @@ public class RealEstateImageDTO
     [DefaultValue("")]
     public Uri? ThumbnailFileUrl { get; set; } = default;
 
-    [DefaultValue(true)]
-    public bool IsCoverImage { get; set; } = default;
-
     #region Relationships
 
     public string? UserId { get; set; } = null!;

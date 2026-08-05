@@ -9,16 +9,16 @@ namespace RealEstate.Controllers.Properties.Features;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class FeatureController(FeatureRepository service, ILogger logger) : ControllerBase
+public class FeatureController(FeatureRepository service, ILogger<FeatureController> logger) : ControllerBase
 {
     private readonly FeatureRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<FeatureController> _logger = logger;
 
-    [HttpGet("/")]
-    public async Task<IEnumerable<PropertyFeature>> GetListAsync() => [.. await _service.GetListAsync().ConfigureAwait(false)];
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<PropertyFeature>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("/{featureId}")]
+    [HttpGet("get/{featureId}")]
     public async Task<ActionResult<PropertyFeature>> GetAsync(string featureId)
     {
         try
@@ -26,10 +26,10 @@ public class FeatureController(FeatureRepository service, ILogger logger) : Cont
             if (string.IsNullOrWhiteSpace(featureId))
                 return BadRequest("FeatureId is empty!");
 
-            if (!Guid.TryParse(featureId, out Guid realEstateFeatureId))
+            if (!Guid.TryParse(featureId, out Guid id))
                 return BadRequest("FeatureId must be a valid GUID!");
 
-            var feature = await _service.GetAsync(realEstateFeatureId).ConfigureAwait(false);
+            var feature = await _service.GetAsync(id).ConfigureAwait(false);
 
             return feature == null ? NotFound() : Ok(feature);
         }
@@ -66,14 +66,7 @@ public class FeatureController(FeatureRepository service, ILogger logger) : Cont
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var feature = new PropertyFeature
-            {
-                Name = propertyFeatureDTO.Name,
-                Category = propertyFeatureDTO.Category,
-                PropertyId = propertyFeatureDTO.PropertyId
-            };
-
-            await _service.AddAsync(feature).ConfigureAwait(false);
+           var feature = await _service.AddAsync(propertyFeatureDTO).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsync), new { featureId = feature.Id }, feature);
         }
@@ -107,29 +100,13 @@ public class FeatureController(FeatureRepository service, ILogger logger) : Cont
             if (string.IsNullOrWhiteSpace(featureId))
                 return BadRequest("FeatureId is empty!");
 
-            if (!Guid.TryParse(featureId, out Guid realEstateFeatureId))
+            if (!Guid.TryParse(featureId, out Guid id))
                 return BadRequest("FeatureId must be a valid GUID!");
-
-            if (propertyFeatureDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingFeature = await _service.IsFeatureExistAsync(realEstateFeatureId).ConfigureAwait(false);
-
-            if (!existingFeature)
-                return NotFound("Feature not found!");
-
-            var feature = new PropertyFeature
-            {
-                Id = realEstateFeatureId,
-                Name = propertyFeatureDTO.Name,
-                Category = propertyFeatureDTO.Category,
-                PropertyId = propertyFeatureDTO.PropertyId
-            };
-
-            await _service.UpdateAsync(feature).ConfigureAwait(false);
+            await _service.UpdateAsync(id,propertyFeatureDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -163,15 +140,10 @@ public class FeatureController(FeatureRepository service, ILogger logger) : Cont
             if (string.IsNullOrWhiteSpace(featureId))
                 return BadRequest("FeatureId is empty!");
 
-            if (!Guid.TryParse(featureId, out Guid realEstateFeatureId))
+            if (!Guid.TryParse(featureId, out Guid id))
                 return BadRequest("FeatureId must be a valid GUID!");
 
-            var existingFeature = await _service.IsFeatureExistAsync(realEstateFeatureId).ConfigureAwait(false);
-
-            if (!existingFeature)
-                return NotFound("Feature not found!");
-
-            await _service.DeleteAsync(realEstateFeatureId).ConfigureAwait(false);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -195,5 +167,36 @@ public class FeatureController(FeatureRepository service, ILogger logger) : Cont
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(403, "Access denied.");
         }
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllAsync()
+    {
+        try
+        {
+            await _service.DeleteAllAsync().ConfigureAwait(false);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+
     }
 }

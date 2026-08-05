@@ -8,10 +8,10 @@ interface ILocationRepository
 {
     Task<IEnumerable<PropertyLocation>> GetListAsync();
     Task<PropertyLocation?> GetAsync(Guid id);
-    Task AddAsync(PropertyLocation location);
-    Task UpdateAsync(PropertyLocation location);
+    Task<PropertyLocation> AddAsync(PropertyLocationDTO propertyLocationDTO);
+    Task UpdateAsync(PropertyLocationDTO propertyLocationDTO, Guid id);
     Task DeleteAsync(Guid id);
-    Task<bool> IsLocationExistAsync(Guid id);
+    Task DeleteAllAsync();
 }
 
 #pragma warning disable CA1515
@@ -23,7 +23,6 @@ public class LocationRepository(AppDbContext context) : ILocationRepository
       await _context
         .Locations
         .AsNoTracking()
-        .Include(location => location.Property)
         .ToListAsync()
         .ConfigureAwait(false);
 
@@ -31,33 +30,53 @@ public class LocationRepository(AppDbContext context) : ILocationRepository
        await _context
          .Locations
          .AsNoTracking()
-         .Include(location => location.Property)
          .SingleOrDefaultAsync(location => location.Id == id)
          .ConfigureAwait(false);
 
-    public async Task AddAsync(PropertyLocation location)
+    public async Task<PropertyLocation> AddAsync(PropertyLocationDTO propertyLocationDTO)
     {
+        ArgumentNullException.ThrowIfNull(propertyLocationDTO);
+
+        var location = new PropertyLocation
+        {
+            Latitude = propertyLocationDTO.Latitude,
+            Longitude = propertyLocationDTO.Longitude,
+            PropertyId = propertyLocationDTO.PropertyId
+        };
+
         await _context.Locations.AddAsync(location).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+        return location;
     }
 
-    public async Task UpdateAsync(PropertyLocation location)
+    public async Task UpdateAsync(PropertyLocationDTO propertyLocationDTO , Guid id)
     {
+        ArgumentNullException.ThrowIfNull(propertyLocationDTO);
+
+        var location = new PropertyLocation
+        {
+            Id = id,
+            Latitude = propertyLocationDTO.Latitude,
+            Longitude = propertyLocationDTO.Longitude,
+            PropertyId = propertyLocationDTO.PropertyId
+        };
+
         _context.Locations.Update(location);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var location = await _context.Locations.FindAsync(id).ConfigureAwait(false);
-
-        if (location == null)
-            ArgumentNullException.ThrowIfNull(location);
+        var location = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(location);
 
         _context.Locations.Remove(location);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task<bool> IsLocationExistAsync(Guid id) =>
-        await _context.Locations.AsNoTracking().AnyAsync(location => location.Id == id).ConfigureAwait(false);
+    public async Task DeleteAllAsync()
+    {
+        await _context.Locations.ExecuteDeleteAsync().ConfigureAwait(false);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
+    }
 }

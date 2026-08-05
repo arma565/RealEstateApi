@@ -9,16 +9,16 @@ namespace RealEstate.Controllers.Properties.Payments;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class PaymentController(PaymentRepository service, ILogger logger) : ControllerBase
+public class PaymentController(PaymentRepository service, ILogger<PaymentController> logger) : ControllerBase
 {
     private readonly PaymentRepository _service = service;
 
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<PaymentController> _logger = logger;
 
-    [HttpGet("/")]
-    public async Task<IEnumerable<Payment>> GetListAsync() => [.. await _service.GetListAsync().ConfigureAwait(false)];
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<Payment>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
-    [HttpGet("/{paymentId}")]
+    [HttpGet("get/{paymentId}")]
     public async Task<ActionResult<Payment>> GetAsync(string paymentId)
     {
         try
@@ -26,10 +26,10 @@ public class PaymentController(PaymentRepository service, ILogger logger) : Cont
             if (string.IsNullOrWhiteSpace(paymentId))
                 return BadRequest("PaymentId is empty!");
 
-            if (!Guid.TryParse(paymentId, out Guid realEstatePaymentId))
+            if (!Guid.TryParse(paymentId, out Guid id))
                 return BadRequest("PaymentId must be a valid GUID!");
 
-            var payment = await _service.GetAsync(realEstatePaymentId).ConfigureAwait(false);
+            var payment = await _service.GetAsync(id).ConfigureAwait(false);
 
             return payment == null ? NotFound() : Ok(payment);
         }
@@ -66,16 +66,7 @@ public class PaymentController(PaymentRepository service, ILogger logger) : Cont
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var payment = new Payment
-            {
-                Amount = paymentDTO.Amount,
-                PaidAt = paymentDTO.PaidAt,
-                PaymentType = paymentDTO.PaymentType,
-                PaymentStatus = paymentDTO.PaymentStatus,
-                LeaseId = paymentDTO.LeaseId
-            };
-
-            await _service.AddAsync(payment).ConfigureAwait(false);
+           var payment = await _service.AddAsync(paymentDTO).ConfigureAwait(false);
 
             return CreatedAtAction(nameof(GetAsync), new { paymentId = payment.Id }, payment);
         }
@@ -102,38 +93,20 @@ public class PaymentController(PaymentRepository service, ILogger logger) : Cont
     }
 
     [HttpPut("update/{paymentId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] PaymentDTO paymentDTO, string paymentId)
+    public async Task<IActionResult> UpdateAsync(string paymentId, [FromBody] PaymentDTO paymentDTO)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(paymentId))
                 return BadRequest("PaymentId is empty!");
 
-            if (!Guid.TryParse(paymentId, out Guid realEstatePaymentId))
+            if (!Guid.TryParse(paymentId, out Guid id))
                 return BadRequest("PaymentId must be a valid GUID!");
-
-            if (paymentDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var existingPayment = await _service.IsPaymentExistAsync(realEstatePaymentId).ConfigureAwait(false);
-
-            if (!existingPayment)
-                return NotFound("Payment not found!");
-
-            var payment = new Payment
-            {
-                Id = realEstatePaymentId,
-                Amount = paymentDTO.Amount,
-                PaidAt = paymentDTO.PaidAt,
-                PaymentType = paymentDTO.PaymentType,
-                PaymentStatus = paymentDTO.PaymentStatus,
-                LeaseId = paymentDTO.LeaseId
-            };
-
-            await _service.UpdateAsync(payment).ConfigureAwait(false);
+            await _service.UpdateAsync(id,paymentDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -167,15 +140,10 @@ public class PaymentController(PaymentRepository service, ILogger logger) : Cont
             if (string.IsNullOrWhiteSpace(paymentId))
                 return BadRequest("PaymentId is empty!");
 
-            if (!Guid.TryParse(paymentId, out Guid realEstatePaymentId))
+            if (!Guid.TryParse(paymentId, out Guid id))
                 return BadRequest("PaymentId must be a valid GUID!");
 
-            var existingPayment = await _service.IsPaymentExistAsync(realEstatePaymentId).ConfigureAwait(false);
-
-            if (!existingPayment)
-                return NotFound("Payment not found!");
-
-            await _service.DeleteAsync(realEstatePaymentId).ConfigureAwait(false);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -199,5 +167,36 @@ public class PaymentController(PaymentRepository service, ILogger logger) : Cont
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(403, "Access denied.");
         }
+    }
+
+    [HttpDelete("delete-all")]
+    public async Task<IActionResult> DeleteAllAsync()
+    {
+        try
+        {
+            await _service.DeleteAllAsync().ConfigureAwait(false);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "Missing argument. Please contact support.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "An invalid operation occurred.");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied.");
+        }
+
     }
 }

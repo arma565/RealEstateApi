@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Services.Authorization;
-using RealEstate.Services.Images;
 using RealEstate.Services.Models.Images;
 using RealEstate.Services.Models.Users;
 using RealEstate.Services.Repositories.Images;
@@ -15,15 +14,12 @@ interface IAdminRepository
     Task DeleteUsersAsync();
     Task<IdentityResult> AssignRoleAsync(ApplicationUser user);
     Task<IdentityResult> PromoteUserAsync(ApplicationUser user);
-    Task<List<RealEstateImage>> GetUserProfileImageListAsync();
 }
 
 #pragma warning disable CA1515
-public class AdminRepository(AppDbContext context,
-                                    UserManager<ApplicationUser> userManager,
-                                    ImageRepository imageRepository) : IAdminRepository
+public class AdminRepository(UserManager<ApplicationUser> userManager,
+                             ImageRepository imageRepository) : IAdminRepository
 {
-    private readonly AppDbContext _context = context;
     private readonly ImageRepository _imageRepository = imageRepository;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
 
@@ -58,14 +54,6 @@ public class AdminRepository(AppDbContext context,
             return IdentityResult.Failed();
         return await _userManager.RemoveFromRoleAsync(user, Roles.Agent).ConfigureAwait(false);
     }
-
-    public async Task<List<RealEstateImage>> GetUserProfileImageListAsync() =>
-          await _context
-         .Images
-         .AsNoTracking()
-         .OrderByDescending(userProfileImg => userProfileImg.Id)
-         .ToListAsync()
-         .ConfigureAwait(false);
 
     public async Task<bool> IsAdmin(ApplicationUser user) => await _userManager.IsInRoleAsync(user, Roles.Admin).ConfigureAwait(false);
 

@@ -31,9 +31,9 @@ public class Lease
     public Guid? PropertyId { get; set; } = null!;
     public RealEstateProperty? Property { get; set; } = null!;
 
-    public ICollection<Person> Persons => []; 
+    public ICollection<Person> Persons { get; } = []; 
 
-    public ICollection<Payment> Payments => [];
+    public ICollection<Payment> Payments { get; } = [];
 
     #endregion
 }
