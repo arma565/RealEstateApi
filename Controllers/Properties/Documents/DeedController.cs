@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Entities.Properties.Documents;
-using RealEstate.Repositories.Properties.Documents;
+using RealEstate.Services.Properties.Documents;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -9,9 +9,9 @@ namespace RealEstate.Controllers.Properties.Documents;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class DeedController(DeedRepository service, ILogger<DeedController> logger) : ControllerBase
+public class DeedController(DeedService service, ILogger<DeedController> logger) : ControllerBase
 {
-    private readonly DeedRepository _service = service;
+    private readonly DeedService _service = service;
 
     private readonly ILogger<DeedController> _logger = logger;
 

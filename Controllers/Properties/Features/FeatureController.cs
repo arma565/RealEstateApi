@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Entities.Properties.Features;
-using RealEstate.Repositories.Properties.Features;
+using RealEstate.Services.Properties.Features;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -9,9 +9,9 @@ namespace RealEstate.Controllers.Properties.Features;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class FeatureController(FeatureRepository service, ILogger<FeatureController> logger) : ControllerBase
+public class FeatureController(FeatureService service, ILogger<FeatureController> logger) : ControllerBase
 {
-    private readonly FeatureRepository _service = service;
+    private readonly FeatureService _service = service;
 
     private readonly ILogger<FeatureController> _logger = logger;
 

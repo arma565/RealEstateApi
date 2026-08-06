@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Supports;
 using RealEstate.Entities.Supports;
 using RealEstate.Repositories.Supports;
+using RealEstate.Services.Supports;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -9,9 +11,9 @@ namespace RealEstate.Controllers.Supports;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public sealed class SupportController(SupportRepository service, ILogger<SupportController> logger) : ControllerBase
+public sealed class SupportController(SupportService service, ILogger<SupportController> logger) : ControllerBase
 {
-    private readonly SupportRepository _service = service;
+    private readonly SupportService _service = service;
 
     private readonly ILogger<SupportController> _logger = logger;
 

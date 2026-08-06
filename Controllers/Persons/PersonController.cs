@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Entities.Persons;
 using RealEstate.Repositories.Persons;
+using RealEstate.Services.Persons;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -9,9 +10,9 @@ namespace RealEstate.Controllers.Persons;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public class PersonController(PersonRepository service, ILogger<PersonRepository> logger) : ControllerBase
+public class PersonController(PersonService service, ILogger<PersonRepository> logger) : ControllerBase
 {
-    private readonly PersonRepository _service = service;
+    private readonly PersonService _service = service;
 
     private readonly ILogger<PersonRepository> _logger = logger;
 

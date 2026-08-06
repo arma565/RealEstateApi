@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Entities.Properties.Addresses.Map;
 using RealEstate.Repositories.Properties.Addresses.Maps;
+using RealEstate.Services.Properties.Addresses.Maps;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -9,9 +10,9 @@ namespace RealEstate.Controllers.Properties.Addresses.Maps;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class LocationController(LocationRepository service, ILogger<LocationController> logger) : ControllerBase
+public class LocationController(LocationService service, ILogger<LocationController> logger) : ControllerBase
 {
-    private readonly LocationRepository _service = service;
+    private readonly LocationService _service = service;
 
     private readonly ILogger<LocationController> _logger = logger;
 

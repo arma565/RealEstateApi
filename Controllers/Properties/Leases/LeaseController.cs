@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Entities.Properties.Leases;
 using RealEstate.Repositories.Properties.Leases;
+using RealEstate.Services.Properties.Leases;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -9,9 +10,9 @@ namespace RealEstate.Controllers.Properties.Leases;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class LeaseController(LeaseRepository service,ILogger<LeaseController> logger) : ControllerBase
+public class LeaseController(LeaseService service,ILogger<LeaseController> logger) : ControllerBase
 {
-    private readonly LeaseRepository _service = service;
+    private readonly LeaseService _service = service;
 
     private readonly ILogger<LeaseController> _logger = logger;
 

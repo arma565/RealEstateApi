@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Entities.Properties.Payments;
 using RealEstate.Repositories.Properties.Payments;
+using RealEstate.Services.Properties.Payments;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -9,9 +10,9 @@ namespace RealEstate.Controllers.Properties.Payments;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class PaymentController(PaymentRepository service, ILogger<PaymentController> logger) : ControllerBase
+public class PaymentController(PaymentService service, ILogger<PaymentController> logger) : ControllerBase
 {
-    private readonly PaymentRepository _service = service;
+    private readonly PaymentService _service = service;
 
     private readonly ILogger<PaymentController> _logger = logger;
 

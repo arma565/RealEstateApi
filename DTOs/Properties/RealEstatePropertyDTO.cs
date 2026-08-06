@@ -2,7 +2,7 @@ using RealEstate.Enums.Properties;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace RealEstate.Entities.Properties;
+namespace RealEstate.DTOs.Properties;
 
 #pragma warning disable CA1515
 public class RealEstatePropertyDTO()
@@ -15,9 +15,6 @@ public class RealEstatePropertyDTO()
 
     [DefaultValue("")]
     public string Description { get; set; } = default!;
-
-    [DefaultValue(0)]
-    public int PlatesNumber { get; set; } = default;
 
     [DefaultValue(PropertyType.House)]
     public PropertyType PropertyType { get; set; } = default;

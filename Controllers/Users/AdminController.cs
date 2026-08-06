@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.Entities.Users;
-using RealEstate.Repositories.Users.AdminRepositories;
-using RealEstate.Repositories.Users.UserRepositories;
+using RealEstate.Services.Users;
 using RealEstate.Services.Validations;
 using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -15,14 +14,14 @@ namespace RealEstate.Controllers.Users;
 [Route("[controller]")]
 [Authorize]
 public sealed class AdminController(
-    AdminRepository adminService,
-    UserRepository userService,
+    AdminService adminService,
+    UserService userService,
     ILogger<AdminController> logger
     ) : ControllerBase
 {
-    private readonly AdminRepository _adminService = adminService;
+    private readonly AdminService _adminService = adminService;
 
-    private readonly UserRepository _userService = userService;
+    private readonly UserService _userService = userService;
 
     private readonly ILogger<AdminController> _logger = logger;
 
@@ -37,10 +36,10 @@ public sealed class AdminController(
             if (user == null)
                 return NotFound("User not found!");
 
-            var promoteResult = await _adminService.PromoteUserAsync(user).ConfigureAwait(false);
+            var promoteResult = await _adminService.PromoteAsync(user).ConfigureAwait(false);
 
             if (!promoteResult.Succeeded)
-                return StatusCode(500);
+                return StatusCode(403 , "Promote failed!");
 
             return Ok("User is admin now");
         }
@@ -106,22 +105,22 @@ public sealed class AdminController(
 
     [HttpDelete("delete/{userName}")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> DeleteAdmin(string userName)
+    public async Task<IActionResult> DeleteAdmin(string id)
     {
 
         try
         {
-            var adminUser = await _userService.GetByUserNameAsync(userName).ConfigureAwait(false);
+            ArgumentNullException.ThrowIfNull(id);
+
+            var adminUser = await _userService.GetByIDAsync(id).ConfigureAwait(false);
 
             if (adminUser == null)
                 return NotFound("Admin user not found!");
 
-            var isAdmin = await _adminService.IsAdmin(adminUser).ConfigureAwait(false);
-
-            if (!isAdmin)
+            if (!await _adminService.IsAdmin(adminUser).ConfigureAwait(false))
                 return Unauthorized("This user is not an admin!");
 
-            var res = await _userService.DeleteAsync(adminUser).ConfigureAwait(false);
+            var res = await _userService.DeleteAsync(id).ConfigureAwait(false);
 
             if (!res.Succeeded)
                 return BadRequest(res.Errors);

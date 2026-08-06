@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RealEstate.Data;
-using RealEstate.Entities.Images.Properties;
-using RealEstate.Images;
+﻿using RealEstate.Entities.Images.Properties;
+using RealEstate.Repositories.Images.Properties;
 
-namespace RealEstate.Repositories.Images.Properties;
+namespace RealEstate.Services.Images.Properties;
 
 
 interface IPropertyImageService
@@ -18,26 +16,18 @@ interface IPropertyImageService
 }
 
 #pragma warning disable CA1515
-public class PropertyImageService(AppDbContext context,
-                                        ImageService imageService) : IPropertyImageService
+public class PropertyImageService(PropertyImageRepository
+                                        repository, ImageProccess imageProccess) : IPropertyImageService
 {
-    private readonly AppDbContext _context = context;
+    private readonly PropertyImageRepository _repository = repository;
 
-    private readonly ImageService _imageService = imageService;
+    private readonly ImageProccess _imageProccess = imageProccess;
 
     public async Task<IEnumerable<PropertyImage>> GetListAsync() =>
-         await _context
-            .PropertyImages
-            .AsNoTracking()
-            .ToListAsync()
-            .ConfigureAwait(false);
+        await _repository.GetListAsync().ConfigureAwait(false);
 
     public async Task<PropertyImage?> GetAsync(Guid id) =>
-    await _context
-    .PropertyImages
-    .AsNoTracking()
-    .SingleOrDefaultAsync(image => image.Id == id)
-    .ConfigureAwait(false);
+        await _repository.GetAsync(id).ConfigureAwait(false);
 
     public async Task<PropertyImage> AddAsync(PropertyImageDTO propertyImageDTO)
     {
@@ -47,9 +37,7 @@ public class PropertyImageService(AppDbContext context,
         {
             PropertyId = propertyImageDTO.PropertyId
         };
-        await _context.PropertyImages.AddAsync(propertyImage).ConfigureAwait(false);
-        await _context.SaveChangesAsync().ConfigureAwait(false);
-        return propertyImage;
+        return await _repository.AddAsync(propertyImage).ConfigureAwait(false);
     }
 
     public async Task UpdateAsync(Guid id, PropertyImageDTO propertyImageDTO, IFormFile image)
@@ -59,7 +47,7 @@ public class PropertyImageService(AppDbContext context,
         var propertyImage = await GetAsync(id).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(propertyImage);
 
-        var savedImagePaths = await _imageService.SaveAsync(image).ConfigureAwait(false);
+        var savedImagePaths = await _imageProccess.SaveAsync(image).ConfigureAwait(false);
 
         propertyImage.Id = id;
         propertyImage.Order = propertyImage.Order++;
@@ -68,26 +56,21 @@ public class PropertyImageService(AppDbContext context,
         propertyImage.ThumbnailFilePath = savedImagePaths.ThumbnailPath;
         propertyImage.PropertyId = propertyImageDTO.PropertyId;
 
-        _context.PropertyImages.Update(propertyImage);
-        await _context.SaveChangesAsync().ConfigureAwait(false);
+        await _repository.UpdateAsync(propertyImage).ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-
         var propertyImage = await GetAsync(id).ConfigureAwait(false);
 
         ArgumentNullException.ThrowIfNull(propertyImage);
 
-        await _imageService.DeleteFilesAsync(new ImagePaths
+        await _imageProccess.DeleteFilesAsync(new ImagePaths
         {
             OriginalPath = propertyImage.ImageFilePath,
             ThumbnailPath = propertyImage.ThumbnailFilePath
         }).ConfigureAwait(false);
-
-        _context.PropertyImages.Remove(propertyImage);
-        await _context.SaveChangesAsync().ConfigureAwait(false);
-
+        await _repository.DeleteAsync(propertyImage).ConfigureAwait(false);
     }
 
     public async Task DeleteAllAsync()
@@ -96,14 +79,13 @@ public class PropertyImageService(AppDbContext context,
 
         foreach (var propertyImage in propertyImages)
         {
-            await _imageService.DeleteFilesAsync(new ImagePaths
+            await _imageProccess.DeleteFilesAsync(new ImagePaths
             {
                 OriginalPath = propertyImage.ImageFilePath,
                 ThumbnailPath = propertyImage.ThumbnailFilePath
             }).ConfigureAwait(false);
         }
-        await _context.PropertyImages.ExecuteDeleteAsync().ConfigureAwait(false);
-        await _context.SaveChangesAsync().ConfigureAwait(false);
+        await _repository.DeleteAllAsync().ConfigureAwait(false);
     }
 
     public async Task<DownloadPaths> GetPathAsync(Guid id)
@@ -112,7 +94,7 @@ public class PropertyImageService(AppDbContext context,
 
         ArgumentNullException.ThrowIfNull(propertyImage);
 
-        return await _imageService.GetPathsAsync(new ImagePaths
+        return await _imageProccess.GetPathsAsync(new ImagePaths
         {
             OriginalPath = propertyImage.ImageFilePath,
             ThumbnailPath = propertyImage.ThumbnailFilePath

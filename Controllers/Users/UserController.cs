@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.Authentication;
+using RealEstate.DTOs.Users;
 using RealEstate.Entities.Users;
-using RealEstate.Repositories.Users.AdminRepositories;
-using RealEstate.Repositories.Users.UserRepositories;
+using RealEstate.Services.Users;
 using RealEstate.Services.Validations;
 using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -15,16 +15,16 @@ namespace RealEstate.Controllers.Users;
 [ApiController]
 [Route("[controller]")]
 public sealed class UserController(
-    UserRepository userService,
-    AdminRepository adminService,
+    UserService userService,
+    AdminService adminService,
     TokenService tokenService,
      ILogger<UserController> logger
     ) : ControllerBase
 {
    
-    private readonly UserRepository _userService = userService;
+    private readonly UserService _userService = userService;
 
-    private readonly AdminRepository _adminService = adminService;
+    private readonly AdminService _adminService = adminService;
 
     private readonly TokenService _tokenService = tokenService;
 
@@ -35,14 +35,12 @@ public sealed class UserController(
     {
         try
         {
-
             if (string.IsNullOrWhiteSpace(userName))
-                return BadRequest("User name can not be empty!");
+                return Unauthorized("User name can not be empty!");
 
             var user = await _userService.GetByUserNameAsync(userName).ConfigureAwait(false);
 
-            if (user == null)
-                return NotFound("No such user found!");
+            ArgumentNullException.ThrowIfNull(user);
 
             return Ok(user);
 
@@ -75,30 +73,37 @@ public sealed class UserController(
     {
         try
         {
-            if (userRegisterAccountDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
+            bool isFirstUser = false;
+
+            ArgumentNullException.ThrowIfNull(userRegisterAccountDTO);
+
+            if (!ModelState.IsValid)
+                return Unauthorized(ModelState);
 
             var allUsers = await _adminService.GetUsersListAsync().ConfigureAwait(false);
 
+            if (!allUsers.Any()) 
+                isFirstUser = true;
+            
             if (allUsers.Any(u => u.UserName == userRegisterAccountDTO.UserName))
-                return BadRequest("Username is already taken!");
+                return Unauthorized("Username is already taken!");
 
             if (allUsers.Any(u => u.Email == userRegisterAccountDTO.Email))
-                return BadRequest("Email is already taken!");
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return Unauthorized("Email is already taken!");
 
             var registerResult = await _userService.RegisterAsync(userRegisterAccountDTO).ConfigureAwait(false);
 
             if (!registerResult.Succeeded)
-                return BadRequest(registerResult.Errors);
-
-            var registeredUser = await _userService.FindByUserNameAsync(userRegisterAccountDTO.UserName).ConfigureAwait(false);
-            await _adminService.AssignRoleAsync(registeredUser!).ConfigureAwait(false);
-
-            return Created();
-
+                return Unauthorized(registerResult.Errors);
+            else
+            {
+                if (isFirstUser) {
+                    var registeredUser = await _userService.GetByUserNameAsync(userRegisterAccountDTO.UserName).ConfigureAwait(false);
+                    ArgumentNullException.ThrowIfNull(registeredUser);
+                    await _adminService.PromoteAsync(registeredUser).ConfigureAwait(false);
+                }
+                return Created();
+            }
         }
         catch (ArgumentNullException ex)
         {
@@ -132,13 +137,11 @@ public sealed class UserController(
             if (!ModelState.IsValid)
                 return Unauthorized(ModelState);
 
-            if (userLoginRequestDTO == null || userLoginRequestDTO.UserName == null || userLoginRequestDTO.Password == null)
-                return Unauthorized("Username and password are required.");
+            ArgumentNullException.ThrowIfNull(userLoginRequestDTO);
 
             var user = await _userService.GetByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
 
-            if (user == null)
-                return NotFound("User not found.");
+            ArgumentNullException.ThrowIfNull(user);
 
             var result = await _userService.LoginAsync(userLoginRequestDTO).ConfigureAwait(false);
 
@@ -184,8 +187,7 @@ public sealed class UserController(
             if (!ModelState.IsValid)
                 return Unauthorized(ModelState);
 
-            if (userLoginRequestDTO == null || userLoginRequestDTO.UserName == null || userLoginRequestDTO.Password == null)
-                return Unauthorized("Username and password are required.");
+            ArgumentNullException.ThrowIfNull(userLoginRequestDTO);
 
             var result = await _userService.LoginAsync(userLoginRequestDTO).ConfigureAwait(false);
 
@@ -194,15 +196,14 @@ public sealed class UserController(
 
             var user = await _userService.FindByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
 
-            if (user == null)
-                return NotFound("No such user found!");
+            ArgumentNullException.ThrowIfNull(user);
 
             var isAdmin = await _adminService.IsAdmin(user).ConfigureAwait(false);
 
             if (isAdmin)
                 return Unauthorized("This user is an admin!");
 
-            var res = await _userService.DeleteAsync(user).ConfigureAwait(false);
+            var res = await _userService.DeleteAsync(user.Id).ConfigureAwait(false);
 
             if (!res.Succeeded)
                 return BadRequest(res.Errors);
@@ -237,18 +238,12 @@ public sealed class UserController(
     {
         try
         {
-            if (userResetPasswordDTO == null)
-                return BadRequest("Failed to retreive parameter!");
+           ArgumentNullException.ThrowIfNull(userResetPasswordDTO);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userService.FindByEmailAsync(userResetPasswordDTO.Email).ConfigureAwait(false);
-
-            if (user == null)
-                return NotFound("No such user found!");
-
-            var result = await _userService.ResetPasswordAsync(user, userResetPasswordDTO.Token, userResetPasswordDTO.NewPassword).ConfigureAwait(false);
+            var result = await _userService.ResetPasswordAsync(userResetPasswordDTO.Email, userResetPasswordDTO.Token, userResetPasswordDTO.NewPassword).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("Reset password  was successful");
@@ -282,18 +277,12 @@ public sealed class UserController(
     {
         try
         {
-            if (userChangePasswordDTO == null)
-                return BadRequest("Failed to retreive parameter!");
+            ArgumentNullException.ThrowIfNull(userChangePasswordDTO);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userService.FindByUserNameAsync(userChangePasswordDTO.UserName).ConfigureAwait(false);
-
-            if (user == null)
-                return NotFound("No such user found!");
-
-            var result = await _userService.ChangePasswordAsync(user, userChangePasswordDTO.OldPassword, userChangePasswordDTO.NewPassword).ConfigureAwait(false);
+            var result = await _userService.ChangePasswordAsync(userChangePasswordDTO.UserName, userChangePasswordDTO.OldPassword, userChangePasswordDTO.NewPassword).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("Password has been changed");
@@ -328,8 +317,7 @@ public sealed class UserController(
     { 
         try
         {
-            if (userForgotPasswordDTO == null)
-                return BadRequest("Failed to retreive parameter!");
+            ArgumentNullException.ThrowIfNull(userForgotPasswordDTO);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -340,12 +328,7 @@ public sealed class UserController(
             //if (!new EmailHelper().IsValidEmail(userForgotPasswordDTO.Email))
             //    return BadRequest("Invalid email format.");
 
-            var user = await _userService.FindByEmailAsync(userForgotPasswordDTO.Email).ConfigureAwait(false);
-
-            if (user == null)
-                return BadRequest("No such user found!");
-
-            var generatedToken = await _userService.GenerateTokenToRecoverUserAsync(user).ConfigureAwait(false);
+            var generatedToken = await _userService.GenerateTokenToRecoverUserAsync(userForgotPasswordDTO.Email).ConfigureAwait(false);
 
             return Ok(generatedToken);
         }
@@ -371,41 +354,18 @@ public sealed class UserController(
         }
     }
 
-    [HttpPut("edit-profile")]
-    public async Task<IActionResult> EditProfile([FromBody] ApplicationUser applicationUser)
+    [HttpPut("edit-profile/{userId}")]
+    public async Task<IActionResult> EditProfile(string userId,[FromBody] ApplicationUser applicationUser)
     {
         try
         {
-            if (applicationUser == null)
-                return BadRequest("User is null!");
+            ArgumentNullException.ThrowIfNull(userId);
+            ArgumentNullException.ThrowIfNull(applicationUser);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userService.FindByIDAsync(applicationUser.Id).ConfigureAwait(false);
-
-            if (user == null)
-                return NotFound("No such user found!");
-
-            if (string.IsNullOrEmpty(applicationUser.UserName) || string.IsNullOrEmpty(applicationUser.Email))
-            {
-                user.UserName = user.UserName;
-                user.Email = user.Email;
-            }
-            else
-            {
-                user.UserName = applicationUser.UserName;
-                user.Email = applicationUser.Email;
-            }
-
-            user.Id = applicationUser.Id;
-            user.FirstName = applicationUser.FirstName;
-            user.LastName = applicationUser.LastName;
-            user.PhoneNumber = applicationUser.PhoneNumber;
-            user.AcceptTerms = user.AcceptTerms;
-            user.ImageId = applicationUser.ImageId;
-
-            var result = await _userService.EditUserProfileAsync(user).ConfigureAwait(false);
+            var result = await _userService.EditUserProfileAsync(userId , applicationUser).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("User profile has been updated");

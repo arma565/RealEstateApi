@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Properties;
 using RealEstate.Entities.Properties;
-using RealEstate.Enums.Properties;
 using RealEstate.Repositories.Properties;
-using RealEstate.Services.Enums.Properties;
+using RealEstate.Services.Properties;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -12,9 +12,9 @@ namespace RealEstate.Controllers.Properties;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public sealed class PropertyController(PropertyRepository service, ILogger<PropertyController> logger) : ControllerBase
+public sealed class PropertyController(PropertyService service, ILogger<PropertyController> logger) : ControllerBase
 {
-    private readonly PropertyRepository _service = service;
+    private readonly PropertyService _service = service;
 
     private readonly ILogger<PropertyController> _logger = logger;
 

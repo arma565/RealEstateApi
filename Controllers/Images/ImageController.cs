@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using RealEstate.Entities.Images;
-using RealEstate.Repositories.Images;
+using RealEstate.Services.Images;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -10,9 +10,9 @@ namespace RealEstate.Controllers.Images;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public class ImageController(ImageRepository service, ILogger<ImageController> logger) : ControllerBase
+public class ImageController(ImageService service, ILogger<ImageController> logger) : ControllerBase
 {
-    private readonly ImageRepository _service = service;
+    private readonly ImageService _service = service;
 
     private readonly ILogger<ImageController> _logger = logger;
 

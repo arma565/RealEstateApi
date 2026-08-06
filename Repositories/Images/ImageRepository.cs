@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Entities.Images;
-using RealEstate.Images;
 
 namespace RealEstate.Repositories.Images;
 

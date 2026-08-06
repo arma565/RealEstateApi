@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RealEstate.Entities.Users;
+namespace RealEstate.DTOs.Users;
 
 #pragma warning disable CA1515
 public class UserLoginRequestDTO

@@ -7,7 +7,6 @@ using RealEstate.Entities.Properties.Features;
 using RealEstate.Entities.Properties.Leases;
 using RealEstate.Entities.Users;
 using RealEstate.Enums.Properties;
-using RealEstate.Services.Models.Images;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

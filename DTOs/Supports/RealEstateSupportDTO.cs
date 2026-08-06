@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace RealEstate.Entities.Supports;
+namespace RealEstate.DTOs.Supports;
 
 #pragma warning disable CA1515
 public class RealEstateSupportDTO
