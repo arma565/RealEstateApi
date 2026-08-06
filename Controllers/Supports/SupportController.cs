@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Supports;
-using RealEstate.Services.Repositories.Supports;
+using RealEstate.Entities.Supports;
+using RealEstate.Repositories.Supports;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public sealed class SupportController(SupportRepository service, ILogger<Support
     private readonly ILogger<SupportController> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<RealEstateSupport>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<RealEstateSupport>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{supportId}")]
-    public async Task<ActionResult<RealEstateSupport>> GetAsync(string supportId)
+    public async Task<ActionResult<RealEstateSupport>> Get(string supportId)
     {
         try
         {
@@ -69,7 +69,7 @@ public sealed class SupportController(SupportRepository service, ILogger<Support
 
             var realEstateSupport = await _service.AddAsync(realEstateSupportDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { supportId = realEstateSupport.Id }, realEstateSupport);
+            return CreatedAtAction(nameof(Get), new { supportId = realEstateSupport.Id }, realEstateSupport);
         }
         catch (ArgumentNullException ex)
         {
@@ -94,7 +94,7 @@ public sealed class SupportController(SupportRepository service, ILogger<Support
     }
 
     [HttpPost("update/{supportId}")]
-    public async Task<IActionResult> UpdateAsync(string supportId, [FromBody] RealEstateSupportDTO realEstateSupportDTO)
+    public async Task<IActionResult> Update(string supportId, [FromBody] RealEstateSupportDTO realEstateSupportDTO)
     {
         try
         {
@@ -134,7 +134,7 @@ public sealed class SupportController(SupportRepository service, ILogger<Support
     }
 
     [HttpDelete("delete/{supportId}")]
-    public async Task<IActionResult> DeleteAsync(string supportId)
+    public async Task<IActionResult> Delete(string supportId)
     {
         try
         {

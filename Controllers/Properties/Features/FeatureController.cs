@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Properties.Features;
-using RealEstate.Services.Repositories.Properties.Features;
+using RealEstate.Entities.Properties.Features;
+using RealEstate.Repositories.Properties.Features;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public class FeatureController(FeatureRepository service, ILogger<FeatureControl
     private readonly ILogger<FeatureController> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<PropertyFeature>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<PropertyFeature>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{featureId}")]
-    public async Task<ActionResult<PropertyFeature>> GetAsync(string featureId)
+    public async Task<ActionResult<PropertyFeature>> Get(string featureId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class FeatureController(FeatureRepository service, ILogger<FeatureControl
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] PropertyFeatureDTO propertyFeatureDTO)
+    public async Task<IActionResult> Add([FromBody] PropertyFeatureDTO propertyFeatureDTO)
     {
         try
         {
@@ -68,7 +68,7 @@ public class FeatureController(FeatureRepository service, ILogger<FeatureControl
 
            var feature = await _service.AddAsync(propertyFeatureDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { featureId = feature.Id }, feature);
+            return CreatedAtAction(nameof(Get), new { featureId = feature.Id }, feature);
         }
         catch (ArgumentNullException ex)
         {
@@ -93,7 +93,7 @@ public class FeatureController(FeatureRepository service, ILogger<FeatureControl
     }
 
     [HttpPut("update/{featureId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] PropertyFeatureDTO propertyFeatureDTO, string featureId)
+    public async Task<IActionResult> Update([FromBody] PropertyFeatureDTO propertyFeatureDTO, string featureId)
     {
         try
         {
@@ -133,7 +133,7 @@ public class FeatureController(FeatureRepository service, ILogger<FeatureControl
     }
 
     [HttpDelete("delete/{featureId}")]
-    public async Task<IActionResult> DeleteAsync(string featureId)
+    public async Task<IActionResult> Delete(string featureId)
     {
         try
         {
@@ -170,7 +170,7 @@ public class FeatureController(FeatureRepository service, ILogger<FeatureControl
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

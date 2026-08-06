@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Properties.Documents;
-using RealEstate.Services.Repositories.Properties.Documents;
+using RealEstate.Entities.Properties.Documents;
+using RealEstate.Repositories.Properties.Documents;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public class DeedController(DeedRepository service, ILogger<DeedController> logg
     private readonly ILogger<DeedController> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<PropertyDeed>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<PropertyDeed>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{propertyDeedId}")]
-    public async Task<ActionResult<PropertyDeed>> GetAsync(string propertyDeedId)
+    public async Task<ActionResult<PropertyDeed>> Get(string propertyDeedId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class DeedController(DeedRepository service, ILogger<DeedController> logg
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] PropertyDeedDTO propertyDeedDTO)
+    public async Task<IActionResult> Add([FromBody] PropertyDeedDTO propertyDeedDTO)
     {
         try
         {
@@ -68,7 +68,7 @@ public class DeedController(DeedRepository service, ILogger<DeedController> logg
 
            var propertyDeed = await _service.AddAsync(propertyDeedDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = propertyDeed.Id }, propertyDeed);
+            return CreatedAtAction(nameof(Get), new { id = propertyDeed.Id }, propertyDeed);
         }
         catch (ArgumentNullException ex)
         {
@@ -93,7 +93,7 @@ public class DeedController(DeedRepository service, ILogger<DeedController> logg
     }
 
     [HttpPut("update/{propertyDeedId}")]
-    public async Task<IActionResult> UpdateAsync(string propertyDeedId, [FromBody] PropertyDeedDTO propertyDeedDTO)
+    public async Task<IActionResult> Update(string propertyDeedId, [FromBody] PropertyDeedDTO propertyDeedDTO)
     {
         try
         {
@@ -133,7 +133,7 @@ public class DeedController(DeedRepository service, ILogger<DeedController> logg
     }
 
     [HttpDelete("delete/{propertyDeedId}")]
-    public async Task<IActionResult> DeleteAsync(string propertyDeedId)
+    public async Task<IActionResult> Delete(string propertyDeedId)
     {
         try
         {
@@ -170,7 +170,7 @@ public class DeedController(DeedRepository service, ILogger<DeedController> logg
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

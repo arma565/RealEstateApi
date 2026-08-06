@@ -3,25 +3,25 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using RealEstate.Authentication;
+using RealEstate.Authorization;
 using RealEstate.Data;
-using RealEstate.Services.Authentication;
-using RealEstate.Services.Authorization;
-using RealEstate.Services.Images;
-using RealEstate.Services.Models.Users;
-using RealEstate.Services.Repositories.Images;
-using RealEstate.Services.Repositories.Images.Properties;
-using RealEstate.Services.Repositories.Persons;
-using RealEstate.Services.Repositories.Properties;
-using RealEstate.Services.Repositories.Properties.Addresses;
-using RealEstate.Services.Repositories.Properties.Addresses.Maps;
-using RealEstate.Services.Repositories.Properties.Documents;
-using RealEstate.Services.Repositories.Properties.Features;
-using RealEstate.Services.Repositories.Properties.Leases;
-using RealEstate.Services.Repositories.Properties.Payments;
-using RealEstate.Services.Repositories.Supports;
-using RealEstate.Services.Repositories.Users.AdminRepositories;
-using RealEstate.Services.Repositories.Users.UserRepositories;
-using RealEstate.Services.Validations;
+using RealEstate.Entities.Users;
+using RealEstate.Images;
+using RealEstate.Repositories.Images;
+using RealEstate.Repositories.Images.Properties;
+using RealEstate.Repositories.Persons;
+using RealEstate.Repositories.Properties;
+using RealEstate.Repositories.Properties.Addresses;
+using RealEstate.Repositories.Properties.Addresses.Maps;
+using RealEstate.Repositories.Properties.Documents;
+using RealEstate.Repositories.Properties.Features;
+using RealEstate.Repositories.Properties.Leases;
+using RealEstate.Repositories.Properties.Payments;
+using RealEstate.Repositories.Supports;
+using RealEstate.Repositories.Users.AdminRepositories;
+using RealEstate.Repositories.Users.UserRepositories;
+using RealEstate.Validations;
 using System.Text;
 
 namespace RealEstate;
@@ -65,7 +65,7 @@ public partial class Program
 
         //Repositories services
         builder.Services.AddScoped<ImageRepository>();
-        builder.Services.AddScoped<PropertyImageRepository>();
+        builder.Services.AddScoped<PropertyImageService>();
         builder.Services.AddScoped<PersonRepository>();
         builder.Services.AddScoped<LocationRepository>();
         builder.Services.AddScoped<AddressRepository>();
@@ -131,7 +131,6 @@ public partial class Program
                 };
             });
         });
-
 
         var app = builder.Build();
 

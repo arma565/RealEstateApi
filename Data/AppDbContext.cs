@@ -1,17 +1,20 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.Services.Models.Images;
-using RealEstate.Services.Models.Images.Properties;
-using RealEstate.Services.Models.Persons;
-using RealEstate.Services.Models.Properties;
-using RealEstate.Services.Models.Properties.Addresses;
-using RealEstate.Services.Models.Properties.Addresses.Map;
-using RealEstate.Services.Models.Properties.Documents;
-using RealEstate.Services.Models.Properties.Features;
-using RealEstate.Services.Models.Properties.Leases;
-using RealEstate.Services.Models.Properties.Payments;
-using RealEstate.Services.Models.Supports;
-using RealEstate.Services.Models.Users;
+using RealEstate.Entities.Images;
+using RealEstate.Entities.Images.Properties;
+using RealEstate.Entities.Persons;
+using RealEstate.Entities.Properties;
+using RealEstate.Entities.Properties.Addresses;
+using RealEstate.Entities.Properties.Addresses.Map;
+using RealEstate.Entities.Properties.Documents;
+using RealEstate.Entities.Properties.Features;
+using RealEstate.Entities.Properties.Leases;
+using RealEstate.Entities.Properties.Payments;
+using RealEstate.Entities.Supports;
+using RealEstate.Entities.Users;
+using RealEstate.Enums.Persons;
+using RealEstate.Enums.Properties;
+using RealEstate.Enums.Properties.Payments;
 
 #pragma warning disable CA1515
 namespace RealEstate.Data;
@@ -132,10 +135,24 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
            .HasPrincipalKey<RealEstateSupport>(realEstatesupport => realEstatesupport.Id)
            .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<Person>()
+            .Property(person => person.Role)
+            .HasConversion(
+                v => v.ToString(),
+                v => Enum.Parse<PersonRoles>(v)
+            );
+
         builder
-            .Entity<RealEstateProperty>()
-            .HasIndex(property => property.PlatesNumber)
+            .Entity<PropertyAddress>()
+            .HasIndex(address => address.PlatesNumber)
             .IsUnique();
+
+        builder.Entity<PropertyFeature>()
+           .Property(property => property.PropertyFeatureCategory)
+           .HasConversion(
+               v => v.ToString(),
+               v => Enum.Parse<PropertyFeatureCategory>(v)
+           );
 
         builder.Entity<Lease>()
             .Property(lease => lease.DepositAmount)
@@ -149,6 +166,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .Property(payment => payment.Amount)
             .HasPrecision(18, 2);
 
+        builder.Entity<Payment>()
+            .Property(payment => payment.PaymentType)
+            .HasConversion(
+                v => v.ToString(),
+                v => Enum.Parse<PaymentType>(v)
+            );
+
         builder.Entity<RealEstateProperty>()
             .Property(property => property.BuildingArea)
             .HasPrecision(18, 2);
@@ -161,6 +185,26 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .Property(property => property.Price)
             .HasPrecision(18, 2);
 
+        builder.Entity<RealEstateProperty>()
+            .Property(property => property.PropertyType)
+            .HasConversion(
+                v => v.ToString(),
+                v => Enum.Parse<PropertyType>(v)
+            );
+
+        builder.Entity<RealEstateProperty>()
+          .Property(property => property.PropertyStatus)
+          .HasConversion(
+              v => v.ToString(),
+              v => Enum.Parse<PropertyStatus>(v)
+          );
+
+        builder.Entity<RealEstateProperty>()
+         .Property(property => property.PropertyCurrency)
+         .HasConversion(
+             v => v.ToString(),
+             v => Enum.Parse<PropertyCurrency>(v)
+         );
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Properties.Payments;
-using RealEstate.Services.Repositories.Properties.Payments;
+using RealEstate.Entities.Properties.Payments;
+using RealEstate.Repositories.Properties.Payments;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public class PaymentController(PaymentRepository service, ILogger<PaymentControl
     private readonly ILogger<PaymentController> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<Payment>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<Payment>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{paymentId}")]
-    public async Task<ActionResult<Payment>> GetAsync(string paymentId)
+    public async Task<ActionResult<Payment>> Get(string paymentId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class PaymentController(PaymentRepository service, ILogger<PaymentControl
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] PaymentDTO paymentDTO)
+    public async Task<IActionResult> Add([FromBody] PaymentDTO paymentDTO)
     {
         try
         {
@@ -68,7 +68,7 @@ public class PaymentController(PaymentRepository service, ILogger<PaymentControl
 
            var payment = await _service.AddAsync(paymentDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { paymentId = payment.Id }, payment);
+            return CreatedAtAction(nameof(Get), new { paymentId = payment.Id }, payment);
         }
         catch (ArgumentNullException ex)
         {
@@ -93,7 +93,7 @@ public class PaymentController(PaymentRepository service, ILogger<PaymentControl
     }
 
     [HttpPut("update/{paymentId}")]
-    public async Task<IActionResult> UpdateAsync(string paymentId, [FromBody] PaymentDTO paymentDTO)
+    public async Task<IActionResult> Update(string paymentId, [FromBody] PaymentDTO paymentDTO)
     {
         try
         {
@@ -133,7 +133,7 @@ public class PaymentController(PaymentRepository service, ILogger<PaymentControl
     }
 
     [HttpDelete("delete/{paymentId}")]
-    public async Task<IActionResult> DeleteAsync(string paymentId)
+    public async Task<IActionResult> Delete(string paymentId)
     {
         try
         {
@@ -170,7 +170,7 @@ public class PaymentController(PaymentRepository service, ILogger<PaymentControl
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

@@ -1,7 +1,7 @@
 [
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Address/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -17,7 +17,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Address/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -27,7 +27,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Address/delete/{addressId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -43,7 +43,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Address/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -63,7 +63,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Address/get/{addressId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -89,7 +89,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.AddressController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Address/update/{addressId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -110,7 +110,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.AdminController",
-    "Method": "DeleteUsersAsync",
+    "Method": "DeleteUsers",
     "RelativePath": "Admin/delete-users",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -120,7 +120,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.AdminController",
-    "Method": "DeleteAdminAsync",
+    "Method": "DeleteAdmin",
     "RelativePath": "Admin/delete/{userName}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -152,7 +152,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.AdminController",
-    "Method": "GetUsersAsync",
+    "Method": "GetUsers",
     "RelativePath": "Admin/users",
     "HttpMethod": "GET",
     "IsController": true,
@@ -172,7 +172,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Deed/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -188,7 +188,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Deed/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -198,7 +198,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Deed/delete/{propertyDeedId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -214,7 +214,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Deed/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -234,7 +234,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Deed/get/{propertyDeedId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -260,7 +260,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Deed/update/{propertyDeedId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -281,7 +281,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Feature/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -297,7 +297,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Feature/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -307,7 +307,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Feature/delete/{featureId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -323,7 +323,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Feature/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -343,7 +343,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Feature/get/{featureId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -369,7 +369,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Feature/update/{featureId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -390,7 +390,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Image/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -406,7 +406,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Image/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -416,7 +416,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Image/delete/{imageId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -432,7 +432,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "DownloadAsync",
+    "Method": "Download",
     "RelativePath": "Image/download/{imageId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -448,7 +448,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Image/get/{imageId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -474,7 +474,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "UploadAsync",
+    "Method": "Upload",
     "RelativePath": "Image/upload/{imageId}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -500,7 +500,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Lease/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -516,7 +516,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Lease/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -526,7 +526,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Lease/delete/{leaseId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -542,7 +542,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Lease/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -562,7 +562,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Lease/get/{leaseId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -588,7 +588,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Leases.LeaseController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Lease/update/{leaseId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -609,7 +609,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Location/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -625,7 +625,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Location/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -635,7 +635,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Location/delete/{locationId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -651,7 +651,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Location/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -671,7 +671,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Location/get/{locationId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -697,7 +697,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Addresses.Maps.LocationController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Location/update/{locationId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -718,7 +718,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Payment/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -734,7 +734,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Payment/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -744,7 +744,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Payment/delete/{paymentId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -760,7 +760,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Payment/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -780,7 +780,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Payment/get/{paymentId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -806,7 +806,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Payment/update/{paymentId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -827,7 +827,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Person/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -843,7 +843,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "Person/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -853,7 +853,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Person/delete/{personId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -869,7 +869,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "GetByNationalIdAsync",
+    "Method": "GetByNationalId",
     "RelativePath": "Person/get-by-nationalId/{nationalId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -895,7 +895,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Person/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -915,7 +915,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Person/get/{personId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -941,7 +941,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Person/update/{personId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -962,7 +962,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "Property/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -988,7 +988,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Property/delete/{propertyId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1024,7 +1024,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Property/get/{propertyId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1050,7 +1050,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Properties.PropertyController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Property/update/{propertyId}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -1071,7 +1071,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "AddAsync",
+    "Method": "Add",
     "RelativePath": "PropertyImage/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1087,7 +1087,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "DeleteAllAsync",
+    "Method": "DeleteAll",
     "RelativePath": "PropertyImage/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1097,7 +1097,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "PropertyImage/delete/{propertyImageId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1113,7 +1113,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "DownloadAsync",
+    "Method": "Download",
     "RelativePath": "PropertyImage/download/{propertyImageId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1129,7 +1129,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "PropertyImage/get/{propertyImageId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1155,7 +1155,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "UploadAsync",
+    "Method": "Upload",
     "RelativePath": "PropertyImage/upload/{propertyImageId}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1207,7 +1207,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Supports.SupportController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "Support/delete/{supportId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1223,7 +1223,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Supports.SupportController",
-    "Method": "GetListAsync",
+    "Method": "GetList",
     "RelativePath": "Support/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1243,7 +1243,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Supports.SupportController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "Support/get/{supportId}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1269,7 +1269,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Supports.SupportController",
-    "Method": "UpdateAsync",
+    "Method": "Update",
     "RelativePath": "Support/update/{supportId}",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1290,7 +1290,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "GetAsync",
+    "Method": "Get",
     "RelativePath": "User/{userName}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1316,7 +1316,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "ChangePasswordAsync",
+    "Method": "ChangePassword",
     "RelativePath": "User/change-password",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1332,7 +1332,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "DeleteAsync",
+    "Method": "Delete",
     "RelativePath": "User/delete",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1348,7 +1348,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "EditUserProfile",
+    "Method": "EditProfile",
     "RelativePath": "User/edit-profile",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -1364,7 +1364,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "ForgotPasswordAsync",
+    "Method": "ForgotPassword",
     "RelativePath": "User/forgot-password",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1390,7 +1390,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "LoginAsync",
+    "Method": "Login",
     "RelativePath": "User/login",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1406,7 +1406,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "RegisterAsync",
+    "Method": "Register",
     "RelativePath": "User/register",
     "HttpMethod": "POST",
     "IsController": true,
@@ -1422,7 +1422,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "ResetPasswordAsync",
+    "Method": "ResetPassword",
     "RelativePath": "User/reset-password",
     "HttpMethod": "POST",
     "IsController": true,

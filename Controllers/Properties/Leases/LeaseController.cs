@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Properties.Leases;
-using RealEstate.Services.Repositories.Properties.Leases;
+using RealEstate.Entities.Properties.Leases;
+using RealEstate.Repositories.Properties.Leases;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public class LeaseController(LeaseRepository service,ILogger<LeaseController> lo
     private readonly ILogger<LeaseController> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<Lease>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<Lease>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{leaseId}")]
-    public async Task<ActionResult<Lease>> GetAsync(string leaseId)
+    public async Task<ActionResult<Lease>> Get(string leaseId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class LeaseController(LeaseRepository service,ILogger<LeaseController> lo
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] LeaseDTO leaseDTO)
+    public async Task<IActionResult> Add([FromBody] LeaseDTO leaseDTO)
     {
         try
         {
@@ -68,7 +68,7 @@ public class LeaseController(LeaseRepository service,ILogger<LeaseController> lo
 
             var lease = await _service.AddAsync(leaseDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { leaseId = lease.Id }, lease);
+            return CreatedAtAction(nameof(Get), new { leaseId = lease.Id }, lease);
         }
         catch (ArgumentNullException ex)
         {
@@ -93,7 +93,7 @@ public class LeaseController(LeaseRepository service,ILogger<LeaseController> lo
     }
 
     [HttpPut("update/{leaseId}")]
-    public async Task<IActionResult> UpdateAsync(string leaseId, [FromBody] LeaseDTO leaseDTO)
+    public async Task<IActionResult> Update(string leaseId, [FromBody] LeaseDTO leaseDTO)
     {
         try
         {
@@ -133,7 +133,7 @@ public class LeaseController(LeaseRepository service,ILogger<LeaseController> lo
     }
 
     [HttpDelete("delete/{leaseId}")]
-    public async Task<IActionResult> DeleteAsync(string leaseId)
+    public async Task<IActionResult> Delete(string leaseId)
     {
         try
         {
@@ -170,7 +170,7 @@ public class LeaseController(LeaseRepository service,ILogger<LeaseController> lo
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

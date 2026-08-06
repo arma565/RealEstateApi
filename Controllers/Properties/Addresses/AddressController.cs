@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Properties.Addresses;
-using RealEstate.Services.Repositories.Properties.Addresses;
+using RealEstate.Entities.Properties.Addresses;
+using RealEstate.Repositories.Properties.Addresses;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public class AddressController(AddressRepository service, ILogger<AddressControl
     private readonly ILogger<AddressController> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<PropertyAddress>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<PropertyAddress>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{addressId}")]
-    public async Task<ActionResult<PropertyAddress>> GetAsync(string addressId)
+    public async Task<ActionResult<PropertyAddress>> Get(string addressId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class AddressController(AddressRepository service, ILogger<AddressControl
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] PropertyAddressDTO propertyAddressDTO)
+    public async Task<IActionResult> Add([FromBody] PropertyAddressDTO propertyAddressDTO)
     {
         try
         {
@@ -66,9 +66,9 @@ public class AddressController(AddressRepository service, ILogger<AddressControl
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-           var address = await _service.AddAsync(propertyAddressDTO).ConfigureAwait(false);
+            var address = await _service.AddAsync(propertyAddressDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { addressId = address.Id }, address);
+            return CreatedAtAction(nameof(Get), new { addressId = address.Id.ToString() }, address);
         }
         catch (ArgumentNullException ex)
         {
@@ -93,7 +93,7 @@ public class AddressController(AddressRepository service, ILogger<AddressControl
     }
 
     [HttpPut("update/{addressId}")]
-    public async Task<IActionResult> UpdateAsync(string addressId, [FromBody] PropertyAddressDTO propertyAddressDTO)
+    public async Task<IActionResult> Update(string addressId, [FromBody] PropertyAddressDTO propertyAddressDTO)
     {
         try
         {
@@ -106,7 +106,7 @@ public class AddressController(AddressRepository service, ILogger<AddressControl
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _service.UpdateAsync(id , propertyAddressDTO).ConfigureAwait(false);
+            await _service.UpdateAsync(id, propertyAddressDTO).ConfigureAwait(false);
 
             return NoContent();
         }
@@ -134,7 +134,7 @@ public class AddressController(AddressRepository service, ILogger<AddressControl
     }
 
     [HttpDelete("delete/{addressId}")]
-    public async Task<IActionResult> DeleteAsync(string addressId)
+    public async Task<IActionResult> Delete(string addressId)
     {
         try
         {
@@ -171,7 +171,7 @@ public class AddressController(AddressRepository service, ILogger<AddressControl
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

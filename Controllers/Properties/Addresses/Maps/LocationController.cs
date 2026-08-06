@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Properties.Addresses.Map;
-using RealEstate.Services.Repositories.Properties.Addresses.Maps;
+using RealEstate.Entities.Properties.Addresses.Map;
+using RealEstate.Repositories.Properties.Addresses.Maps;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public class LocationController(LocationRepository service, ILogger<LocationCont
     private readonly ILogger<LocationController> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<PropertyLocation>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<PropertyLocation>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{locationId}")]
-    public async Task<ActionResult<PropertyLocation>> GetAsync(string locationId)
+    public async Task<ActionResult<PropertyLocation>> Get(string locationId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class LocationController(LocationRepository service, ILogger<LocationCont
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] PropertyLocationDTO propertyLocationDTO)
+    public async Task<IActionResult> Add([FromBody] PropertyLocationDTO propertyLocationDTO)
     {
         try
         {
@@ -68,7 +68,7 @@ public class LocationController(LocationRepository service, ILogger<LocationCont
 
           var location =  await _service.AddAsync(propertyLocationDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { locationId = location.Id }, location);
+            return CreatedAtAction(nameof(Get), new { locationId = location.Id }, location);
         }
         catch (ArgumentNullException ex)
         {
@@ -93,7 +93,7 @@ public class LocationController(LocationRepository service, ILogger<LocationCont
     }
 
     [HttpPut("update/{locationId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] PropertyLocationDTO propertyLocationDTO, string locationId)
+    public async Task<IActionResult> Update([FromBody] PropertyLocationDTO propertyLocationDTO, string locationId)
     {
         try
         {
@@ -137,7 +137,7 @@ public class LocationController(LocationRepository service, ILogger<LocationCont
     }
 
     [HttpDelete("delete/{locationId}")]
-    public async Task<IActionResult> DeleteAsync(string locationId)
+    public async Task<IActionResult> Delete(string locationId)
     {
         try
         {
@@ -174,7 +174,7 @@ public class LocationController(LocationRepository service, ILogger<LocationCont
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

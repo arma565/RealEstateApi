@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using RealEstate.Services.Models.Images.Properties;
-using RealEstate.Services.Repositories.Images.Properties;
+using RealEstate.Entities.Images.Properties;
+using RealEstate.Repositories.Images.Properties;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -10,14 +10,14 @@ namespace RealEstate.Controllers.Images.Properties;
 #pragma warning disable CA1515
 [ApiController]
 [Route("[controller]")]
-public class PropertyImageController(PropertyImageRepository service, ILogger<PropertyImageController> logger) : ControllerBase
+public class PropertyImageController(PropertyImageService service, ILogger<PropertyImageController> logger) : ControllerBase
 {
-    private readonly PropertyImageRepository _service = service;
+    private readonly PropertyImageService _service = service;
 
     private readonly ILogger<PropertyImageController> _logger = logger;
 
     [HttpPost("upload/{propertyImageId}")]
-    public async Task<IActionResult> UploadAsync(string propertyImageId, [FromBody] PropertyImageDTO propertyImageDTO ,[FromForm] IFormFile[] images)
+    public async Task<IActionResult> Upload(string propertyImageId, [FromBody] PropertyImageDTO propertyImageDTO ,[FromForm] IFormFile[] images)
     {
         try
         {
@@ -65,7 +65,7 @@ public class PropertyImageController(PropertyImageRepository service, ILogger<Pr
     }
 
     [HttpGet("download/{propertyImageId}")]
-    public async Task<IActionResult> DownloadAsync(string propertyImageId)
+    public async Task<IActionResult> Download(string propertyImageId)
     {
         try
         {
@@ -115,7 +115,7 @@ public class PropertyImageController(PropertyImageRepository service, ILogger<Pr
     }
 
     [HttpGet("get/{propertyImageId}")]
-    public async Task<ActionResult<PropertyImage>> GetAsync(string propertyImageId)
+    public async Task<ActionResult<PropertyImage>> Get(string propertyImageId)
     {
         try
         {
@@ -147,7 +147,7 @@ public class PropertyImageController(PropertyImageRepository service, ILogger<Pr
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult> AddAsync([FromBody] PropertyImageDTO propertyImageDTO)
+    public async Task<ActionResult> Add([FromBody] PropertyImageDTO propertyImageDTO)
     {
         try
         {
@@ -159,7 +159,7 @@ public class PropertyImageController(PropertyImageRepository service, ILogger<Pr
 
             var propertyImage = await _service.AddAsync(propertyImageDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = propertyImage.Id }, propertyImage);
+            return CreatedAtAction(nameof(Get), new { id = propertyImage.Id }, propertyImage);
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -174,7 +174,7 @@ public class PropertyImageController(PropertyImageRepository service, ILogger<Pr
     }
 
     [HttpDelete("delete/{propertyImageId}")]
-    public async Task<IActionResult> DeleteAsync(string propertyImageId)
+    public async Task<IActionResult> Delete(string propertyImageId)
     {
         try
         {
@@ -207,7 +207,7 @@ public class PropertyImageController(PropertyImageRepository service, ILogger<Pr
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Authentication;
-using RealEstate.Services.Models.Users;
-using RealEstate.Services.Repositories.Users.AdminRepositories;
-using RealEstate.Services.Repositories.Users.UserRepositories;
+using RealEstate.Authentication;
+using RealEstate.Entities.Users;
+using RealEstate.Repositories.Users.AdminRepositories;
+using RealEstate.Repositories.Users.UserRepositories;
 using RealEstate.Services.Validations;
 using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -31,7 +31,7 @@ public sealed class UserController(
     private readonly ILogger<UserController> _logger = logger;
 
     [HttpGet("{userName}")]
-    public async Task<ActionResult<ApplicationUser>> GetAsync(string userName)
+    public async Task<ActionResult<ApplicationUser>> Get(string userName)
     {
         try
         {
@@ -71,7 +71,7 @@ public sealed class UserController(
 
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterAccountDTO userRegisterAccountDTO)
+    public async Task<IActionResult> Register([FromBody] UserRegisterAccountDTO userRegisterAccountDTO)
     {
         try
         {
@@ -125,7 +125,7 @@ public sealed class UserController(
     [HttpPost("login")]
     [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
-    public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequestDTO userLoginRequestDTO)
+    public async Task<IActionResult> Login([FromBody] UserLoginRequestDTO userLoginRequestDTO)
     {
         try
         {
@@ -177,7 +177,7 @@ public sealed class UserController(
     [HttpDelete("delete")]
     [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
-    public async Task<IActionResult> DeleteAsync([FromBody] UserLoginRequestDTO userLoginRequestDTO)
+    public async Task<IActionResult> Delete([FromBody] UserLoginRequestDTO userLoginRequestDTO)
     {
         try
         {
@@ -233,7 +233,7 @@ public sealed class UserController(
     }
 
     [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPasswordAsync([FromBody] UserResetPasswordDTO userResetPasswordDTO)
+    public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordDTO userResetPasswordDTO)
     {
         try
         {
@@ -278,7 +278,7 @@ public sealed class UserController(
     }
 
     [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePasswordAsync([FromBody] UserChangePasswordDTO userChangePasswordDTO)
+    public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordDTO userChangePasswordDTO)
     {
         try
         {
@@ -324,7 +324,7 @@ public sealed class UserController(
     }
 
     [HttpPost("forgot-password")]
-    public async Task<ActionResult<string>> ForgotPasswordAsync([FromBody] UserForgotPasswordDTO userForgotPasswordDTO)
+    public async Task<ActionResult<string>> ForgotPassword([FromBody] UserForgotPasswordDTO userForgotPasswordDTO)
     { 
         try
         {
@@ -372,7 +372,7 @@ public sealed class UserController(
     }
 
     [HttpPut("edit-profile")]
-    public async Task<IActionResult> EditUserProfile([FromBody] ApplicationUser applicationUser)
+    public async Task<IActionResult> EditProfile([FromBody] ApplicationUser applicationUser)
     {
         try
         {

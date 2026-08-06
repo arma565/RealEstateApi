@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using RealEstate.Services.Models.Images;
-using RealEstate.Services.Repositories.Images;
+using RealEstate.Entities.Images;
+using RealEstate.Repositories.Images;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -17,7 +17,7 @@ public class ImageController(ImageRepository service, ILogger<ImageController> l
     private readonly ILogger<ImageController> _logger = logger;
 
     [HttpPost("upload/{imageId}")]
-    public async Task<IActionResult> UploadAsync(string imageId, RealEstateImageDTO realEstateImageDTO ,IFormFile image)
+    public async Task<IActionResult> Upload(string imageId, RealEstateImageDTO realEstateImageDTO ,IFormFile image)
     {
         try
         {
@@ -59,7 +59,7 @@ public class ImageController(ImageRepository service, ILogger<ImageController> l
     }
 
     [HttpGet("download/{imageId}")]
-    public async Task<IActionResult> DownloadAsync(string imageId)
+    public async Task<IActionResult> Download(string imageId)
     {
         try
         {
@@ -109,7 +109,7 @@ public class ImageController(ImageRepository service, ILogger<ImageController> l
     }
 
     [HttpGet("get/{imageId}")]
-    public async Task<ActionResult<RealEstateImage>> GetAsync(string imageId)
+    public async Task<ActionResult<RealEstateImage>> Get(string imageId)
     {
         try
         {
@@ -141,7 +141,7 @@ public class ImageController(ImageRepository service, ILogger<ImageController> l
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult> AddAsync([FromBody] RealEstateImageDTO realEstateImageDTO)
+    public async Task<ActionResult> Add([FromBody] RealEstateImageDTO realEstateImageDTO)
     {
         try
         {
@@ -153,7 +153,7 @@ public class ImageController(ImageRepository service, ILogger<ImageController> l
 
             var realEstateImage = await _service.AddAsync(realEstateImageDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = realEstateImage.Id }, realEstateImage);
+            return CreatedAtAction(nameof(Get), new { id = realEstateImage.Id }, realEstateImage);
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -168,7 +168,7 @@ public class ImageController(ImageRepository service, ILogger<ImageController> l
     }
 
     [HttpDelete("delete/{imageId}")]
-    public async Task<IActionResult> DeleteAsync(string imageId)
+    public async Task<IActionResult> Delete(string imageId)
     {
         try
         {
@@ -201,7 +201,7 @@ public class ImageController(ImageRepository service, ILogger<ImageController> l
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Persons;
-using RealEstate.Services.Repositories.Persons;
+using RealEstate.Entities.Persons;
+using RealEstate.Repositories.Persons;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -16,10 +16,10 @@ public class PersonController(PersonRepository service, ILogger<PersonRepository
     private readonly ILogger<PersonRepository> _logger = logger;
 
     [HttpGet("get-list")]
-    public async Task<ActionResult<IEnumerable<Person>>> GetListAsync() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<Person>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{personId}")]
-    public async Task<ActionResult<Person>> GetAsync(string personId)
+    public async Task<ActionResult<Person>> Get(string personId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class PersonController(PersonRepository service, ILogger<PersonRepository
     }
 
     [HttpGet("get-by-nationalId/{nationalId}")]
-    public async Task<ActionResult<Person>> GetByNationalIdAsync(string nationalId)
+    public async Task<ActionResult<Person>> GetByNationalId(string nationalId)
     {
         try
         {
@@ -93,7 +93,7 @@ public class PersonController(PersonRepository service, ILogger<PersonRepository
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] PersonDTO personDTO)
+    public async Task<IActionResult> Add([FromBody] PersonDTO personDTO)
     {
         try
         {
@@ -105,7 +105,7 @@ public class PersonController(PersonRepository service, ILogger<PersonRepository
 
           var person =  await _service.AddAsync(personDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { personId = person.Id }, person);
+            return CreatedAtAction(nameof(Get), new { personId = person.Id }, person);
         }
         catch (ArgumentNullException ex)
         {
@@ -130,7 +130,7 @@ public class PersonController(PersonRepository service, ILogger<PersonRepository
     }
 
     [HttpPut("update/{personId}")]
-    public async Task<IActionResult> UpdateAsync([FromBody] PersonDTO personDTO, string personId)
+    public async Task<IActionResult> Update([FromBody] PersonDTO personDTO, string personId)
     {
         try
         {
@@ -171,7 +171,7 @@ public class PersonController(PersonRepository service, ILogger<PersonRepository
     }
 
     [HttpDelete("delete/{personId}")]
-    public async Task<IActionResult> DeleteAsync(string personId)
+    public async Task<IActionResult> Delete(string personId)
     {
         try
         {
@@ -208,7 +208,7 @@ public class PersonController(PersonRepository service, ILogger<PersonRepository
     }
 
     [HttpDelete("delete-all")]
-    public async Task<IActionResult> DeleteAllAsync()
+    public async Task<IActionResult> DeleteAll()
     {
         try
         {

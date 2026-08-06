@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Properties;
-using RealEstate.Services.Repositories.Properties;
+using RealEstate.Entities.Properties;
+using RealEstate.Enums.Properties;
+using RealEstate.Repositories.Properties;
+using RealEstate.Services.Enums.Properties;
 using RealEstate.Services.Validations;
 using System.Security;
 
@@ -20,7 +22,7 @@ public sealed class PropertyController(PropertyRepository service, ILogger<Prope
     public async Task<ActionResult<IEnumerable<RealEstateProperty>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{propertyId}")]
-    public async Task<ActionResult<RealEstateProperty>> GetAsync(string propertyId)
+    public async Task<ActionResult<RealEstateProperty>> Get(string propertyId)
     {
         try
         {
@@ -58,7 +60,7 @@ public sealed class PropertyController(PropertyRepository service, ILogger<Prope
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] RealEstatePropertyDTO realEstatePropertyDTO)
+    public async Task<IActionResult> Add([FromBody] RealEstatePropertyDTO realEstatePropertyDTO)
     {
         try
         {
@@ -70,7 +72,7 @@ public sealed class PropertyController(PropertyRepository service, ILogger<Prope
 
            var realEstateProperty = await _service.AddAsync(realEstatePropertyDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(GetAsync), new { assetID = realEstateProperty.Id }, realEstateProperty);
+            return CreatedAtAction(nameof(Get), new { propertyId = realEstateProperty.Id }, realEstateProperty);
         }
         catch (ArgumentNullException ex)
         {
@@ -96,7 +98,7 @@ public sealed class PropertyController(PropertyRepository service, ILogger<Prope
     }
 
     [HttpPut("update/{propertyId}")]
-    public async Task<IActionResult> UpdateAsync(string propertyId, [FromBody] RealEstatePropertyDTO realEstatePropertyDTO)
+    public async Task<IActionResult> Update(string propertyId, [FromBody] RealEstatePropertyDTO realEstatePropertyDTO)
     {
         try
         {
@@ -137,7 +139,7 @@ public sealed class PropertyController(PropertyRepository service, ILogger<Prope
     }
 
     [HttpDelete("delete/{propertyId}")]
-    public async Task<IActionResult> DeleteAsync(string propertyId)
+    public async Task<IActionResult> Delete(string propertyId)
     {
         try
         {

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstate.Services.Models.Users;
-using RealEstate.Services.Repositories.Users.AdminRepositories;
-using RealEstate.Services.Repositories.Users.UserRepositories;
+using RealEstate.Entities.Users;
+using RealEstate.Repositories.Users.AdminRepositories;
+using RealEstate.Repositories.Users.UserRepositories;
 using RealEstate.Services.Validations;
 using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -69,11 +69,11 @@ public sealed class AdminController(
 
     [HttpGet("users")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsersAsync() => Ok(await _adminService.GetUsersListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers() => Ok(await _adminService.GetUsersListAsync().ConfigureAwait(false));
 
     [HttpDelete("delete-users")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> DeleteUsersAsync()
+    public async Task<IActionResult> DeleteUsers()
     {
 
         try
@@ -106,7 +106,7 @@ public sealed class AdminController(
 
     [HttpDelete("delete/{userName}")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<IActionResult> DeleteAdminAsync(string userName)
+    public async Task<IActionResult> DeleteAdmin(string userName)
     {
 
         try
