@@ -135,14 +135,14 @@ public class ImageProccess( IWebHostEnvironment environment) : IImageProccess
 
 public record ImagePaths
 {
-    public string? OriginalPath { get; set; } = null!;
-    public string? ThumbnailPath { get; set; } = null!;
+    public required string OriginalPath { get; set; }
+    public required string ThumbnailPath { get; set; }
 }
 
 public record DownloadPaths
 {
-    public string? FullOriginalPath { get; set; } = null!;
-    public string? FullThumbnailPath { get; set; } = null!;
+    public required string FullOriginalPath { get; set; }
+    public required string FullThumbnailPath { get; set; }
 }
 
 

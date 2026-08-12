@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RealEstate.Entities.Properties.Payments;
+using RealEstate.Entities.Properties.Leases.Payments;
 using RealEstate.Repositories.Properties.Payments;
-using RealEstate.Services.Properties.Payments;
+using RealEstate.Services.Properties.Leases.Payments;
 using RealEstate.Services.Validations;
 using System.Security;
 

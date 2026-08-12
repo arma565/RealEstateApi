@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Properties.Leases;
 using RealEstate.Entities.Properties.Leases;
 using RealEstate.Repositories.Properties.Leases;
 using RealEstate.Services.Properties.Leases;

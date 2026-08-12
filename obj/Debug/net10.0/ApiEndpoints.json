@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "propertyAddressDTO",
-        "Type": "RealEstate.Services.Models.Properties.Addresses.PropertyAddressDTO",
+        "Type": "RealEstate.DTOs.Properties.Addresses.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -51,7 +51,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Addresses.PropertyAddress, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Addresses.PropertyAddress, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -77,7 +77,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Properties.Addresses.PropertyAddress",
+        "Type": "RealEstate.Entities.Properties.Addresses.PropertyAddress",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -102,7 +102,7 @@
       },
       {
         "Name": "propertyAddressDTO",
-        "Type": "RealEstate.Services.Models.Properties.Addresses.PropertyAddressDTO",
+        "Type": "RealEstate.DTOs.Properties.Addresses.UpdateDTO",
         "IsRequired": true
       }
     ],
@@ -127,8 +127,13 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userName",
+        "Name": "id",
         "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "userName",
+        "Type": "",
         "IsRequired": true
       }
     ],
@@ -160,7 +165,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Users.ApplicationUser, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Users.ApplicationUser, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -180,7 +185,7 @@
     "Parameters": [
       {
         "Name": "propertyDeedDTO",
-        "Type": "RealEstate.Services.Models.Properties.Documents.PropertyDeedDTO",
+        "Type": "RealEstate.Entities.Properties.Documents.PropertyDeedDTO",
         "IsRequired": true
       }
     ],
@@ -222,7 +227,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Documents.PropertyDeed, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Documents.PropertyDeed, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -248,7 +253,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Properties.Documents.PropertyDeed",
+        "Type": "RealEstate.Entities.Properties.Documents.PropertyDeed",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -273,7 +278,7 @@
       },
       {
         "Name": "propertyDeedDTO",
-        "Type": "RealEstate.Services.Models.Properties.Documents.PropertyDeedDTO",
+        "Type": "RealEstate.Entities.Properties.Documents.PropertyDeedDTO",
         "IsRequired": true
       }
     ],
@@ -289,7 +294,7 @@
     "Parameters": [
       {
         "Name": "propertyFeatureDTO",
-        "Type": "RealEstate.Services.Models.Properties.Features.PropertyFeatureDTO",
+        "Type": "RealEstate.Entities.Properties.Features.PropertyFeatureDTO",
         "IsRequired": true
       }
     ],
@@ -331,7 +336,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Features.PropertyFeature, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Features.PropertyFeature, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -357,7 +362,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Properties.Features.PropertyFeature",
+        "Type": "RealEstate.Entities.Properties.Features.PropertyFeature",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -377,7 +382,7 @@
     "Parameters": [
       {
         "Name": "propertyFeatureDTO",
-        "Type": "RealEstate.Services.Models.Properties.Features.PropertyFeatureDTO",
+        "Type": "RealEstate.Entities.Properties.Features.PropertyFeatureDTO",
         "IsRequired": true
       },
       {
@@ -398,7 +403,7 @@
     "Parameters": [
       {
         "Name": "realEstateImageDTO",
-        "Type": "RealEstate.Services.Models.Images.RealEstateImageDTO",
+        "Type": "RealEstate.Entities.Images.RealEstateImageDTO",
         "IsRequired": true
       }
     ],
@@ -462,7 +467,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Images.RealEstateImage",
+        "Type": "RealEstate.Entities.Images.RealEstateImage",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -487,7 +492,7 @@
       },
       {
         "Name": "realEstateImageDTO",
-        "Type": "RealEstate.Services.Models.Images.RealEstateImageDTO",
+        "Type": "RealEstate.Entities.Images.RealEstateImageDTO",
         "IsRequired": true
       },
       {
@@ -508,7 +513,7 @@
     "Parameters": [
       {
         "Name": "leaseDTO",
-        "Type": "RealEstate.Services.Models.Properties.Leases.LeaseDTO",
+        "Type": "RealEstate.Entities.Properties.Leases.LeaseDTO",
         "IsRequired": true
       }
     ],
@@ -550,7 +555,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Leases.Lease, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Leases.Lease, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -576,7 +581,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Properties.Leases.Lease",
+        "Type": "RealEstate.Entities.Properties.Leases.Lease",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -601,7 +606,7 @@
       },
       {
         "Name": "leaseDTO",
-        "Type": "RealEstate.Services.Models.Properties.Leases.LeaseDTO",
+        "Type": "RealEstate.Entities.Properties.Leases.LeaseDTO",
         "IsRequired": true
       }
     ],
@@ -617,7 +622,7 @@
     "Parameters": [
       {
         "Name": "propertyLocationDTO",
-        "Type": "RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocationDTO",
+        "Type": "RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO",
         "IsRequired": true
       }
     ],
@@ -659,7 +664,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocation, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Addresses.Map.PropertyLocation, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -685,7 +690,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocation",
+        "Type": "RealEstate.Entities.Properties.Addresses.Map.PropertyLocation",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -705,7 +710,7 @@
     "Parameters": [
       {
         "Name": "propertyLocationDTO",
-        "Type": "RealEstate.Services.Models.Properties.Addresses.Map.PropertyLocationDTO",
+        "Type": "RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO",
         "IsRequired": true
       },
       {
@@ -726,7 +731,7 @@
     "Parameters": [
       {
         "Name": "paymentDTO",
-        "Type": "RealEstate.Services.Models.Properties.Payments.PaymentDTO",
+        "Type": "RealEstate.Entities.Properties.Payments.PaymentDTO",
         "IsRequired": true
       }
     ],
@@ -768,7 +773,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.Payments.Payment, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Payments.Payment, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -794,7 +799,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Properties.Payments.Payment",
+        "Type": "RealEstate.Entities.Properties.Payments.Payment",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -819,7 +824,7 @@
       },
       {
         "Name": "paymentDTO",
-        "Type": "RealEstate.Services.Models.Properties.Payments.PaymentDTO",
+        "Type": "RealEstate.Entities.Properties.Payments.PaymentDTO",
         "IsRequired": true
       }
     ],
@@ -835,7 +840,7 @@
     "Parameters": [
       {
         "Name": "personDTO",
-        "Type": "RealEstate.Services.Models.Persons.PersonDTO",
+        "Type": "RealEstate.Entities.Persons.PersonDTO",
         "IsRequired": true
       }
     ],
@@ -883,7 +888,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Persons.Person",
+        "Type": "RealEstate.Entities.Persons.Person",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -903,7 +908,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Persons.Person, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Persons.Person, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -929,7 +934,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Persons.Person",
+        "Type": "RealEstate.Entities.Persons.Person",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -949,7 +954,7 @@
     "Parameters": [
       {
         "Name": "personDTO",
-        "Type": "RealEstate.Services.Models.Persons.PersonDTO",
+        "Type": "RealEstate.Entities.Persons.PersonDTO",
         "IsRequired": true
       },
       {
@@ -970,7 +975,7 @@
     "Parameters": [
       {
         "Name": "realEstatePropertyDTO",
-        "Type": "RealEstate.Services.Models.Properties.RealEstatePropertyDTO",
+        "Type": "RealEstate.DTOs.Properties.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -1012,7 +1017,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Properties.RealEstateProperty, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.RealEstateProperty, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1038,7 +1043,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Properties.RealEstateProperty",
+        "Type": "RealEstate.Entities.Properties.RealEstateProperty",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1063,7 +1068,7 @@
       },
       {
         "Name": "realEstatePropertyDTO",
-        "Type": "RealEstate.Services.Models.Properties.RealEstatePropertyDTO",
+        "Type": "RealEstate.DTOs.Properties.UpdateDTO",
         "IsRequired": true
       }
     ],
@@ -1079,7 +1084,7 @@
     "Parameters": [
       {
         "Name": "propertyImageDTO",
-        "Type": "RealEstate.Services.Models.Images.Properties.PropertyImageDTO",
+        "Type": "RealEstate.Entities.Images.Properties.PropertyImageDTO",
         "IsRequired": true
       }
     ],
@@ -1143,7 +1148,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Images.Properties.PropertyImage",
+        "Type": "RealEstate.Entities.Images.Properties.PropertyImage",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1168,7 +1173,7 @@
       },
       {
         "Name": "propertyImageDTO",
-        "Type": "RealEstate.Services.Models.Images.Properties.PropertyImageDTO",
+        "Type": "RealEstate.Entities.Images.Properties.PropertyImageDTO",
         "IsRequired": true
       },
       {
@@ -1189,7 +1194,7 @@
     "Parameters": [
       {
         "Name": "realEstateSupportDTO",
-        "Type": "RealEstate.Services.Models.Supports.RealEstateSupportDTO",
+        "Type": "RealEstate.DTOs.Supports.RealEstateSupportDTO",
         "IsRequired": true
       }
     ],
@@ -1231,7 +1236,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Services.Models.Supports.RealEstateSupport, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Supports.RealEstateSupport, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1257,7 +1262,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Supports.RealEstateSupport",
+        "Type": "RealEstate.Entities.Supports.RealEstateSupport",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1282,7 +1287,7 @@
       },
       {
         "Name": "realEstateSupportDTO",
-        "Type": "RealEstate.Services.Models.Supports.RealEstateSupportDTO",
+        "Type": "RealEstate.DTOs.Supports.RealEstateSupportDTO",
         "IsRequired": true
       }
     ],
@@ -1304,7 +1309,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Services.Models.Users.ApplicationUser",
+        "Type": "RealEstate.Entities.Users.ApplicationUser",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1324,7 +1329,7 @@
     "Parameters": [
       {
         "Name": "userChangePasswordDTO",
-        "Type": "RealEstate.Services.Models.Users.UserChangePasswordDTO",
+        "Type": "RealEstate.DTOs.Users.UserChangePasswordDTO",
         "IsRequired": true
       }
     ],
@@ -1340,7 +1345,7 @@
     "Parameters": [
       {
         "Name": "userLoginRequestDTO",
-        "Type": "RealEstate.Services.Models.Users.UserLoginRequestDTO",
+        "Type": "RealEstate.DTOs.Users.UserLoginRequestDTO",
         "IsRequired": true
       }
     ],
@@ -1349,14 +1354,19 @@
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
     "Method": "EditProfile",
-    "RelativePath": "User/edit-profile",
+    "RelativePath": "User/edit-profile/{userId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
         "Name": "applicationUser",
-        "Type": "RealEstate.Services.Models.Users.ApplicationUser",
+        "Type": "RealEstate.Entities.Users.ApplicationUser",
         "IsRequired": true
       }
     ],
@@ -1372,7 +1382,7 @@
     "Parameters": [
       {
         "Name": "userForgotPasswordDTO",
-        "Type": "RealEstate.Services.Models.Users.UserForgotPasswordDTO",
+        "Type": "RealEstate.DTOs.Users.UserForgotPasswordDTO",
         "IsRequired": true
       }
     ],
@@ -1398,7 +1408,7 @@
     "Parameters": [
       {
         "Name": "userLoginRequestDTO",
-        "Type": "RealEstate.Services.Models.Users.UserLoginRequestDTO",
+        "Type": "RealEstate.DTOs.Users.UserLoginRequestDTO",
         "IsRequired": true
       }
     ],
@@ -1414,7 +1424,7 @@
     "Parameters": [
       {
         "Name": "userRegisterAccountDTO",
-        "Type": "RealEstate.Services.Models.Users.UserRegisterAccountDTO",
+        "Type": "RealEstate.DTOs.Users.UserRegisterAccountDTO",
         "IsRequired": true
       }
     ],
@@ -1430,7 +1440,7 @@
     "Parameters": [
       {
         "Name": "userResetPasswordDTO",
-        "Type": "RealEstate.Services.Models.Users.UserResetPasswordDTO",
+        "Type": "RealEstate.DTOs.Users.UserResetPasswordDTO",
         "IsRequired": true
       }
     ],

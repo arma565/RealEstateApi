@@ -1,6 +1,4 @@
-﻿using RealEstate.Entities.Properties;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Properties.Addresses.Map;
 
@@ -8,18 +6,16 @@ namespace RealEstate.Entities.Properties.Addresses.Map;
 public class PropertyLocation
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = new();
 
-    [DefaultValue(0.0)]
-    public double Latitude { get; set; } = default;
+    public required double Latitude { get; set; }
 
-    [DefaultValue(0.0)]
-    public double Longitude { get; set; } = default!;
+    public required double Longitude { get; set; }
 
     #region Relationships
-
-    public Guid? PropertyId { get; set; } = null!;
-    public RealEstateProperty? Property { get; set; } = null!;
+    
+    public Guid PropertyId { get; set; }
+    public RealEstateProperty Property { get; set; } = null!;
 
     #endregion
 

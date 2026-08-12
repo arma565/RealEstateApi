@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Properties.Addresses;
 using RealEstate.Entities.Properties.Addresses;
 using RealEstate.Repositories.Properties.Addresses;
 using RealEstate.Services.Properties.Addresses;
@@ -57,7 +58,7 @@ public class AddressController(AddressService service, ILogger<AddressController
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] PropertyAddressDTO propertyAddressDTO)
+    public async Task<IActionResult> Add([FromBody] CreateDTO propertyAddressDTO)
     {
         try
         {
@@ -94,7 +95,7 @@ public class AddressController(AddressService service, ILogger<AddressController
     }
 
     [HttpPut("update/{addressId}")]
-    public async Task<IActionResult> Update(string addressId, [FromBody] PropertyAddressDTO propertyAddressDTO)
+    public async Task<IActionResult> Update(string addressId, [FromBody] UpdateDTO propertyAddressDTO)
     {
         try
         {

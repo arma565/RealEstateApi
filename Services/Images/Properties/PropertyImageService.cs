@@ -1,5 +1,7 @@
-﻿using RealEstate.Entities.Images.Properties;
+﻿using RealEstate.DTOs.Images.Properties;
+using RealEstate.Entities.Images.Properties;
 using RealEstate.Repositories.Images.Properties;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RealEstate.Services.Images.Properties;
 
@@ -7,10 +9,10 @@ namespace RealEstate.Services.Images.Properties;
 interface IPropertyImageService
 {
     Task<IEnumerable<PropertyImage>> GetListAsync();
-    Task<PropertyImage?> GetAsync(Guid id);
+    Task<PropertyImage> GetAsync(Guid id);
     Task<DownloadPaths> GetPathAsync(Guid id);
-    Task<PropertyImage> AddAsync(PropertyImageDTO propertyImageDTO);
-    Task UpdateAsync(Guid id, PropertyImageDTO propertyImageDTO, IFormFile image);
+    Task<PropertyImage> AddAsync(CreateDTO createDTO, IFormFile image);
+    Task UpdateAsync(Guid id, UpdateDTO updateDTO, IFormFile image);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
 }
@@ -26,37 +28,67 @@ public class PropertyImageService(PropertyImageRepository
     public async Task<IEnumerable<PropertyImage>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);
 
-    public async Task<PropertyImage?> GetAsync(Guid id) =>
-        await _repository.GetAsync(id).ConfigureAwait(false);
-
-    public async Task<PropertyImage> AddAsync(PropertyImageDTO propertyImageDTO)
+    public async Task<PropertyImage> GetAsync(Guid id)
     {
-        ArgumentNullException.ThrowIfNull(propertyImageDTO);
 
-        var propertyImage = new PropertyImage
-        {
-            PropertyId = propertyImageDTO.PropertyId
-        };
-        return await _repository.AddAsync(propertyImage).ConfigureAwait(false);
-    }
-
-    public async Task UpdateAsync(Guid id, PropertyImageDTO propertyImageDTO, IFormFile image)
-    {
-        ArgumentNullException.ThrowIfNull(propertyImageDTO);
-
-        var propertyImage = await GetAsync(id).ConfigureAwait(false);
+        var propertyImage = await _repository.GetAsync(id).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(propertyImage);
 
+        return propertyImage;
+    }
+
+    public async Task<PropertyImage> AddAsync(CreateDTO createDTO, IFormFile image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
         var savedImagePaths = await _imageProccess.SaveAsync(image).ConfigureAwait(false);
 
-        propertyImage.Id = id;
-        propertyImage.Order = propertyImage.Order++;
-        propertyImage.IsCoverImage = propertyImage.Order == 1;
-        propertyImage.ImageFilePath = savedImagePaths.OriginalPath;
-        propertyImage.ThumbnailFilePath = savedImagePaths.ThumbnailPath;
-        propertyImage.PropertyId = propertyImageDTO.PropertyId;
+        ArgumentNullException.ThrowIfNull(createDTO);
 
-        await _repository.UpdateAsync(propertyImage).ConfigureAwait(false);
+        var allPropertyImages = await GetListAsync().ConfigureAwait(false);
+
+        if (!allPropertyImages.Any())
+        {
+            createDTO.OrderId = 1;
+            createDTO.IsCoverImage = true;
+        }
+        else
+        {
+            var lastPropertyImageOrderNumber = allPropertyImages.Last().OrderId;
+            createDTO.OrderId = lastPropertyImageOrderNumber + 1;
+            createDTO.IsCoverImage = false;
+        }
+
+        return await _repository.AddAsync(new PropertyImage
+        {
+            OrderId = createDTO.OrderId,
+            IsCoverImage = createDTO.IsCoverImage,
+            ImageFilePath = savedImagePaths.OriginalPath,
+            ThumbnailFilePath = savedImagePaths.ThumbnailPath,
+            PropertyId = createDTO.PropertyId
+        }).ConfigureAwait(false);
+    }
+
+    public async Task UpdateAsync(Guid id, UpdateDTO updateDTO, IFormFile image)
+    {
+        var existPropertyImage = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(existPropertyImage);
+
+        await _imageProccess.DeleteFilesAsync(new ImagePaths
+        {
+            OriginalPath = existPropertyImage.ImageFilePath,
+            ThumbnailPath = existPropertyImage.ThumbnailFilePath
+        }).ConfigureAwait(false);
+
+        ArgumentNullException.ThrowIfNull(updateDTO);
+
+        ArgumentNullException.ThrowIfNull(image);
+        var savedImagePaths = await _imageProccess.SaveAsync(image).ConfigureAwait(false);
+
+        existPropertyImage.ImageFilePath = savedImagePaths.OriginalPath;
+        existPropertyImage.ThumbnailFilePath = savedImagePaths.ThumbnailPath;
+        existPropertyImage.PropertyId = updateDTO.PropertyId != existPropertyImage.PropertyId ? updateDTO.PropertyId : existPropertyImage.PropertyId;
+
+        await _repository.UpdateAsync(existPropertyImage).ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)

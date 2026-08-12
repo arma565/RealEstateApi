@@ -1,4 +1,4 @@
-using RealEstate.Entities.Images.Properties;
+using RealEstate.Entities.Images.Supports;
 using RealEstate.Entities.Persons;
 using RealEstate.Entities.Properties.Addresses;
 using RealEstate.Entities.Properties.Addresses.Map;
@@ -7,7 +7,6 @@ using RealEstate.Entities.Properties.Features;
 using RealEstate.Entities.Properties.Leases;
 using RealEstate.Entities.Users;
 using RealEstate.Enums.Properties;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Properties;
@@ -17,61 +16,48 @@ public class RealEstateProperty()
 {
 
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = new();
 
-    [DefaultValue(0)]
-    public int OrderId { get; set; } = default;
+    public int OrderId { get; set; }
 
-    [DefaultValue("")]
-    public string Title { get; set; } = default!;
+    public required string Title { get; set; }
 
-    [DefaultValue("")]
-    public string? Description { get; set; } = default;
+    public string? Description { get; set; }
 
-    [DefaultValue(PropertyType.House)]
-    public PropertyType PropertyType { get; set; } = default;
+    public PropertyType PropertyType { get; set; }
 
-    [DefaultValue(PropertyStatus.ForRent)]
-    public PropertyStatus PropertyStatus { get; set; } = default;
+    public PropertyStatus PropertyStatus { get; set; }
 
-    [DefaultValue(0.0)]
-    public decimal Price { get; set; } = default;
+    public PropertyCurrency PropertyCurrency { get; set; }
 
-    [DefaultValue(PropertyCurrency.USD)]
-    public PropertyCurrency PropertyCurrency { get; set; } = default;
+    public required int YearBuilt { get; set; }
 
-    [Required(ErrorMessage = "YearBuilt is required!")]
-    public int YearBuilt { get; set; } = default;
+    public required decimal Price { get; set; }
 
-    [Required(ErrorMessage = "LandArea size is required!")]
-    public decimal LandArea { get; set; } = default;
+    public required decimal LandArea { get; set; }
 
-    [Required(ErrorMessage = "BuildingArea size is required!")]
-    public decimal BuildingArea { get; set; } = default;
+    public required decimal BuildingArea { get; set; }
 
     #region Relationships
 
-    public Guid? AddressId { get; set; } = null!;
-    public PropertyAddress? Address { get; set; } = null!;
+    public Guid OwnerId { get; set; }
+    public Person Owner { get; set; } = null!;
 
-    public Guid? LocationId { get; set; } = null!;
-    public PropertyLocation? Location { get; set; } = null!;
+    public PropertyLocation? Location { get; set; }
 
-    public Guid? OwnerId { get; set; } = null!;
-    public Person? Owner { get; set; } = null!;
+    public PropertyAddress? Address { get; set; }
 
-    public string? AgentId { get; set; } = null!;
-    public ApplicationUser? Agent { get; set; } = null!;
+    public PropertyDeed? PropertyDeed { get; set; }
 
-    public Guid? PropertyDeedId { get; set; } = null!;
-    public PropertyDeed? PropertyDeed { get; set; } = null!;
+    public string? AgentId { get; set; }
+    public ApplicationUser Agent { get; set; } = null!;
 
-    public Guid? LeaseId { get; set; } = null!;
-    public Lease? Lease { get; set; } = null!;
+    public ICollection<Lease> Leases { get; } = [];
 
-    public ICollection<PropertyFeature> Features { get; } = [];
+    public ICollection<PropertyFeature> PropertyFeatures { get; } = [];
 
-    public ICollection<PropertyImage> Images { get; } = [];
+    public ICollection<SupportImage> PropertyImages { get; } = [];
+
     #endregion
 
 }

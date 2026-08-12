@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Properties.Documents;
 using RealEstate.Entities.Properties.Documents;
 using RealEstate.Services.Properties.Documents;
 using RealEstate.Services.Validations;

@@ -1,7 +1,5 @@
 using RealEstate.Entities.Properties;
 using RealEstate.Entities.Properties.Leases;
-using RealEstate.Enums.Persons;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Persons;
@@ -12,43 +10,30 @@ public class Person()
     [Key]
     public Guid Id { get; set; }
 
-    [Required(ErrorMessage = "First name is required!")]
-    public string? FirstName { get; set; } = default;
+    public required string FirstName { get; set; }
 
-    [Required(ErrorMessage = "Last name is required!")]
-    public string? LastName { get; set; } = default;
+    public required string LastName { get; set; }
 
-    [Required(ErrorMessage = "Father's name is required!")]
-    public string? FatherName { get; set; } = default;
+    public required string FatherName { get; set; }
 
-    [Required(ErrorMessage = "Birth certificate number is required!")]
-    [Range(10, long.MaxValue, ErrorMessage = ("Birth Certificate Number must be greater than 10 numbers!"))]
-    public long BirthCertificateNumber { get; set; } = default;
+    public required long BirthCertificateNumber { get; set; }
 
-    public string? BirthCertificateIssued { get; set; } = default!;
+    public required string BirthCertificateIssued { get; set; }
 
-    [Required(ErrorMessage = "National ID is required!")]
-    [Range(10, long.MaxValue, ErrorMessage = ("NationalId must be greater than 10 numbers!"))]
-    public long NationalId { get; set; } = default;
+    public required long NationalId { get; set; }
 
-    public string Born { get; set; } = default!;
+    public required string Born { get; set; }
 
-    [Required(ErrorMessage = "Phone is required!")]
-    public string Phone { get; set; } = default!;
+    public required string Phone { get; set; }
 
-    [Required(ErrorMessage = "Address is required!")]
-    public string Address { get; set; } = default!;
-
-    [DefaultValue(PersonRoles.LandLord)]
-    public PersonRoles Role { get; set; } = default!;
+    public required string Address { get; set; }
 
     #region Relationships
 
-    public Guid? PropertyId { get; set; } = null!;
-    public RealEstateProperty? Property { get; set; } = null!;
+    public ICollection<Lease> Leases { get; } = [];
 
-    public Guid? LeaseId { get; set; } = null!;
-    public Lease? Lease { get; set; } = null!;
+    public ICollection<RealEstateProperty> RealEstateProperties { get; } = [];
+
     #endregion
 }
 

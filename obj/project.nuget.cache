@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "A1RNn7zPNS8=",
+  "dgSpecHash": "ouIgClmm73E=",
   "success": true,
   "projectFilePath": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\RealEstate.csproj",
   "expectedPackageFiles": [
@@ -46,9 +46,9 @@
     "C:\\Users\\MSP\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
     "C:\\Users\\MSP\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\MSP\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
-    "C:\\Users\\MSP\\.nuget\\packages\\skiasharp\\4.151.0\\skiasharp.4.151.0.nupkg.sha512",
-    "C:\\Users\\MSP\\.nuget\\packages\\skiasharp.nativeassets.macos\\4.151.0\\skiasharp.nativeassets.macos.4.151.0.nupkg.sha512",
-    "C:\\Users\\MSP\\.nuget\\packages\\skiasharp.nativeassets.win32\\4.151.0\\skiasharp.nativeassets.win32.4.151.0.nupkg.sha512",
+    "C:\\Users\\MSP\\.nuget\\packages\\skiasharp\\4.151.1\\skiasharp.4.151.1.nupkg.sha512",
+    "C:\\Users\\MSP\\.nuget\\packages\\skiasharp.nativeassets.macos\\4.151.1\\skiasharp.nativeassets.macos.4.151.1.nupkg.sha512",
+    "C:\\Users\\MSP\\.nuget\\packages\\skiasharp.nativeassets.win32\\4.151.1\\skiasharp.nativeassets.win32.4.151.1.nupkg.sha512",
     "C:\\Users\\MSP\\.nuget\\packages\\swashbuckle.aspnetcore\\10.2.3\\swashbuckle.aspnetcore.10.2.3.nupkg.sha512",
     "C:\\Users\\MSP\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\10.2.3\\swashbuckle.aspnetcore.swagger.10.2.3.nupkg.sha512",
     "C:\\Users\\MSP\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\10.2.3\\swashbuckle.aspnetcore.swaggergen.10.2.3.nupkg.sha512",

@@ -1,108 +1,43 @@
 ﻿@RealEstate_HostAddress = https://localhost:5069
 
-@profileImageID=string
-DELETE {{RealEstate_HostAddress}}/auth/profile/delete/{{profileImageID}}
+
+GET {{RealEstate_HostAddress}}/property/get-list
+Authorization: bearer {{$bearerToken}}
 
 ###
 
-POST {{RealEstate_HostAddress}}/auth/user/change/password
+GET {{RealEstate_HostAddress}}/property/get/{{propertyId}}
+Authorization: bearer {{$bearerToken}}
+
+###
+
+POST {{RealEstate_HostAddress}}/property/add
+Authorization: bearer {{$bearerToken}}
 Content-Type: application/json
 
 {
-  "userName": "sss_234",
-  "oldPassword": "Sssbbb@555",
-  "newPassword": "ArmArm#123",
-  "repeatNewPassword": "ArmArm#123"
+  //CreateDTO
 }
 
 ###
 
-DELETE {{RealEstate_HostAddress}}/auth/user/delete-all
-
-###
-
-@userName=arm_234
-DELETE {{RealEstate_HostAddress}}/auth/user/delete/{{userName}}
-
-###
-
-@imageFileName=string
-GET {{RealEstate_HostAddress}}/auth/user/download/{{imageFileName}}
-
-###
-
-PUT {{RealEstate_HostAddress}}/auth/user/edit/profile
+PUT {{RealEstate_HostAddress}}/property/update/{{propertyId}}
+Authorization: bearer {{$bearerToken}}
 Content-Type: application/json
 
 {
-    "id": "eb59a7a6-d12a-42b1-8cd3-56e0c56f25dd",
-    "userName": "arm_234",
-    "email": "arm@gmail.com",
-    "phoneNumber": "+98854455445",
-    "firstName": "John",
-    "lastName": "Bell",
-    "acceptTerms": true,
-    "profileImage": null
+  //UpdateDTO
 }
 
 ###
 
-POST {{RealEstate_HostAddress}}/auth/user/login
-Content-Type: application/json
-
-{
-  "userName": "arm_234",
-  "password": "ArmArm#123"
-}
+@propertyId=string
+DELETE {{RealEstate_HostAddress}}/property/delete/{{propertyId}}
+Authorization: bearer {{$bearerToken}}
 
 ###
 
-POST {{RealEstate_HostAddress}}/auth/user/recover/account
-Content-Type: application/json
-
-{
-  //RecoverAccount
-}
-
-###
-
-POST {{RealEstate_HostAddress}}/auth/user/register
-Content-Type: application/json
-
-{
-  "userName": "sss_234",
-  "email": "asdasda@gmail.com",
-  "password": "Sssbbb@555",
-  "repeatPassword": "Sssbbb@555",
-  "acceptTerms": true
-}
-
-###
-
-POST {{RealEstate_HostAddress}}/auth/user/reset/password
-Content-Type: application/json
-
-{
-  //ResetPassword
-}
-
-###
-
-@userID=string
-POST {{RealEstate_HostAddress}}/auth/user/upload/{{userID}}
-Content-Type: application/json
-
-{
-  //IFormFile
-}
-
-###
-
-GET {{RealEstate_HostAddress}}/auth/user/users
-
-###
-
-@userName=arm_234
-GET {{RealEstate_HostAddress}}/auth/user/{{userName}}
+DELETE {{RealEstate_HostAddress}}/property/delete-all
+Authorization: bearer {{$bearerToken}}
 
 ###

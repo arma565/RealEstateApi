@@ -1,6 +1,4 @@
-﻿using RealEstate.Entities.Images;
-using RealEstate.Entities.Properties;
-using System.ComponentModel;
+﻿using RealEstate.Entities.Images.Documents;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
@@ -10,25 +8,22 @@ namespace RealEstate.Entities.Properties.Documents;
 public class PropertyDeed
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = new();
 
-    [DefaultValue("")]
-    public string? DeedNumber { get; set; } = default;
+    public required string DeedNumber { get; set; }
 
-    [DefaultValue("")]
-    public string? RegistryNumber { get; set; } = default;
+    public required string RegistryNumber { get; set; }
 
     public DateTime IssueDate { get; set; } = DateTime.Parse(DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
-    [DefaultValue("")]
-    public string? IssuedBy { get; set; } = default;
+    public required string IssuedBy { get; set; }
 
     #region Relationships
 
-    public Guid? ImageId { get; set; } = null!;
-    public RealEstateImage? Image { get; set; } = null!;
+    public PropertyDeedImage? PropertyDeedImage { get; set; }
 
-    public Guid? PropertyId { get; set; } = null!;
-    public RealEstateProperty? Property { get; set; } = null!;
+    public Guid PropertyId { get; set; }
+    public RealEstateProperty Property { get; set; } = null!;
+
     #endregion
 }

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.DTOs.Users;
@@ -5,14 +6,9 @@ namespace RealEstate.DTOs.Users;
 #pragma warning disable CA1515
 public class UserForgotPasswordDTO
 {
-    private string _email = "";
-
+    [DefaultValue("")]
     [Required(ErrorMessage = "Email is required!")]
     [EmailAddress(ErrorMessage = "Invalid email format.")]
-    public string Email
-    {
-        get => _email;
-        set => _email = value;
-    }
+    public required string Email { get; set; }
 }
 

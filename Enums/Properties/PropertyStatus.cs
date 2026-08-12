@@ -3,9 +3,10 @@
 #pragma warning disable CA1515
 public enum PropertyStatus
 {
-    ForSale = 0,
-    ForRent = 1,
-    Sold = 2,
-    Rented = 3,
-    Pending = 4
+    NotSet = 0,
+    ForSale = 1,
+    ForRent = 2,
+    Sold = 3,
+    Rented = 4,
+    Pending = 5
 }

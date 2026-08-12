@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
-using RealEstate.Entities.Images;
+using RealEstate.Entities.Images.Users;
 using RealEstate.Entities.Properties;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Users;
@@ -10,33 +9,25 @@ namespace RealEstate.Entities.Users;
 public class ApplicationUser : IdentityUser
 {
     [Key]
-    [DefaultValue("")]
     public override string Id { get; set; } = default!;
 
-    [DefaultValue("")]
-    public override string? UserName { get; set; } = default;
+    public override string? UserName { get; set; }
 
-    [DefaultValue("")]
-    public override string? Email { get; set; } = default;
+    public override string? Email { get; set; }
 
-    [DefaultValue("")]
-    public override string? PhoneNumber { get; set; } = default;
+    public override string? PhoneNumber { get; set; }
 
-    [DefaultValue("")]
-    public string? FirstName { get; set; } = default;
+    public required string? FirstName { get; set; }
 
-    [DefaultValue("")]
-    public string? LastName { get; set; } = default;
+    public required string? LastName { get; set; }
 
-    [DefaultValue(true)]
-    public bool AcceptTerms { get; set; } = default;
+    public required bool AcceptTerms { get; set; }
 
     #region Relationships
 
-    public Guid ImageId { get; set; }
-    public RealEstateImage ProfileImage { get; set; } = default!;
+    public ApplicationUserImage? AgentImage { get; set; }
 
-    public ICollection<RealEstateProperty> Properties { get; } = [];
+    public ICollection<RealEstateProperty> RealEstateProperties { get; } = [];
 
     #endregion
 

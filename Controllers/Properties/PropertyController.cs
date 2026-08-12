@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.DTOs.Properties;
 using RealEstate.Entities.Properties;
-using RealEstate.Repositories.Properties;
 using RealEstate.Services.Properties;
 using RealEstate.Services.Validations;
 using System.Security;
@@ -60,7 +59,7 @@ public sealed class PropertyController(PropertyService service, ILogger<Property
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] RealEstatePropertyDTO realEstatePropertyDTO)
+    public async Task<IActionResult> Add([FromBody] CreateDTO realEstatePropertyDTO)
     {
         try
         {
@@ -98,7 +97,7 @@ public sealed class PropertyController(PropertyService service, ILogger<Property
     }
 
     [HttpPut("update/{propertyId}")]
-    public async Task<IActionResult> Update(string propertyId, [FromBody] RealEstatePropertyDTO realEstatePropertyDTO)
+    public async Task<IActionResult> Update(string propertyId, [FromBody] UpdateDTO realEstatePropertyDTO)
     {
         try
         {

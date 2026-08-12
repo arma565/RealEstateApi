@@ -1,5 +1,4 @@
-﻿using RealEstate.Entities.Images;
-using System.ComponentModel;
+﻿using RealEstate.Entities.Images.Supports;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Supports;
@@ -8,23 +7,20 @@ namespace RealEstate.Entities.Supports;
 public class RealEstateSupport
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = new();
 
-    [DefaultValue("")]
-    public string? Title { get; set; } = default;
+    public required string Title { get; set; }
 
-    [DefaultValue("")]
-    public string? DetailsTitle { get; set; } = default;
+    public required string DetailsTitle { get; set; }
 
-    [DefaultValue("")]
-    public string? DetailsSubtitle { get; set; } = default;
+    public required string DetailsSubtitle { get; set; }
 
     public ICollection<string> DetailsDescriptionList => [];
 
     #region Relationships
 
-    public Guid? ImageId { get; set; } = null!;
-    public RealEstateImage? Image { get; set; } = null!;
+    public SupportImage? SupportImage { get; set; }
+
     #endregion
 
 }

@@ -8,6 +8,7 @@ using RealEstate.Authorization;
 using RealEstate.Data;
 using RealEstate.Entities.Users;
 using RealEstate.Repositories.Images;
+using RealEstate.Repositories.Images.Properties;
 using RealEstate.Repositories.Persons;
 using RealEstate.Repositories.Properties;
 using RealEstate.Repositories.Properties.Addresses;
@@ -15,11 +16,21 @@ using RealEstate.Repositories.Properties.Addresses.Maps;
 using RealEstate.Repositories.Properties.Documents;
 using RealEstate.Repositories.Properties.Features;
 using RealEstate.Repositories.Properties.Leases;
-using RealEstate.Repositories.Properties.Payments;
+using RealEstate.Repositories.Properties.Leases.Payments;
 using RealEstate.Repositories.Supports;
 using RealEstate.Repositories.Users;
 using RealEstate.Services.Images;
 using RealEstate.Services.Images.Properties;
+using RealEstate.Services.Persons;
+using RealEstate.Services.Properties;
+using RealEstate.Services.Properties.Addresses;
+using RealEstate.Services.Properties.Addresses.Maps;
+using RealEstate.Services.Properties.Documents;
+using RealEstate.Services.Properties.Features;
+using RealEstate.Services.Properties.Leases;
+using RealEstate.Services.Properties.Leases.Payments;
+using RealEstate.Services.Supports;
+using RealEstate.Services.Users;
 using RealEstate.Validations;
 using System.Text;
 
@@ -62,9 +73,9 @@ public partial class Program
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-        //Repositories services
+        //Repositories
         builder.Services.AddScoped<ImageRepository>();
-        builder.Services.AddScoped<PropertyImageService>();
+        builder.Services.AddScoped<SupportImageRepository>();
         builder.Services.AddScoped<PersonRepository>();
         builder.Services.AddScoped<LocationRepository>();
         builder.Services.AddScoped<AddressRepository>();
@@ -76,6 +87,22 @@ public partial class Program
         builder.Services.AddScoped<SupportRepository>();
         builder.Services.AddScoped<AdminRepository>();
         builder.Services.AddScoped<UserRepository>();
+        //Services
+        builder.Services.AddScoped<ImageProccess>();
+        builder.Services.AddScoped<PropertyImageService>();
+        builder.Services.AddScoped<PersonService>();
+        builder.Services.AddScoped<LocationService>();
+        builder.Services.AddScoped<AddressService>();
+        builder.Services.AddScoped<DeedService>();
+        builder.Services.AddScoped<FeatureService>();
+        builder.Services.AddScoped<LeaseService>();
+        builder.Services.AddScoped<PaymentService>();
+        builder.Services.AddScoped<PropertyService>();
+        builder.Services.AddScoped<SupportService>();
+        builder.Services.AddScoped<AdminService>();
+        builder.Services.AddScoped<UserService>();
+
+
 
         //Authentication and Authorization Services
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -129,6 +156,8 @@ public partial class Program
                     [new OpenApiSecuritySchemeReference("Bearer", document)] = []
                 };
             });
+
+            options.CustomSchemaIds(type => type.FullName);
         });
 
         var app = builder.Build();

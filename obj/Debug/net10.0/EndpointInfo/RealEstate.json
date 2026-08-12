@@ -18,7 +18,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyAddress"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.PropertyAddress"
                   }
                 }
               },
@@ -26,7 +26,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyAddress"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.PropertyAddress"
                   }
                 }
               },
@@ -34,7 +34,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyAddress"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.PropertyAddress"
                   }
                 }
               }
@@ -64,17 +64,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyAddress"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.PropertyAddress"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyAddress"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.PropertyAddress"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyAddress"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.PropertyAddress"
                 }
               }
             }
@@ -91,22 +91,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.CreateDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.CreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.CreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.CreateDTO"
               }
             }
           }
@@ -137,22 +137,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.UpdateDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.UpdateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.UpdateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyAddressDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Addresses.UpdateDTO"
               }
             }
           }
@@ -232,7 +232,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ApplicationUser"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
                   }
                 }
               },
@@ -240,7 +240,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ApplicationUser"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
                   }
                 }
               },
@@ -248,7 +248,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ApplicationUser"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
                   }
                 }
               }
@@ -275,6 +275,13 @@
           "Admin"
         ],
         "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "userName",
             "in": "path",
@@ -304,7 +311,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyDeed"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
                   }
                 }
               },
@@ -312,7 +319,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyDeed"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
                   }
                 }
               },
@@ -320,7 +327,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyDeed"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
                   }
                 }
               }
@@ -350,17 +357,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyDeed"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyDeed"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyDeed"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
                 }
               }
             }
@@ -377,22 +384,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             }
           }
@@ -423,22 +430,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyDeedDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeedDTO"
               }
             }
           }
@@ -497,7 +504,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyFeature"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeature"
                   }
                 }
               },
@@ -505,7 +512,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyFeature"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeature"
                   }
                 }
               },
@@ -513,7 +520,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyFeature"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeature"
                   }
                 }
               }
@@ -543,17 +550,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyFeature"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeature"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyFeature"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeature"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyFeature"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeature"
                 }
               }
             }
@@ -570,22 +577,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             }
           }
@@ -616,22 +623,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyFeatureDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeatureDTO"
               }
             }
           }
@@ -696,7 +703,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImageDTO"
               }
             }
           }
@@ -751,17 +758,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateImage"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateImage"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateImage"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImage"
                 }
               }
             }
@@ -778,22 +785,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImageDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImageDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImageDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImageDTO"
               }
             }
           }
@@ -852,7 +859,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Lease"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
                   }
                 }
               },
@@ -860,7 +867,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Lease"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
                   }
                 }
               },
@@ -868,7 +875,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Lease"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
                   }
                 }
               }
@@ -898,17 +905,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Lease"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Lease"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Lease"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
                 }
               }
             }
@@ -925,22 +932,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             }
           }
@@ -971,22 +978,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/LeaseDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.LeaseDTO"
               }
             }
           }
@@ -1045,7 +1052,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyLocation"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
                   }
                 }
               },
@@ -1053,7 +1060,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyLocation"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
                   }
                 }
               },
@@ -1061,7 +1068,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PropertyLocation"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
                   }
                 }
               }
@@ -1091,17 +1098,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyLocation"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyLocation"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyLocation"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
                 }
               }
             }
@@ -1118,22 +1125,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             }
           }
@@ -1164,22 +1171,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyLocationDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO"
               }
             }
           }
@@ -1238,7 +1245,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Payment"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.Payment"
                   }
                 }
               },
@@ -1246,7 +1253,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Payment"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.Payment"
                   }
                 }
               },
@@ -1254,7 +1261,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Payment"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.Payment"
                   }
                 }
               }
@@ -1284,17 +1291,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Payment"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.Payment"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Payment"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.Payment"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Payment"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.Payment"
                 }
               }
             }
@@ -1311,22 +1318,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             }
           }
@@ -1357,22 +1364,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PaymentDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.PaymentDTO"
               }
             }
           }
@@ -1431,7 +1438,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Person"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                   }
                 }
               },
@@ -1439,7 +1446,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Person"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                   }
                 }
               },
@@ -1447,7 +1454,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Person"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                   }
                 }
               }
@@ -1477,17 +1484,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Person"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Person"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Person"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                 }
               }
             }
@@ -1516,17 +1523,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Person"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Person"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Person"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
                 }
               }
             }
@@ -1543,22 +1550,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             }
           }
@@ -1589,22 +1596,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PersonDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Persons.PersonDTO"
               }
             }
           }
@@ -1663,7 +1670,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RealEstateProperty"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
                   }
                 }
               },
@@ -1671,7 +1678,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RealEstateProperty"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
                   }
                 }
               },
@@ -1679,7 +1686,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RealEstateProperty"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
                   }
                 }
               }
@@ -1709,17 +1716,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateProperty"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateProperty"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateProperty"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
                 }
               }
             }
@@ -1736,22 +1743,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.CreateDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.CreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.CreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.CreateDTO"
               }
             }
           }
@@ -1782,22 +1789,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.UpdateDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.UpdateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.UpdateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstatePropertyDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.UpdateDTO"
               }
             }
           }
@@ -1862,22 +1869,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             }
           }
@@ -1932,17 +1939,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyImage"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyImage"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyImage"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImage"
                 }
               }
             }
@@ -1959,22 +1966,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PropertyImageDTO"
+                "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImageDTO"
               }
             }
           }
@@ -2033,7 +2040,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RealEstateSupport"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
                   }
                 }
               },
@@ -2041,7 +2048,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RealEstateSupport"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
                   }
                 }
               },
@@ -2049,7 +2056,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RealEstateSupport"
+                    "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
                   }
                 }
               }
@@ -2079,17 +2086,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateSupport"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateSupport"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RealEstateSupport"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
                 }
               }
             }
@@ -2106,22 +2113,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             }
           }
@@ -2152,22 +2159,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstateSupportDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Supports.RealEstateSupportDTO"
               }
             }
           }
@@ -2234,17 +2241,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationUser"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationUser"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationUser"
+                  "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
                 }
               }
             }
@@ -2261,22 +2268,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRegisterAccountDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserRegisterAccountDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRegisterAccountDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserRegisterAccountDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRegisterAccountDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserRegisterAccountDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRegisterAccountDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserRegisterAccountDTO"
               }
             }
           }
@@ -2297,22 +2304,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             }
           }
@@ -2333,22 +2340,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserLoginRequestDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserLoginRequestDTO"
               }
             }
           }
@@ -2369,22 +2376,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserResetPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserResetPasswordDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserResetPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserResetPasswordDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserResetPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserResetPasswordDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserResetPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserResetPasswordDTO"
               }
             }
           }
@@ -2405,22 +2412,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserChangePasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserChangePasswordDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserChangePasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserChangePasswordDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserChangePasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserChangePasswordDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserChangePasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserChangePasswordDTO"
               }
             }
           }
@@ -2441,22 +2448,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserForgotPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserForgotPasswordDTO"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserForgotPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserForgotPasswordDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserForgotPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserForgotPasswordDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserForgotPasswordDTO"
+                "$ref": "#/components/schemas/RealEstate.DTOs.Users.UserForgotPasswordDTO"
               }
             }
           }
@@ -2485,31 +2492,41 @@
         }
       }
     },
-    "/User/edit-profile": {
+    "/User/edit-profile/{userId}": {
       "put": {
         "tags": [
           "User"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "requestBody": {
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/ApplicationUser"
+                "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ApplicationUser"
+                "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ApplicationUser"
+                "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ApplicationUser"
+                "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
               }
             }
           }
@@ -2524,7 +2541,1251 @@
   },
   "components": {
     "schemas": {
-      "ApplicationUser": {
+      "RealEstate.DTOs.Properties.Addresses.CreateDTO": {
+        "required": [
+          "city",
+          "country",
+          "province",
+          "street"
+        ],
+        "type": "object",
+        "properties": {
+          "country": {
+            "minLength": 1,
+            "type": "string",
+            "default": ""
+          },
+          "province": {
+            "minLength": 1,
+            "type": "string",
+            "default": ""
+          },
+          "city": {
+            "minLength": 1,
+            "type": "string",
+            "default": ""
+          },
+          "district": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "street": {
+            "minLength": 1,
+            "type": "string",
+            "default": ""
+          },
+          "postalCode": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "platesNumber": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Properties.Addresses.UpdateDTO": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "province": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "platesNumber": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          },
+          "postalCode": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "default": "",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Properties.CreateDTO": {
+        "required": [
+          "buildingArea",
+          "landArea",
+          "price",
+          "title",
+          "yearBuilt"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "propertyType": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyType"
+          },
+          "propertyStatus": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyStatus"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyCurrency"
+          },
+          "yearBuilt": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "landArea": {
+            "type": "number",
+            "format": "double"
+          },
+          "buildingArea": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Properties.UpdateDTO": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "propertyType": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyType"
+          },
+          "propertyStatus": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyStatus"
+          },
+          "propertyCurrency": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyCurrency"
+          },
+          "yearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "landArea": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "buildingArea": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "addressId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "locationId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "agentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "propertyDeedId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "leaseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Supports.RealEstateSupportDTO": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "detailsTitle": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "detailsSubtitle": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "detailsDescriptionList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "imageId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Users.UserChangePasswordDTO": {
+        "required": [
+          "newPassword",
+          "oldPassword",
+          "repeatNewPassword",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "oldPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "newPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "repeatNewPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Users.UserForgotPasswordDTO": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Users.UserLoginRequestDTO": {
+        "required": [
+          "password",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Users.UserRegisterAccountDTO": {
+        "required": [
+          "acceptTerms",
+          "email",
+          "password",
+          "repeatPassword",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "repeatPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "acceptTerms": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.DTOs.Users.UserResetPasswordDTO": {
+        "required": [
+          "email",
+          "newPassword",
+          "repeatNewPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "token": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          },
+          "repeatNewPassword": {
+            "minLength": 8,
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Images.Properties.PropertyImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "imageFilePath": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "thumbnailFilePath": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
+          },
+          "propertyDeedId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "deed": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+          },
+          "supportId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "support": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          },
+          "isCoverImage": {
+            "type": "boolean",
+            "default": false
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Images.Properties.PropertyImageDTO": {
+        "type": "object",
+        "properties": {
+          "imageFilePath": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "thumbnailFilePath": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          },
+          "isCoverImage": {
+            "type": "boolean",
+            "default": false
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Images.RealEstateImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "imageFilePath": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "thumbnailFilePath": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
+          },
+          "propertyDeedId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "deed": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+          },
+          "supportId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "support": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Images.RealEstateImageDTO": {
+        "type": "object",
+        "properties": {
+          "imageFileUrl": {
+            "type": "string",
+            "format": "uri",
+            "default": "",
+            "nullable": true
+          },
+          "thumbnailFileUrl": {
+            "type": "string",
+            "format": "uri",
+            "default": "",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "propertyDeedId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "supportId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Persons.Person": {
+        "required": [
+          "address",
+          "birthCertificateNumber",
+          "fatherName",
+          "firstName",
+          "lastName",
+          "nationalId",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "fatherName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "birthCertificateNumber": {
+            "maximum": 9.223372036854776E+18,
+            "minimum": 10,
+            "type": "integer",
+            "format": "int64"
+          },
+          "birthCertificateIssued": {
+            "type": "string",
+            "nullable": true
+          },
+          "nationalId": {
+            "maximum": 9.223372036854776E+18,
+            "minimum": 10,
+            "type": "integer",
+            "format": "int64"
+          },
+          "born": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "address": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Persons.PersonRoles"
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          },
+          "leaseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lease": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Persons.PersonDTO": {
+        "required": [
+          "address",
+          "birthCertificateNumber",
+          "fatherName",
+          "firstName",
+          "lastName",
+          "nationalId",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "fatherName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "birthCertificateNumber": {
+            "maximum": 9.223372036854776E+18,
+            "minimum": 10,
+            "type": "integer",
+            "format": "int64"
+          },
+          "birthCertificateIssued": {
+            "type": "string",
+            "nullable": true
+          },
+          "nationalId": {
+            "maximum": 9.223372036854776E+18,
+            "minimum": 10,
+            "type": "integer",
+            "format": "int64"
+          },
+          "born": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "address": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Persons.PersonRoles"
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "leaseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Addresses.Map.PropertyLocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Addresses.PropertyAddress": {
+        "required": [
+          "city",
+          "country",
+          "platesNumber",
+          "province",
+          "street"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "country": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "province": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "city": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "district": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "street": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "platesNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "postalCode": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Documents.PropertyDeed": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "deedNumber": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "registryNumber": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "issueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "issuedBy": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "imageId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "image": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImage"
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Documents.PropertyDeedDTO": {
+        "type": "object",
+        "properties": {
+          "deedNumber": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "registryNumber": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "issueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "issuedBy": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "imageId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Features.PropertyFeature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "propertyFeatureCategory": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyFeatureCategory"
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Features.PropertyFeatureDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "category": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyFeatureCategory"
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Leases.Lease": {
+        "required": [
+          "depositAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "monthlyRent": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "depositAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "time"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          },
+          "persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "payments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RealEstate.Entities.Properties.Payments.Payment"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Leases.LeaseDTO": {
+        "required": [
+          "depositAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "monthlyRent": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "depositAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "time",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Payments.Payment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "paidAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paymentType": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.Payments.PaymentType"
+          },
+          "paymentStatus": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.Payments.PaymentStatus"
+          },
+          "leaseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lease": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.Payments.PaymentDTO": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "paidAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paymentType": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.Payments.PaymentType"
+          },
+          "paymentStatus": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.Payments.PaymentStatus"
+          },
+          "leaseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Properties.RealEstateProperty": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          },
+          "title": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "propertyType": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyType"
+          },
+          "propertyStatus": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyStatus"
+          },
+          "propertyCurrency": {
+            "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyCurrency"
+          },
+          "yearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "landArea": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "buildingArea": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "addressId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.PropertyAddress"
+          },
+          "locationId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "location": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "owner": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
+          },
+          "agentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "agent": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
+          },
+          "propertyDeedId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "propertyDeed": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+          },
+          "leaseId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lease": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RealEstate.Entities.Properties.Features.PropertyFeature"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImage"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Supports.RealEstateSupport": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "detailsTitle": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "detailsSubtitle": {
+            "type": "string",
+            "default": "",
+            "nullable": true
+          },
+          "detailsDescriptionList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "imageId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "image": {
+            "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImage"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RealEstate.Entities.Users.ApplicationUser": {
         "type": "object",
         "properties": {
           "normalizedUserName": {
@@ -2607,12 +3868,12 @@
             "format": "uuid"
           },
           "profileImage": {
-            "$ref": "#/components/schemas/RealEstateImage"
+            "$ref": "#/components/schemas/RealEstate.Entities.Images.RealEstateImage"
           },
           "properties": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/RealEstateProperty"
+              "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
             },
             "nullable": true,
             "readOnly": true
@@ -2620,168 +3881,16 @@
         },
         "additionalProperties": false
       },
-      "Lease": {
-        "required": [
-          "depositAmount"
+      "RealEstate.Enums.Persons.PersonRoles": {
+        "enum": [
+          0,
+          1,
+          2
         ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "monthlyRent": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "depositAmount": {
-            "type": "number",
-            "format": "double"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "time"
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstateProperty"
-          },
-          "persons": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Person"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "payments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Payment"
-            },
-            "nullable": true,
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
+        "type": "integer",
+        "format": "int32"
       },
-      "LeaseDTO": {
-        "required": [
-          "depositAmount"
-        ],
-        "type": "object",
-        "properties": {
-          "monthlyRent": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "depositAmount": {
-            "type": "number",
-            "format": "double"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "time",
-            "nullable": true
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Payment": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "amount": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "paidAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "paymentType": {
-            "$ref": "#/components/schemas/PaymentType"
-          },
-          "paymentStatus": {
-            "$ref": "#/components/schemas/PaymentStatus"
-          },
-          "leaseId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "lease": {
-            "$ref": "#/components/schemas/Lease"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PaymentDTO": {
-        "type": "object",
-        "properties": {
-          "amount": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "paidAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "paymentType": {
-            "$ref": "#/components/schemas/PaymentType"
-          },
-          "paymentStatus": {
-            "$ref": "#/components/schemas/PaymentStatus"
-          },
-          "leaseId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PaymentStatus": {
+      "RealEstate.Enums.Properties.Payments.PaymentStatus": {
         "enum": [
           0,
           1,
@@ -2792,7 +3901,7 @@
         "type": "integer",
         "format": "int32"
       },
-      "PaymentType": {
+      "RealEstate.Enums.Properties.Payments.PaymentType": {
         "enum": [
           0,
           1,
@@ -2804,548 +3913,7 @@
         "type": "integer",
         "format": "int32"
       },
-      "Person": {
-        "required": [
-          "address",
-          "birthCertificateNumber",
-          "fatherName",
-          "firstName",
-          "lastName",
-          "nationalId",
-          "phone"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "firstName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "lastName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "fatherName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "birthCertificateNumber": {
-            "maximum": 9.223372036854776E+18,
-            "minimum": 10,
-            "type": "integer",
-            "format": "int64"
-          },
-          "birthCertificateIssued": {
-            "type": "string",
-            "nullable": true
-          },
-          "nationalId": {
-            "maximum": 9.223372036854776E+18,
-            "minimum": 10,
-            "type": "integer",
-            "format": "int64"
-          },
-          "born": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "address": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "role": {
-            "$ref": "#/components/schemas/PersonRoles"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstateProperty"
-          },
-          "leaseId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "lease": {
-            "$ref": "#/components/schemas/Lease"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PersonDTO": {
-        "required": [
-          "address",
-          "birthCertificateNumber",
-          "fatherName",
-          "firstName",
-          "lastName",
-          "nationalId",
-          "phone"
-        ],
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "lastName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "fatherName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "birthCertificateNumber": {
-            "maximum": 9.223372036854776E+18,
-            "minimum": 10,
-            "type": "integer",
-            "format": "int64"
-          },
-          "birthCertificateIssued": {
-            "type": "string",
-            "nullable": true
-          },
-          "nationalId": {
-            "maximum": 9.223372036854776E+18,
-            "minimum": 10,
-            "type": "integer",
-            "format": "int64"
-          },
-          "born": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "address": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "role": {
-            "$ref": "#/components/schemas/PersonRoles"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "leaseId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PersonRoles": {
-        "enum": [
-          0,
-          1,
-          2
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "PropertyAddress": {
-        "required": [
-          "city",
-          "country",
-          "platesNumber",
-          "province",
-          "street"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "country": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "province": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "city": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "district": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "street": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "platesNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "postalCode": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstateProperty"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyAddressDTO": {
-        "required": [
-          "city",
-          "country",
-          "platesNumber",
-          "province",
-          "street"
-        ],
-        "type": "object",
-        "properties": {
-          "country": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "province": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "city": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "district": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "street": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "platesNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "postalCode": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyCurrency": {
-        "enum": [
-          0,
-          1,
-          2,
-          3
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "PropertyDeed": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "deedNumber": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "registryNumber": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "issueDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "issuedBy": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "imageId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "image": {
-            "$ref": "#/components/schemas/RealEstateImage"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstateProperty"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyDeedDTO": {
-        "type": "object",
-        "properties": {
-          "deedNumber": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "registryNumber": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "issueDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "issuedBy": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "imageId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyFeature": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "category": {
-            "$ref": "#/components/schemas/PropertyFeatureCategory"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstateProperty"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyFeatureCategory": {
-        "enum": [
-          0,
-          1,
-          2,
-          3
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "PropertyFeatureDTO": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "category": {
-            "$ref": "#/components/schemas/PropertyFeatureCategory"
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyImage": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "imageFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "thumbnailFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/ApplicationUser"
-          },
-          "propertyDeedId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "deed": {
-            "$ref": "#/components/schemas/PropertyDeed"
-          },
-          "supportId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "support": {
-            "$ref": "#/components/schemas/RealEstateSupport"
-          },
-          "order": {
-            "type": "integer",
-            "format": "int32",
-            "default": 0
-          },
-          "isCoverImage": {
-            "type": "boolean",
-            "default": false
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstateProperty"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyImageDTO": {
-        "type": "object",
-        "properties": {
-          "imageFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "thumbnailFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "order": {
-            "type": "integer",
-            "format": "int32",
-            "default": 0
-          },
-          "isCoverImage": {
-            "type": "boolean",
-            "default": false
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyLocation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "latitude": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "longitude": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstateProperty"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyLocationDTO": {
-        "type": "object",
-        "properties": {
-          "latitude": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "longitude": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PropertyStatus": {
+      "RealEstate.Enums.Properties.PropertyCurrency": {
         "enum": [
           0,
           1,
@@ -3356,7 +3924,29 @@
         "type": "integer",
         "format": "int32"
       },
-      "PropertyType": {
+      "RealEstate.Enums.Properties.PropertyFeatureCategory": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "RealEstate.Enums.Properties.PropertyStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "RealEstate.Enums.Properties.PropertyType": {
         "enum": [
           0,
           1,
@@ -3364,504 +3954,11 @@
           3,
           4,
           5,
-          6
+          6,
+          7
         ],
         "type": "integer",
         "format": "int32"
-      },
-      "RealEstateImage": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "imageFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "thumbnailFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/ApplicationUser"
-          },
-          "propertyDeedId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "deed": {
-            "$ref": "#/components/schemas/PropertyDeed"
-          },
-          "supportId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "support": {
-            "$ref": "#/components/schemas/RealEstateSupport"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RealEstateImageDTO": {
-        "type": "object",
-        "properties": {
-          "imageFileUrl": {
-            "type": "string",
-            "format": "uri",
-            "default": "",
-            "nullable": true
-          },
-          "thumbnailFileUrl": {
-            "type": "string",
-            "format": "uri",
-            "default": "",
-            "nullable": true
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "propertyDeedId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "supportId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "RealEstateProperty": {
-        "required": [
-          "buildingArea",
-          "landArea",
-          "yearBuilt"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "orderId": {
-            "type": "integer",
-            "format": "int32",
-            "default": 0
-          },
-          "title": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "platesNumber": {
-            "type": "integer",
-            "format": "int32",
-            "default": 0
-          },
-          "propertyType": {
-            "$ref": "#/components/schemas/PropertyType"
-          },
-          "propertyStatus": {
-            "$ref": "#/components/schemas/PropertyStatus"
-          },
-          "price": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "currency": {
-            "$ref": "#/components/schemas/PropertyCurrency"
-          },
-          "yearBuilt": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "landArea": {
-            "type": "number",
-            "format": "double"
-          },
-          "buildingArea": {
-            "type": "number",
-            "format": "double"
-          },
-          "addressId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "address": {
-            "$ref": "#/components/schemas/PropertyAddress"
-          },
-          "locationId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "location": {
-            "$ref": "#/components/schemas/PropertyLocation"
-          },
-          "ownerId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "owner": {
-            "$ref": "#/components/schemas/Person"
-          },
-          "agentId": {
-            "type": "string",
-            "nullable": true
-          },
-          "agent": {
-            "$ref": "#/components/schemas/ApplicationUser"
-          },
-          "propertyDeedId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "propertyDeed": {
-            "$ref": "#/components/schemas/PropertyDeed"
-          },
-          "leaseId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "lease": {
-            "$ref": "#/components/schemas/Lease"
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PropertyFeature"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "images": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PropertyImage"
-            },
-            "nullable": true,
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "RealEstatePropertyDTO": {
-        "required": [
-          "buildingArea",
-          "landArea",
-          "title",
-          "yearBuilt"
-        ],
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "integer",
-            "format": "int32",
-            "default": 1
-          },
-          "title": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "platesNumber": {
-            "type": "integer",
-            "format": "int32",
-            "default": 0
-          },
-          "propertyType": {
-            "$ref": "#/components/schemas/PropertyType"
-          },
-          "propertyStatus": {
-            "$ref": "#/components/schemas/PropertyStatus"
-          },
-          "price": {
-            "type": "number",
-            "format": "double",
-            "default": 0
-          },
-          "currency": {
-            "$ref": "#/components/schemas/PropertyCurrency"
-          },
-          "yearBuilt": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "landArea": {
-            "type": "number",
-            "format": "double"
-          },
-          "buildingArea": {
-            "type": "number",
-            "format": "double"
-          },
-          "addressId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "locationId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "ownerId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "agentId": {
-            "type": "string",
-            "nullable": true
-          },
-          "propertyDeedId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "leaseId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "RealEstateSupport": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "detailsTitle": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "detailsSubtitle": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "detailsDescriptionList": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "imageId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "image": {
-            "$ref": "#/components/schemas/RealEstateImage"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RealEstateSupportDTO": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "detailsTitle": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "detailsSubtitle": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "detailsDescriptionList": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "imageId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserChangePasswordDTO": {
-        "required": [
-          "newPassword",
-          "oldPassword",
-          "repeatNewPassword",
-          "userName"
-        ],
-        "type": "object",
-        "properties": {
-          "userName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "oldPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "newPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "repeatNewPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserForgotPasswordDTO": {
-        "required": [
-          "email"
-        ],
-        "type": "object",
-        "properties": {
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserLoginRequestDTO": {
-        "required": [
-          "password",
-          "userName"
-        ],
-        "type": "object",
-        "properties": {
-          "userName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "password": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserRegisterAccountDTO": {
-        "required": [
-          "acceptTerms",
-          "email",
-          "password",
-          "repeatPassword",
-          "userName"
-        ],
-        "type": "object",
-        "properties": {
-          "userName": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          },
-          "password": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "repeatPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "acceptTerms": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserResetPasswordDTO": {
-        "required": [
-          "email",
-          "newPassword",
-          "repeatNewPassword"
-        ],
-        "type": "object",
-        "properties": {
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
-          },
-          "token": {
-            "type": "string",
-            "nullable": true
-          },
-          "newPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          },
-          "repeatNewPassword": {
-            "minLength": 8,
-            "type": "string",
-            "format": "password"
-          }
-        },
-        "additionalProperties": false
       }
     },
     "securitySchemes": {

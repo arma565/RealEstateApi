@@ -22,6 +22,7 @@ public class AddressRepository(AppDbContext context) : IAddressRepository
     public async Task<IEnumerable<PropertyAddress>> GetListAsync() =>
      await _context
         .Addresses
+        .Include(address => address.Property)
         .AsNoTracking()
         .ToListAsync()
         .ConfigureAwait(false);
@@ -29,6 +30,7 @@ public class AddressRepository(AppDbContext context) : IAddressRepository
     public async Task<PropertyAddress?> GetAsync(Guid id) =>
     await _context
        .Addresses
+       .Include(address => address.Property)
        .AsNoTracking()
        .SingleOrDefaultAsync(address => address.Id == id)
        .ConfigureAwait(false);

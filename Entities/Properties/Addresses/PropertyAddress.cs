@@ -1,6 +1,4 @@
-﻿using RealEstate.Entities.Properties;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Properties.Addresses;
 
@@ -8,33 +6,26 @@ namespace RealEstate.Entities.Properties.Addresses;
 public class PropertyAddress
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = new();
 
-    [Required(ErrorMessage = "Country is required!")]
-    public string? Country { get; set; } = default;
+    public required string Country { get; set; } 
 
-    [Required(ErrorMessage = "Province is required!")]
-    public string? Province { get; set; } = default;
+    public required string Province { get; set; } 
 
-    [Required(ErrorMessage = "City is required!")]
-    public string? City { get; set; } = default;
+    public required string City { get; set; }
 
-    [DefaultValue("")]
-    public string? District { get; set; } = default!;
+    public required string District { get; set; }
 
-    [Required(ErrorMessage = "Street is required!")]
-    public string? Street { get; set; } = default;
+    public required string Street { get; set; }
 
-    [Required(ErrorMessage = "PlatesNumber is required!")]
-    public int PlatesNumber { get; set; } = default;
+    public required int PlatesNumber { get; set; }
 
-    [DefaultValue("")]
-    public string? PostalCode { get; set; } = default!;
+    public required string PostalCode { get; set; }
 
     #region Relationships
 
-    public Guid? PropertyId { get; set; } = null!;
-    public RealEstateProperty? Property { get; set; } = null!;
+    public Guid PropertyId { get; set; }
+    public RealEstateProperty Property { get; set; } = null!;
 
     #endregion
 }

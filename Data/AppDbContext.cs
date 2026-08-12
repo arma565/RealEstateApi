@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.Entities.Images;
+using RealEstate.Entities.Images.Documents;
 using RealEstate.Entities.Images.Properties;
+using RealEstate.Entities.Images.Supports;
+using RealEstate.Entities.Images.Users;
 using RealEstate.Entities.Persons;
 using RealEstate.Entities.Properties;
 using RealEstate.Entities.Properties.Addresses;
@@ -9,10 +11,9 @@ using RealEstate.Entities.Properties.Addresses.Map;
 using RealEstate.Entities.Properties.Documents;
 using RealEstate.Entities.Properties.Features;
 using RealEstate.Entities.Properties.Leases;
-using RealEstate.Entities.Properties.Payments;
+using RealEstate.Entities.Properties.Leases.Payments;
 using RealEstate.Entities.Supports;
 using RealEstate.Entities.Users;
-using RealEstate.Enums.Persons;
 using RealEstate.Enums.Properties;
 using RealEstate.Enums.Properties.Payments;
 
@@ -21,23 +22,27 @@ namespace RealEstate.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public required DbSet<RealEstateImage> Images { get; set; }
+    public required DbSet<PropertyDeedImage> PropertyDeedImages { get; set; }
 
     public required DbSet<PropertyImage> PropertyImages { get; set; }
 
-    public required DbSet<Person> Persons { get; set; }
+    public required DbSet<SupportImage> SupportImages { get; set; }
 
-    public required DbSet<PropertyAddress> Addresses { get; set; }
+    public required DbSet<ApplicationUserImage> AgentImages { get; set; }
+
+    public required DbSet<Person> Persons { get; set; }
 
     public required DbSet<PropertyLocation> Locations { get; set; }
 
+    public required DbSet<PropertyAddress> Addresses { get; set; }
+
     public required DbSet<PropertyDeed> PropertyDeeds { get; set; }
+
+    public required DbSet<PropertyFeature> PropertyFeatures { get; set; }
 
     public required DbSet<Lease> Leases { get; set; }
 
     public required DbSet<Payment> Payments { get; set; }
-
-    public required DbSet<PropertyFeature> PropertyFeatures { get; set; }
 
     public required DbSet<RealEstateProperty> Properties { get; set; }
 
@@ -49,103 +54,129 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
         base.OnModelCreating(builder);
 
-        builder.Entity<ApplicationUser>()
-              .HasOne(applicationUser => applicationUser.ProfileImage)
-              .WithOne(image => image.User)
-              .HasForeignKey<RealEstateImage>(image => image.UserId)
-              .HasPrincipalKey<ApplicationUser>(applicationUser => applicationUser.Id)
-              .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<Person>()
+            .HasMany(person => person.Leases)
+            .WithOne(lease => lease.Tenant)
+            .HasForeignKey(lease => lease.TenantId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
 
-        builder.Entity<ApplicationUser>()
-               .HasMany(applicationUser => applicationUser.Properties)
-               .WithOne(property => property.Agent)
-               .HasPrincipalKey(applicationUser => applicationUser.Id)
-               .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<Person>()
+            .HasMany(person => person.RealEstateProperties)
+            .WithOne(property => property.Owner)
+            .HasForeignKey(property => property.OwnerId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
 
         builder.Entity<PropertyDeed>()
-            .HasOne(propertyDeed => propertyDeed.Image)
-            .WithOne(image => image.Deed)
-            .HasForeignKey<RealEstateImage>(image => image.PropertyDeedId)
-            .HasPrincipalKey<PropertyDeed>(propertyDeed => propertyDeed.Id)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.Entity<Lease>()
-            .HasOne(lease => lease.Property)
-            .WithOne(property => property.Lease)
-            .HasForeignKey<RealEstateProperty>(property => property.LeaseId)
-            .HasPrincipalKey<Lease>(lease => lease.Id)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.Entity<Lease>()
-            .HasMany(lease => lease.Persons)
-            .WithOne(person => person.Lease)
-            .HasPrincipalKey(lease => lease.Id)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(propertyDeed => propertyDeed.PropertyDeedImage)
+            .WithOne(propertyDeedImage => propertyDeedImage.PropertyDeed)
+            .HasForeignKey<PropertyDeedImage>(propertyDeedImage => propertyDeedImage.PropertyDeedId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
 
         builder.Entity<Lease>()
             .HasMany(lease => lease.Payments)
             .WithOne(payment => payment.Lease)
-            .HasPrincipalKey(lease => lease.Id)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(payment => payment.LeaseId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
+
+        builder.Entity<RealEstateProperty>()
+             .HasMany(property => property.PropertyImages)
+             .WithOne(propertyImage => propertyImage.Property)
+             .HasForeignKey(propertyImage => propertyImage.PropertyId)
+             .OnDelete(DeleteBehavior.Cascade)
+             .IsRequired();
+
+        builder.Entity<RealEstateProperty>()
+             .HasOne(property => property.Location)
+             .WithOne(location => location.Property)
+             .HasForeignKey<PropertyLocation>(location => location.PropertyId)
+             .OnDelete(DeleteBehavior.Cascade)
+             .IsRequired();
 
         builder.Entity<RealEstateProperty>()
            .HasOne(property => property.Address)
            .WithOne(address => address.Property)
            .HasForeignKey<PropertyAddress>(address => address.PropertyId)
-           .HasPrincipalKey<RealEstateProperty>(property => property.Id)
-           .OnDelete(DeleteBehavior.Cascade);
+           .OnDelete(DeleteBehavior.Cascade)
+           .IsRequired();
 
         builder.Entity<RealEstateProperty>()
-           .HasOne(property => property.Location)
-           .WithOne(location => location.Property)
-           .HasForeignKey<PropertyLocation>(location => location.PropertyId)
-           .HasPrincipalKey<RealEstateProperty>(property => property.Id)
-           .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(property => property.PropertyDeed)
+            .WithOne(propertyDeed => propertyDeed.Property)
+            .HasForeignKey<PropertyDeed>(propertyDeed => propertyDeed.PropertyId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
 
         builder.Entity<RealEstateProperty>()
-            .HasOne(property => property.Owner)
-            .WithOne(person => person.Property)
-            .HasForeignKey<Person>(person => person.PropertyId)
-            .HasPrincipalKey<RealEstateProperty>(property => property.Id)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.Entity<RealEstateProperty>()
-        .HasOne(property => property.PropertyDeed)
-        .WithOne(deed => deed.Property)
-        .HasForeignKey<PropertyDeed>(deed => deed.PropertyId)
-        .HasPrincipalKey<RealEstateProperty>(property => property.Id)
-        .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<RealEstateProperty>()
-            .HasMany(property => property.Features)
+            .HasMany(property => property.PropertyFeatures)
             .WithOne(feature => feature.Property)
-            .HasPrincipalKey(property => property.Id)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(feature => feature.PropertyId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
 
         builder.Entity<RealEstateProperty>()
-           .HasMany(property => property.Images)
-           .WithOne(image => image.Property)
-           .HasPrincipalKey(property => property.Id)
-           .OnDelete(DeleteBehavior.Cascade);
+           .HasMany(property => property.Leases)
+           .WithOne(lease => lease.Property)
+           .HasForeignKey(lease => lease.PropertyId)
+           .OnDelete(DeleteBehavior.Cascade)
+           .IsRequired();
 
         builder.Entity<RealEstateSupport>()
-           .HasOne(realEstatesupport => realEstatesupport.Image)
-           .WithOne(realEstateImage => realEstateImage.Support)
-           .HasForeignKey<RealEstateImage>(realEstateImage => realEstateImage.SupportId)
-           .HasPrincipalKey<RealEstateSupport>(realEstatesupport => realEstatesupport.Id)
-           .OnDelete(DeleteBehavior.Cascade);
+           .HasOne(realEstatesupport => realEstatesupport.SupportImage)
+           .WithOne(supportImage => supportImage.Support)
+           .HasForeignKey<Entities.Images.Supports.SupportImage>(supportImage => supportImage.SupportId)
+           .OnDelete(DeleteBehavior.Cascade)
+           .IsRequired();
 
-        builder.Entity<Person>()
-            .Property(person => person.Role)
-            .HasConversion(
-                v => v.ToString(),
-                v => Enum.Parse<PersonRoles>(v)
-            );
+        builder.Entity<ApplicationUser>()
+          .HasOne(applicationUser => applicationUser.AgentImage)
+          .WithOne(agentImage => agentImage.Agent)
+          .HasForeignKey<ApplicationUserImage>(agentImage => agentImage.AgentId)
+          .OnDelete(DeleteBehavior.Cascade)
+          .IsRequired();
+
+        builder.Entity<ApplicationUser>()
+           .HasMany(applicationUser => applicationUser.RealEstateProperties)
+           .WithOne(property => property.Agent)
+           .HasForeignKey(property => property.AgentId)
+           .OnDelete(DeleteBehavior.Cascade)
+           .IsRequired();
+
 
         builder
-            .Entity<PropertyAddress>()
-            .HasIndex(address => address.PlatesNumber)
-            .IsUnique();
+           .Entity<PropertyAddress>()
+           .HasIndex(address => address.PlatesNumber)
+           .IsUnique();
+
+
+        builder.Entity<Lease>()
+           .Property(lease => lease.DepositAmount)
+           .HasPrecision(18, 2);
+
+        builder.Entity<Lease>()
+           .Property(lease => lease.MonthlyRent)
+           .HasPrecision(18, 2);
+
+        builder.Entity<Payment>()
+           .Property(payment => payment.Amount)
+           .HasPrecision(18, 2);
+
+        builder.Entity<RealEstateProperty>()
+           .Property(property => property.BuildingArea)
+           .HasPrecision(18, 2);
+
+        builder.Entity<RealEstateProperty>()
+           .Property(property => property.LandArea)
+           .HasPrecision(18, 2);
+
+        builder.Entity<RealEstateProperty>()
+           .Property(property => property.Price)
+           .HasPrecision(18, 2);
+
+
 
         builder.Entity<PropertyFeature>()
            .Property(property => property.PropertyFeatureCategory)
@@ -154,36 +185,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
                v => Enum.Parse<PropertyFeatureCategory>(v)
            );
 
-        builder.Entity<Lease>()
-            .Property(lease => lease.DepositAmount)
-            .HasPrecision(18, 2);
-
-        builder.Entity<Lease>()
-            .Property(lease => lease.MonthlyRent)
-            .HasPrecision(18, 2);
-
-        builder.Entity<Payment>()
-            .Property(payment => payment.Amount)
-            .HasPrecision(18, 2);
-
         builder.Entity<Payment>()
             .Property(payment => payment.PaymentType)
             .HasConversion(
                 v => v.ToString(),
                 v => Enum.Parse<PaymentType>(v)
             );
-
-        builder.Entity<RealEstateProperty>()
-            .Property(property => property.BuildingArea)
-            .HasPrecision(18, 2);
-
-        builder.Entity<RealEstateProperty>()
-            .Property(property => property.LandArea)
-            .HasPrecision(18, 2);
-
-        builder.Entity<RealEstateProperty>()
-            .Property(property => property.Price)
-            .HasPrecision(18, 2);
 
         builder.Entity<RealEstateProperty>()
             .Property(property => property.PropertyType)

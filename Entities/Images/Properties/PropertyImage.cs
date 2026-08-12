@@ -1,22 +1,21 @@
-﻿using RealEstate.Entities.Images;
-using RealEstate.Entities.Properties;
-using System.ComponentModel;
+﻿using RealEstate.Entities.Properties;
 
 namespace RealEstate.Entities.Images.Properties;
 
 #pragma warning disable CA1515
-public class PropertyImage : RealEstateImage
+public class PropertyImage : BaseImage
 {
-    [DefaultValue(0)]
-    public int Order { get; set; } = default;
+    public int OrderId { get; set; }
 
-    [DefaultValue(false)]
-    public bool IsCoverImage { get; set; } = default;
+    public bool IsCoverImage { get; set; }
 
     #region Relationships
 
-    public Guid? PropertyId { get; set; } = null!;
-    public RealEstateProperty? Property { get; set; } = null!;
+    public Guid PropertyId { get; set; }
+    public RealEstateProperty Property { get; set; } = null!;
 
     #endregion
+
+
+
 }

@@ -1,3 +1,4 @@
+using RealEstate.DTOs.Persons;
 using RealEstate.Entities.Persons;
 using RealEstate.Repositories.Persons;
 
@@ -6,10 +7,9 @@ namespace RealEstate.Services.Persons;
 interface IPersonService
 {
     Task<IEnumerable<Person>> GetListAsync();
-    Task<Person?> GetAsync(Guid id);
-    Task<Person?> GetByNationalIdAsync(long nationalId);
-    Task<Person> AddAsync(PersonDTO personDTO);
-    Task UpdateAsync(PersonDTO personDTO, Guid id);
+    Task<Person> GetAsync(Guid id);
+    Task<Person> AddAsync(CreateDTO createDTO);
+    Task UpdateAsync(UpdateDTO updateDTO, Guid id);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
 }
@@ -22,55 +22,46 @@ public class PersonService(PersonRepository repository) : IPersonService
     public async Task<IEnumerable<Person>> GetListAsync() =>
      await _repository.GetListAsync().ConfigureAwait(false);
 
-    public async Task<Person?> GetAsync(Guid id) =>
-         await _repository.GetAsync(id).ConfigureAwait(false);
-
-    public async Task<Person?> GetByNationalIdAsync(long nationalId) =>
-        await _repository.GetByNationalIdAsync(nationalId).ConfigureAwait(false);
-
-    public async Task<Person> AddAsync(PersonDTO personDTO)
-    {
-        ArgumentNullException.ThrowIfNull(personDTO);
-
-        var person = new Person
-        {
-            FirstName = personDTO.FirstName,
-            LastName = personDTO.LastName,
-            FatherName = personDTO.FatherName,
-            BirthCertificateNumber = personDTO.BirthCertificateNumber,
-            BirthCertificateIssued = personDTO.BirthCertificateIssued,
-            NationalId = personDTO.NationalId,
-            Born = personDTO.Born,
-            Phone = personDTO.Phone,
-            Address = personDTO.Address,
-            Role = personDTO.Role,
-            PropertyId = personDTO.PropertyId,
-            LeaseId = personDTO.LeaseId
-        };
-
-        return await _repository.AddAsync(person).ConfigureAwait(false);
+    public async Task<Person> GetAsync(Guid id) {
+        var person = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(person);
+        return person;
     }
 
-    public async Task UpdateAsync(PersonDTO personDTO, Guid id)
+    public async Task<Person> AddAsync(CreateDTO createDTO)
     {
-        ArgumentNullException.ThrowIfNull(personDTO);
+        ArgumentNullException.ThrowIfNull(createDTO);
+
+        return await _repository.AddAsync(new Person
+        {
+            FirstName = createDTO.FirstName,
+            LastName = createDTO.LastName,
+            FatherName = createDTO.FatherName,
+            BirthCertificateNumber = createDTO.BirthCertificateNumber,
+            BirthCertificateIssued = createDTO.BirthCertificateIssued,
+            NationalId = createDTO.NationalId,
+            Born = createDTO.Born,
+            Phone = createDTO.Phone,
+            Address = createDTO.Address
+        }).ConfigureAwait(false);
+    }
+
+    public async Task UpdateAsync(UpdateDTO updateDTO, Guid id)
+    {
+        ArgumentNullException.ThrowIfNull(updateDTO);
 
         var person = await GetAsync(id).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(person);
 
-        person.Id = id;
-        person.FirstName = personDTO.FirstName;
-        person.LastName = personDTO.LastName;
-        person.FatherName = personDTO.FatherName;
-        person.BirthCertificateNumber = personDTO.BirthCertificateNumber;
-        person.BirthCertificateIssued = personDTO.BirthCertificateIssued;
-        person.NationalId = personDTO.NationalId;
-        person.Born = personDTO.Born;
-        person.Phone = personDTO.Phone;
-        person.Address = personDTO.Address;
-        person.Role = personDTO.Role;
-        person.PropertyId = personDTO.PropertyId;
-        person.LeaseId = personDTO.LeaseId;
+        person.FirstName = string.IsNullOrEmpty(updateDTO.FirstName) ? person.FirstName : updateDTO.FirstName;
+        person.LastName = string.IsNullOrEmpty(updateDTO.LastName) ? person.LastName : updateDTO.LastName;
+        person.FatherName = string.IsNullOrEmpty(updateDTO.FatherName) ? person.FatherName : updateDTO.FatherName;
+        person.BirthCertificateNumber = updateDTO.BirthCertificateNumber != person.BirthCertificateNumber ? updateDTO.BirthCertificateNumber : person.BirthCertificateNumber;
+        person.BirthCertificateIssued = string.IsNullOrEmpty(updateDTO.BirthCertificateIssued) ? person.BirthCertificateIssued : updateDTO.BirthCertificateIssued;
+        person.NationalId = updateDTO.NationalId != person.NationalId ? updateDTO.NationalId : person.NationalId;
+        person.Born = string.IsNullOrEmpty(updateDTO.Born) ? person.Born : updateDTO.Born;
+        person.Phone = string.IsNullOrEmpty(updateDTO.Phone) ? person.Phone : updateDTO.Phone;
+        person.Address = string.IsNullOrEmpty(updateDTO.Address) ? person.Address : updateDTO.Address;
 
         await _repository.UpdateAsync(person).ConfigureAwait(false);
     }

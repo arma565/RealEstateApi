@@ -8,7 +8,6 @@ interface IPersonRepository
 {
     Task<IEnumerable<Person>> GetListAsync();
     Task<Person?> GetAsync(Guid id);
-    Task<Person?> GetByNationalIdAsync(long nationalId);
     Task<Person> AddAsync(Person person);
     Task UpdateAsync(Person person);
     Task DeleteAsync(Person person);
@@ -22,15 +21,21 @@ public class PersonRepository(AppDbContext context) : IPersonRepository
 
     public async Task<IEnumerable<Person>> GetListAsync() =>
         await _context
-            .Persons.AsNoTracking()
+            .Persons
+            .Include(person => person.RealEstateProperties)
+            .Include(person => person.Leases)
+            .AsNoTracking()
             .OrderByDescending(per => per.Id)
             .ToListAsync().ConfigureAwait(false);
 
     public async Task<Person?> GetAsync(Guid id) =>
-        await _context.Persons.AsNoTracking().SingleOrDefaultAsync(person => person.Id == id).ConfigureAwait(false);
-
-    public async Task<Person?> GetByNationalIdAsync(long nationalId) =>
-        await _context.Persons.AsNoTracking().SingleOrDefaultAsync(person => person.NationalId == nationalId).ConfigureAwait(false);
+         await _context
+            .Persons
+            .Include(person => person.RealEstateProperties)
+            .Include(person => person.Leases)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(person => person.Id == id)
+            .ConfigureAwait(false);
 
     public async Task<Person> AddAsync(Person person)
     {

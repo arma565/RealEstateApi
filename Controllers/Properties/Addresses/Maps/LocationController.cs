@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Properties.Addresses.Map;
 using RealEstate.Entities.Properties.Addresses.Map;
 using RealEstate.Repositories.Properties.Addresses.Maps;
 using RealEstate.Services.Properties.Addresses.Maps;

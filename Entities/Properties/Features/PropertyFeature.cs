@@ -1,6 +1,4 @@
-﻿using RealEstate.Entities.Properties;
-using RealEstate.Enums.Properties;
-using System.ComponentModel;
+﻿using RealEstate.Enums.Properties;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Properties.Features;
@@ -9,18 +7,16 @@ namespace RealEstate.Entities.Properties.Features;
 public class PropertyFeature
 {
     [Key]
-    public Guid Id { get; set; } = default;
+    public Guid Id { get; set; }
 
-    [DefaultValue("")]
-    public string? Name { get; set; } = default;
+    public required string Name { get; set; }
 
-    [DefaultValue(PropertyFeatureCategory.Interior)]
     public PropertyFeatureCategory PropertyFeatureCategory { get; set; }
 
     #region Relationships
 
-    public Guid? PropertyId { get; set; } = null!;
-    public RealEstateProperty? Property { get; set; } = null!;
+    public Guid PropertyId { get; set; }
+    public RealEstateProperty Property { get; set; } = null!;
 
     #endregion
 }

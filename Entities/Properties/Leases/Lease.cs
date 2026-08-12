@@ -1,7 +1,5 @@
 ﻿using RealEstate.Entities.Persons;
-using RealEstate.Entities.Properties;
-using RealEstate.Entities.Properties.Payments;
-using System.ComponentModel;
+using RealEstate.Entities.Properties.Leases.Payments;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
@@ -11,28 +9,27 @@ namespace RealEstate.Entities.Properties.Leases;
 public class Lease
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = new();
 
-    [DefaultValue(0.0)]
-    public decimal MonthlyRent { get; set; } = default;
+    public required decimal MonthlyRent { get; set; }
 
-    [Required(ErrorMessage = "DepositAmount is required!")]
-    public decimal DepositAmount { get; set; } = default;
+    public required decimal DepositAmount { get; set; }
 
     public TimeOnly StartTime { get; set; } = TimeOnly.Parse(DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
-    public TimeOnly EndTime { get; set; }
+    public required TimeOnly EndTime { get; set; }
 
     public DateOnly StartDate { get; set; } = DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
-    public DateOnly EndDate { get; set; }
+    public required DateOnly EndDate { get; set; }
 
     #region Relationships
 
-    public Guid? PropertyId { get; set; } = null!;
-    public RealEstateProperty? Property { get; set; } = null!;
+    public Guid PropertyId { get; set; }
+    public RealEstateProperty Property { get; set; } = null!;
 
-    public ICollection<Person> Persons { get; } = []; 
+    public Guid TenantId { get; set; }
+    public Person Tenant { get; set; } = null!;
 
     public ICollection<Payment> Payments { get; } = [];
 

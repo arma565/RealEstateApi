@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using RealEstate.DTOs.Images;
 using RealEstate.Entities.Images;
 using RealEstate.Services.Images;
 using RealEstate.Services.Validations;
@@ -17,7 +18,7 @@ public class ImageController(ImageService service, ILogger<ImageController> logg
     private readonly ILogger<ImageController> _logger = logger;
 
     [HttpPost("upload/{imageId}")]
-    public async Task<IActionResult> Upload(string imageId, RealEstateImageDTO realEstateImageDTO ,IFormFile image)
+    public async Task<IActionResult> Upload(string imageId, BaseImageDTO realEstateImageDTO ,IFormFile image)
     {
         try
         {
@@ -141,7 +142,7 @@ public class ImageController(ImageService service, ILogger<ImageController> logg
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult> Add([FromBody] RealEstateImageDTO realEstateImageDTO)
+    public async Task<ActionResult> Add([FromBody] BaseImageDTO realEstateImageDTO)
     {
         try
         {

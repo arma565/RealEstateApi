@@ -37,7 +37,7 @@ public class PropertyRepository(AppDbContext context) : IPropertyRepository
         await _context
             .Properties
             .AsNoTracking()
-             .Include(property => property.Address)
+            .Include(property => property.Address)
             .Include(property => property.Location)
             .Include(property => property.Owner)
             .Include(property => property.PropertyDeed)

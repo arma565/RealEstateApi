@@ -1,4 +1,5 @@
-﻿using RealEstate.Entities.Properties.Documents;
+﻿using RealEstate.DTOs.Properties.Documents;
+using RealEstate.Entities.Properties.Documents;
 using RealEstate.Repositories.Properties.Documents;
 
 namespace RealEstate.Services.Properties.Documents;

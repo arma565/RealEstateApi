@@ -3,8 +3,9 @@
 #pragma warning disable CA1515
 public enum PropertyCurrency
 {
-    USD = 0,
-    EUR = 1,
-    AED = 2,
-    IRR = 3
+    NotSet = 0,
+    USD = 1,
+    EUR = 2,
+    AED = 3,
+    IRR = 4
 }

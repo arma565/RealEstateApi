@@ -3,11 +3,12 @@
 #pragma warning disable CA1515
 public enum PropertyType
 {
-    House = 0,
-    Apartment = 1,
-    Villa = 2,
-    Condo = 3,
-    Land = 4,
-    Office = 5,
-    Shop = 6
+    NotSet = 0,
+    House = 1,
+    Apartment = 2,
+    Villa = 3,
+    Condo = 4,
+    Land = 5,
+    Office = 6,
+    Shop = 7
 }

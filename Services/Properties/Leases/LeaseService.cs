@@ -1,4 +1,5 @@
-﻿using RealEstate.Entities.Properties.Leases;
+﻿using RealEstate.DTOs.Properties.Leases;
+using RealEstate.Entities.Properties.Leases;
 using RealEstate.Repositories.Properties.Leases;
 
 namespace RealEstate.Services.Properties.Leases;

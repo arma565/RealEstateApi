@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Persons;
 using RealEstate.Entities.Persons;
 using RealEstate.Repositories.Persons;
 using RealEstate.Services.Persons;
@@ -94,7 +95,7 @@ public class PersonController(PersonService service, ILogger<PersonRepository> l
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] PersonDTO personDTO)
+    public async Task<IActionResult> Add([FromBody] CreateDTO personDTO)
     {
         try
         {
@@ -131,7 +132,7 @@ public class PersonController(PersonService service, ILogger<PersonRepository> l
     }
 
     [HttpPut("update/{personId}")]
-    public async Task<IActionResult> Update([FromBody] PersonDTO personDTO, string personId)
+    public async Task<IActionResult> Update([FromBody] CreateDTO personDTO, string personId)
     {
         try
         {

@@ -1,4 +1,6 @@
-﻿using RealEstate.Entities.Properties.Addresses.Map;
+﻿using RealEstate.DTOs.Properties.Addresses.Map;
+using RealEstate.Entities.Persons;
+using RealEstate.Entities.Properties.Addresses.Map;
 using RealEstate.Repositories.Properties.Addresses.Maps;
 
 namespace RealEstate.Services.Properties.Addresses.Maps;
@@ -6,9 +8,9 @@ namespace RealEstate.Services.Properties.Addresses.Maps;
 interface ILocationService
 {
     Task<IEnumerable<PropertyLocation>> GetListAsync();
-    Task<PropertyLocation?> GetAsync(Guid id);
-    Task<PropertyLocation> AddAsync(PropertyLocationDTO propertyLocationDTO);
-    Task UpdateAsync(PropertyLocationDTO propertyLocationDTO, Guid id);
+    Task<PropertyLocation> GetAsync(Guid id);
+    Task<PropertyLocation> AddAsync(CreateDTO createDTO);
+    Task UpdateAsync(UpdateDTO updateDTO, Guid id);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
 }
@@ -21,34 +23,34 @@ public class LocationService(LocationRepository repository) : ILocationService
     public async Task<IEnumerable<PropertyLocation>> GetListAsync() =>
      await _repository.GetListAsync().ConfigureAwait(false);
 
-    public async Task<PropertyLocation?> GetAsync(Guid id) =>
-    await _repository.GetAsync(id).ConfigureAwait(false);
-
-    public async Task<PropertyLocation> AddAsync(PropertyLocationDTO propertyLocationDTO)
+    public async Task<PropertyLocation> GetAsync(Guid id) { 
+        var location = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(location);
+        return location;
+    }
+    
+    public async Task<PropertyLocation> AddAsync(CreateDTO createDTO)
     {
-        ArgumentNullException.ThrowIfNull(propertyLocationDTO);
+        ArgumentNullException.ThrowIfNull(createDTO);
 
-        var location = new PropertyLocation
+        return await _repository.AddAsync(new PropertyLocation
         {
-            Latitude = propertyLocationDTO.Latitude,
-            Longitude = propertyLocationDTO.Longitude,
-            PropertyId = propertyLocationDTO.PropertyId
-        };
-
-        return await _repository.AddAsync(location).ConfigureAwait(false);
+            Latitude = createDTO.Latitude,
+            Longitude = createDTO.Longitude,
+            PropertyId = createDTO.PropertyId
+        }).ConfigureAwait(false);
     }
 
-    public async Task UpdateAsync(PropertyLocationDTO propertyLocationDTO, Guid id)
+    public async Task UpdateAsync(UpdateDTO updateDTO, Guid id)
     {
-        ArgumentNullException.ThrowIfNull(propertyLocationDTO);
+        ArgumentNullException.ThrowIfNull(updateDTO);
 
-        var location = new PropertyLocation
-        {
-            Id = id,
-            Latitude = propertyLocationDTO.Latitude,
-            Longitude = propertyLocationDTO.Longitude,
-            PropertyId = propertyLocationDTO.PropertyId
-        };
+        var location = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(location);
+
+        location.Latitude = updateDTO.Latitude != location.Latitude ? updateDTO.Latitude : location.Latitude;
+        location.Longitude = updateDTO.Longitude != location.Longitude ? updateDTO.Longitude : location.Longitude;
+        location.PropertyId = updateDTO.PropertyId != location.PropertyId ? updateDTO.PropertyId : location.PropertyId;
 
         await _repository.UpdateAsync(location).ConfigureAwait(false);
     }

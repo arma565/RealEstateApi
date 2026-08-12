@@ -17,7 +17,7 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
     private readonly ILogger<PropertyImageController> _logger = logger;
 
     [HttpPost("upload/{propertyImageId}")]
-    public async Task<IActionResult> Upload(string propertyImageId, [FromBody] PropertyImageDTO propertyImageDTO ,[FromForm] IFormFile[] images)
+    public async Task<IActionResult> Upload(string propertyImageId, [FromBody] CreateDTO propertyImageDTO ,[FromForm] IFormFile[] images)
     {
         try
         {
@@ -115,7 +115,7 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
     }
 
     [HttpGet("get/{propertyImageId}")]
-    public async Task<ActionResult<PropertyImage>> Get(string propertyImageId)
+    public async Task<ActionResult<SupportImage>> Get(string propertyImageId)
     {
         try
         {
@@ -147,7 +147,7 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
     }
 
     [HttpPost("add")]
-    public async Task<ActionResult> Add([FromBody] PropertyImageDTO propertyImageDTO)
+    public async Task<ActionResult> Add([FromBody] CreateDTO propertyImageDTO)
     {
         try
         {
