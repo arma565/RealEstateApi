@@ -5,7 +5,7 @@ public class UpdateDTO : BaseImageDTO
 {
     #region Relationships
 
-    public string? AgentId { get; set; }
+    public string AgentId { get; set; } = null!;
 
     #endregion
 }

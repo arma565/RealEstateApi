@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Properties.Features;
 using RealEstate.Entities.Properties.Features;
 using RealEstate.Services.Properties.Features;
 using RealEstate.Services.Validations;
@@ -36,27 +37,22 @@ public class FeatureController(FeatureService service, ILogger<FeatureController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] PropertyFeatureDTO propertyFeatureDTO)
+    public async Task<IActionResult> Add([FromBody] CreateDTO propertyFeatureDTO)
     {
         try
         {
@@ -73,27 +69,22 @@ public class FeatureController(FeatureService service, ILogger<FeatureController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
     [HttpPut("update/{featureId}")]
-    public async Task<IActionResult> Update([FromBody] PropertyFeatureDTO propertyFeatureDTO, string featureId)
+    public async Task<IActionResult> Update([FromBody] UpdateDTO propertyFeatureDTO, string featureId)
     {
         try
         {
@@ -113,22 +104,17 @@ public class FeatureController(FeatureService service, ILogger<FeatureController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -150,22 +136,17 @@ public class FeatureController(FeatureService service, ILogger<FeatureController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -180,23 +161,17 @@ public class FeatureController(FeatureService service, ILogger<FeatureController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
-
     }
 }

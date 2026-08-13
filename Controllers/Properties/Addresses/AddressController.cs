@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.DTOs.Properties.Addresses;
 using RealEstate.Entities.Properties.Addresses;
-using RealEstate.Repositories.Properties.Addresses;
 using RealEstate.Services.Properties.Addresses;
 using RealEstate.Services.Validations;
 using System.Security;
@@ -38,22 +37,17 @@ public class AddressController(AddressService service, ILogger<AddressController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -75,22 +69,17 @@ public class AddressController(AddressService service, ILogger<AddressController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -115,24 +104,18 @@ public class AddressController(AddressService service, ILogger<AddressController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
-
     }
 
     [HttpDelete("delete/{addressId}")]
@@ -153,22 +136,17 @@ public class AddressController(AddressService service, ILogger<AddressController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -183,23 +161,17 @@ public class AddressController(AddressService service, ILogger<AddressController
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
-
     }
 }

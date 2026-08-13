@@ -48,22 +48,17 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -108,22 +103,17 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -158,22 +148,17 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -194,7 +179,7 @@ public sealed class UserController(
             if (!result.Succeeded)
                 return Unauthorized("Invalid username or password.");
 
-            var user = await _userService.FindByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
+            var user = await _userService.GetByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
 
             ArgumentNullException.ThrowIfNull(user);
 
@@ -214,22 +199,17 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -253,22 +233,17 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -293,22 +268,17 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -322,12 +292,6 @@ public sealed class UserController(
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            //if (string.IsNullOrWhiteSpace(userForgotPasswordDTO.Email))
-            //    return BadRequest("Email is required!");
-
-            //if (!new EmailHelper().IsValidEmail(userForgotPasswordDTO.Email))
-            //    return BadRequest("Invalid email format.");
-
             var generatedToken = await _userService.GenerateTokenToRecoverUserAsync(userForgotPasswordDTO.Email).ConfigureAwait(false);
 
             return Ok(generatedToken);
@@ -335,37 +299,32 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
     [HttpPut("edit-profile/{userId}")]
-    public async Task<IActionResult> EditProfile(string userId,[FromBody] ApplicationUser applicationUser)
+    public async Task<IActionResult> EditProfile(string userId,[FromBody] EditProfileDTO editProfileDTO)
     {
         try
         {
             ArgumentNullException.ThrowIfNull(userId);
-            ArgumentNullException.ThrowIfNull(applicationUser);
+            ArgumentNullException.ThrowIfNull(editProfileDTO);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.EditUserProfileAsync(userId , applicationUser).ConfigureAwait(false);
+            var result = await _userService.EditUserProfileAsync(userId , editProfileDTO).ConfigureAwait(false);
 
             if (result.Succeeded)
                 return Ok("User profile has been updated");
@@ -375,24 +334,18 @@ public sealed class UserController(
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
-
     }
 }
 

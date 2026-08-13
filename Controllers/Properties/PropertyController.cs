@@ -39,22 +39,17 @@ public sealed class PropertyController(PropertyService service, ILogger<Property
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -76,24 +71,18 @@ public sealed class PropertyController(PropertyService service, ILogger<Property
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
-
     }
 
     [HttpPut("update/{propertyId}")]
@@ -117,24 +106,18 @@ public sealed class PropertyController(PropertyService service, ILogger<Property
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
-
     }
 
     [HttpDelete("delete/{propertyId}")]
@@ -155,22 +138,17 @@ public sealed class PropertyController(PropertyService service, ILogger<Property
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -185,22 +163,17 @@ public sealed class PropertyController(PropertyService service, ILogger<Property
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 }

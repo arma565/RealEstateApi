@@ -1,3 +1,4 @@
+using RealEstate.Entities.Images.Properties;
 using RealEstate.Entities.Images.Supports;
 using RealEstate.Entities.Persons;
 using RealEstate.Entities.Properties.Addresses;
@@ -56,7 +57,7 @@ public class RealEstateProperty()
 
     public ICollection<PropertyFeature> PropertyFeatures { get; } = [];
 
-    public ICollection<SupportImage> PropertyImages { get; } = [];
+    public ICollection<PropertyImage> PropertyImages { get; } = [];
 
     #endregion
 

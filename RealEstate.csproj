@@ -30,9 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controllers\Images\Documents\" />
-	  <Folder Include="Controllers\Images\Supports\" />
-	  <Folder Include="Controllers\Images\Users\" />
 	  <Folder Include="Uploads\" />
 	  <Folder Include="wwwroot\" />
 	</ItemGroup>

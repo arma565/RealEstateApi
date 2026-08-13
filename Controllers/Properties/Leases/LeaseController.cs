@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.DTOs.Properties.Leases;
 using RealEstate.Entities.Properties.Leases;
-using RealEstate.Repositories.Properties.Leases;
 using RealEstate.Services.Properties.Leases;
 using RealEstate.Services.Validations;
 using System.Security;
@@ -38,27 +37,22 @@ public class LeaseController(LeaseService service,ILogger<LeaseController> logge
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] LeaseDTO leaseDTO)
+    public async Task<IActionResult> Add([FromBody] CreateDTO leaseDTO)
     {
         try
         {
@@ -75,27 +69,22 @@ public class LeaseController(LeaseService service,ILogger<LeaseController> logge
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
     [HttpPut("update/{leaseId}")]
-    public async Task<IActionResult> Update(string leaseId, [FromBody] LeaseDTO leaseDTO)
+    public async Task<IActionResult> Update(string leaseId, [FromBody] UpdateDTO leaseDTO)
     {
         try
         {
@@ -115,22 +104,17 @@ public class LeaseController(LeaseService service,ILogger<LeaseController> logge
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -152,22 +136,17 @@ public class LeaseController(LeaseService service,ILogger<LeaseController> logge
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -182,23 +161,17 @@ public class LeaseController(LeaseService service,ILogger<LeaseController> logge
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
-
     }
 }

@@ -1,12 +1,11 @@
 ﻿using RealEstate.DTOs.Images.Users;
-using RealEstate.Entities.Images.Supports;
 using RealEstate.Entities.Images.Users;
 using RealEstate.Repositories.Images.Users;
 
 namespace RealEstate.Services.Images.Users;
 
 
-interface IApplicationUserImageImageService
+interface IApplicationUserImageService
 {
     Task<IEnumerable<ApplicationUserImage>> GetListAsync();
     Task<ApplicationUserImage> GetAsync(Guid id);
@@ -18,8 +17,8 @@ interface IApplicationUserImageImageService
 }
 
 #pragma warning disable CA1515
-public class ApplicationUserImageImageService(ApplicationUserImageRepository
-                                        repository, ImageProccess imageProccess) : IApplicationUserImageImageService
+public class ApplicationUserImageService(ApplicationUserImageRepository
+                                        repository, ImageProccess imageProccess) : IApplicationUserImageService
 {
     private readonly ApplicationUserImageRepository _repository = repository;
 

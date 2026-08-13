@@ -24,13 +24,13 @@ public class SupportRepository(AppDbContext context) : ISupportRepository
        await _context
       .Supports
       .AsNoTracking()
-      .Include(support => support.Image)
+      .Include(support => support.SupportImage)
       .ToListAsync().ConfigureAwait(false);
 
     public async Task<RealEstateSupport?> GetAsync(Guid id) =>
       await _context
           .Supports.AsNoTracking()
-          .Include(support => support.Image)
+          .Include(support => support.SupportImage)
           .SingleOrDefaultAsync(support => support.Id == id)
           .ConfigureAwait(false);
 

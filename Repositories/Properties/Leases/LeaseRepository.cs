@@ -23,7 +23,6 @@ public class LeaseRepository(AppDbContext context) : ILeaseRepository
      await _context
         .Leases
         .AsNoTracking()
-        .Include(lease => lease.Persons)
         .Include(lease => lease.Payments)
         .ToListAsync()
         .ConfigureAwait(false);
@@ -32,7 +31,6 @@ public class LeaseRepository(AppDbContext context) : ILeaseRepository
     await _context
        .Leases
        .AsNoTracking()
-       .Include(lease => lease.Persons)
        .Include(lease => lease.Payments)
        .SingleOrDefaultAsync(lease => lease.Id == id)
        .ConfigureAwait(false);

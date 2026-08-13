@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using RealEstate.DTOs.Images.Properties;
+using RealEstate.Entities.Images.Properties;
 using RealEstate.Services.Images.Properties;
 using RealEstate.Services.Validations;
 using System.Security;
@@ -15,51 +17,45 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
 
     private readonly ILogger<PropertyImageController> _logger = logger;
 
-    [HttpPost("upload/{propertyImageId}")]
-    public async Task<IActionResult> Upload(string propertyImageId, [FromBody] CreateDTO propertyImageDTO ,[FromForm] IFormFile[] images)
+    [HttpPost("upload")]
+    public async Task<IActionResult> Upload([FromBody] CreateDTO propertyImageDTO, [FromForm] IFormFile[] images)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(propertyImageId))
-                return BadRequest("PropertyImageId is empty!");
-
-            if (!Guid.TryParse(propertyImageId, out Guid id))
-                return BadRequest("PropertyImageId must be a valid GUID!");
-
             if (images == null || images.Length == 0)
                 return BadRequest("No images provided for upload.");
 
             foreach (var image in images)
             {
-                await _service.UpdateAsync(id, propertyImageDTO ,image).ConfigureAwait(false);
+                await _service.AddAsync(propertyImageDTO, image).ConfigureAwait(false);
             }
 
-            return Ok("Images uploaded successfully");
+            return Created();
         }
         catch (IOException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "File system error occurred while uploading images.");
+            return StatusCode(500, "File system error occurred while uploading images!");
         }
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (InvalidOperationException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "An invalid operation occurred!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -89,32 +85,32 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
         catch (IOException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "File system error occurred while uploading images.");
+            return StatusCode(500, "File system error occurred while uploading images!");
         }
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (InvalidOperationException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "An invalid operation occurred!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
     [HttpGet("get/{propertyImageId}")]
-    public async Task<ActionResult<SupportImage>> Get(string propertyImageId)
+    public async Task<ActionResult<PropertyImage>> Get(string propertyImageId)
     {
         try
         {
@@ -124,51 +120,76 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
             if (!Guid.TryParse(propertyImageId, out Guid id))
                 return BadRequest("PropertyImageId must be a valid GUID!");
 
-            var propertyImage = await _service.GetAsync(id).ConfigureAwait(false);
-            ArgumentNullException.ThrowIfNull(propertyImage);
-            return propertyImage;
+            return await _service.GetAsync(id).ConfigureAwait(false); ;
         }
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
-    [HttpPost("add")]
-    public async Task<ActionResult> Add([FromBody] CreateDTO propertyImageDTO)
+    [HttpPut("update/{propertyImageId}")]
+    public async Task<ActionResult> Update(string propertyImageId, [FromBody] UpdateDTO propertyImageDTO, [FromForm] IFormFile[] images)
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(propertyImageId))
+                return BadRequest("PropertyImageId is empty!");
+
+            if (!Guid.TryParse(propertyImageId, out Guid id))
+                return BadRequest("PropertyImageId must be a valid GUID!");
+
             if (propertyImageDTO == null)
                 return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var propertyImage = await _service.AddAsync(propertyImageDTO).ConfigureAwait(false);
+            if (images == null || images.Length == 0)
+                return BadRequest("No images provided for upload.");
 
-            return CreatedAtAction(nameof(Get), new { id = propertyImage.Id }, propertyImage);
+            foreach (var image in images)
+            {
+                await _service.UpdateAsync(id, propertyImageDTO, image).ConfigureAwait(false);
+            }
+
+            return NoContent();
+        }
+        catch (IOException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(500, "File system error occurred while uploading images!");
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "Required argument is missing!");
+        }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "An invalid operation occurred!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -185,22 +206,22 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
 
             await _service.DeleteAsync(id).ConfigureAwait(false);
 
-            return Ok("Property image successfully deleted!");
+            return NoContent();
         }
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
 
     }
@@ -216,22 +237,17 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
 
     }

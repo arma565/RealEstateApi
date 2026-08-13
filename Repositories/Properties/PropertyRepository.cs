@@ -27,9 +27,9 @@ public class PropertyRepository(AppDbContext context) : IPropertyRepository
             .Include(property => property.Location)
             .Include(property => property.Owner)
             .Include(property => property.PropertyDeed)
-            .Include(property => property.Lease)
-            .Include(property => property.Features)
-            .Include(propertyImg => propertyImg.Images)
+            .Include(property => property.Leases)
+            .Include(property => property.PropertyFeatures)
+            .Include(propertyImg => propertyImg.PropertyImages)
             .ToListAsync()
             .ConfigureAwait(false);
 
@@ -41,9 +41,9 @@ public class PropertyRepository(AppDbContext context) : IPropertyRepository
             .Include(property => property.Location)
             .Include(property => property.Owner)
             .Include(property => property.PropertyDeed)
-            .Include(property => property.Lease)
-            .Include(property => property.Features)
-            .Include(propertyImg => propertyImg.Images)
+      .Include(property => property.Leases)
+            .Include(property => property.PropertyFeatures)
+            .Include(propertyImg => propertyImg.PropertyImages)
             .SingleOrDefaultAsync(property => property.Id == id)
             .ConfigureAwait(false);
 

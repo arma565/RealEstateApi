@@ -31,7 +31,7 @@ public sealed class AdminController(
     {
         try
         {
-            var user = await _userService.FindByUserNameAsync(userName).ConfigureAwait(false);
+            var user = await _userService.GetByUserNameAsync(userName).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("User not found!");
@@ -39,30 +39,24 @@ public sealed class AdminController(
             var promoteResult = await _adminService.PromoteAsync(user).ConfigureAwait(false);
 
             if (!promoteResult.Succeeded)
-                return StatusCode(403 , "Promote failed!");
+                return StatusCode(403, "Promote failed!");
 
             return Ok("User is admin now");
         }
-
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -80,26 +74,20 @@ public sealed class AdminController(
             await _adminService.DeleteUsersAsync().ConfigureAwait(false);
             return Ok("Users has been deleted");
         }
-
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 
@@ -107,12 +95,11 @@ public sealed class AdminController(
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteAdmin(string id)
     {
-
         try
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var adminUser = await _userService.GetByIDAsync(id).ConfigureAwait(false);
+            var adminUser = await _userService.GetAsync(id).ConfigureAwait(false);
 
             if (adminUser == null)
                 return NotFound("Admin user not found!");
@@ -127,26 +114,20 @@ public sealed class AdminController(
 
             return NoContent();
         }
-
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "Missing argument. Please contact support.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(500, "An invalid operation occurred.");
+            return StatusCode(400, "Required argument is missing!");
         }
         catch (UnauthorizedAccessException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied.");
+            return StatusCode(403, "Access denied!");
         }
     }
 }
