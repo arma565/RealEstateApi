@@ -16,7 +16,7 @@ public class CreateDTO
 
     [DefaultValue("")]
     [Required(ErrorMessage = "DetailsSubtitle is required!")]
-    public required string DetailsSubtitle { get; set; } 
+    public required string DetailsSubtitle { get; set; }
 
     public ICollection<string> DetailsDescriptionList => [];
 }

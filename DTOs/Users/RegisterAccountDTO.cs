@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace RealEstate.DTOs.Users;
 
 #pragma warning disable CA1515
-public class UserRegisterAccountDTO
+public class RegisterAccountDTO
 {
     [DefaultValue("")]
     [Required(ErrorMessage = "UserName is required!")]

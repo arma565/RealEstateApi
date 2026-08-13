@@ -7,8 +7,10 @@ using RealEstate.Authentication;
 using RealEstate.Authorization;
 using RealEstate.Data;
 using RealEstate.Entities.Users;
-using RealEstate.Repositories.Images;
+using RealEstate.Repositories.Images.Documents;
 using RealEstate.Repositories.Images.Properties;
+using RealEstate.Repositories.Images.Supports;
+using RealEstate.Repositories.Images.Users;
 using RealEstate.Repositories.Persons;
 using RealEstate.Repositories.Properties;
 using RealEstate.Repositories.Properties.Addresses;
@@ -59,52 +61,57 @@ public partial class Program
             );
         });
 
-        //Database services
-        builder.Services.AddControllers()
-            .AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+        builder.Services.AddControllers();
+        //.AddNewtonsoftJson(options =>
+        //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+        //Database services
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("PropertyConnection"))
         );
-
         builder
             .Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
         //Repositories
-        builder.Services.AddScoped<ImageRepository>();
+        builder.Services.AddScoped<PropertyDeedImageRepository>();
+        builder.Services.AddScoped<PropertyImageRepository>();
         builder.Services.AddScoped<SupportImageRepository>();
+        builder.Services.AddScoped<ApplicationUserImageRepository>();
         builder.Services.AddScoped<PersonRepository>();
         builder.Services.AddScoped<LocationRepository>();
         builder.Services.AddScoped<AddressRepository>();
-        builder.Services.AddScoped<DeedRepository>();
+        builder.Services.AddScoped<PropertyDeedRepository>();
         builder.Services.AddScoped<FeatureRepository>();
-        builder.Services.AddScoped<LeaseRepository>();
         builder.Services.AddScoped<PaymentRepository>();
+        builder.Services.AddScoped<LeaseRepository>();
         builder.Services.AddScoped<PropertyRepository>();
         builder.Services.AddScoped<SupportRepository>();
         builder.Services.AddScoped<AdminRepository>();
         builder.Services.AddScoped<UserRepository>();
+
         //Services
         builder.Services.AddScoped<ImageProccess>();
         builder.Services.AddScoped<PropertyImageService>();
         builder.Services.AddScoped<PersonService>();
         builder.Services.AddScoped<LocationService>();
         builder.Services.AddScoped<AddressService>();
-        builder.Services.AddScoped<DeedService>();
+        builder.Services.AddScoped<PropertyDeedService>();
         builder.Services.AddScoped<FeatureService>();
-        builder.Services.AddScoped<LeaseService>();
         builder.Services.AddScoped<PaymentService>();
+        builder.Services.AddScoped<LeaseService>();
         builder.Services.AddScoped<PropertyService>();
         builder.Services.AddScoped<SupportService>();
         builder.Services.AddScoped<AdminService>();
         builder.Services.AddScoped<UserService>();
-
-
+        builder.Services.AddScoped<EmailValidationService>();
+        builder.Services.AddScoped<PasswordValidationService>();
 
         //Authentication and Authorization Services
+        builder.Services.AddScoped<TokenService>();
+        builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -116,25 +123,19 @@ public partial class Program
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-
                     ValidIssuer = jwt!.Issuer,
                     ValidAudience = jwt!.Audience,
 
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Secret))
                 };
             });
+
         builder.Services.AddAuthorizationBuilder()
         .AddPolicy("AdminOnly", policy => policy.RequireRole(Roles.Admin))
-        .AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser()); ;
-        builder.Services.AddScoped<TokenService>();
-        builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+        .AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
 
-        //Services
-        builder.Services.AddScoped<ImageService>();
-        builder.Services.AddScoped<EmailValidationService>();
-        builder.Services.AddScoped<PasswordValidationService>();
-        builder.Services.AddHttpClient();
-        builder.Services.AddHttpContextAccessor();
+        //builder.Services.AddHttpClient();
+        //builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
@@ -166,8 +167,7 @@ public partial class Program
         using (var scope = app.Services.CreateScope())
         {
             await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider).ConfigureAwait(false);
-        }
-        ;
+        };
 
         if (app.Environment.IsDevelopment())
         {

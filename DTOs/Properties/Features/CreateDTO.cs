@@ -9,7 +9,7 @@ public class CreateDTO
 {
     [DefaultValue("")]
     [Required(ErrorMessage = "Name is required!")]
-    public required string? Name { get; set; }
+    public required string Name { get; set; }
 
     [DefaultValue(PropertyFeatureCategory.Interior)]
     public PropertyFeatureCategory Category { get; set; }

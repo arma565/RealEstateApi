@@ -10,7 +10,7 @@ public class UpdateDTO
     public string? Name { get; set; }
 
     [DefaultValue(PropertyFeatureCategory.Interior)]
-    public PropertyFeatureCategory Category { get; set; }
+    public PropertyFeatureCategory PropertyFeatureCategory { get; set; }
 
     #region Relationships
 

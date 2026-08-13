@@ -7,7 +7,7 @@ namespace RealEstate.DTOs.Properties.Leases.Payments;
 public class UpdateDTO
 {
     [DefaultValue(0.0)]
-    public decimal? Amount { get; set; }
+    public decimal Amount { get; set; }
 
     [DefaultValue(PaymentType.Deposit)]
     public PaymentType PaymentType { get; set; }

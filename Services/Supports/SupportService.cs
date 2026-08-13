@@ -7,82 +7,66 @@ namespace RealEstate.Services.Supports;
 interface ISupportService
 {
     Task<IEnumerable<RealEstateSupport>> GetListAsync();
-    Task<RealEstateSupport?> GetAsync(Guid id);
-    Task<RealEstateSupport> AddAsync(RealEstateSupportDTO realEstateSupportDTO);
-    Task UpdateAsync(Guid id , RealEstateSupportDTO realEstateSupportDTO);
+    Task<RealEstateSupport> GetAsync(Guid id);
+    Task<RealEstateSupport> AddAsync(CreateDTO createDTO);
+    Task UpdateAsync(Guid id , UpdateDTO updateDTO);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
 }
 
 #pragma warning disable CA1515
-public class SupportService(SupportRepository support) : ISupportService
+public class SupportService(SupportRepository repository) : ISupportService
 {
-    private readonly SupportRepository _support = support;
-
-    //private readonly ImageRepository _imageRepository = imageRepository;
+    private readonly SupportRepository _repository = repository;
 
     public async Task<IEnumerable<RealEstateSupport>> GetListAsync() =>
-        await _support.GetListAsync().ConfigureAwait(false);
+        await _repository.GetListAsync().ConfigureAwait(false);
 
-    public async Task<RealEstateSupport?> GetAsync(Guid id) =>
-         await _support.GetAsync(id).ConfigureAwait(false);
-
-    public async Task<RealEstateSupport> AddAsync(RealEstateSupportDTO realEstateSupportDTO)
+    public async Task<RealEstateSupport> GetAsync(Guid id)
     {
+        var support = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(support);
 
-        ArgumentNullException.ThrowIfNull(realEstateSupportDTO);
-
-        var realEstateSupport = new RealEstateSupport
-        {
-            Title = realEstateSupportDTO.Title,
-            DetailsTitle = realEstateSupportDTO.DetailsTitle,
-            DetailsSubtitle = realEstateSupportDTO.DetailsSubtitle,
-            ImageId = realEstateSupportDTO.ImageId
-        };
-
-        return await _support.AddAsync(realEstateSupport).ConfigureAwait(false); ;
+        return support;
     }
 
-    public async Task UpdateAsync(Guid id , RealEstateSupportDTO realEstateSupportDTO)
+    public async Task<RealEstateSupport> AddAsync(CreateDTO createDTO)
     {
-        ArgumentNullException.ThrowIfNull(realEstateSupportDTO);
+        ArgumentNullException.ThrowIfNull(createDTO);
 
-        var realEstateSupport = new RealEstateSupport
+        return await _repository.AddAsync(new RealEstateSupport
         {
-            Id = id,
-            Title = realEstateSupportDTO.Title,
-            DetailsTitle = realEstateSupportDTO.DetailsTitle,
-            DetailsSubtitle = realEstateSupportDTO.DetailsSubtitle,
-            ImageId = realEstateSupportDTO.ImageId
-        };
+            Title = createDTO.Title,
+            DetailsTitle = createDTO.DetailsTitle,
+            DetailsSubtitle = createDTO.DetailsSubtitle
+        }).ConfigureAwait(false); ;
+    }
 
-        await _support.UpdateAsync(realEstateSupport).ConfigureAwait(false);
+    public async Task UpdateAsync(Guid id , UpdateDTO updateDTO)
+    {
+        var support = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(support);
+
+        ArgumentNullException.ThrowIfNull(updateDTO);
+
+        support.Title = string.IsNullOrEmpty(updateDTO.Title) ? support.Title : updateDTO.Title;
+        support.DetailsTitle = string.IsNullOrEmpty(updateDTO.DetailsTitle) ? support.DetailsTitle : updateDTO.DetailsTitle;
+        support.DetailsSubtitle = string.IsNullOrEmpty(updateDTO.DetailsSubtitle) ? support.DetailsSubtitle : updateDTO.DetailsSubtitle;
+
+        await _repository.UpdateAsync(support).ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
         var support = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(support);
 
-        ArgumentNullException.ThrowIfNull(support!.Image);
-
-        //await _imageRepository.DeleteAsync(support.Image.Id).ConfigureAwait(false);
-
-        await _support.DeleteAsync(support).ConfigureAwait(false);
+        await _repository.DeleteAsync(support).ConfigureAwait(false);
     }
 
-    public async Task DeleteAllAsync()
-    {
-        var supports = await GetListAsync().ConfigureAwait(false);
-
-        //foreach (var support in supports)
-        //{
-        //    if (support == null || support.Image == null)
-        //        continue;
-        //    await _imageRepository.DeleteAsync(support.Image.Id).ConfigureAwait(false);
-        //}
-
-        await _support.DeleteAllAsync().ConfigureAwait(false);
-    }
+    public async Task DeleteAllAsync() =>
+        await _repository.DeleteAllAsync().ConfigureAwait(false);
+    
 
 }
 

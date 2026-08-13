@@ -1,4 +1,5 @@
 ﻿using RealEstate.DTOs.Properties.Leases;
+using RealEstate.Entities.Persons;
 using RealEstate.Entities.Properties.Leases;
 using RealEstate.Repositories.Properties.Leases;
 
@@ -7,9 +8,9 @@ namespace RealEstate.Services.Properties.Leases;
 interface ILeaseService
 {
     Task<IEnumerable<Lease>> GetListAsync();
-    Task<Lease?> GetAsync(Guid id);
-    Task<Lease> AddAsync(LeaseDTO leaseDTO);
-    Task UpdateAsync(Guid id, LeaseDTO leaseDTO);
+    Task<Lease> GetAsync(Guid id);
+    Task<Lease> AddAsync(CreateDTO createDTO);
+    Task UpdateAsync(Guid id, UpdateDTO updateDTO);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
 }
@@ -22,42 +23,40 @@ public class LeaseService(LeaseRepository repository) : ILeaseService
     public async Task<IEnumerable<Lease>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);
 
-    public async Task<Lease?> GetAsync(Guid id) =>
-    await _repository.GetAsync(id).ConfigureAwait(false);
-
-    public async Task<Lease> AddAsync(LeaseDTO leaseDTO)
+    public async Task<Lease> GetAsync(Guid id)
     {
-        ArgumentNullException.ThrowIfNull(leaseDTO);
+        var lease = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(lease);
 
-        var lease = new Lease
-        {
-            MonthlyRent = leaseDTO.MonthlyRent,
-            DepositAmount = leaseDTO.DepositAmount,
-            StartTime = leaseDTO.StartTime ?? TimeOnly.MinValue,
-            EndTime = leaseDTO.EndTime,
-            StartDate = leaseDTO.StartDate,
-            EndDate = leaseDTO.EndDate,
-            PropertyId = leaseDTO.PropertyId
-        };
-
-        return await _repository.AddAsync(lease).ConfigureAwait(false); ;
+        return lease;
     }
 
-    public async Task UpdateAsync(Guid id, LeaseDTO leaseDTO)
+    public async Task<Lease> AddAsync(CreateDTO createDTO)
     {
-        ArgumentNullException.ThrowIfNull(leaseDTO);
+        ArgumentNullException.ThrowIfNull(createDTO);
 
-        var lease = new Lease
+        return await _repository.AddAsync(new Lease
         {
-            Id = id,
-            MonthlyRent = leaseDTO.MonthlyRent,
-            DepositAmount = leaseDTO.DepositAmount,
-            StartTime = leaseDTO.StartTime ?? TimeOnly.MinValue,
-            EndTime = leaseDTO.EndTime,
-            StartDate = leaseDTO.StartDate,
-            EndDate = leaseDTO.EndDate,
-            PropertyId = leaseDTO.PropertyId
-        };
+            MonthlyRent = createDTO.MonthlyRent,
+            DepositAmount = createDTO.DepositAmount,
+            EndTime = createDTO.EndTime,
+            EndDate = createDTO.EndDate,
+            PropertyId = createDTO.PropertyId
+        }).ConfigureAwait(false); ;
+    }
+
+    public async Task UpdateAsync(Guid id, UpdateDTO updateDTO)
+    {
+        var lease = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(lease);
+
+        ArgumentNullException.ThrowIfNull(updateDTO);
+
+        lease.MonthlyRent = updateDTO.MonthlyRent != lease.MonthlyRent ? updateDTO.MonthlyRent : lease.MonthlyRent;
+        lease.DepositAmount = updateDTO.DepositAmount != lease.DepositAmount ? updateDTO.DepositAmount : lease.DepositAmount;
+        lease.EndTime = updateDTO.EndTime !=  lease.EndTime ? updateDTO.EndTime : lease.EndTime; 
+        lease.EndDate = updateDTO.EndDate !=  lease.EndDate ? updateDTO.EndDate : lease.EndDate; 
+        lease.PropertyId = updateDTO.PropertyId != lease.PropertyId ? updateDTO.PropertyId : lease.PropertyId;
 
         await _repository.UpdateAsync(lease).ConfigureAwait(false);
     }
@@ -65,7 +64,6 @@ public class LeaseService(LeaseRepository repository) : ILeaseService
     public async Task DeleteAsync(Guid id)
     {
         var lease = await GetAsync(id).ConfigureAwait(false);
-        
         ArgumentNullException.ThrowIfNull(lease);
 
         await _repository.DeleteAsync(lease).ConfigureAwait(false);

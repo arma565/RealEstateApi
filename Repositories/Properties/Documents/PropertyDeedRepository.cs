@@ -15,7 +15,7 @@ interface IDeedRepository
 }
 
 #pragma warning disable CA1515
-public class DeedRepository(AppDbContext context) : IDeedRepository
+public class PropertyDeedRepository(AppDbContext context) : IDeedRepository
 {
     private readonly AppDbContext _context = context;
 
@@ -23,7 +23,7 @@ public class DeedRepository(AppDbContext context) : IDeedRepository
      await _context
         .PropertyDeeds
         .AsNoTracking()
-        .Include(deed => deed.Image)
+        .Include(deed => deed.PropertyDeedImage)
         .Include(deed => deed.Property)
         .ToListAsync()
         .ConfigureAwait(false);
@@ -32,7 +32,7 @@ public class DeedRepository(AppDbContext context) : IDeedRepository
     await _context
        .PropertyDeeds
        .AsNoTracking()
-       .Include(deed => deed.Image)
+       .Include(deed => deed.PropertyDeedImage)
        .Include(deed => deed.Property)
        .SingleOrDefaultAsync(deed => deed.Id == id)
        .ConfigureAwait(false);

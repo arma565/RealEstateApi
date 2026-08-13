@@ -14,7 +14,6 @@ interface IAdminService
 #pragma warning disable CA1515
 public class AdminService(AdminRepository repository) : IAdminService
 {
-    //private readonly ImageRepository _imageRepository = imageRepository;
     private readonly AdminRepository _repository = repository;
 
     public async Task<IEnumerable<ApplicationUser>> GetUsersListAsync() => 
@@ -27,7 +26,6 @@ public class AdminService(AdminRepository repository) : IAdminService
         {
             if (await _repository.IsAdmin(user).ConfigureAwait(false))
                 continue;
-            //await _imageRepository.DeleteAsync(user.ProfileImage.Id).ConfigureAwait(false);
             await _repository.DeleteUserAsync(user).ConfigureAwait(false);
         }
     }

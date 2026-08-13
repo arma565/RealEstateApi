@@ -10,9 +10,9 @@ namespace RealEstate.Controllers.Properties.Documents;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class DeedController(DeedService service, ILogger<DeedController> logger) : ControllerBase
+public class DeedController(PropertyDeedService service, ILogger<DeedController> logger) : ControllerBase
 {
-    private readonly DeedService _service = service;
+    private readonly PropertyDeedService _service = service;
 
     private readonly ILogger<DeedController> _logger = logger;
 

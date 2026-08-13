@@ -6,16 +6,16 @@ namespace RealEstate.DTOs.Properties.Leases;
 public class UpdateDTO
 {
     [DefaultValue(0.0)]
-    public decimal? MonthlyRent { get; set; }
+    public decimal MonthlyRent { get; set; }
 
     [DefaultValue(0.0)]
-    public decimal? DepositAmount { get; set; }
+    public decimal DepositAmount { get; set; }
 
     [DefaultValue("")]
-    public TimeOnly? EndTime { get; set; }
+    public TimeOnly EndTime { get; set; }
 
     [DefaultValue("")]
-    public DateOnly? EndDate { get; set; }
+    public DateOnly EndDate { get; set; }
 
     #region Relationships
 

@@ -1,6 +1,5 @@
+
 using RealEstate.DTOs.Properties;
-using RealEstate.DTOs.Properties.Documents;
-using RealEstate.DTOs.Properties.Leases;
 using RealEstate.Entities.Properties;
 using RealEstate.Enums.Properties;
 using RealEstate.Repositories.Properties;
@@ -10,9 +9,9 @@ namespace RealEstate.Services.Properties;
 interface IPropertyService
 {
     Task<IEnumerable<RealEstateProperty>> GetListAsync();
-    Task<RealEstateProperty?> GetAsync(Guid id);
-    Task<RealEstateProperty> AddAsync(CreateDTO dto);
-    Task UpdateAsync(Guid id, UpdateDTO dto);
+    Task<RealEstateProperty> GetAsync(Guid id);
+    Task<RealEstateProperty> AddAsync(CreateDTO createDTO);
+    Task UpdateAsync(Guid id, UpdateDTO updateDTO);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
 }
@@ -22,105 +21,82 @@ public class PropertyService(PropertyRepository repository) : IPropertyService
 {
     private readonly PropertyRepository _repository = repository;
 
-    //private readonly ImageRepository _imageRepository = imageRepository;
-
     public async Task<IEnumerable<RealEstateProperty>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);
 
-    public async Task<RealEstateProperty?> GetAsync(Guid id) =>
-         await _repository.GetAsync(id).ConfigureAwait(false);
+    public async Task<RealEstateProperty> GetAsync(Guid id)
+    {
+        var property = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(property);
 
-    public async Task<RealEstateProperty> AddAsync(CreateDTO dto)
+        return property;
+    }
+
+    public async Task<RealEstateProperty> AddAsync(CreateDTO createDTO)
     {
 
-        ArgumentNullException.ThrowIfNull(dto);
+        ArgumentNullException.ThrowIfNull(createDTO);
 
         var allProperties = await GetListAsync().ConfigureAwait(false);
 
         if (!allProperties.Any())
-            dto.OrderId = 1;
+            createDTO.OrderId = 1;
         else
         {
             var lastPropertyOrderNumber = allProperties.Last().OrderId;
-            dto.OrderId = lastPropertyOrderNumber + 1;
+            createDTO.OrderId = lastPropertyOrderNumber + 1;
         }
 
-        var realEstateProperty = new RealEstateProperty
+        return await _repository.AddAsync(new RealEstateProperty
         {
-            OrderId = dto.OrderId,
-            Title = dto.Title,
-            Description = dto.Description,
-            PropertyType = dto.PropertyType,
-            PropertyStatus = dto.PropertyStatus,
-            Price = dto.Price,
-            PropertyCurrency = dto.Currency,
-            YearBuilt = dto.YearBuilt,
-            LandArea = dto.LandArea,
-            BuildingArea = dto.BuildingArea
-        };
-        return await _repository.AddAsync(realEstateProperty).ConfigureAwait(false);
+            OrderId = createDTO.OrderId,
+            Title = createDTO.Title,
+            Description = createDTO.Description,
+            PropertyType = createDTO.PropertyType,
+            PropertyStatus = createDTO.PropertyStatus,
+            Price = createDTO.Price,
+            PropertyCurrency = createDTO.Currency,
+            YearBuilt = createDTO.YearBuilt,
+            LandArea = createDTO.LandArea,
+            BuildingArea = createDTO.BuildingArea,
+            OwnerId = createDTO.OwnerId,
+            AgentId = createDTO.AgentId
+        }).ConfigureAwait(false);
     }
 
-    public async Task UpdateAsync(Guid id, UpdateDTO dto)
+    public async Task UpdateAsync(Guid id, UpdateDTO updateDTO)
     {
-        ArgumentNullException.ThrowIfNull(dto);
+        var property = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(property);
 
-        var existProperty = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(updateDTO);
 
-        ArgumentNullException.ThrowIfNull(existProperty);
+        property.Title = string.IsNullOrEmpty(updateDTO.Title) ? property.Title : updateDTO.Title;
+        property.Description = string.IsNullOrEmpty(updateDTO.Description) ? property.Description : updateDTO.Description;
+        property.PropertyType = updateDTO.PropertyType is PropertyType.NotSet ? property.PropertyType : updateDTO.PropertyType;
+        property.PropertyStatus = updateDTO.PropertyStatus is PropertyStatus.NotSet ? property.PropertyStatus : updateDTO.PropertyStatus;
+        property.PropertyCurrency = updateDTO.PropertyCurrency is PropertyCurrency.NotSet ? property.PropertyCurrency : updateDTO.PropertyCurrency;
+        property.YearBuilt = updateDTO.YearBuilt != property.YearBuilt ? updateDTO.YearBuilt : property.YearBuilt;
+        property.Price = updateDTO.Price != property.Price ? updateDTO.Price : property.Price;
+        property.LandArea = updateDTO.LandArea != property.LandArea ? updateDTO.LandArea : property.LandArea;
+        property.BuildingArea = updateDTO.BuildingArea != property.BuildingArea ? updateDTO.BuildingArea : property.BuildingArea;
+        property.OwnerId = updateDTO.OwnerId != property.OwnerId ? updateDTO.OwnerId : property.OwnerId;
+        property.AgentId = updateDTO.AgentId != property.AgentId ? updateDTO.AgentId : property.AgentId;
 
-        existProperty.Title = string.IsNullOrEmpty(dto.Title) ? existProperty.Title : dto.Title;
-        existProperty.Description = string.IsNullOrEmpty(dto.Description) ? existProperty.Description : dto.Description;
-        existProperty.PropertyType = dto.PropertyType is PropertyType.NotSet ? existProperty.PropertyType : dto.PropertyType;
-        existProperty.PropertyStatus = dto.PropertyStatus is PropertyStatus.NotSet ? existProperty.PropertyStatus : dto.PropertyStatus;
-        existProperty.PropertyCurrency = dto.PropertyCurrency is PropertyCurrency.NotSet ? existProperty.PropertyCurrency : dto.PropertyCurrency;
-        existProperty.YearBuilt = dto.YearBuilt.Equals(0) ? existProperty.YearBuilt : dto.YearBuilt;
-        existProperty.Price = dto.Price.Equals(0) ? existProperty.Price : dto.Price;
-        existProperty.LandArea = dto.LandArea.Equals(0.0) ? existProperty.LandArea : dto.LandArea;
-        existProperty.BuildingArea = dto.BuildingArea.Equals(0.0) ? existProperty.BuildingArea : dto.BuildingArea;
-        existProperty.AddressId = dto.AddressId is null ? existProperty.AddressId : dto.AddressId;
-        existProperty.LocationId = dto.LocationId is null ? existProperty.LocationId : dto.LocationId;
-        existProperty.OwnerId = dto.OwnerId is null ? existProperty.OwnerId : dto.OwnerId;
-        existProperty.AgentId = dto.AgentId is null ? existProperty.AgentId : dto.AgentId;
-        existProperty.PropertyDeedId = dto.PropertyDeedId is null ? existProperty.PropertyDeedId : dto.PropertyDeedId;
-        existProperty.LeaseId = dto.LeaseId is null ? existProperty.LeaseId : dto.LeaseId;
-
-        await _repository.UpdateAsync(existProperty).ConfigureAwait(false);
+        await _repository.UpdateAsync(property).ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
         var property = await GetAsync(id).ConfigureAwait(false);
-
         ArgumentNullException.ThrowIfNull(property);
-
-        //foreach (var img in property.Images)
-        //{
-        //    if (img == null)
-        //        continue;
-        //    await _imageRepository.DeleteAsync(img).ConfigureAwait(false);
-        //}
 
         await _repository.DeleteAsync(property).ConfigureAwait(false);
     }
 
-    public async Task DeleteAllAsync()
-    {
-        var properties = await GetListAsync().ConfigureAwait(false);
-
-        //foreach (var property in properties)
-        //{
-        //    if (property == null)
-        //        continue;
-        //    foreach (var img in property.Images)
-        //    {
-        //        if (img == null)
-        //            continue;
-        //        await _imageRepository.DeleteAsync(img).ConfigureAwait(false);
-        //    }
-        //}
+    public async Task DeleteAllAsync() =>
         await _repository.DeleteAllAsync().ConfigureAwait(false);
-    }
+    
 
 }
 

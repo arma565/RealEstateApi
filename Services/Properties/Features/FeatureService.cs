@@ -1,4 +1,5 @@
-﻿using RealEstate.Entities.Properties.Features;
+﻿using RealEstate.DTOs.Properties.Features;
+using RealEstate.Entities.Properties.Features;
 using RealEstate.Repositories.Properties.Features;
 
 namespace RealEstate.Services.Properties.Features;
@@ -6,9 +7,9 @@ namespace RealEstate.Services.Properties.Features;
 interface IFeatureService
 {
     Task<IEnumerable<PropertyFeature>> GetListAsync();
-    Task<PropertyFeature?> GetAsync(Guid id);
-    Task<PropertyFeature> AddAsync(PropertyFeatureDTO propertyFeatureDTO);
-    Task UpdateAsync(Guid id, PropertyFeatureDTO propertyFeatureDTO);
+    Task<PropertyFeature> GetAsync(Guid id);
+    Task<PropertyFeature> AddAsync(CreateDTO createDTO);
+    Task UpdateAsync(Guid id, UpdateDTO updateDTO);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
 }
@@ -21,43 +22,44 @@ public class FeatureService(FeatureRepository repository) : IFeatureService
     public async Task<IEnumerable<PropertyFeature>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);
 
-    public async Task<PropertyFeature?> GetAsync(Guid id) =>
-        await _repository.GetAsync(id).ConfigureAwait(false);   
-
-    public async Task<PropertyFeature> AddAsync(PropertyFeatureDTO propertyFeatureDTO)
+    public async Task<PropertyFeature> GetAsync(Guid id)
     {
-        ArgumentNullException.ThrowIfNull(propertyFeatureDTO);
+        var propertyFeature = await _repository.GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(propertyFeature);
 
-        var feature = new PropertyFeature
-        {
-            Name = propertyFeatureDTO.Name,
-            PropertyFeatureCategory = propertyFeatureDTO.Category,
-            PropertyId = propertyFeatureDTO.PropertyId
-        };
-
-        return await _repository.AddAsync(feature).ConfigureAwait(false);
+        return propertyFeature;
     }
 
-    public async Task UpdateAsync(Guid id, PropertyFeatureDTO propertyFeatureDTO)
+    public async Task<PropertyFeature> AddAsync(CreateDTO createDTO)
+    {
+        ArgumentNullException.ThrowIfNull(createDTO);
+
+        return await _repository.AddAsync(new PropertyFeature
+        {
+            Name = createDTO.Name,
+            PropertyFeatureCategory = createDTO.Category,
+            PropertyId = createDTO.PropertyId
+        }).ConfigureAwait(false);
+    }
+
+    public async Task UpdateAsync(Guid id, UpdateDTO updateDTO)
     {
 
-        ArgumentNullException.ThrowIfNull(propertyFeatureDTO);
+        ArgumentNullException.ThrowIfNull(updateDTO);
 
-        var feature = new PropertyFeature
-        {
-            Id = id,
-            Name = propertyFeatureDTO.Name,
-            PropertyFeatureCategory = propertyFeatureDTO.Category,
-            PropertyId = propertyFeatureDTO.PropertyId
-        };
+        var propertyFeature = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(propertyFeature);
 
-        await _repository.UpdateAsync(feature).ConfigureAwait(false);
+        propertyFeature.Name = string.IsNullOrEmpty(updateDTO.Name) ? propertyFeature.Name : updateDTO.Name;
+        propertyFeature.PropertyFeatureCategory = updateDTO.PropertyFeatureCategory;
+        propertyFeature.PropertyId = updateDTO.PropertyId != propertyFeature.PropertyId ? updateDTO.PropertyId : propertyFeature.PropertyId;
+
+        await _repository.UpdateAsync(propertyFeature).ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(Guid id)
     {
         var feature = await GetAsync(id).ConfigureAwait(false);
-
         ArgumentNullException.ThrowIfNull(feature);
 
         await _repository.DeleteAsync(feature).ConfigureAwait(false);

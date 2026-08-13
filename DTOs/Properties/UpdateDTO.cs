@@ -22,16 +22,16 @@ public class UpdateDTO()
     public PropertyCurrency PropertyCurrency { get; set; } = default;
 
     [DefaultValue(0)]
-    public int? YearBuilt { get; set; }
+    public int YearBuilt { get; set; }
 
     [DefaultValue(0.0)]
-    public decimal? Price { get; set; }
+    public decimal Price { get; set; }
 
     [DefaultValue(0.0)]
-    public decimal? LandArea { get; set; }
+    public decimal LandArea { get; set; }
 
     [DefaultValue(0.0)]
-    public decimal? BuildingArea { get; set; }
+    public decimal BuildingArea { get; set; }
 
     #region Relationships
 

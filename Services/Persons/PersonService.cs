@@ -48,10 +48,11 @@ public class PersonService(PersonRepository repository) : IPersonService
 
     public async Task UpdateAsync(UpdateDTO updateDTO, Guid id)
     {
-        ArgumentNullException.ThrowIfNull(updateDTO);
 
         var person = await GetAsync(id).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(person);
+
+        ArgumentNullException.ThrowIfNull(updateDTO);
 
         person.FirstName = string.IsNullOrEmpty(updateDTO.FirstName) ? person.FirstName : updateDTO.FirstName;
         person.LastName = string.IsNullOrEmpty(updateDTO.LastName) ? person.LastName : updateDTO.LastName;

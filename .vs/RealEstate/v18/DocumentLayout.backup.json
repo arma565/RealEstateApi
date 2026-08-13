@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\services\\properties\\addresses\\addressservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:services\\properties\\addresses\\addressservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -47,19 +42,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AddressService.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Properties\\Addresses\\AddressService.cs",
-              "RelativeDocumentMoniker": "Services\\Properties\\Addresses\\AddressService.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Properties\\Addresses\\AddressService.cs",
-              "RelativeToolTip": "Services\\Properties\\Addresses\\AddressService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-12T18:58:04.819Z",
-              "EditorCaption": ""
             }
           ]
         }

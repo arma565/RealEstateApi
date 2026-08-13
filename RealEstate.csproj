@@ -7,6 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<UserSecretsId>79778ee3-6d4a-4bf3-8e70-111a26831ddd</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,6 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Controllers\Images\Documents\" />
+	  <Folder Include="Controllers\Images\Supports\" />
+	  <Folder Include="Controllers\Images\Users\" />
 	  <Folder Include="Uploads\" />
 	  <Folder Include="wwwroot\" />
 	</ItemGroup>

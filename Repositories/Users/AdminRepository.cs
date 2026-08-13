@@ -19,7 +19,7 @@ public class AdminRepository(UserManager<ApplicationUser> userManager) : IAdminR
     private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     public async Task<IEnumerable<ApplicationUser>> GetUsersListAsync() =>
-        [.. await _userManager.Users.AsNoTracking().Include(user => user.ProfileImage).ToListAsync().ConfigureAwait(false)];
+        await _userManager.Users.AsNoTracking().Include(user => user.AgentImage).ToListAsync().ConfigureAwait(false);
 
     public async Task DeleteUserAsync(ApplicationUser user) =>
          await _userManager.DeleteAsync(user).ConfigureAwait(false);

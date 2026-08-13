@@ -69,7 +69,7 @@ public sealed class UserController(
 
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> Register([FromBody] UserRegisterAccountDTO userRegisterAccountDTO)
+    public async Task<IActionResult> Register([FromBody] RegisterAccountDTO userRegisterAccountDTO)
     {
         try
         {
@@ -130,7 +130,7 @@ public sealed class UserController(
     [HttpPost("login")]
     [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] UserLoginRequestDTO userLoginRequestDTO)
+    public async Task<IActionResult> Login([FromBody] LoginRequestDTO userLoginRequestDTO)
     {
         try
         {
@@ -180,7 +180,7 @@ public sealed class UserController(
     [HttpDelete("delete")]
     [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
-    public async Task<IActionResult> Delete([FromBody] UserLoginRequestDTO userLoginRequestDTO)
+    public async Task<IActionResult> Delete([FromBody] LoginRequestDTO userLoginRequestDTO)
     {
         try
         {
@@ -234,7 +234,7 @@ public sealed class UserController(
     }
 
     [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordDTO userResetPasswordDTO)
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO userResetPasswordDTO)
     {
         try
         {
@@ -273,7 +273,7 @@ public sealed class UserController(
     }
 
     [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordDTO userChangePasswordDTO)
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO userChangePasswordDTO)
     {
         try
         {
@@ -313,7 +313,7 @@ public sealed class UserController(
     }
 
     [HttpPost("forgot-password")]
-    public async Task<ActionResult<string>> ForgotPassword([FromBody] UserForgotPasswordDTO userForgotPasswordDTO)
+    public async Task<ActionResult<string>> ForgotPassword([FromBody] ForgotPasswordDTO userForgotPasswordDTO)
     { 
         try
         {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using RealEstate.Entities.Images.Properties;
 using RealEstate.Services.Images.Properties;
 using RealEstate.Services.Validations;
 using System.Security;

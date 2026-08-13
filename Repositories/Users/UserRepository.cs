@@ -6,7 +6,7 @@ namespace RealEstate.Repositories.Users;
 
 interface IUserRepository
 {
-    Task<ApplicationUser?> GetByIDAsync(string userId);
+    Task<ApplicationUser?> GetAsync(string userId);
     Task<ApplicationUser?> GetByUserNameAsync(string userName);
     Task<IdentityResult> RegisterAsync(ApplicationUser applicationUser, string password);
     Task<SignInResult> LoginAsync(string userName, string password);
@@ -28,10 +28,11 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
 
-    public async Task<ApplicationUser?> GetByIDAsync(string userId) =>
+    public async Task<ApplicationUser?> GetAsync(string userId) =>
          await _userManager
-             .Users.AsNoTracking()
-             .Include(user => user.ProfileImage)
+             .Users
+             .AsNoTracking()
+             .Include(user => user.AgentImage)
              .SingleOrDefaultAsync(user => user.Id == userId)
              .ConfigureAwait(false);
 
@@ -39,7 +40,7 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
          await _userManager
              .Users
              .AsNoTracking()
-             .Include(user => user.ProfileImage)
+             .Include(user => user.AgentImage)
              .SingleOrDefaultAsync(user => user.UserName == userName)
              .ConfigureAwait(false);
 
