@@ -121,13 +121,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
            .HasMany(property => property.Leases)
            .WithOne(lease => lease.Property)
            .HasForeignKey(lease => lease.PropertyId)
-           .OnDelete(DeleteBehavior.Cascade)
+           .OnDelete(DeleteBehavior.NoAction)
            .IsRequired();
 
         builder.Entity<RealEstateSupport>()
            .HasOne(realEstatesupport => realEstatesupport.SupportImage)
            .WithOne(supportImage => supportImage.Support)
-           .HasForeignKey<Entities.Images.Supports.SupportImage>(supportImage => supportImage.SupportId)
+           .HasForeignKey<SupportImage>(supportImage => supportImage.SupportId)
            .OnDelete(DeleteBehavior.Cascade)
            .IsRequired();
 

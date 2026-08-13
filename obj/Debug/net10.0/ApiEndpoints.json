@@ -176,6 +176,121 @@
     ]
   },
   {
+    "ContainingType": "RealEstate.Controllers.Images.Users.ApplicationUserImageController",
+    "Method": "DeleteAll",
+    "RelativePath": "ApplicationUserImage/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Users.ApplicationUserImageController",
+    "Method": "Delete",
+    "RelativePath": "ApplicationUserImage/delete/{applicationUserImageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationUserImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Users.ApplicationUserImageController",
+    "Method": "Download",
+    "RelativePath": "ApplicationUserImage/download/{applicationUserImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationUserImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Users.ApplicationUserImageController",
+    "Method": "Get",
+    "RelativePath": "ApplicationUserImage/get/{applicationUserImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationUserImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Entities.Images.Users.ApplicationUserImage",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Users.ApplicationUserImageController",
+    "Method": "Update",
+    "RelativePath": "ApplicationUserImage/update/{applicationUserImageId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationUserImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "applicationUserImageDTO",
+        "Type": "RealEstate.DTOs.Images.Users.UpdateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Users.ApplicationUserImageController",
+    "Method": "Upload",
+    "RelativePath": "ApplicationUserImage/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationUserImageDTO",
+        "Type": "RealEstate.DTOs.Images.Users.CreateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
     "Method": "Add",
     "RelativePath": "Deed/add",
@@ -185,7 +300,7 @@
     "Parameters": [
       {
         "Name": "propertyDeedDTO",
-        "Type": "RealEstate.Entities.Properties.Documents.PropertyDeedDTO",
+        "Type": "RealEstate.DTOs.Properties.Documents.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -278,7 +393,7 @@
       },
       {
         "Name": "propertyDeedDTO",
-        "Type": "RealEstate.Entities.Properties.Documents.PropertyDeedDTO",
+        "Type": "RealEstate.DTOs.Properties.Documents.UpdateDTO",
         "IsRequired": true
       }
     ],
@@ -294,7 +409,7 @@
     "Parameters": [
       {
         "Name": "propertyFeatureDTO",
-        "Type": "RealEstate.Entities.Properties.Features.PropertyFeatureDTO",
+        "Type": "RealEstate.DTOs.Properties.Features.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -382,123 +497,13 @@
     "Parameters": [
       {
         "Name": "propertyFeatureDTO",
-        "Type": "RealEstate.Entities.Properties.Features.PropertyFeatureDTO",
+        "Type": "RealEstate.DTOs.Properties.Features.UpdateDTO",
         "IsRequired": true
       },
       {
         "Name": "featureId",
         "Type": "System.String",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "Add",
-    "RelativePath": "Image/add",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "realEstateImageDTO",
-        "Type": "RealEstate.Entities.Images.RealEstateImageDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "DeleteAll",
-    "RelativePath": "Image/delete-all",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "Delete",
-    "RelativePath": "Image/delete/{imageId}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "Download",
-    "RelativePath": "Image/download/{imageId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "Get",
-    "RelativePath": "Image/get/{imageId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "RealEstate.Entities.Images.RealEstateImage",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Images.ImageController",
-    "Method": "Upload",
-    "RelativePath": "Image/upload/{imageId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "imageId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "realEstateImageDTO",
-        "Type": "RealEstate.Entities.Images.RealEstateImageDTO",
-        "IsRequired": true
-      },
-      {
-        "Name": "image",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -513,7 +518,7 @@
     "Parameters": [
       {
         "Name": "leaseDTO",
-        "Type": "RealEstate.Entities.Properties.Leases.LeaseDTO",
+        "Type": "RealEstate.DTOs.Properties.Leases.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -606,7 +611,7 @@
       },
       {
         "Name": "leaseDTO",
-        "Type": "RealEstate.Entities.Properties.Leases.LeaseDTO",
+        "Type": "RealEstate.DTOs.Properties.Leases.UpdateDTO",
         "IsRequired": true
       }
     ],
@@ -622,7 +627,7 @@
     "Parameters": [
       {
         "Name": "propertyLocationDTO",
-        "Type": "RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO",
+        "Type": "RealEstate.DTOs.Properties.Addresses.Map.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -710,7 +715,7 @@
     "Parameters": [
       {
         "Name": "propertyLocationDTO",
-        "Type": "RealEstate.Entities.Properties.Addresses.Map.PropertyLocationDTO",
+        "Type": "RealEstate.DTOs.Properties.Addresses.Map.UpdateDTO",
         "IsRequired": true
       },
       {
@@ -722,7 +727,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.Payments.PaymentController",
     "Method": "Add",
     "RelativePath": "Payment/add",
     "HttpMethod": "POST",
@@ -731,14 +736,14 @@
     "Parameters": [
       {
         "Name": "paymentDTO",
-        "Type": "RealEstate.Entities.Properties.Payments.PaymentDTO",
+        "Type": "RealEstate.DTOs.Properties.Leases.Payments.CreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.Payments.PaymentController",
     "Method": "DeleteAll",
     "RelativePath": "Payment/delete-all",
     "HttpMethod": "DELETE",
@@ -748,7 +753,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.Payments.PaymentController",
     "Method": "Delete",
     "RelativePath": "Payment/delete/{paymentId}",
     "HttpMethod": "DELETE",
@@ -764,7 +769,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.Payments.PaymentController",
     "Method": "GetList",
     "RelativePath": "Payment/get-list",
     "HttpMethod": "GET",
@@ -773,7 +778,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Payments.Payment, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Leases.Payments.Payment, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -784,7 +789,7 @@
     ]
   },
   {
-    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.Payments.PaymentController",
     "Method": "Get",
     "RelativePath": "Payment/get/{paymentId}",
     "HttpMethod": "GET",
@@ -799,7 +804,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RealEstate.Entities.Properties.Payments.Payment",
+        "Type": "RealEstate.Entities.Properties.Leases.Payments.Payment",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -810,7 +815,7 @@
     ]
   },
   {
-    "ContainingType": "RealEstate.Controllers.Properties.Payments.PaymentController",
+    "ContainingType": "RealEstate.Controllers.Properties.Leases.Payments.PaymentController",
     "Method": "Update",
     "RelativePath": "Payment/update/{paymentId}",
     "HttpMethod": "PUT",
@@ -824,7 +829,7 @@
       },
       {
         "Name": "paymentDTO",
-        "Type": "RealEstate.Entities.Properties.Payments.PaymentDTO",
+        "Type": "RealEstate.DTOs.Properties.Leases.Payments.UpdateDTO",
         "IsRequired": true
       }
     ],
@@ -840,7 +845,7 @@
     "Parameters": [
       {
         "Name": "personDTO",
-        "Type": "RealEstate.Entities.Persons.PersonDTO",
+        "Type": "RealEstate.DTOs.Persons.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -871,32 +876,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Persons.PersonController",
-    "Method": "GetByNationalId",
-    "RelativePath": "Person/get-by-nationalId/{nationalId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "nationalId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "RealEstate.Entities.Persons.Person",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "RealEstate.Controllers.Persons.PersonController",
@@ -954,7 +933,7 @@
     "Parameters": [
       {
         "Name": "personDTO",
-        "Type": "RealEstate.Entities.Persons.PersonDTO",
+        "Type": "RealEstate.DTOs.Persons.UpdateDTO",
         "IsRequired": true
       },
       {
@@ -1075,17 +1054,116 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "Add",
-    "RelativePath": "PropertyImage/add",
+    "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
+    "Method": "DeleteAll",
+    "RelativePath": "PropertyDeedImage/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
+    "Method": "Delete",
+    "RelativePath": "PropertyDeedImage/delete/{propertyDeedImageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
+    "Method": "Download",
+    "RelativePath": "PropertyDeedImage/download/{propertyDeedImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
+    "Method": "Get",
+    "RelativePath": "PropertyDeedImage/get/{propertyDeedImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Entities.Images.Documents.PropertyDeedImage",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
+    "Method": "Update",
+    "RelativePath": "PropertyDeedImage/update/{propertyDeedImageId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "propertyDeedImageDTO",
+        "Type": "RealEstate.DTOs.Images.Documents.UpdateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
+    "Method": "Upload",
+    "RelativePath": "PropertyDeedImage/upload",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "propertyImageDTO",
-        "Type": "RealEstate.Entities.Images.Properties.PropertyImageDTO",
+        "Name": "propertyDeedImageDTO",
+        "Type": "RealEstate.DTOs.Images.Documents.CreateDTO",
         "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1160,9 +1238,9 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
-    "Method": "Upload",
-    "RelativePath": "PropertyImage/upload/{propertyImageId}",
-    "HttpMethod": "POST",
+    "Method": "Update",
+    "RelativePath": "PropertyImage/update/{propertyImageId}",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -1173,7 +1251,28 @@
       },
       {
         "Name": "propertyImageDTO",
-        "Type": "RealEstate.Entities.Images.Properties.PropertyImageDTO",
+        "Type": "RealEstate.DTOs.Images.Properties.UpdateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Properties.PropertyImageController",
+    "Method": "Upload",
+    "RelativePath": "PropertyImage/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyImageDTO",
+        "Type": "RealEstate.DTOs.Images.Properties.CreateDTO",
         "IsRequired": true
       },
       {
@@ -1194,7 +1293,7 @@
     "Parameters": [
       {
         "Name": "realEstateSupportDTO",
-        "Type": "RealEstate.DTOs.Supports.RealEstateSupportDTO",
+        "Type": "RealEstate.DTOs.Supports.CreateDTO",
         "IsRequired": true
       }
     ],
@@ -1287,8 +1386,123 @@
       },
       {
         "Name": "realEstateSupportDTO",
-        "Type": "RealEstate.DTOs.Supports.RealEstateSupportDTO",
+        "Type": "RealEstate.DTOs.Supports.UpdateDTO",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Supports.SupportImageController",
+    "Method": "DeleteAll",
+    "RelativePath": "SupportImage/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Supports.SupportImageController",
+    "Method": "Delete",
+    "RelativePath": "SupportImage/delete/{supportImageId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Supports.SupportImageController",
+    "Method": "Download",
+    "RelativePath": "SupportImage/download/{supportImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Supports.SupportImageController",
+    "Method": "Get",
+    "RelativePath": "SupportImage/get/{supportImageId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Entities.Images.Supports.SupportImage",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Supports.SupportImageController",
+    "Method": "Update",
+    "RelativePath": "SupportImage/update/{supportImageId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportImageId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "supportImageDTO",
+        "Type": "RealEstate.DTOs.Images.Supports.UpdateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Supports.SupportImageController",
+    "Method": "Upload",
+    "RelativePath": "SupportImage/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "supportImageDTO",
+        "Type": "RealEstate.DTOs.Images.Supports.CreateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "images",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1329,7 +1543,7 @@
     "Parameters": [
       {
         "Name": "userChangePasswordDTO",
-        "Type": "RealEstate.DTOs.Users.UserChangePasswordDTO",
+        "Type": "RealEstate.DTOs.Users.ChangePasswordDTO",
         "IsRequired": true
       }
     ],
@@ -1345,7 +1559,7 @@
     "Parameters": [
       {
         "Name": "userLoginRequestDTO",
-        "Type": "RealEstate.DTOs.Users.UserLoginRequestDTO",
+        "Type": "RealEstate.DTOs.Users.LoginRequestDTO",
         "IsRequired": true
       }
     ],
@@ -1365,8 +1579,8 @@
         "IsRequired": true
       },
       {
-        "Name": "applicationUser",
-        "Type": "RealEstate.Entities.Users.ApplicationUser",
+        "Name": "editProfileDTO",
+        "Type": "RealEstate.DTOs.Users.EditProfileDTO",
         "IsRequired": true
       }
     ],
@@ -1382,7 +1596,7 @@
     "Parameters": [
       {
         "Name": "userForgotPasswordDTO",
-        "Type": "RealEstate.DTOs.Users.UserForgotPasswordDTO",
+        "Type": "RealEstate.DTOs.Users.ForgotPasswordDTO",
         "IsRequired": true
       }
     ],
@@ -1408,7 +1622,7 @@
     "Parameters": [
       {
         "Name": "userLoginRequestDTO",
-        "Type": "RealEstate.DTOs.Users.UserLoginRequestDTO",
+        "Type": "RealEstate.DTOs.Users.LoginRequestDTO",
         "IsRequired": true
       }
     ],
@@ -1424,7 +1638,7 @@
     "Parameters": [
       {
         "Name": "userRegisterAccountDTO",
-        "Type": "RealEstate.DTOs.Users.UserRegisterAccountDTO",
+        "Type": "RealEstate.DTOs.Users.RegisterAccountDTO",
         "IsRequired": true
       }
     ],
@@ -1440,7 +1654,7 @@
     "Parameters": [
       {
         "Name": "userResetPasswordDTO",
-        "Type": "RealEstate.DTOs.Users.UserResetPasswordDTO",
+        "Type": "RealEstate.DTOs.Users.ResetPasswordDTO",
         "IsRequired": true
       }
     ],
