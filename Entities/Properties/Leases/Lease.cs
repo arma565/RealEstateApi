@@ -1,7 +1,9 @@
-﻿using RealEstate.Entities.Persons;
+﻿using RealEstate.Entities.Persons.Owners;
+using RealEstate.Entities.Persons.Tenants;
 using RealEstate.Entities.Properties.Leases.Payments;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Properties.Leases;
 
@@ -26,10 +28,16 @@ public class Lease
     #region Relationships
 
     public Guid PropertyId { get; set; }
+    [JsonIgnore]
     public RealEstateProperty Property { get; set; } = null!;
 
+    public Guid OwnerId { get; set; }
+    [JsonIgnore]
+    public Owner Owner { get; set; } = null!;
+
     public Guid TenantId { get; set; }
-    public Person Tenant { get; set; } = null!;
+    [JsonIgnore]
+    public Tenant Tenant { get; set; } = null!;
 
     public ICollection<Payment> Payments { get; } = [];
 

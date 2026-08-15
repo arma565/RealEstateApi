@@ -11,7 +11,7 @@ using RealEstate.Repositories.Images.Documents;
 using RealEstate.Repositories.Images.Properties;
 using RealEstate.Repositories.Images.Supports;
 using RealEstate.Repositories.Images.Users;
-using RealEstate.Repositories.Persons;
+using RealEstate.Repositories.Owners;
 using RealEstate.Repositories.Properties;
 using RealEstate.Repositories.Properties.Addresses;
 using RealEstate.Repositories.Properties.Addresses.Maps;
@@ -20,6 +20,7 @@ using RealEstate.Repositories.Properties.Features;
 using RealEstate.Repositories.Properties.Leases;
 using RealEstate.Repositories.Properties.Leases.Payments;
 using RealEstate.Repositories.Supports;
+using RealEstate.Repositories.Tenants;
 using RealEstate.Repositories.Users;
 using RealEstate.Services.Images;
 using RealEstate.Services.Images.Properties;
@@ -35,6 +36,7 @@ using RealEstate.Services.Supports;
 using RealEstate.Services.Users;
 using RealEstate.Validations;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace RealEstate;
 
@@ -62,9 +64,8 @@ public partial class Program
         });
 
 
-        builder.Services.AddControllers();
-        //.AddNewtonsoftJson(options =>
-        //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+        builder.Services.AddControllers()
+            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
         //Database services
         builder.Services.AddDbContext<AppDbContext>(options =>
@@ -80,7 +81,8 @@ public partial class Program
         builder.Services.AddScoped<PropertyImageRepository>();
         builder.Services.AddScoped<SupportImageRepository>();
         builder.Services.AddScoped<ApplicationUserImageRepository>();
-        builder.Services.AddScoped<PersonRepository>();
+        builder.Services.AddScoped<OwnerRepository>();
+        builder.Services.AddScoped<TenantRepository>();
         builder.Services.AddScoped<LocationRepository>();
         builder.Services.AddScoped<AddressRepository>();
         builder.Services.AddScoped<PropertyDeedRepository>();
@@ -95,7 +97,8 @@ public partial class Program
         //Services
         builder.Services.AddScoped<ImageProccess>();
         builder.Services.AddScoped<PropertyImageService>();
-        builder.Services.AddScoped<PersonService>();
+        builder.Services.AddScoped<OwnerService>();
+        builder.Services.AddScoped<TenantService>();
         builder.Services.AddScoped<LocationService>();
         builder.Services.AddScoped<AddressService>();
         builder.Services.AddScoped<PropertyDeedService>();
@@ -134,8 +137,6 @@ public partial class Program
         .AddPolicy("AdminOnly", policy => policy.RequireRole(Roles.Admin))
         .AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
 
-        //builder.Services.AddHttpClient();
-        //builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
@@ -163,10 +164,11 @@ public partial class Program
 
         var app = builder.Build();
 
-        //Seed roles into the database
+        //Seed roles and create admin
         using (var scope = app.Services.CreateScope())
         {
             await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider).ConfigureAwait(false);
+            await IdentitySeeder.CreateAdmin(scope.ServiceProvider).ConfigureAwait(false);
         };
 
         if (app.Environment.IsDevelopment())

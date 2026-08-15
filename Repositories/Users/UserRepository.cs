@@ -6,9 +6,6 @@ namespace RealEstate.Repositories.Users;
 
 interface IUserRepository
 {
-    Task<ApplicationUser?> GetAsync(string userId);
-    Task<ApplicationUser?> GetByUserNameAsync(string userName);
-    Task<IdentityResult> RegisterAsync(ApplicationUser applicationUser, string password);
     Task<SignInResult> LoginAsync(string userName, string password);
     Task<IdentityResult> DeleteAsync(ApplicationUser applicationUser);
     Task<string> GenerateTokenToRecoverUserAsync(ApplicationUser applicationUser);
@@ -16,8 +13,6 @@ interface IUserRepository
     Task<IdentityResult> ChangePasswordAsync(ApplicationUser applicationUser, string currentPassword, string newPassword);
     Task<IdentityResult> EditUserProfileAsync(ApplicationUser applicationUser);
     Task<ApplicationUser?> FindByEmailAsync(string email);
-    Task<ApplicationUser?> FindByUserNameAsync(string userName);
-    Task<ApplicationUser?> FindByIDAsync(string userId);
     Task<bool> IsEmailConfirmedAsync(ApplicationUser applicationUser);
 }
 
@@ -27,25 +22,6 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-
-    public async Task<ApplicationUser?> GetAsync(string userId) =>
-         await _userManager
-             .Users
-             .AsNoTracking()
-             .Include(user => user.AgentImage)
-             .SingleOrDefaultAsync(user => user.Id == userId)
-             .ConfigureAwait(false);
-
-    public async Task<ApplicationUser?> GetByUserNameAsync(string userName) =>
-         await _userManager
-             .Users
-             .AsNoTracking()
-             .Include(user => user.AgentImage)
-             .SingleOrDefaultAsync(user => user.UserName == userName)
-             .ConfigureAwait(false);
-
-    public async Task<IdentityResult> RegisterAsync(ApplicationUser applicationUser, string password) =>
-         await _userManager.CreateAsync(applicationUser, password).ConfigureAwait(false);
 
     public async Task<SignInResult> LoginAsync(string userName, string password) =>
          await _signInManager.PasswordSignInAsync(
@@ -72,12 +48,6 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
 
     public async Task<ApplicationUser?> FindByEmailAsync(string email) =>
         await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-
-    public async Task<ApplicationUser?> FindByUserNameAsync(string userName) =>
-        await _userManager.FindByNameAsync(userName).ConfigureAwait(false);
-
-    public async Task<ApplicationUser?> FindByIDAsync(string userId) =>
-        await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
     public async Task<bool> IsEmailConfirmedAsync(ApplicationUser applicationUser) =>
         await _userManager.IsEmailConfirmedAsync(applicationUser).ConfigureAwait(false);

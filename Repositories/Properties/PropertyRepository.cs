@@ -23,9 +23,8 @@ public class PropertyRepository(AppDbContext context) : IPropertyRepository
          await _context
             .Properties
             .AsNoTracking()
-            .Include(property => property.Address)
             .Include(property => property.Location)
-            .Include(property => property.Owner)
+            .Include(property => property.Address)
             .Include(property => property.PropertyDeed)
             .Include(property => property.Leases)
             .Include(property => property.PropertyFeatures)
@@ -37,11 +36,10 @@ public class PropertyRepository(AppDbContext context) : IPropertyRepository
         await _context
             .Properties
             .AsNoTracking()
-            .Include(property => property.Address)
             .Include(property => property.Location)
-            .Include(property => property.Owner)
+            .Include(property => property.Address)
             .Include(property => property.PropertyDeed)
-      .Include(property => property.Leases)
+            .Include(property => property.Leases)
             .Include(property => property.PropertyFeatures)
             .Include(propertyImg => propertyImg.PropertyImages)
             .SingleOrDefaultAsync(property => property.Id == id)
@@ -71,7 +69,7 @@ public class PropertyRepository(AppDbContext context) : IPropertyRepository
         await _context.Properties.ExecuteDeleteAsync().ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
-   
+
 }
 
 

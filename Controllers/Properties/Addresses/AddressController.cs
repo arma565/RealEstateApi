@@ -56,8 +56,7 @@ public class AddressController(AddressService service, ILogger<AddressController
     {
         try
         {
-            if (propertyAddressDTO == null)
-                return BadRequest("Failed to retrieve parameter!");
+            ArgumentNullException.ThrowIfNull(propertyAddressDTO , "PropertyAddressDTO is null");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -66,10 +65,15 @@ public class AddressController(AddressService service, ILogger<AddressController
 
             return CreatedAtAction(nameof(Get), new { addressId = address.Id.ToString() }, address);
         }
+        catch (InvalidOperationException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, ex.Message);
+        }
         catch (ArgumentNullException ex)
         {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(400, "Required argument is missing!");
+            return BadRequest(ex.Message);
         }
         catch (UnauthorizedAccessException ex)
         {

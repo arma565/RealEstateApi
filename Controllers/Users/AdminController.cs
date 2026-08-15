@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RealEstate.DTOs.Users;
 using RealEstate.Entities.Users;
 using RealEstate.Services.Users;
 using RealEstate.Services.Validations;
@@ -20,10 +21,134 @@ public sealed class AdminController(
     ) : ControllerBase
 {
     private readonly AdminService _adminService = adminService;
-
     private readonly UserService _userService = userService;
-
     private readonly ILogger<AdminController> _logger = logger;
+
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers() => Ok(await _adminService.GetUsersListAsync().ConfigureAwait(false));
+
+    [HttpGet("{userName}")]
+    public async Task<ActionResult<ApplicationUser>> Get(string userName)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(userName))
+                return Unauthorized("User name can not be empty!");
+
+            var user = await _adminService.GetByUserNameAsync(userName).ConfigureAwait(false);
+
+            ArgumentNullException.ThrowIfNull(user);
+
+            return Ok(user);
+
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "Required argument is missing!");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+    }
+
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register([FromBody] RegisterAccountDTO userRegisterAccountDTO)
+    {
+        try
+        {
+            ArgumentNullException.ThrowIfNull(userRegisterAccountDTO);
+
+            if (!ModelState.IsValid)
+                return Unauthorized(ModelState);
+
+            var allUsers = await _adminService.GetUsersListAsync().ConfigureAwait(false);
+
+            if (allUsers.Any(u => u.UserName == userRegisterAccountDTO.UserName))
+                return Unauthorized("Username is already taken!");
+
+            if (allUsers.Any(u => u.Email == userRegisterAccountDTO.Email))
+                return Unauthorized("Email is already taken!");
+
+            var registerResult = await _adminService.RegisterAsync(userRegisterAccountDTO).ConfigureAwait(false);
+
+            if (!registerResult.Succeeded)
+                return Unauthorized(registerResult.Errors);
+            else
+                return Created();
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "Required argument is missing!");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+    }
+
+    [HttpDelete("delete")]
+    [Authorize(Policy = "AuthenticatedUser")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Delete([FromBody] LoginRequestDTO userLoginRequestDTO)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                return Unauthorized(ModelState);
+
+            ArgumentNullException.ThrowIfNull(userLoginRequestDTO);
+
+            var result = await _userService.LoginAsync(userLoginRequestDTO).ConfigureAwait(false);
+
+            if (!result.Succeeded)
+                return Unauthorized("Invalid username or password.");
+
+            var user = await _adminService.GetByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
+
+            ArgumentNullException.ThrowIfNull(user);
+
+            var isAdmin = await _adminService.IsAdmin(user).ConfigureAwait(false);
+
+            if (isAdmin)
+                return Unauthorized("This user is an admin!");
+
+            await _adminService.DeleteAsync(user.Id).ConfigureAwait(false);
+
+            return NoContent();
+
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "Required argument is missing!");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+    }
 
     [HttpPost("promote")]
     [Authorize(Policy = "AdminOnly")]
@@ -31,12 +156,12 @@ public sealed class AdminController(
     {
         try
         {
-            var user = await _userService.GetByUserNameAsync(userName).ConfigureAwait(false);
+            var user = await _adminService.GetByUserNameAsync(userName).ConfigureAwait(false);
 
             if (user == null)
                 return NotFound("User not found!");
 
-            var promoteResult = await _adminService.PromoteAsync(user).ConfigureAwait(false);
+            var promoteResult = await _adminService.PromoteAsync(userName).ConfigureAwait(false);
 
             if (!promoteResult.Succeeded)
                 return StatusCode(403, "Promote failed!");
@@ -59,10 +184,6 @@ public sealed class AdminController(
             return StatusCode(403, "Access denied!");
         }
     }
-
-    [HttpGet("users")]
-    [Authorize(Policy = "AdminOnly")]
-    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers() => Ok(await _adminService.GetUsersListAsync().ConfigureAwait(false));
 
     [HttpDelete("delete-users")]
     [Authorize(Policy = "AdminOnly")]
@@ -91,7 +212,7 @@ public sealed class AdminController(
         }
     }
 
-    [HttpDelete("delete/{userName}")]
+    [HttpDelete("delete/{id}")]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteAdmin(string id)
     {
@@ -99,7 +220,7 @@ public sealed class AdminController(
         {
             ArgumentNullException.ThrowIfNull(id);
 
-            var adminUser = await _userService.GetAsync(id).ConfigureAwait(false);
+            var adminUser = await _adminService.GetAsync(id).ConfigureAwait(false);
 
             if (adminUser == null)
                 return NotFound("Admin user not found!");
@@ -107,10 +228,7 @@ public sealed class AdminController(
             if (!await _adminService.IsAdmin(adminUser).ConfigureAwait(false))
                 return Unauthorized("This user is not an admin!");
 
-            var res = await _userService.DeleteAsync(id).ConfigureAwait(false);
-
-            if (!res.Succeeded)
-                return BadRequest(res.Errors);
+            await _adminService.DeleteAsync(id).ConfigureAwait(false);
 
             return NoContent();
         }

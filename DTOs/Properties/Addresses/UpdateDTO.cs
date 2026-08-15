@@ -21,7 +21,7 @@ public class UpdateDTO
     public string? Street { get; set; }
 
     [DefaultValue(0)]
-    public int PlatesNumber { get; set; }
+    public int PlateNumber { get; set; }
 
     [DefaultValue("")]
     public string? PostalCode { get; set; }

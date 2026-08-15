@@ -9,7 +9,7 @@ interface IApplicationUserImageService
 {
     Task<IEnumerable<ApplicationUserImage>> GetListAsync();
     Task<ApplicationUserImage> GetAsync(Guid id);
-    Task<DownloadPaths> GetPathAsync(Guid id);
+    Task<string> GetPathAsync(Guid id, bool isThumbnail);
     Task<ApplicationUserImage> AddAsync(CreateDTO createDTO, IFormFile image);
     Task UpdateAsync(Guid id, UpdateDTO updateDTO, IFormFile image);
     Task DeleteAsync(Guid id);
@@ -33,6 +33,14 @@ public class ApplicationUserImageService(ApplicationUserImageRepository
         ArgumentNullException.ThrowIfNull(applicationUserImage);
 
         return applicationUserImage;
+    }
+
+    public async Task<string> GetPathAsync(Guid id, bool isThumbnail)
+    {
+        var agentImage = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(agentImage);
+
+        return await _imageProccess.GetFullPathsAsync(isThumbnail ? agentImage.ThumbnailFilePath : agentImage.ImageFilePath).ConfigureAwait(false); ;
     }
 
     public async Task<ApplicationUserImage> AddAsync(CreateDTO createDTO, IFormFile image)
@@ -99,18 +107,5 @@ public class ApplicationUserImageService(ApplicationUserImageRepository
             }).ConfigureAwait(false);
         }
         await _repository.DeleteAllAsync().ConfigureAwait(false);
-    }
-
-    public async Task<DownloadPaths> GetPathAsync(Guid id)
-    {
-        var agentImage = await GetAsync(id).ConfigureAwait(false);
-
-        ArgumentNullException.ThrowIfNull(agentImage);
-
-        return await _imageProccess.GetPathsAsync(new ImagePaths
-        {
-            OriginalPath = agentImage.ImageFilePath,
-            ThumbnailPath = agentImage.ThumbnailFilePath
-        }).ConfigureAwait(false);
     }
 }

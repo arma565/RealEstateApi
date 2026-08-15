@@ -1,5 +1,6 @@
 ﻿using RealEstate.Enums.Properties;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Properties.Features;
 
@@ -16,6 +17,7 @@ public class PropertyFeature
     #region Relationships
 
     public Guid PropertyId { get; set; }
+    [JsonIgnore]
     public RealEstateProperty Property { get; set; } = null!;
 
     #endregion

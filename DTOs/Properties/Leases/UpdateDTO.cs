@@ -21,5 +21,9 @@ public class UpdateDTO
 
     public Guid PropertyId { get; set; }
 
+    public Guid OwnerId { get; set; }
+
+    public Guid TenantId { get; set; }
+
     #endregion
 }

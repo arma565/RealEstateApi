@@ -29,7 +29,7 @@ public class CreateDTO()
 
     [DefaultValue(PropertyCurrency.NotSet)]
     [Range(0, 4, ErrorMessage = "Out of range")]
-    public PropertyCurrency Currency { get; set; }
+    public PropertyCurrency PropertyCurrency { get; set; }
 
     [DefaultValue(0)]
     [Required(ErrorMessage = "YearBuilt is required!")]

@@ -2,6 +2,7 @@
 using RealEstate.Enums.Properties.Payments;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Properties.Leases.Payments;
 
@@ -22,6 +23,7 @@ public class Payment
     #region Relationships
 
     public Guid LeaseId { get; set; }
+    [JsonIgnore]
     public Lease Lease { get; set; } = null!;
 
     #endregion

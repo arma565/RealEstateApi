@@ -34,6 +34,8 @@ public class AddressService(AddressRepository repository) : IAddressService
 
         ArgumentNullException.ThrowIfNull(createDTO);
 
+        bool isUniquePlateNumber = !(await _repository.GetListAsync().ConfigureAwait(false)).Any(address =>  address.PlateNumber == createDTO.PlateNumber);
+
 
         return await _repository.AddAsync(new PropertyAddress
         {
@@ -42,7 +44,7 @@ public class AddressService(AddressRepository repository) : IAddressService
             City = createDTO.City,
             District = createDTO.District ?? "",
             Street = createDTO.Street,
-            PlatesNumber = createDTO.PlatesNumber,
+            PlateNumber = isUniquePlateNumber ? createDTO.PlateNumber : throw new InvalidOperationException("PlateNumber is already exist!"), 
             PostalCode = createDTO.PostalCode ?? "",
             PropertyId = createDTO.PropertyId
         }).ConfigureAwait(false);
@@ -61,7 +63,7 @@ public class AddressService(AddressRepository repository) : IAddressService
         existAddress.City = string.IsNullOrEmpty(updateDTO.City) ? existAddress.City : updateDTO.City;
         existAddress.District = string.IsNullOrEmpty(updateDTO.District) ? existAddress.District : updateDTO.District;
         existAddress.Street = string.IsNullOrEmpty(updateDTO.Street) ? existAddress.Street : updateDTO.Street;
-        existAddress.PlatesNumber = updateDTO.PlatesNumber.Equals(0) ? existAddress.PlatesNumber : updateDTO.PlatesNumber;
+        existAddress.PlateNumber = updateDTO.PlateNumber.Equals(0) ? existAddress.PlateNumber : updateDTO.PlateNumber;
         existAddress.PostalCode = string.IsNullOrEmpty(updateDTO.PostalCode) ? existAddress.PostalCode : updateDTO.PostalCode;
         existAddress.PropertyId = updateDTO.PropertyId != updateDTO.PropertyId ? updateDTO.PropertyId : existAddress.PropertyId;
 

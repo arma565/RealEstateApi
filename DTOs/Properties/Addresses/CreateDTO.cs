@@ -29,7 +29,7 @@ public class CreateDTO
     public string? PostalCode { get; set; }
 
     [DefaultValue(0)]
-    public int PlatesNumber { get; set; }
+    public int PlateNumber { get; set; }
 
     #region Relationships
 

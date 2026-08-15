@@ -41,7 +41,9 @@ public class LeaseService(LeaseRepository repository) : ILeaseService
             DepositAmount = createDTO.DepositAmount,
             EndTime = createDTO.EndTime,
             EndDate = createDTO.EndDate,
-            PropertyId = createDTO.PropertyId
+            PropertyId = createDTO.PropertyId,
+            OwnerId = createDTO.OwnerId,
+            TenantId = createDTO.TenantId
         }).ConfigureAwait(false); ;
     }
 
@@ -57,6 +59,8 @@ public class LeaseService(LeaseRepository repository) : ILeaseService
         lease.EndTime = updateDTO.EndTime !=  lease.EndTime ? updateDTO.EndTime : lease.EndTime; 
         lease.EndDate = updateDTO.EndDate !=  lease.EndDate ? updateDTO.EndDate : lease.EndDate; 
         lease.PropertyId = updateDTO.PropertyId != lease.PropertyId ? updateDTO.PropertyId : lease.PropertyId;
+        lease.OwnerId = updateDTO.OwnerId != lease.OwnerId ? updateDTO.OwnerId : lease.OwnerId;
+        lease.TenantId = updateDTO.TenantId != lease.TenantId ? updateDTO.TenantId : lease.TenantId;
 
         await _repository.UpdateAsync(lease).ConfigureAwait(false);
     }

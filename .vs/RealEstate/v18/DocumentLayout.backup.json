@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\controllers\\users\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:controllers\\users\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\controllers\\users\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:controllers\\users\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -51,14 +55,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "Data\\AppDbContext.cs",
-              "ViewState": "AgIAALEAAAAAAAAAAAAiwIEAAAAaAAAAAAAAAA==",
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\AdminController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Users\\AdminController.cs",
+              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\AdminController.cs",
+              "RelativeToolTip": "Controllers\\Users\\AdminController.cs",
+              "ViewState": "AgIAAG4AAAAAAAAAAAAuwBYAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-13T12:07:55.675Z",
+              "WhenOpened": "2026-08-15T12:21:00.041Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Users\\UserController.cs",
+              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\UserController.cs",
+              "RelativeToolTip": "Controllers\\Users\\UserController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAowEwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-15T12:10:22.747Z",
               "EditorCaption": ""
             }
           ]

@@ -17,7 +17,7 @@ namespace RealEstate.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -261,7 +261,7 @@ namespace RealEstate.Migrations
                     b.ToTable("AgentImages");
                 });
 
-            modelBuilder.Entity("RealEstate.Entities.Persons.Person", b =>
+            modelBuilder.Entity("RealEstate.Entities.Persons.Owners.Owner", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,7 +303,52 @@ namespace RealEstate.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Owners");
+                });
+
+            modelBuilder.Entity("RealEstate.Entities.Persons.Tenants.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BirthCertificateIssued")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("BirthCertificateNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Born")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("NationalId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("RealEstate.Entities.Properties.Addresses.Map.PropertyLocation", b =>
@@ -347,7 +392,7 @@ namespace RealEstate.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlatesNumber")
+                    b.Property<int>("PlateNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("PostalCode")
@@ -367,7 +412,7 @@ namespace RealEstate.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlatesNumber")
+                    b.HasIndex("PlateNumber")
                         .IsUnique();
 
                     b.HasIndex("PropertyId")
@@ -452,6 +497,9 @@ namespace RealEstate.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("PropertyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -465,6 +513,8 @@ namespace RealEstate.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("PropertyId");
 
@@ -800,17 +850,25 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("RealEstate.Entities.Properties.Leases.Lease", b =>
                 {
+                    b.HasOne("RealEstate.Entities.Persons.Owners.Owner", "Owner")
+                        .WithMany("Leases")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RealEstate.Entities.Properties.RealEstateProperty", "Property")
                         .WithMany("Leases")
                         .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("RealEstate.Entities.Persons.Person", "Tenant")
+                    b.HasOne("RealEstate.Entities.Persons.Tenants.Tenant", "Tenant")
                         .WithMany("Leases")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Owner");
 
                     b.Navigation("Property");
 
@@ -836,7 +894,7 @@ namespace RealEstate.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RealEstate.Entities.Persons.Person", "Owner")
+                    b.HasOne("RealEstate.Entities.Persons.Owners.Owner", "Owner")
                         .WithMany("RealEstateProperties")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -847,11 +905,16 @@ namespace RealEstate.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("RealEstate.Entities.Persons.Person", b =>
+            modelBuilder.Entity("RealEstate.Entities.Persons.Owners.Owner", b =>
                 {
                     b.Navigation("Leases");
 
                     b.Navigation("RealEstateProperties");
+                });
+
+            modelBuilder.Entity("RealEstate.Entities.Persons.Tenants.Tenant", b =>
+                {
+                    b.Navigation("Leases");
                 });
 
             modelBuilder.Entity("RealEstate.Entities.Properties.Documents.PropertyDeed", b =>

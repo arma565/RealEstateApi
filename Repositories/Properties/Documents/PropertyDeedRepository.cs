@@ -23,8 +23,7 @@ public class PropertyDeedRepository(AppDbContext context) : IDeedRepository
      await _context
         .PropertyDeeds
         .AsNoTracking()
-        .Include(deed => deed.PropertyDeedImage)
-        .Include(deed => deed.Property)
+        .Include(propertyDeed => propertyDeed.PropertyDeedImage)
         .ToListAsync()
         .ConfigureAwait(false);
 
@@ -32,8 +31,7 @@ public class PropertyDeedRepository(AppDbContext context) : IDeedRepository
     await _context
        .PropertyDeeds
        .AsNoTracking()
-       .Include(deed => deed.PropertyDeedImage)
-       .Include(deed => deed.Property)
+       .Include(propertyDeed => propertyDeed.PropertyDeedImage)
        .SingleOrDefaultAsync(deed => deed.Id == id)
        .ConfigureAwait(false);
 

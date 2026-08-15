@@ -1,6 +1,5 @@
 using RealEstate.Entities.Images.Properties;
-using RealEstate.Entities.Images.Supports;
-using RealEstate.Entities.Persons;
+using RealEstate.Entities.Persons.Owners;
 using RealEstate.Entities.Properties.Addresses;
 using RealEstate.Entities.Properties.Addresses.Map;
 using RealEstate.Entities.Properties.Documents;
@@ -9,6 +8,7 @@ using RealEstate.Entities.Properties.Leases;
 using RealEstate.Entities.Users;
 using RealEstate.Enums.Properties;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Properties;
 
@@ -42,7 +42,8 @@ public class RealEstateProperty()
     #region Relationships
 
     public Guid OwnerId { get; set; }
-    public Person Owner { get; set; } = null!;
+    [JsonIgnore]
+    public Owner Owner { get; set; } = null!;
 
     public PropertyLocation? Location { get; set; }
 
@@ -51,6 +52,7 @@ public class RealEstateProperty()
     public PropertyDeed? PropertyDeed { get; set; }
 
     public string? AgentId { get; set; }
+    [JsonIgnore]
     public ApplicationUser Agent { get; set; } = null!;
 
     public ICollection<Lease> Leases { get; } = [];

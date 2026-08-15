@@ -319,7 +319,7 @@
         }
       }
     },
-    "/ApplicationUserImage/download/{applicationUserImageId}": {
+    "/ApplicationUserImage/download/{applicationUserImageId}/{isThumbnail}": {
       "get": {
         "tags": [
           "ApplicationUserImage"
@@ -331,6 +331,14 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "isThumbnail",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -1187,6 +1195,189 @@
         }
       }
     },
+    "/Owner/get-list": {
+      "get": {
+        "tags": [
+          "Owner"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Owners.Owner"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Owners.Owner"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Owners.Owner"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Owner/get/{ownerId}": {
+      "get": {
+        "tags": [
+          "Owner"
+        ],
+        "parameters": [
+          {
+            "name": "ownerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Owners.Owner"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Owners.Owner"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Owners.Owner"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Owner/add": {
+      "post": {
+        "tags": [
+          "Owner"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Owner/update/{ownerId}": {
+      "put": {
+        "tags": [
+          "Owner"
+        ],
+        "parameters": [
+          {
+            "name": "ownerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Owner/delete/{ownerId}": {
+      "delete": {
+        "tags": [
+          "Owner"
+        ],
+        "parameters": [
+          {
+            "name": "ownerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Owner/delete-all": {
+      "delete": {
+        "tags": [
+          "Owner"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Payment/get-list": {
       "get": {
         "tags": [
@@ -1362,189 +1553,6 @@
       "delete": {
         "tags": [
           "Payment"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Person/get-list": {
-      "get": {
-        "tags": [
-          "Person"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Person/get/{personId}": {
-      "get": {
-        "tags": [
-          "Person"
-        ],
-        "parameters": [
-          {
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Person/add": {
-      "post": {
-        "tags": [
-          "Person"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Person/update/{personId}": {
-      "put": {
-        "tags": [
-          "Person"
-        ],
-        "parameters": [
-          {
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Person/delete/{personId}": {
-      "delete": {
-        "tags": [
-          "Person"
-        ],
-        "parameters": [
-          {
-            "name": "personId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Person/delete-all": {
-      "delete": {
-        "tags": [
-          "Person"
         ],
         "responses": {
           "200": {
@@ -1767,7 +1775,7 @@
         }
       }
     },
-    "/PropertyDeedImage/download/{propertyDeedImageId}": {
+    "/PropertyDeedImage/download/{propertyDeedImageId}/{isThumbnail}": {
       "get": {
         "tags": [
           "PropertyDeedImage"
@@ -1779,6 +1787,14 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "isThumbnail",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -1903,26 +1919,38 @@
         }
       }
     },
-    "/PropertyImage/upload": {
+    "/PropertyImage/upload/{propertyId}": {
       "post": {
         "tags": [
           "PropertyImage"
         ],
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Properties.CreateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Properties.CreateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Properties.CreateDTO"
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "image": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1934,7 +1962,7 @@
         }
       }
     },
-    "/PropertyImage/download/{propertyImageId}": {
+    "/PropertyImage/download/{propertyImageId}/{isThumbnail}": {
       "get": {
         "tags": [
           "PropertyImage"
@@ -1947,11 +1975,57 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "isThumbnail",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/PropertyImage/get-list": {
+      "get": {
+        "tags": [
+          "PropertyImage"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImage"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImage"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Images.Properties.PropertyImage"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -2284,7 +2358,7 @@
         }
       }
     },
-    "/SupportImage/download/{supportImageId}": {
+    "/SupportImage/download/{supportImageId}/{isThumbnail}": {
       "get": {
         "tags": [
           "SupportImage"
@@ -2296,6 +2370,14 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "isThumbnail",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -2412,6 +2494,189 @@
       "delete": {
         "tags": [
           "SupportImage"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Tenant/get-list": {
+      "get": {
+        "tags": [
+          "Tenant"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Tenants.Tenant"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Tenants.Tenant"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Persons.Tenants.Tenant"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Tenant/get/{tenantId}": {
+      "get": {
+        "tags": [
+          "Tenant"
+        ],
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Tenants.Tenant"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Tenants.Tenant"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Persons.Tenants.Tenant"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Tenant/add": {
+      "post": {
+        "tags": [
+          "Tenant"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.CreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Tenant/update/{tenantId}": {
+      "put": {
+        "tags": [
+          "Tenant"
+        ],
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Persons.UpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Tenant/delete/{tenantId}": {
+      "delete": {
+        "tags": [
+          "Tenant"
+        ],
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Tenant/delete-all": {
+      "delete": {
+        "tags": [
+          "Tenant"
         ],
         "responses": {
           "200": {
@@ -2749,38 +3014,6 @@
         },
         "additionalProperties": false
       },
-      "RealEstate.DTOs.Images.Properties.CreateDTO": {
-        "required": [
-          "imageFilePath",
-          "propertyId",
-          "thumbnailFilePath"
-        ],
-        "type": "object",
-        "properties": {
-          "imageFilePath": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "thumbnailFilePath": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "orderId": {
-            "type": "integer",
-            "format": "int32",
-            "default": ""
-          },
-          "isCoverImage": {
-            "type": "boolean",
-            "default": false
-          },
-          "propertyId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
       "RealEstate.DTOs.Images.Properties.UpdateDTO": {
         "type": "object",
         "properties": {
@@ -3053,7 +3286,7 @@
             "default": "",
             "nullable": true
           },
-          "platesNumber": {
+          "plateNumber": {
             "type": "integer",
             "format": "int32",
             "default": 0
@@ -3138,7 +3371,7 @@
             "default": "",
             "nullable": true
           },
-          "platesNumber": {
+          "plateNumber": {
             "type": "integer",
             "format": "int32",
             "default": 0
@@ -3183,7 +3416,7 @@
           "propertyStatus": {
             "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyStatus"
           },
-          "currency": {
+          "propertyCurrency": {
             "$ref": "#/components/schemas/RealEstate.Enums.Properties.PropertyCurrency"
           },
           "yearBuilt": {
@@ -3319,7 +3552,9 @@
           "endDate",
           "endTime",
           "monthlyRent",
-          "propertyId"
+          "ownerId",
+          "propertyId",
+          "tenantId"
         ],
         "type": "object",
         "properties": {
@@ -3344,6 +3579,14 @@
             "default": ""
           },
           "propertyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
             "type": "string",
             "format": "uuid"
           }
@@ -3420,6 +3663,14 @@
             "default": ""
           },
           "propertyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
             "type": "string",
             "format": "uuid"
           }
@@ -3680,7 +3931,7 @@
           },
           "acceptTerms": {
             "type": "boolean",
-            "default": false
+            "default": true
           }
         },
         "additionalProperties": false
@@ -3742,9 +3993,6 @@
           "propertyDeedId": {
             "type": "string",
             "format": "uuid"
-          },
-          "propertyDeed": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
           }
         },
         "additionalProperties": false
@@ -3778,9 +4026,6 @@
           "propertyId": {
             "type": "string",
             "format": "uuid"
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
           }
         },
         "additionalProperties": false
@@ -3807,9 +4052,6 @@
           "supportId": {
             "type": "string",
             "format": "uuid"
-          },
-          "support": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Supports.RealEstateSupport"
           }
         },
         "additionalProperties": false
@@ -3836,14 +4078,11 @@
           "agentId": {
             "type": "string",
             "nullable": true
-          },
-          "agent": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
           }
         },
         "additionalProperties": false
       },
-      "RealEstate.Entities.Persons.Person": {
+      "RealEstate.Entities.Persons.Owners.Owner": {
         "required": [
           "address",
           "birthCertificateIssued",
@@ -3916,6 +4155,71 @@
         },
         "additionalProperties": false
       },
+      "RealEstate.Entities.Persons.Tenants.Tenant": {
+        "required": [
+          "address",
+          "birthCertificateIssued",
+          "birthCertificateNumber",
+          "born",
+          "fatherName",
+          "firstName",
+          "lastName",
+          "nationalId",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fatherName": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthCertificateNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "birthCertificateIssued": {
+            "type": "string",
+            "nullable": true
+          },
+          "nationalId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "born": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "leases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RealEstate.Entities.Properties.Addresses.Map.PropertyLocation": {
         "required": [
           "latitude",
@@ -3938,9 +4242,6 @@
           "propertyId": {
             "type": "string",
             "format": "uuid"
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
           }
         },
         "additionalProperties": false
@@ -3950,7 +4251,7 @@
           "city",
           "country",
           "district",
-          "platesNumber",
+          "plateNumber",
           "postalCode",
           "province",
           "street"
@@ -3981,7 +4282,7 @@
             "type": "string",
             "nullable": true
           },
-          "platesNumber": {
+          "plateNumber": {
             "type": "integer",
             "format": "int32"
           },
@@ -3992,9 +4293,6 @@
           "propertyId": {
             "type": "string",
             "format": "uuid"
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
           }
         },
         "additionalProperties": false
@@ -4033,9 +4331,6 @@
           "propertyId": {
             "type": "string",
             "format": "uuid"
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
           }
         },
         "additionalProperties": false
@@ -4060,9 +4355,6 @@
           "propertyId": {
             "type": "string",
             "format": "uuid"
-          },
-          "property": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
           }
         },
         "additionalProperties": false
@@ -4108,15 +4400,13 @@
             "type": "string",
             "format": "uuid"
           },
-          "property": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.RealEstateProperty"
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
           },
           "tenantId": {
             "type": "string",
             "format": "uuid"
-          },
-          "tenant": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
           },
           "payments": {
             "type": "array",
@@ -4153,9 +4443,6 @@
           "leaseId": {
             "type": "string",
             "format": "uuid"
-          },
-          "lease": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Properties.Leases.Lease"
           }
         },
         "additionalProperties": false
@@ -4215,9 +4502,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "owner": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Persons.Person"
-          },
           "location": {
             "$ref": "#/components/schemas/RealEstate.Entities.Properties.Addresses.Map.PropertyLocation"
           },
@@ -4230,9 +4514,6 @@
           "agentId": {
             "type": "string",
             "nullable": true
-          },
-          "agent": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Users.ApplicationUser"
           },
           "leases": {
             "type": "array",
@@ -4492,10 +4773,10 @@
       "name": "Location"
     },
     {
-      "name": "Payment"
+      "name": "Owner"
     },
     {
-      "name": "Person"
+      "name": "Payment"
     },
     {
       "name": "Property"
@@ -4511,6 +4792,9 @@
     },
     {
       "name": "SupportImage"
+    },
+    {
+      "name": "Tenant"
     },
     {
       "name": "User"

@@ -27,5 +27,11 @@ public class CreateDTO
     [Required(ErrorMessage = "PropertyId is required!")]
     public required Guid PropertyId { get; set; }
 
+    [Required(ErrorMessage = "OwnerId is required!")]
+    public required Guid OwnerId { get; set; }
+
+    [Required(ErrorMessage = "TenantId is required!")]
+    public required Guid TenantId { get; set; }
+
     #endregion
 }

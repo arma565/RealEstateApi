@@ -9,7 +9,7 @@ interface ISupportImageService
 {
     Task<IEnumerable<SupportImage>> GetListAsync();
     Task<SupportImage> GetAsync(Guid id);
-    Task<DownloadPaths> GetPathAsync(Guid id);
+    Task<string> GetPathAsync(Guid id, bool isThumbnail);
     Task<SupportImage> AddAsync(CreateDTO createDTO, IFormFile image);
     Task UpdateAsync(Guid id, UpdateDTO updateDTO, IFormFile image);
     Task DeleteAsync(Guid id);
@@ -36,6 +36,13 @@ public class SupportImageService(SupportImageRepository
         return supportImage;
     }
 
+    public async Task<string> GetPathAsync(Guid id, bool isThumbnail)
+    {
+        var supportImage = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(supportImage);
+
+        return await _imageProccess.GetFullPathsAsync(isThumbnail ? supportImage.ThumbnailFilePath : supportImage.ImageFilePath).ConfigureAwait(false); ;
+    }
 
     public async Task<SupportImage> AddAsync(CreateDTO createDTO, IFormFile image)
     {
@@ -102,18 +109,5 @@ public class SupportImageService(SupportImageRepository
             }).ConfigureAwait(false);
         }
         await _repository.DeleteAllAsync().ConfigureAwait(false);
-    }
-
-    public async Task<DownloadPaths> GetPathAsync(Guid id)
-    {
-        var supportImage = await GetAsync(id).ConfigureAwait(false);
-
-        ArgumentNullException.ThrowIfNull(supportImage);
-
-        return await _imageProccess.GetPathsAsync(new ImagePaths
-        {
-            OriginalPath = supportImage.ImageFilePath,
-            ThumbnailPath = supportImage.ThumbnailFilePath
-        }).ConfigureAwait(false);
     }
 }

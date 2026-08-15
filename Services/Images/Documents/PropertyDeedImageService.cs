@@ -9,7 +9,7 @@ interface IPropertyDeedImageService
 {
     Task<IEnumerable<PropertyDeedImage>> GetListAsync();
     Task<PropertyDeedImage> GetAsync(Guid id);
-    Task<DownloadPaths> GetPathAsync(Guid id);
+    Task<string> GetPathAsync(Guid id, bool isThumbnail);
     Task<PropertyDeedImage> AddAsync(CreateDTO createDTO , IFormFile image);
     Task UpdateAsync(Guid id, UpdateDTO updateDTO, IFormFile image);
     Task DeleteAsync(Guid id);
@@ -32,6 +32,14 @@ public class PropertyDeedImageService(PropertyDeedImageRepository
         ArgumentNullException.ThrowIfNull(propertyDeed);
 
         return propertyDeed;
+    }
+
+    public async Task<string> GetPathAsync(Guid id, bool isThumbnail)
+    {
+        var propertyDeedImage = await GetAsync(id).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(propertyDeedImage);
+
+        return await _imageProccess.GetFullPathsAsync(isThumbnail ? propertyDeedImage.ThumbnailFilePath : propertyDeedImage.ImageFilePath).ConfigureAwait(false); ;
     }
 
     public async Task<PropertyDeedImage> AddAsync(CreateDTO createDTO, IFormFile image)
@@ -101,18 +109,5 @@ public class PropertyDeedImageService(PropertyDeedImageRepository
             }).ConfigureAwait(false);
         }
         await _repository.DeleteAllAsync().ConfigureAwait(false);
-    }
-
-    public async Task<DownloadPaths> GetPathAsync(Guid id)
-    {
-        var propertyDeedImage = await GetAsync(id).ConfigureAwait(false);
-
-        ArgumentNullException.ThrowIfNull(propertyDeedImage);
-
-        return await _imageProccess.GetPathsAsync(new ImagePaths
-        {
-            OriginalPath = propertyDeedImage.ImageFilePath,
-            ThumbnailPath = propertyDeedImage.ThumbnailFilePath
-        }).ConfigureAwait(false);
     }
 }

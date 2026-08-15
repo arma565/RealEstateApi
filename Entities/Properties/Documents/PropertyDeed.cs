@@ -1,6 +1,7 @@
 ﻿using RealEstate.Entities.Images.Documents;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Properties.Documents;
 
@@ -23,6 +24,7 @@ public class PropertyDeed
     public PropertyDeedImage? PropertyDeedImage { get; set; }
 
     public Guid PropertyId { get; set; }
+    [JsonIgnore]
     public RealEstateProperty Property { get; set; } = null!;
 
     #endregion

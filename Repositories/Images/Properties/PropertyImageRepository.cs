@@ -28,11 +28,11 @@ public class PropertyImageRepository(AppDbContext context) : IPropertyImageRepos
             .ConfigureAwait(false);
 
     public async Task<PropertyImage?> GetAsync(Guid id) =>
-    await _context
-    .PropertyImages
-    .AsNoTracking()
-    .SingleOrDefaultAsync(image => image.Id == id)
-    .ConfigureAwait(false);
+         await _context
+            .PropertyImages
+            .AsNoTracking()
+            .SingleOrDefaultAsync(image => image.Id == id)
+            .ConfigureAwait(false);
 
     public async Task<PropertyImage> AddAsync(PropertyImage propertyImage)
     {

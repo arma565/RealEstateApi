@@ -55,7 +55,7 @@ public class PropertyService(PropertyRepository repository) : IPropertyService
             PropertyType = createDTO.PropertyType,
             PropertyStatus = createDTO.PropertyStatus,
             Price = createDTO.Price,
-            PropertyCurrency = createDTO.Currency,
+            PropertyCurrency = createDTO.PropertyCurrency,
             YearBuilt = createDTO.YearBuilt,
             LandArea = createDTO.LandArea,
             BuildingArea = createDTO.BuildingArea,

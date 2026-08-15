@@ -28,7 +28,7 @@ public class RegisterAccountDTO
     [MinLength(8, ErrorMessage = "The password must be more than 8 characters!")]
     public required string RepeatPassword { get; set; } 
 
-    [DefaultValue(false)]
+    [DefaultValue(true)]
     [Required]
     [Range(typeof(bool), "true", "true", ErrorMessage = "You must accept the terms and conditions!")]
     public required bool AcceptTerms { get; set; }

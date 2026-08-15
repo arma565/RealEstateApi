@@ -59,8 +59,8 @@ public class PropertyDeedImageController(PropertyDeedImageService service, ILogg
         }
     }
 
-    [HttpGet("download/{propertyDeedImageId}")]
-    public async Task<IActionResult> Download(string propertyDeedImageId)
+    [HttpGet("download/{propertyDeedImageId}/{isThumbnail}")]
+    public async Task<IActionResult> Download(string propertyDeedImageId, bool isThumbnail)
     {
         try
         {
@@ -70,17 +70,17 @@ public class PropertyDeedImageController(PropertyDeedImageService service, ILogg
             if (!Guid.TryParse(propertyDeedImageId, out Guid id))
                 return BadRequest("propertyDeedImageId must be a valid GUID!");
 
-            var fullPath = await _service.GetPathAsync(id).ConfigureAwait(false);
+            var fullPath = await _service.GetPathAsync(id,isThumbnail).ConfigureAwait(false);
 
-            if (fullPath == null || fullPath.FullOriginalPath == null)
+            if (string.IsNullOrEmpty(fullPath))
                 return NotFound("Image not found!");
 
             var provider = new FileExtensionContentTypeProvider();
 
-            if (!provider.TryGetContentType(fullPath.FullOriginalPath, out var contentType))
+            if (!provider.TryGetContentType(fullPath, out var contentType))
                 contentType = "application/octet-stream";
 
-            return PhysicalFile(fullPath.FullOriginalPath, contentType, Path.GetFileName(fullPath.FullOriginalPath));
+            return PhysicalFile(fullPath, contentType, Path.GetFileName(fullPath));
         }
         catch (IOException ex)
         {

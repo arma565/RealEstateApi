@@ -64,7 +64,7 @@ public class DeedController(PropertyDeedService service, ILogger<DeedController>
 
            var propertyDeed = await _service.AddAsync(propertyDeedDTO).ConfigureAwait(false);
 
-            return CreatedAtAction(nameof(Get), new { id = propertyDeed.Id }, propertyDeed);
+            return CreatedAtAction(nameof(Get), new { propertyDeedId = propertyDeed.Id }, propertyDeed);
         }
         catch (ArgumentNullException ex)
         {

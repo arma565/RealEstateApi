@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.StaticFiles;
 using RealEstate.DTOs.Images.Properties;
 using RealEstate.Entities.Images.Properties;
+using RealEstate.Entities.Persons;
 using RealEstate.Services.Images.Properties;
 using RealEstate.Services.Validations;
 using System.Security;
@@ -17,18 +18,18 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
 
     private readonly ILogger<PropertyImageController> _logger = logger;
 
-    [HttpPost("upload")]
-    public async Task<IActionResult> Upload([FromBody] CreateDTO propertyImageDTO, [FromForm] IFormFile[] images)
+    [HttpPost("upload/{propertyId}")]
+    public async Task<IActionResult> Upload([FromRoute] Guid propertyId, IFormFile image)
     {
         try
         {
-            if (images == null || images.Length == 0)
-                return BadRequest("No images provided for upload.");
+            //if (string.IsNullOrWhiteSpace(propertyId))
+            //    return BadRequest("PropertyId is empty!");
 
-            foreach (var image in images)
-            {
-                await _service.AddAsync(propertyImageDTO, image).ConfigureAwait(false);
-            }
+            //if (!Guid.TryParse(propertyId, out Guid id))
+            //    return BadRequest("PropertyId must be a valid GUID!");
+
+            await _service.AddAsync(propertyId, image).ConfigureAwait(false);
 
             return Created();
         }
@@ -59,8 +60,8 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
         }
     }
 
-    [HttpGet("download/{propertyImageId}")]
-    public async Task<IActionResult> Download(string propertyImageId)
+    [HttpGet("download/{propertyImageId}/{isThumbnail}")]
+    public async Task<IActionResult> Download(string propertyImageId , bool isThumbnail)
     {
         try
         {
@@ -70,17 +71,17 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
             if (!Guid.TryParse(propertyImageId, out Guid id))
                 return BadRequest("PropertyImageId must be a valid GUID!");
 
-            var fullPath = await _service.GetPathAsync(id).ConfigureAwait(false);
+            var fullPath = await _service.GetPathAsync(id , isThumbnail).ConfigureAwait(false);
 
-            if (fullPath == null || fullPath.FullOriginalPath == null)
+            if (string.IsNullOrEmpty(fullPath))
                 return NotFound("Image not found!");
 
             var provider = new FileExtensionContentTypeProvider();
 
-            if (!provider.TryGetContentType(fullPath.FullOriginalPath, out var contentType))
+            if (!provider.TryGetContentType(fullPath, out var contentType))
                 contentType = "application/octet-stream";
 
-            return PhysicalFile(fullPath.FullOriginalPath, contentType, Path.GetFileName(fullPath.FullOriginalPath));
+            return PhysicalFile(fullPath, contentType, Path.GetFileName(fullPath));
         }
         catch (IOException ex)
         {
@@ -108,6 +109,9 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
             return StatusCode(403, "Access denied!");
         }
     }
+
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<PropertyImage>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{propertyImageId}")]
     public async Task<ActionResult<PropertyImage>> Get(string propertyImageId)

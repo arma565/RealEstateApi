@@ -1,4 +1,5 @@
 ﻿using RealEstate.Entities.Users;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Images.Users;
 
@@ -8,6 +9,7 @@ public class ApplicationUserImage : BaseImage
     #region Relationships
 
     public string AgentId { get; set; } = null!;
+    [JsonIgnore]
     public ApplicationUser Agent { get; set; } = null!;
 
     #endregion

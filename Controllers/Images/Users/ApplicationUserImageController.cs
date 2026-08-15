@@ -59,8 +59,8 @@ public class ApplicationUserImageController(ApplicationUserImageService service,
         }
     }
 
-    [HttpGet("download/{applicationUserImageId}")]
-    public async Task<IActionResult> Download(string applicationUserImageId)
+    [HttpGet("download/{applicationUserImageId}/{isThumbnail}")]
+    public async Task<IActionResult> Download(string applicationUserImageId, bool isThumbnail)
     {
         try
         {
@@ -70,17 +70,17 @@ public class ApplicationUserImageController(ApplicationUserImageService service,
             if (!Guid.TryParse(applicationUserImageId, out Guid id))
                 return BadRequest("ApplicationUserImageId must be a valid GUID!");
 
-            var fullPath = await _service.GetPathAsync(id).ConfigureAwait(false);
+            var fullPath = await _service.GetPathAsync(id,isThumbnail).ConfigureAwait(false);
 
-            if (fullPath == null || fullPath.FullOriginalPath == null)
+            if (string.IsNullOrEmpty(fullPath))
                 return NotFound("Image not found!");
 
             var provider = new FileExtensionContentTypeProvider();
 
-            if (!provider.TryGetContentType(fullPath.FullOriginalPath, out var contentType))
+            if (!provider.TryGetContentType(fullPath, out var contentType))
                 contentType = "application/octet-stream";
 
-            return PhysicalFile(fullPath.FullOriginalPath, contentType, Path.GetFileName(fullPath.FullOriginalPath));
+            return PhysicalFile(fullPath, contentType, Path.GetFileName(fullPath));
         }
         catch (IOException ex)
         {

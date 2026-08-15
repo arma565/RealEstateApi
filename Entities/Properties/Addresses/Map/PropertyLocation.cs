@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Properties.Addresses.Map;
 
@@ -15,6 +16,7 @@ public class PropertyLocation
     #region Relationships
     
     public Guid PropertyId { get; set; }
+    [JsonIgnore]
     public RealEstateProperty Property { get; set; } = null!;
 
     #endregion

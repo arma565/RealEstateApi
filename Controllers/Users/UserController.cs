@@ -30,93 +30,6 @@ public sealed class UserController(
 
     private readonly ILogger<UserController> _logger = logger;
 
-    [HttpGet("{userName}")]
-    public async Task<ActionResult<ApplicationUser>> Get(string userName)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(userName))
-                return Unauthorized("User name can not be empty!");
-
-            var user = await _userService.GetByUserNameAsync(userName).ConfigureAwait(false);
-
-            ArgumentNullException.ThrowIfNull(user);
-
-            return Ok(user);
-
-        }
-        catch (ArgumentNullException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(400, "Required argument is missing!");
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-        catch (SecurityException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-    }
-
-    [HttpPost("register")]
-    [AllowAnonymous]
-    public async Task<IActionResult> Register([FromBody] RegisterAccountDTO userRegisterAccountDTO)
-    {
-        try
-        {
-            bool isFirstUser = false;
-
-            ArgumentNullException.ThrowIfNull(userRegisterAccountDTO);
-
-            if (!ModelState.IsValid)
-                return Unauthorized(ModelState);
-
-            var allUsers = await _adminService.GetUsersListAsync().ConfigureAwait(false);
-
-            if (!allUsers.Any()) 
-                isFirstUser = true;
-            
-            if (allUsers.Any(u => u.UserName == userRegisterAccountDTO.UserName))
-                return Unauthorized("Username is already taken!");
-
-            if (allUsers.Any(u => u.Email == userRegisterAccountDTO.Email))
-                return Unauthorized("Email is already taken!");
-
-            var registerResult = await _userService.RegisterAsync(userRegisterAccountDTO).ConfigureAwait(false);
-
-            if (!registerResult.Succeeded)
-                return Unauthorized(registerResult.Errors);
-            else
-            {
-                if (isFirstUser) {
-                    var registeredUser = await _userService.GetByUserNameAsync(userRegisterAccountDTO.UserName).ConfigureAwait(false);
-                    ArgumentNullException.ThrowIfNull(registeredUser);
-                    await _adminService.PromoteAsync(registeredUser).ConfigureAwait(false);
-                }
-                return Created();
-            }
-        }
-        catch (ArgumentNullException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(400, "Required argument is missing!");
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-        catch (SecurityException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-    }
-
     [HttpPost("login")]
     [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
@@ -129,7 +42,7 @@ public sealed class UserController(
 
             ArgumentNullException.ThrowIfNull(userLoginRequestDTO);
 
-            var user = await _userService.GetByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
+            var user = await _adminService.GetByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
 
             ArgumentNullException.ThrowIfNull(user);
 
@@ -143,57 +56,6 @@ public sealed class UserController(
             }
 
             return Unauthorized("Username or password is not correct! please try again");
-
-        }
-        catch (ArgumentNullException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(400, "Required argument is missing!");
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-        catch (SecurityException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-    }
-
-    [HttpDelete("delete")]
-    [Authorize(Policy = "AuthenticatedUser")]
-    [AllowAnonymous]
-    public async Task<IActionResult> Delete([FromBody] LoginRequestDTO userLoginRequestDTO)
-    {
-        try
-        {
-            if (!ModelState.IsValid)
-                return Unauthorized(ModelState);
-
-            ArgumentNullException.ThrowIfNull(userLoginRequestDTO);
-
-            var result = await _userService.LoginAsync(userLoginRequestDTO).ConfigureAwait(false);
-
-            if (!result.Succeeded)
-                return Unauthorized("Invalid username or password.");
-
-            var user = await _userService.GetByUserNameAsync(userLoginRequestDTO.UserName).ConfigureAwait(false);
-
-            ArgumentNullException.ThrowIfNull(user);
-
-            var isAdmin = await _adminService.IsAdmin(user).ConfigureAwait(false);
-
-            if (isAdmin)
-                return Unauthorized("This user is an admin!");
-
-            var res = await _userService.DeleteAsync(user.Id).ConfigureAwait(false);
-
-            if (!res.Succeeded)
-                return BadRequest(res.Errors);
-
-            return NoContent();
 
         }
         catch (ArgumentNullException ex)

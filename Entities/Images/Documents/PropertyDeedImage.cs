@@ -1,4 +1,5 @@
 ﻿using RealEstate.Entities.Properties.Documents;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Images.Documents;
 
@@ -9,6 +10,7 @@ public class PropertyDeedImage : BaseImage
     #region Relationships
 
     public Guid PropertyDeedId { get; set; }
+    [JsonIgnore]
     public PropertyDeed PropertyDeed { get; set; } = null!;
     
     #endregion

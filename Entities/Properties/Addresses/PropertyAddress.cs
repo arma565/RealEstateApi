@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Entities.Properties.Addresses;
 
@@ -18,13 +19,14 @@ public class PropertyAddress
 
     public required string Street { get; set; }
 
-    public required int PlatesNumber { get; set; }
+    public required int PlateNumber { get; set; }
 
     public required string PostalCode { get; set; }
 
     #region Relationships
 
     public Guid PropertyId { get; set; }
+    [JsonIgnore]
     public RealEstateProperty Property { get; set; } = null!;
 
     #endregion

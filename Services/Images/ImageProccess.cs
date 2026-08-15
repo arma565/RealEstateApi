@@ -6,7 +6,7 @@ interface IImageProccess
 {
     Task<ImagePaths> SaveAsync(IFormFile image);
 
-    Task<DownloadPaths> GetPathsAsync(ImagePaths paths);
+    Task<string> GetFullPathsAsync(string path);
 
     Task DeleteFilesAsync(ImagePaths paths);
 }
@@ -26,7 +26,7 @@ public class ImageProccess( IWebHostEnvironment environment) : IImageProccess
 
         var originalFileName = await CreateImages(image, environment).ConfigureAwait(false);
 
-        string relativeFolderPath = Path.Combine("RealEstate", "Uploads");
+        string relativeFolderPath = Path.Combine("Uploads");
 
         var imagePaths = new ImagePaths
         {
@@ -37,18 +37,12 @@ public class ImageProccess( IWebHostEnvironment environment) : IImageProccess
         return imagePaths;
     }
 
-    public async Task<DownloadPaths> GetPathsAsync(ImagePaths paths)
+    public async Task<string> GetFullPathsAsync(string path)
     {
-        if (paths == null)
-            ArgumentNullException.ThrowIfNull(paths);
-        if (!File.Exists(paths.OriginalPath) || !File.Exists(paths.ThumbnailPath))
-            throw new FileNotFoundException("One or both image files not found.");
+        if (path == null)
+            ArgumentNullException.ThrowIfNull(path);
 
-        return new DownloadPaths
-        {
-            FullOriginalPath = Path.Combine(environment.ContentRootPath, paths.OriginalPath),
-            FullThumbnailPath = Path.Combine(environment.ContentRootPath, paths.ThumbnailPath)
-        };
+        return Path.Combine(environment.ContentRootPath, path);
     }
 
     public async Task DeleteFilesAsync(ImagePaths paths)
@@ -88,7 +82,7 @@ public class ImageProccess( IWebHostEnvironment environment) : IImageProccess
 
     private static async Task<string> CreateImages(IFormFile image , IWebHostEnvironment _environment) {
 
-        string originalFolderPath = Path.Combine(_environment.ContentRootPath, "RealEstate", "Uploads", "Images");
+        string originalFolderPath = Path.Combine(_environment.ContentRootPath, "Uploads", "Images");
 
         if (!Directory.Exists(originalFolderPath))
             Directory.CreateDirectory(originalFolderPath);
@@ -109,7 +103,7 @@ public class ImageProccess( IWebHostEnvironment environment) : IImageProccess
 
     private static async Task CreateThumbnail(string originalFileName , string originalFilePath , IWebHostEnvironment _environment) {
 
-        string thumbnailFolderPath = Path.Combine(_environment.ContentRootPath, "RealEstate", "Uploads", "Thumbnails");
+        string thumbnailFolderPath = Path.Combine(_environment.ContentRootPath, "Uploads", "Thumbnails");
 
         if (!Directory.Exists(thumbnailFolderPath))
             Directory.CreateDirectory(thumbnailFolderPath);

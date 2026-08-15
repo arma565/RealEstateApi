@@ -1,5 +1,3 @@
-using RealEstate.Entities.Properties;
-using RealEstate.Entities.Properties.Leases;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealEstate.Entities.Persons;
@@ -8,7 +6,7 @@ namespace RealEstate.Entities.Persons;
 public class Person()
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = new();
 
     public required string FirstName { get; set; }
 
@@ -27,13 +25,5 @@ public class Person()
     public required string Phone { get; set; }
 
     public required string Address { get; set; }
-
-    #region Relationships
-
-    public ICollection<Lease> Leases { get; } = [];
-
-    public ICollection<RealEstateProperty> RealEstateProperties { get; } = [];
-
-    #endregion
 }
 

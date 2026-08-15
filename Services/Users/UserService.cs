@@ -7,11 +7,7 @@ namespace RealEstate.Services.Users;
 
 interface IUserService
 {
-    Task<ApplicationUser> GetAsync(string id);
-    Task<ApplicationUser> GetByUserNameAsync(string userName);
-    Task<IdentityResult> RegisterAsync(RegisterAccountDTO userRegisterAccountDTO);
     Task<SignInResult> LoginAsync(LoginRequestDTO userRequest);
-    Task<IdentityResult> DeleteAsync(string id);
     Task<string> GenerateTokenToRecoverUserAsync(string email);
     Task<IdentityResult> ResetPasswordAsync(string email, string token, string newPassword);
     Task<IdentityResult> ChangePasswordAsync(string userName, string currentPassword, string newPassword);
@@ -20,46 +16,13 @@ interface IUserService
 }
 
 #pragma warning disable CA1515
-public class UserService(UserRepository repository) : IUserService
+public class UserService(UserRepository repository , AdminService adminService) : IUserService
 {
     private readonly UserRepository _repository = repository;
-
-    public async Task<ApplicationUser> GetAsync(string id)
-    {
-        var applicationUser = await _repository.GetAsync(id).ConfigureAwait(false);
-        ArgumentNullException.ThrowIfNull(applicationUser);
-        return applicationUser;
-    }
-
-    public async Task<ApplicationUser> GetByUserNameAsync(string userName)
-    {
-        var applicationUser = await _repository.GetByUserNameAsync(userName).ConfigureAwait(false);
-        ArgumentNullException.ThrowIfNull(applicationUser);
-        return applicationUser;
-    }
-
-    public async Task<IdentityResult> RegisterAsync(RegisterAccountDTO userRegisterAccountDTO)
-    {
-        ArgumentNullException.ThrowIfNull(userRegisterAccountDTO);
-
-        return await _repository.RegisterAsync(new ApplicationUser
-        {
-            UserName = userRegisterAccountDTO.UserName,
-            Email = userRegisterAccountDTO.Email,
-            AcceptTerms = userRegisterAccountDTO.AcceptTerms
-        }, userRegisterAccountDTO.Password).ConfigureAwait(false);
-    }
+    private readonly AdminService _adminService = adminService;
 
     public async Task<SignInResult> LoginAsync(LoginRequestDTO userRequest) =>
          userRequest is null ? SignInResult.Failed : await _repository.LoginAsync(userRequest.UserName, userRequest.Password).ConfigureAwait(false);
-
-    public async Task<IdentityResult> DeleteAsync(string id)
-    {
-        var user = await _repository.GetAsync(id).ConfigureAwait(false);
-        ArgumentNullException.ThrowIfNull(user);
-
-        return await _repository.DeleteAsync(user).ConfigureAwait(false);
-    }
 
     public async Task<string> GenerateTokenToRecoverUserAsync(string email)
     {
@@ -82,7 +45,7 @@ public class UserService(UserRepository repository) : IUserService
     public async Task<IdentityResult> ChangePasswordAsync(string userName, string currentPassword, string newPassword)
     {
 
-        var user = await _repository.GetByUserNameAsync(userName).ConfigureAwait(false);
+        var user = await _adminService.GetByUserNameAsync(userName).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(user);
 
         return await _repository.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
@@ -91,7 +54,7 @@ public class UserService(UserRepository repository) : IUserService
     public async Task<IdentityResult> EditUserProfileAsync(string id, EditProfileDTO editProfileDTO)
     {
 
-        var user = await _repository.GetAsync(id).ConfigureAwait(false);
+        var user = await _adminService.GetAsync(id).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(user);
 
         ArgumentNullException.ThrowIfNull(editProfileDTO);
