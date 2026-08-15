@@ -91,7 +91,6 @@ public partial class Program
         builder.Services.AddScoped<LeaseRepository>();
         builder.Services.AddScoped<PropertyRepository>();
         builder.Services.AddScoped<SupportRepository>();
-        builder.Services.AddScoped<AdminRepository>();
         builder.Services.AddScoped<UserRepository>();
 
         //Services
@@ -107,7 +106,6 @@ public partial class Program
         builder.Services.AddScoped<LeaseService>();
         builder.Services.AddScoped<PropertyService>();
         builder.Services.AddScoped<SupportService>();
-        builder.Services.AddScoped<AdminService>();
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<EmailValidationService>();
         builder.Services.AddScoped<PasswordValidationService>();
@@ -134,7 +132,8 @@ public partial class Program
             });
 
         builder.Services.AddAuthorizationBuilder()
-        .AddPolicy("AdminOnly", policy => policy.RequireRole(Roles.Admin))
+        .AddPolicy("ManagerOnly", policy => policy.RequireRole(Roles.Manager))
+        .AddPolicy("AdminOrManager", policy => policy.RequireRole(Roles.Admin , Roles.Manager))
         .AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
 
         builder.Services.AddEndpointsApiExplorer();
@@ -168,7 +167,7 @@ public partial class Program
         using (var scope = app.Services.CreateScope())
         {
             await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider).ConfigureAwait(false);
-            await IdentitySeeder.CreateAdmin(scope.ServiceProvider).ConfigureAwait(false);
+            await IdentitySeeder.CreateManager(scope.ServiceProvider).ConfigureAwait(false);
         };
 
         if (app.Environment.IsDevelopment())

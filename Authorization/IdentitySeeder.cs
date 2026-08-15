@@ -12,6 +12,7 @@ public static class IdentitySeeder
 
         string[] roles =
         [
+        Roles.Manager,
         Roles.Admin,
         Roles.Agent
         ];
@@ -26,25 +27,26 @@ public static class IdentitySeeder
         }
     }
 
-    public static async Task CreateAdmin(IServiceProvider serviceProvider) {
+    public static async Task CreateManager(IServiceProvider serviceProvider)
+    {
 
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        // Check if admin user already exists
-        var adminUser = await userManager.FindByNameAsync("Admin").ConfigureAwait(false);
+        // Check if manager user already exists
+        var managerUser = await userManager.FindByNameAsync("Manager").ConfigureAwait(false);
 
-        if (adminUser == null)
+        if (managerUser == null)
         {
-            adminUser = new ApplicationUser
+            managerUser = new ApplicationUser
             {
-                UserName = "Admin",
-                Email = "admin@example.com",
+                UserName = "Manager",
+                Email = "manager@manager.com",
                 AcceptTerms = true
             };
 
             var userResult = await userManager.CreateAsync(
-                adminUser,
-                "Admin@123").ConfigureAwait(false);
+                managerUser,
+                "Manager@123").ConfigureAwait(false);
 
             if (!userResult.Succeeded)
             {
@@ -53,12 +55,12 @@ public static class IdentitySeeder
             }
         }
 
-        // Make sure user is in Admin role
-        if (!await userManager.IsInRoleAsync(adminUser, Roles.Admin).ConfigureAwait(false))
+        // Make sure user is in Manager role
+        if (!await userManager.IsInRoleAsync(managerUser, Roles.Manager).ConfigureAwait(false))
         {
             var roleResult = await userManager.AddToRoleAsync(
-                adminUser,
-                Roles.Admin).ConfigureAwait(false);
+                managerUser,
+                Roles.Manager).ConfigureAwait(false);
 
             if (!roleResult.Succeeded)
             {
