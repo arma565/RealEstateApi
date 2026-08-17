@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.Authorization;
 using RealEstate.Entities.Users;
+using RealEstate.Enums.Users.Authentications;
 
 namespace RealEstate.Repositories.Users;
 

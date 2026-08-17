@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RealEstate.Authentication;
 using RealEstate.DTOs.Users;
 using RealEstate.Entities.Users;
 using RealEstate.Repositories.Users;
+using RealEstate.Services.Users.Authentication;
 
 namespace RealEstate.Services.Users;
 
@@ -75,7 +75,7 @@ public class UserService(UserRepository repository, TokenService tokenService) :
             return IdentityResult.Failed();
     }
 
-    public async Task<string> LoginAsync(LoginRequestDTO userRequest)
+    public async Task<TokenResponse> LoginAsync(LoginRequestDTO userRequest)
     {
 
         ArgumentNullException.ThrowIfNull(userRequest);
@@ -84,10 +84,7 @@ public class UserService(UserRepository repository, TokenService tokenService) :
         if (!result.Succeeded)
             throw new InvalidOperationException("Sign in failed!");
 
-        var user = await GetByUserNameAsync(userRequest.UserName).ConfigureAwait(false);
-        ArgumentNullException.ThrowIfNull(user);
-
-        return await _tokenService.CreateAccessTokenAsync(user).ConfigureAwait(false);
+        return await _tokenService.CreateAccessTokenAsync(userRequest.UserName).ConfigureAwait(false);
     }
 
     public async Task<string> GenerateTokenAsync(string email)

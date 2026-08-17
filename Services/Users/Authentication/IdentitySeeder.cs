@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RealEstate.Entities.Users;
+using RealEstate.Enums.Users.Authentications;
 
-namespace RealEstate.Authorization;
+namespace RealEstate.Services.Users.Authentication;
 
 #pragma warning disable CA1515
 public static class IdentitySeeder
@@ -12,9 +13,9 @@ public static class IdentitySeeder
 
         string[] roles =
         [
-        Roles.Manager,
-        Roles.Admin,
-        Roles.Agent
+        Roles.Manager.ToString(),
+        Roles.Admin.ToString(),
+        Roles.Agent.ToString()
         ];
 
         foreach (var role in roles)
@@ -56,11 +57,11 @@ public static class IdentitySeeder
         }
 
         // Make sure user is in Manager role
-        if (!await userManager.IsInRoleAsync(managerUser, Roles.Manager).ConfigureAwait(false))
+        if (!await userManager.IsInRoleAsync(managerUser, Roles.Manager.ToString()).ConfigureAwait(false))
         {
             var roleResult = await userManager.AddToRoleAsync(
                 managerUser,
-                Roles.Manager).ConfigureAwait(false);
+                Roles.Manager.ToString()).ConfigureAwait(false);
 
             if (!roleResult.Succeeded)
             {

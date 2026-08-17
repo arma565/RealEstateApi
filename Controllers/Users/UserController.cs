@@ -5,6 +5,7 @@ using RealEstate.Authentication;
 using RealEstate.DTOs.Users;
 using RealEstate.Entities.Users;
 using RealEstate.Services.Users;
+using RealEstate.Services.Users.Authentication;
 using RealEstate.Services.Validations;
 using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -27,7 +28,7 @@ public sealed class UserController(
 
     [HttpGet("get-list")]
     [Authorize(Policy = "AdminOrManager")]
-    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers() => Ok(await _userService.GetUsersListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAll() => Ok(await _userService.GetUsersListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{userName}")]
     public async Task<ActionResult<ApplicationUser>> Get(string userName)
@@ -115,7 +116,7 @@ public sealed class UserController(
         }
         catch (InvalidOperationException ex) {
             LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(400, $"{ex.Message}: Username or password is not correct! please try again");
+            return StatusCode(400, ex.Message);
         }
         catch (ArgumentNullException ex)
         {
@@ -132,6 +133,33 @@ public sealed class UserController(
             LogMessages.UnexpectedError(_logger, ex);
             return StatusCode(403, "Access denied!");
         }
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh(RefreshTokenRequest request)
+    {
+        var tokenHash = TokenService.HashRefreshToken(request.RefreshToken);
+
+        var refreshToken = await _context.RefreshTokens
+            .Include(x => x.User)
+            .SingleOrDefaultAsync(x => x.TokenHash == tokenHash);
+
+        if (refreshToken is null)
+            return Unauthorized();
+
+        if (refreshToken.IsRevoked)
+            return Unauthorized();
+
+        if (refreshToken.ExpiresAt <= DateTime.UtcNow)
+            return Unauthorized();
+
+        var accessToken =
+            await _tokenService.CreateAccessTokenAsync(refreshToken.User);
+
+        return Ok(new
+        {
+            accessToken
+        });
     }
 
     [HttpPost("reset-password")]
@@ -277,6 +305,68 @@ public sealed class UserController(
         }
     }
 
+    [HttpPost("promote/{userName}")]
+    [Authorize(Policy = "ManagerOnly")]
+    [Authorize(Policy = "AuthenticatedUser")]
+    public async Task<IActionResult> PromoteUser(string userName)
+    {
+        try
+        {
+            var promoteResult = await _userService.PromoteAsync(userName).ConfigureAwait(false);
+
+            if (!promoteResult.Succeeded)
+                return StatusCode(400, "Promote failed!");
+
+            return Ok("User is admin now");
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "Required argument is missing!");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+    }
+
+    [HttpPost("demote/{userName}")]
+    [Authorize(Policy = "ManagerOnly")]
+    [Authorize(Policy = "AuthenticatedUser")]
+    public async Task<IActionResult> DemoteUser(string userName)
+    {
+        try
+        {
+            var demoteResult = await _userService.DemoteAsync(userName).ConfigureAwait(false);
+
+            if (!demoteResult.Succeeded)
+                return StatusCode(400, "Demote failed!");
+
+            return Ok("User is agent now");
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "Required argument is missing!");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+    }
+
     [HttpDelete("delete/{id}")]
     [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
@@ -303,34 +393,6 @@ public sealed class UserController(
         {
             LogMessages.UnexpectedError(_logger, ex);
             return Forbid("Access denied!");
-        }
-        catch (SecurityException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-    }
-
-    [HttpDelete("delete-users")]
-    [Authorize(Policy = "AdminOrManager")]
-    [Authorize(Policy = "AuthenticatedUser")]
-    public async Task<IActionResult> DeleteUsers()
-    {
-
-        try
-        {
-            await _userService.DeleteUsersAsync().ConfigureAwait(false);
-            return Ok("Users has been deleted");
-        }
-        catch (ArgumentNullException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(400, "Required argument is missing!");
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
         }
         catch (SecurityException ex)
         {
@@ -380,51 +442,16 @@ public sealed class UserController(
         }
     }
 
-
-    [HttpPost("promote/{userName}")]
-    [Authorize(Policy = "ManagerOnly")]
+    [HttpDelete("delete-users")]
+    [Authorize(Policy = "AdminOrManager")]
     [Authorize(Policy = "AuthenticatedUser")]
-    public async Task<IActionResult> PromoteUser(string userName)
+    public async Task<IActionResult> DeleteUsers()
     {
+
         try
         {
-            var promoteResult = await _userService.PromoteAsync(userName).ConfigureAwait(false);
-
-            if (!promoteResult.Succeeded)
-                return StatusCode(400,"Promote failed!");
-
-            return Ok("User is admin now");
-        }
-        catch (ArgumentNullException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(400, "Required argument is missing!");
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-        catch (SecurityException ex)
-        {
-            LogMessages.UnexpectedError(_logger, ex);
-            return StatusCode(403, "Access denied!");
-        }
-    }
-
-    [HttpPost("demote/{userName}")]
-    [Authorize(Policy = "ManagerOnly")]
-    [Authorize(Policy = "AuthenticatedUser")]
-    public async Task<IActionResult> DemoteUser(string userName)
-    {
-        try
-        {
-            var demoteResult = await _userService.DemoteAsync(userName).ConfigureAwait(false);
-
-            if (!demoteResult.Succeeded)
-                return StatusCode(400, "Demote failed!");
-
-            return Ok("User is agent now");
+            await _userService.DeleteUsersAsync().ConfigureAwait(false);
+            return Ok("Users has been deleted");
         }
         catch (ArgumentNullException ex)
         {

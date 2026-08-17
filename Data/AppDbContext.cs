@@ -16,6 +16,7 @@ using RealEstate.Entities.Properties.Leases;
 using RealEstate.Entities.Properties.Leases.Payments;
 using RealEstate.Entities.Supports;
 using RealEstate.Entities.Users;
+using RealEstate.Entities.Users.Authentications;
 using RealEstate.Enums.Properties;
 using RealEstate.Enums.Properties.Payments;
 
@@ -51,6 +52,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 	public required DbSet<RealEstateSupport> Supports { get; set; }
 
     public required DbSet<ApplicationUserImage> AgentImages { get; set; }
+
+	public required DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
 	{
