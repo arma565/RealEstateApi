@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using RealEstate.Data;
+using RealEstate.Data.Authentication;
 using RealEstate.Entities.Users;
 using RealEstate.Entities.Users.Authentications;
 using RealEstate.Enums.Users.Authentications;
@@ -22,6 +23,7 @@ using RealEstate.Repositories.Properties.Leases.Payments;
 using RealEstate.Repositories.Supports;
 using RealEstate.Repositories.Tenants;
 using RealEstate.Repositories.Users;
+using RealEstate.Repositories.Users.Authentications;
 using RealEstate.Services.Images;
 using RealEstate.Services.Images.Properties;
 using RealEstate.Services.Persons;
@@ -34,7 +36,7 @@ using RealEstate.Services.Properties.Leases;
 using RealEstate.Services.Properties.Leases.Payments;
 using RealEstate.Services.Supports;
 using RealEstate.Services.Users;
-using RealEstate.Services.Users.Authentication;
+using RealEstate.Services.Users.Authentications;
 using RealEstate.Validations;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -92,6 +94,7 @@ public partial class Program
         builder.Services.AddScoped<LeaseRepository>();
         builder.Services.AddScoped<PropertyRepository>();
         builder.Services.AddScoped<SupportRepository>();
+        builder.Services.AddScoped<TokenRepository>();
         builder.Services.AddScoped<UserRepository>();
 
         //Services
@@ -107,15 +110,18 @@ public partial class Program
         builder.Services.AddScoped<LeaseService>();
         builder.Services.AddScoped<PropertyService>();
         builder.Services.AddScoped<SupportService>();
+        builder.Services.AddScoped<TokenService>();
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<EmailValidationService>();
         builder.Services.AddScoped<PasswordValidationService>();
 
-        //Authentication and Authorization Services
-        builder.Services.AddScoped<TokenService>();
+        //Authentication and Authorization
         builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
             {
                 var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 
@@ -133,8 +139,8 @@ public partial class Program
             });
 
         builder.Services.AddAuthorizationBuilder()
-        .AddPolicy("ManagerOnly", policy => policy.RequireRole(Roles.Manager))
-        .AddPolicy("AdminOrManager", policy => policy.RequireRole(Roles.Admin , Roles.Manager))
+        .AddPolicy("ManagerOnly", policy => policy.RequireRole(Roles.Manager.ToString()))
+        .AddPolicy("AdminOrManager", policy => policy.RequireRole(Roles.Admin.ToString(), Roles.Manager.ToString()))
         .AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
 
         builder.Services.AddEndpointsApiExplorer();
@@ -169,7 +175,8 @@ public partial class Program
         {
             await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider).ConfigureAwait(false);
             await IdentitySeeder.CreateManager(scope.ServiceProvider).ConfigureAwait(false);
-        };
+        }
+        ;
 
         if (app.Environment.IsDevelopment())
         {

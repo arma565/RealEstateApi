@@ -3,12 +3,19 @@
   "WorkspaceRootPath": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\controllers\\users\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:controllers\\users\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\services\\users\\authentications\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:services\\users\\authentications\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\services\\users\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:services\\users\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|m:\\applications\\webprogramming\\netcore\\minimalapiprojects\\realestate\\controllers\\users\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{097447ED-5291-4D82-AD9E-30934F459CCA}|RealEstate.csproj|solutionrelative:controllers\\users\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/EstateDB/True/SqlTable/dbo.RefreshTokens.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,14 +30,50 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Users\\UserController.cs",
+              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\UserController.cs",
+              "RelativeToolTip": "Controllers\\Users\\UserController.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAuwI4AAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-18T17:57:40.136Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "dbo.RefreshTokens [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/EstateDB/True/SqlTable/dbo.RefreshTokens.sql",
+              "ToolTip": "dbo.RefreshTokens [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-08-18T17:53:43.883Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "UserService.cs",
               "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Users\\UserService.cs",
               "RelativeDocumentMoniker": "Services\\Users\\UserService.cs",
               "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Users\\UserService.cs",
               "RelativeToolTip": "Services\\Users\\UserService.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAADgv00AAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAuwFgAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-17T20:31:16.304Z",
+              "WhenOpened": "2026-08-18T17:38:07.487Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Users\\Authentications\\TokenService.cs",
+              "RelativeDocumentMoniker": "Services\\Users\\Authentications\\TokenService.cs",
+              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Services\\Users\\Authentications\\TokenService.cs",
+              "RelativeToolTip": "Services\\Users\\Authentications\\TokenService.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAwC8AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-18T17:39:06.02Z",
               "EditorCaption": ""
             },
             {
@@ -64,19 +107,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\UserController.cs",
-              "RelativeDocumentMoniker": "Controllers\\Users\\UserController.cs",
-              "ToolTip": "M:\\Applications\\WebProgramming\\NetCore\\MinimalApiProjects\\RealEstate\\Controllers\\Users\\UserController.cs",
-              "RelativeToolTip": "Controllers\\Users\\UserController.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAQwHEAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-17T20:31:07.209Z",
-              "EditorCaption": ""
             }
           ]
         }

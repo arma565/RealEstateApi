@@ -1712,7 +1712,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "GetUsers",
+    "Method": "GetAll",
     "RelativePath": "User/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1783,6 +1783,22 @@
       {
         "Name": "userName",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Users.UserController",
+    "Method": "Refresh",
+    "RelativePath": "User/refresh",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "RealEstate.DTOs.Users.RefreshTokenRequest",
         "IsRequired": true
       }
     ],

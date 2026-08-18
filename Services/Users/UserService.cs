@@ -2,7 +2,7 @@
 using RealEstate.DTOs.Users;
 using RealEstate.Entities.Users;
 using RealEstate.Repositories.Users;
-using RealEstate.Services.Users.Authentication;
+using RealEstate.Services.Users.Authentications;
 
 namespace RealEstate.Services.Users;
 
@@ -12,8 +12,7 @@ interface IUserService
     Task<ApplicationUser> GetAsync(string id);
     Task<ApplicationUser> GetByUserNameAsync(string userName);
     Task<IdentityResult> RegisterAsync(RegisterAccountDTO userRegisterAccountDTO);
-    Task<string> LoginAsync(LoginRequestDTO userRequest);
-    Task<string> GenerateTokenAsync(string email);
+    Task<TokenResponse> LoginAsync(LoginRequestDTO userRequest);
     Task<IdentityResult> ResetPasswordAsync(string email, string token, string newPassword);
     Task<IdentityResult> ChangePasswordAsync(string userName, string currentPassword, string newPassword);
     Task<IdentityResult> EditUserProfileAsync(string id, EditProfileDTO editProfileDTO);
@@ -77,23 +76,16 @@ public class UserService(UserRepository repository, TokenService tokenService) :
 
     public async Task<TokenResponse> LoginAsync(LoginRequestDTO userRequest)
     {
-
         ArgumentNullException.ThrowIfNull(userRequest);
         var result = await _repository.LoginAsync(userRequest.UserName, userRequest.Password).ConfigureAwait(false);
 
         if (!result.Succeeded)
             throw new InvalidOperationException("Sign in failed!");
 
-        return await _tokenService.CreateAccessTokenAsync(userRequest.UserName).ConfigureAwait(false);
-    }
-
-    public async Task<string> GenerateTokenAsync(string email)
-    {
-
-        var user = await _repository.FindByEmailAsync(email).ConfigureAwait(false);
+        var user = await _repository.GetByUserNameAsync(userRequest.UserName).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(user);
 
-        return await _repository.GenerateTokenAsync(user).ConfigureAwait(false);
+        return await _tokenService.CreateTokensAsync(user).ConfigureAwait(false) ;
     }
 
     public async Task<IdentityResult> ResetPasswordAsync(string email, string token, string newPassword)
@@ -181,6 +173,4 @@ public class UserService(UserRepository repository, TokenService tokenService) :
 
         await _repository.AssignAsync(user).ConfigureAwait(false);
     }
-               
-    
 }

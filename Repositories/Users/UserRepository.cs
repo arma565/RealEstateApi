@@ -12,7 +12,6 @@ interface IUserRepository
     Task<ApplicationUser?> GetByUserNameAsync(string userName);
     Task<IdentityResult> RegisterAsync(ApplicationUser applicationUser, string password);
     Task<SignInResult> LoginAsync(string userName, string password);
-    Task<string> GenerateTokenAsync(ApplicationUser applicationUser);
     Task<IdentityResult> ResetPasswordAsync(ApplicationUser applicationUser, string token, string newPassword);
     Task<IdentityResult> ChangePasswordAsync(ApplicationUser applicationUser, string currentPassword, string newPassword);
     Task<IdentityResult> EditUserProfileAsync(ApplicationUser applicationUser);
@@ -23,6 +22,7 @@ interface IUserRepository
     Task<bool> IsAdmin(ApplicationUser user);
     Task<bool> IsManager(ApplicationUser user);
     Task<ApplicationUser?> FindByEmailAsync(string email);
+    Task<ApplicationUser?> FindByUsernameAsync(string userName);
     Task<bool> IsEmailConfirmedAsync(ApplicationUser applicationUser);
 
 }
@@ -41,6 +41,7 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
              .AsNoTracking()
              .Include(user => user.AgentImage)
              .Include(user => user.RealEstateProperties)
+             .Include(user => user.RefreshToken)
              .ToListAsync().ConfigureAwait(false);
 
     public async Task<ApplicationUser?> GetAsync(string userId) =>
@@ -49,6 +50,7 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
              .AsNoTracking()
              .Include(user => user.AgentImage)
              .Include(user => user.RealEstateProperties)
+             .Include(user => user.RefreshToken)
              .SingleOrDefaultAsync(user => user.Id == userId)
              .ConfigureAwait(false);
 
@@ -58,6 +60,7 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
              .AsNoTracking()
              .Include(user => user.AgentImage)
              .Include(user => user.RealEstateProperties)
+             .Include(user => user.RefreshToken)
              .SingleOrDefaultAsync(user => user.UserName == userName)
              .ConfigureAwait(false);
 
@@ -72,9 +75,6 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
            false
         ).ConfigureAwait(false);
 
-    public async Task<string> GenerateTokenAsync(ApplicationUser applicationUser) =>
-         await _userManager.GeneratePasswordResetTokenAsync(applicationUser).ConfigureAwait(false);
-
     public async Task<IdentityResult> ResetPasswordAsync(ApplicationUser applicationUser, string token, string newPassword) =>
          await _userManager.ResetPasswordAsync(applicationUser, token, newPassword).ConfigureAwait(false);
 
@@ -88,29 +88,29 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
          await _userManager.DeleteAsync(applicationUser).ConfigureAwait(false);
 
     public async Task<IdentityResult> AssignAsync(ApplicationUser applicationUser) =>
-         await _userManager.AddToRoleAsync(applicationUser, Roles.Agent).ConfigureAwait(false);
+         await _userManager.AddToRoleAsync(applicationUser, Roles.Agent.ToString()).ConfigureAwait(false);
 
     public async Task<IdentityResult> PromoteAsync(ApplicationUser user)
     {
-        var result = await _userManager.AddToRoleAsync(user, Roles.Admin).ConfigureAwait(false);
+        var result = await _userManager.AddToRoleAsync(user, Roles.Admin.ToString()).ConfigureAwait(false);
         if (!result.Succeeded)
             return IdentityResult.Failed();
-        return await _userManager.RemoveFromRoleAsync(user, Roles.Agent).ConfigureAwait(false);
+        return await _userManager.RemoveFromRoleAsync(user, Roles.Agent.ToString()).ConfigureAwait(false);
     }
 
     public async Task<IdentityResult> DemoteAsync(ApplicationUser user)
     {
-        var result = await _userManager.AddToRoleAsync(user, Roles.Agent).ConfigureAwait(false);
+        var result = await _userManager.AddToRoleAsync(user, Roles.Agent.ToString()).ConfigureAwait(false);
         if (!result.Succeeded)
             return IdentityResult.Failed();
-        return await _userManager.RemoveFromRoleAsync(user, Roles.Admin).ConfigureAwait(false);
+        return await _userManager.RemoveFromRoleAsync(user, Roles.Admin.ToString()).ConfigureAwait(false);
     }
 
     public async Task<bool> IsAdmin(ApplicationUser user) =>
-         await _userManager.IsInRoleAsync(user, Roles.Admin).ConfigureAwait(false);
+         await _userManager.IsInRoleAsync(user, Roles.Admin.ToString()).ConfigureAwait(false);
 
     public async Task<bool> IsManager(ApplicationUser user) =>
-       await _userManager.IsInRoleAsync(user, Roles.Manager).ConfigureAwait(false);
+       await _userManager.IsInRoleAsync(user, Roles.Manager.ToString()).ConfigureAwait(false);
 
     public async Task<ApplicationUser?> FindByEmailAsync(string email) =>
          await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
@@ -120,21 +120,6 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
 
     public async Task<bool> IsEmailConfirmedAsync(ApplicationUser applicationUser) =>
          await _userManager.IsEmailConfirmedAsync(applicationUser).ConfigureAwait(false);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

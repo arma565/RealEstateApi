@@ -1,15 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using RealEstate.Authentication;
 using RealEstate.DTOs.Users;
 using RealEstate.Entities.Users;
 using RealEstate.Services.Users;
-using RealEstate.Services.Users.Authentication;
+using RealEstate.Services.Users.Authentications;
 using RealEstate.Services.Validations;
 using System.Security;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
-
 
 namespace RealEstate.Controllers.Users;
 
@@ -19,11 +17,12 @@ namespace RealEstate.Controllers.Users;
 [Authorize]
 public sealed class UserController(
     UserService userService,
+    TokenService tokenService,
      ILogger<UserController> logger
     ) : ControllerBase
 {
     private readonly UserService _userService = userService;
-
+    private readonly TokenService _tokenService = tokenService;
     private readonly ILogger<UserController> _logger = logger;
 
     [HttpGet("get-list")]
@@ -61,7 +60,6 @@ public sealed class UserController(
     }
 
     [HttpPost("register")]
-    [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] RegisterAccountDTO userRegisterAccountDTO)
     {
         try
@@ -101,7 +99,6 @@ public sealed class UserController(
     }
 
     [HttpPost("login")]
-    [Authorize(Policy = "AuthenticatedUser")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequestDTO userLoginRequestDTO)
     {
@@ -136,30 +133,31 @@ public sealed class UserController(
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh(RefreshTokenRequest request)
+    [AllowAnonymous]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
     {
-        var tokenHash = TokenService.HashRefreshToken(request.RefreshToken);
-
-        var refreshToken = await _context.RefreshTokens
-            .Include(x => x.User)
-            .SingleOrDefaultAsync(x => x.TokenHash == tokenHash);
-
-        if (refreshToken is null)
-            return Unauthorized();
-
-        if (refreshToken.IsRevoked)
-            return Unauthorized();
-
-        if (refreshToken.ExpiresAt <= DateTime.UtcNow)
-            return Unauthorized();
-
-        var accessToken =
-            await _tokenService.CreateAccessTokenAsync(refreshToken.User);
-
-        return Ok(new
+        try
         {
-            accessToken
-        });
+            ArgumentNullException.ThrowIfNull(request);
+
+            return Ok(await _tokenService.RefreshToken(request).ConfigureAwait(false));
+        }
+        catch (ArgumentNullException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(400, "Required argument is missing!");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+        catch (SecurityException ex)
+        {
+            LogMessages.UnexpectedError(_logger, ex);
+            return StatusCode(403, "Access denied!");
+        }
+
     }
 
     [HttpPost("reset-password")]
@@ -248,7 +246,7 @@ public sealed class UserController(
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var generatedToken = await _userService.GenerateTokenAsync(userForgotPasswordDTO.Email).ConfigureAwait(false);
+            var generatedToken = await _tokenService.GeneratePasswordResetTokenAsync(userForgotPasswordDTO.Email).ConfigureAwait(false);
 
             return Ok(generatedToken);
         }

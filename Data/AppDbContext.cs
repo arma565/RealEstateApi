@@ -258,7 +258,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 		   .OnDelete(DeleteBehavior.Cascade)
 		   .IsRequired();
 
+        builder.Entity<ApplicationUser>()
+		   .HasOne(applicationUser => applicationUser.RefreshToken)
+		   .WithOne(refreshToken => refreshToken.Agent)
+		   .HasForeignKey<RefreshToken>(refreshToken => refreshToken.AgentId)
+		   .OnDelete(DeleteBehavior.Cascade)
+		   .IsRequired();
+
         #endregion
-	}
+    }
 }
 

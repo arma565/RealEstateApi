@@ -12,7 +12,7 @@ using RealEstate.Data;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260815162135_RealEstateMigrations#1")]
+    [Migration("20260818171456_RealEstateMigrations#1")]
     partial class RealEstateMigrations1
     {
         /// <inheritdoc />
@@ -712,6 +712,36 @@ namespace RealEstate.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RealEstate.Entities.Users.Authentications.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AgentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TokenHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgentId")
+                        .IsUnique();
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -908,6 +938,17 @@ namespace RealEstate.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("RealEstate.Entities.Users.Authentications.RefreshToken", b =>
+                {
+                    b.HasOne("RealEstate.Entities.Users.ApplicationUser", "Agent")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("RealEstate.Entities.Users.Authentications.RefreshToken", "AgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
+                });
+
             modelBuilder.Entity("RealEstate.Entities.Persons.Owners.Owner", b =>
                 {
                     b.Navigation("Leases");
@@ -955,6 +996,8 @@ namespace RealEstate.Migrations
                     b.Navigation("AgentImage");
 
                     b.Navigation("RealEstateProperties");
+
+                    b.Navigation("RefreshToken");
                 });
 #pragma warning restore 612, 618
         }

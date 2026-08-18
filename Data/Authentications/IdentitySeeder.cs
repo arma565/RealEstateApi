@@ -2,7 +2,7 @@
 using RealEstate.Entities.Users;
 using RealEstate.Enums.Users.Authentications;
 
-namespace RealEstate.Services.Users.Authentication;
+namespace RealEstate.Data.Authentication;
 
 #pragma warning disable CA1515
 public static class IdentitySeeder
