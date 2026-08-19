@@ -82,10 +82,10 @@ public class UserService(UserRepository repository, TokenService tokenService) :
         if (!result.Succeeded)
             throw new InvalidOperationException("Sign in failed!");
 
-        var user = await _repository.GetByUserNameAsync(userRequest.UserName).ConfigureAwait(false);
+        var user = await GetByUserNameAsync(userRequest.UserName).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(user);
 
-        return await _tokenService.CreateTokensAsync(user).ConfigureAwait(false) ;
+        return await _tokenService.CreateTokensAsync(user).ConfigureAwait(false);
     }
 
     public async Task<IdentityResult> ResetPasswordAsync(string email, string token, string newPassword)
@@ -97,11 +97,12 @@ public class UserService(UserRepository repository, TokenService tokenService) :
         return await _repository.ResetPasswordAsync(user, token, newPassword).ConfigureAwait(false);
     }
 
-    public async Task<IdentityResult> ChangePasswordAsync(string userName, string currentPassword, string newPassword) {
+    public async Task<IdentityResult> ChangePasswordAsync(string userName, string currentPassword, string newPassword)
+    {
         var user = await _repository.FindByUsernameAsync(userName).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(user);
 
-       return await _repository.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
+        return await _repository.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
     }
 
     public async Task<IdentityResult> EditUserProfileAsync(string id, EditProfileDTO editProfileDTO)
@@ -167,7 +168,8 @@ public class UserService(UserRepository repository, TokenService tokenService) :
 
     public async Task<bool> IsEmailConfirmed(ApplicationUser applicationUser) => await _repository.IsEmailConfirmedAsync(applicationUser).ConfigureAwait(false);
 
-    private async Task AssignAsync(string userName) {
+    private async Task AssignAsync(string userName)
+    {
         var user = await _repository.FindByUsernameAsync(userName).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(user);
 

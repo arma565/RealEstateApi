@@ -15,8 +15,9 @@ namespace RealEstate.Services.Users.Authentications;
 internal interface ITokenService
 {
     Task<TokenResponse> CreateTokensAsync(ApplicationUser applicationUser);
-    Task<TokenResponse> RefreshToken(RefreshTokenRequest request);
-    Task<RefreshToken> GetRefreshTokensAsync(RefreshTokenRequest request);
+    Task<TokenResponse> RefreshTokens(RefreshTokenRequest request);
+    Task<RefreshToken?> GetRefreshTokenAsync(Guid id);
+    Task<RefreshToken> GetRefreshTokenAsync(RefreshTokenRequest request);
     Task<string> GeneratePasswordResetTokenAsync(string email);
 }
 public class TokenService(TokenRepository repository, IOptions<JwtOptions> options) : ITokenService
@@ -32,20 +33,32 @@ public class TokenService(TokenRepository repository, IOptions<JwtOptions> optio
 
         var refreshToken = GenerateRefreshToken();
 
-        await _repository.AddRefreshTokenAsync(new RefreshToken
-        {
-            TokenHash = HashRefreshToken(refreshToken),
-            CreatedAt = DateTime.UtcNow,
-            ExpiresAt = DateTime.UtcNow.AddDays(30),
-            AgentId = applicationUser.RefreshToken is null ? applicationUser.Id : applicationUser.RefreshToken.AgentId
-        }).ConfigureAwait(false);
+        var existRefreshToken = await _repository.GetRefreshTokenAsync(applicationUser.RefreshToken!.Id).ConfigureAwait(false);
 
+        if (existRefreshToken != null)
+        {
+            existRefreshToken.TokenHash = HashRefreshToken(refreshToken);
+            existRefreshToken.CreatedAt = DateTime.UtcNow;
+            existRefreshToken.ExpiresAt = DateTime.UtcNow.AddDays(30);
+            existRefreshToken.AgentId = applicationUser.Id;
+            await _repository.UpdateRefreshTokenAsync(existRefreshToken).ConfigureAwait(false);
+        }
+        else
+        {
+            await _repository.AddRefreshTokenAsync(new RefreshToken
+            {
+                TokenHash = HashRefreshToken(refreshToken),
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(30),
+                AgentId = applicationUser.Id
+            }).ConfigureAwait(false);
+        }
         return new TokenResponse(AccessToken: accessToken, RefreshToken: refreshToken);
     }
 
-    public async Task<TokenResponse> RefreshToken(RefreshTokenRequest request)
+    public async Task<TokenResponse> RefreshTokens(RefreshTokenRequest request)
     {
-        var refreshToken = await GetRefreshTokensAsync(request).ConfigureAwait(false);
+        var refreshToken = await GetRefreshTokenAsync(request).ConfigureAwait(false);
 
         ArgumentNullException.ThrowIfNull(refreshToken);
         ArgumentNullException.ThrowIfNull(refreshToken.Agent.UserName);
@@ -59,13 +72,16 @@ public class TokenService(TokenRepository repository, IOptions<JwtOptions> optio
         return await CreateTokensAsync(refreshToken.Agent).ConfigureAwait(false);
     }
 
-    public async Task<RefreshToken> GetRefreshTokensAsync(RefreshTokenRequest request)
+    public async Task<RefreshToken?> GetRefreshTokenAsync(Guid id) =>
+     await _repository.GetRefreshTokenAsync(id).ConfigureAwait(false);
+
+    public async Task<RefreshToken> GetRefreshTokenAsync(RefreshTokenRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
         var tokenHash = HashRefreshToken(request.RefreshToken);
 
-        var refreshToken = await _repository.GetRefreshTokensAsync(tokenHash).ConfigureAwait(false);
+        var refreshToken = await _repository.GetRefreshTokenAsync(tokenHash).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(refreshToken);
 
         return refreshToken;

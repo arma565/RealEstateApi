@@ -84,7 +84,7 @@ public class TenantController(TenantService service, ILogger<TenantController> l
     }
 
     [HttpPut("update/{tenantId}")]
-    public async Task<IActionResult> Update([FromBody] UpdateDTO tenantDTO, string tenantId)
+    public async Task<IActionResult> Update(string tenantId, [FromBody] UpdateDTO tenantDTO)
     {
         try
         {

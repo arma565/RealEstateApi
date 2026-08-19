@@ -2724,7 +2724,7 @@
         }
       }
     },
-    "/User/refresh": {
+    "/User/refresh-tokens": {
       "post": {
         "tags": [
           "User"

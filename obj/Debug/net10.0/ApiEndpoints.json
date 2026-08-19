@@ -761,13 +761,13 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "ownerDTO",
-        "Type": "RealEstate.DTOs.Persons.UpdateDTO",
+        "Name": "ownerId",
+        "Type": "System.String",
         "IsRequired": true
       },
       {
-        "Name": "ownerId",
-        "Type": "System.String",
+        "Name": "ownerDTO",
+        "Type": "RealEstate.DTOs.Persons.UpdateDTO",
         "IsRequired": true
       }
     ],
@@ -1577,13 +1577,13 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "tenantDTO",
-        "Type": "RealEstate.DTOs.Persons.UpdateDTO",
+        "Name": "tenantId",
+        "Type": "System.String",
         "IsRequired": true
       },
       {
-        "Name": "tenantId",
-        "Type": "System.String",
+        "Name": "tenantDTO",
+        "Type": "RealEstate.DTOs.Persons.UpdateDTO",
         "IsRequired": true
       }
     ],
@@ -1712,7 +1712,7 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "GetAll",
+    "Method": "GetList",
     "RelativePath": "User/get-list",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1790,8 +1790,8 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Users.UserController",
-    "Method": "Refresh",
-    "RelativePath": "User/refresh",
+    "Method": "RefreshTokens",
+    "RelativePath": "User/refresh-tokens",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

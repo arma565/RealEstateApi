@@ -84,7 +84,7 @@ public class OwnerController(OwnerService service, ILogger<OwnerController> logg
     }
 
     [HttpPut("update/{ownerId}")]
-    public async Task<IActionResult> Update([FromBody] UpdateDTO ownerDTO, string ownerId)
+    public async Task<IActionResult> Update(string ownerId, [FromBody] UpdateDTO ownerDTO)
     {
         try
         {

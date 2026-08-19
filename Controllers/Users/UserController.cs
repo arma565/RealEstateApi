@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.DTOs.Users;
@@ -27,7 +26,7 @@ public sealed class UserController(
 
     [HttpGet("get-list")]
     [Authorize(Policy = "AdminOrManager")]
-    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAll() => Ok(await _userService.GetUsersListAsync().ConfigureAwait(false));
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetList() => Ok(await _userService.GetUsersListAsync().ConfigureAwait(false));
 
     [HttpGet("get/{userName}")]
     public async Task<ActionResult<ApplicationUser>> Get(string userName)
@@ -132,15 +131,15 @@ public sealed class UserController(
         }
     }
 
-    [HttpPost("refresh")]
+    [HttpPost("refresh-tokens")]
     [AllowAnonymous]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+    public async Task<IActionResult> RefreshTokens([FromBody] RefreshTokenRequest request)
     {
         try
         {
             ArgumentNullException.ThrowIfNull(request);
 
-            return Ok(await _tokenService.RefreshToken(request).ConfigureAwait(false));
+            return Ok(await _tokenService.RefreshTokens(request).ConfigureAwait(false));
         }
         catch (ArgumentNullException ex)
         {
