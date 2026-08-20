@@ -11,7 +11,7 @@ interface IPropertyImageService
     Task<IEnumerable<PropertyImage>> GetListAsync();
     Task<PropertyImage> GetAsync(Guid id);
     Task<string> GetPathAsync(Guid id,bool isThumbnail);
-    Task<PropertyImage> AddAsync(Guid id, IFormFile image);
+    Task<PropertyImage> AddAsync(CreateDTO createDTO, IFormFile image);
     Task UpdateAsync(Guid id, UpdateDTO updateDTO, IFormFile image);
     Task DeleteAsync(Guid id);
     Task DeleteAllAsync();
@@ -45,14 +45,14 @@ public class PropertyImageService(PropertyImageRepository<PropertyImage>
         return await _imageProccess.GetFullPathsAsync(isThumbnail ? propertyImage.ThumbnailFilePath : propertyImage.ImageFilePath).ConfigureAwait(false); ;
     }
 
-    public async Task<PropertyImage> AddAsync(Guid id, IFormFile image)
+    public async Task<PropertyImage> AddAsync(CreateDTO createDTO, IFormFile image)
     {
         ArgumentNullException.ThrowIfNull(image);
         var savedImagePaths = await _imageProccess.SaveAsync(image).ConfigureAwait(false);
 
-        var allPropertyImages = await GetListAsync().ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(createDTO);
 
-        var createDTO = new CreateDTO {Image = image ,PropertyId = id};
+        var allPropertyImages = await GetListAsync().ConfigureAwait(false);
 
         if (!allPropertyImages.Any())
         {

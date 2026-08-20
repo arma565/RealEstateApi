@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using RealEstate.DTOs.Images.Users;
+using RealEstate.Entities.Images.Documents;
 using RealEstate.Entities.Images.Users;
 using RealEstate.Services.Images.Users;
 using RealEstate.Services.Validations;
@@ -18,17 +19,19 @@ public class ApplicationUserImageController(ApplicationUserImageService service,
     private readonly ILogger<ApplicationUserImageController> _logger = logger;
 
     [HttpPost("upload")]
-    public async Task<IActionResult> Upload([FromBody] CreateDTO applicationUserImageDTO, [FromForm] IFormFile[] images)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Upload([FromForm] CreateDTO applicationUserImageDTO)
     {
         try
         {
-            if (images == null || images.Length == 0)
-                return BadRequest("No images provided for upload.");
+            ArgumentNullException.ThrowIfNull(applicationUserImageDTO);
 
-            foreach (var image in images)
-            {
-                await _service.AddAsync(applicationUserImageDTO, image).ConfigureAwait(false);
-            }
+            var image = applicationUserImageDTO.Image;
+
+            if (image == null || image.Length == 0)
+                return BadRequest("No image provided for upload.");
+
+            await _service.AddAsync(applicationUserImageDTO, image).ConfigureAwait(false);
 
             return Created();
         }
@@ -109,6 +112,9 @@ public class ApplicationUserImageController(ApplicationUserImageService service,
         }
     }
 
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<ApplicationUserImage>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+
     [HttpGet("get/{applicationUserImageId}")]
     public async Task<ActionResult<ApplicationUserImage>> Get(string applicationUserImageId)
     {
@@ -140,7 +146,8 @@ public class ApplicationUserImageController(ApplicationUserImageService service,
     }
 
     [HttpPut("update/{applicationUserImageId}")]
-    public async Task<ActionResult> Update(string applicationUserImageId, [FromBody] UpdateDTO applicationUserImageDTO, [FromForm] IFormFile[] images)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> Update(string applicationUserImageId, [FromForm] UpdateDTO applicationUserImageDTO)
     {
         try
         {
@@ -156,13 +163,12 @@ public class ApplicationUserImageController(ApplicationUserImageService service,
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (images == null || images.Length == 0)
+            var image = applicationUserImageDTO.Image;
+
+            if (image == null || image.Length == 0)
                 return BadRequest("No images provided for upload.");
 
-            foreach (var image in images)
-            {
-                await _service.UpdateAsync(id, applicationUserImageDTO, image).ConfigureAwait(false);
-            }
+            await _service.UpdateAsync(id, applicationUserImageDTO, image).ConfigureAwait(false);
 
             return NoContent();
         }

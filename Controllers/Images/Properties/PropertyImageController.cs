@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using RealEstate.DTOs.Images.Properties;
+using RealEstate.Entities.Images.Documents;
 using RealEstate.Entities.Images.Properties;
 using RealEstate.Entities.Persons;
 using RealEstate.Services.Images.Properties;
@@ -18,18 +19,20 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
 
     private readonly ILogger<PropertyImageController> _logger = logger;
 
-    [HttpPost("upload/{propertyId}")]
-    public async Task<IActionResult> Upload([FromRoute] Guid propertyId, IFormFile image)
+    [HttpPost("upload")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Upload([FromForm] CreateDTO propertyImageDTO)
     {
         try
         {
-            //if (string.IsNullOrWhiteSpace(propertyId))
-            //    return BadRequest("PropertyId is empty!");
+            ArgumentNullException.ThrowIfNull(propertyImageDTO);
 
-            //if (!Guid.TryParse(propertyId, out Guid id))
-            //    return BadRequest("PropertyId must be a valid GUID!");
+            var image = propertyImageDTO.Image;
 
-            await _service.AddAsync(propertyId, image).ConfigureAwait(false);
+            if (image == null || image.Length == 0)
+                return BadRequest("No image provided for upload.");
+
+            await _service.AddAsync(propertyImageDTO, image).ConfigureAwait(false);
 
             return Created();
         }
@@ -144,7 +147,8 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
     }
 
     [HttpPut("update/{propertyImageId}")]
-    public async Task<ActionResult> Update(string propertyImageId, [FromBody] UpdateDTO propertyImageDTO, [FromForm] IFormFile[] images)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> Update(string propertyImageId, [FromForm] UpdateDTO propertyDeedImageDTO)
     {
         try
         {
@@ -154,19 +158,18 @@ public class PropertyImageController(PropertyImageService service, ILogger<Prope
             if (!Guid.TryParse(propertyImageId, out Guid id))
                 return BadRequest("PropertyImageId must be a valid GUID!");
 
-            if (propertyImageDTO == null)
+            if (propertyDeedImageDTO == null)
                 return BadRequest("Failed to retrieve parameter!");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (images == null || images.Length == 0)
+            var image = propertyDeedImageDTO.Image;
+
+            if (image == null || image.Length == 0)
                 return BadRequest("No images provided for upload.");
 
-            foreach (var image in images)
-            {
-                await _service.UpdateAsync(id, propertyImageDTO, image).ConfigureAwait(false);
-            }
+            await _service.UpdateAsync(id, propertyDeedImageDTO, image).ConfigureAwait(false);
 
             return NoContent();
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using RealEstate.DTOs.Images.Supports;
+using RealEstate.Entities.Images.Documents;
 using RealEstate.Entities.Images.Supports;
 using RealEstate.Services.Images.Supports;
 using RealEstate.Services.Validations;
@@ -18,17 +19,19 @@ public class SupportImageController(SupportImageService service, ILogger<Support
     private readonly ILogger<SupportImageController> _logger = logger;
 
     [HttpPost("upload")]
-    public async Task<IActionResult> Upload([FromBody] CreateDTO supportImageDTO, [FromForm] IFormFile[] images)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Upload([FromBody] CreateDTO supportImageDTO)
     {
         try
         {
-            if (images == null || images.Length == 0)
-                return BadRequest("No images provided for upload.");
+            ArgumentNullException.ThrowIfNull(supportImageDTO);
 
-            foreach (var image in images)
-            {
-                await _service.AddAsync(supportImageDTO, image).ConfigureAwait(false);
-            }
+            var image = supportImageDTO.Image;
+
+            if (image == null || image.Length == 0)
+                return BadRequest("No image provided for upload.");
+
+            await _service.AddAsync(supportImageDTO, image).ConfigureAwait(false);
 
             return Created();
         }
@@ -109,6 +112,9 @@ public class SupportImageController(SupportImageService service, ILogger<Support
         }
     }
 
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<SupportImage>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+
     [HttpGet("get/{supportImageId}")]
     public async Task<ActionResult<SupportImage>> Get(string supportImageId)
     {
@@ -140,7 +146,8 @@ public class SupportImageController(SupportImageService service, ILogger<Support
     }
 
     [HttpPut("update/{supportImageId}")]
-    public async Task<ActionResult> Update(string supportImageId, [FromBody] UpdateDTO supportImageDTO, [FromForm] IFormFile[] images)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> Update(string supportImageId, [FromForm] UpdateDTO supportImageDTO)
     {
         try
         {
@@ -156,13 +163,12 @@ public class SupportImageController(SupportImageService service, ILogger<Support
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (images == null || images.Length == 0)
+            var image = supportImageDTO.Image;
+
+            if (image == null || image.Length == 0)
                 return BadRequest("No images provided for upload.");
 
-            foreach (var image in images)
-            {
-                await _service.UpdateAsync(id, supportImageDTO, image).ConfigureAwait(false);
-            }
+            await _service.UpdateAsync(id, supportImageDTO, image).ConfigureAwait(false);
 
             return NoContent();
         }
