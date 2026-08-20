@@ -15,9 +15,9 @@ interface IPaymentService
 }
 
 #pragma warning disable CA1515
-public class PaymentService(PaymentRepository repository) : IPaymentService
+public class PaymentService(PaymentRepository<Payment> repository) : IPaymentService
 {
-    private readonly PaymentRepository _repository = repository;
+    private readonly PaymentRepository<Payment> _repository = repository;
 
     public async Task<IEnumerable<Payment>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);

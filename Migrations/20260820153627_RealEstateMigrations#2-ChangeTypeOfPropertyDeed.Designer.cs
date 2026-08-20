@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.Data;
 
@@ -11,9 +12,11 @@ using RealEstate.Data;
 namespace RealEstate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260820153627_RealEstateMigrations#2-ChangeTypeOfPropertyDeed")]
+    partial class RealEstateMigrations2ChangeTypeOfPropertyDeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,7 +177,8 @@ namespace RealEstate.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PropertyDeedId");
+                    b.HasIndex("PropertyDeedId")
+                        .IsUnique();
 
                     b.ToTable("PropertyDeedImages");
                 });
@@ -790,8 +794,8 @@ namespace RealEstate.Migrations
             modelBuilder.Entity("RealEstate.Entities.Images.Documents.PropertyDeedImage", b =>
                 {
                     b.HasOne("RealEstate.Entities.Properties.Documents.PropertyDeed", "PropertyDeed")
-                        .WithMany("PropertyDeedImages")
-                        .HasForeignKey("PropertyDeedId")
+                        .WithOne("PropertyDeedImage")
+                        .HasForeignKey("RealEstate.Entities.Images.Documents.PropertyDeedImage", "PropertyDeedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -957,7 +961,7 @@ namespace RealEstate.Migrations
 
             modelBuilder.Entity("RealEstate.Entities.Properties.Documents.PropertyDeed", b =>
                 {
-                    b.Navigation("PropertyDeedImages");
+                    b.Navigation("PropertyDeedImage");
                 });
 
             modelBuilder.Entity("RealEstate.Entities.Properties.Leases.Lease", b =>

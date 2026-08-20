@@ -10,11 +10,11 @@ namespace RealEstate.Controllers.Properties.Documents;
 #pragma warning disable CA1515
 [Route("[controller]")]
 [ApiController]
-public class DeedController(PropertyDeedService service, ILogger<DeedController> logger) : ControllerBase
+public class PropertyDeedController(PropertyDeedService service, ILogger<PropertyDeedController> logger) : ControllerBase
 {
     private readonly PropertyDeedService _service = service;
 
-    private readonly ILogger<DeedController> _logger = logger;
+    private readonly ILogger<PropertyDeedController> _logger = logger;
 
     [HttpGet("get-list")]
     public async Task<ActionResult<IEnumerable<PropertyDeed>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));

@@ -15,9 +15,9 @@ interface ISupportService
 }
 
 #pragma warning disable CA1515
-public class SupportService(SupportRepository repository) : ISupportService
+public class SupportService(SupportRepository<RealEstateSupport> repository) : ISupportService
 {
-    private readonly SupportRepository _repository = repository;
+    private readonly SupportRepository<RealEstateSupport> _repository = repository;
 
     public async Task<IEnumerable<RealEstateSupport>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);

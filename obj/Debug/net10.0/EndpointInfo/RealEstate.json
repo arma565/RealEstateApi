@@ -363,189 +363,6 @@
         }
       }
     },
-    "/Deed/get-list": {
-      "get": {
-        "tags": [
-          "Deed"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Deed/get/{propertyDeedId}": {
-      "get": {
-        "tags": [
-          "Deed"
-        ],
-        "parameters": [
-          {
-            "name": "propertyDeedId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Deed/add": {
-      "post": {
-        "tags": [
-          "Deed"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.CreateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.CreateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.CreateDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Deed/update/{propertyDeedId}": {
-      "put": {
-        "tags": [
-          "Deed"
-        ],
-        "parameters": [
-          {
-            "name": "propertyDeedId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.UpdateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.UpdateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.UpdateDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Deed/delete/{propertyDeedId}": {
-      "delete": {
-        "tags": [
-          "Deed"
-        ],
-        "parameters": [
-          {
-            "name": "propertyDeedId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Deed/delete-all": {
-      "delete": {
-        "tags": [
-          "Deed"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/Feature/get-list": {
       "get": {
         "tags": [
@@ -1644,6 +1461,189 @@
         }
       }
     },
+    "/PropertyDeed/get-list": {
+      "get": {
+        "tags": [
+          "PropertyDeed"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PropertyDeed/get/{propertyDeedId}": {
+      "get": {
+        "tags": [
+          "PropertyDeed"
+        ],
+        "parameters": [
+          {
+            "name": "propertyDeedId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealEstate.Entities.Properties.Documents.PropertyDeed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PropertyDeed/add": {
+      "post": {
+        "tags": [
+          "PropertyDeed"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.CreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.CreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.CreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/PropertyDeed/update/{propertyDeedId}": {
+      "put": {
+        "tags": [
+          "PropertyDeed"
+        ],
+        "parameters": [
+          {
+            "name": "propertyDeedId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.UpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.UpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealEstate.DTOs.Properties.Documents.UpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/PropertyDeed/delete/{propertyDeedId}": {
+      "delete": {
+        "tags": [
+          "PropertyDeed"
+        ],
+        "parameters": [
+          {
+            "name": "propertyDeedId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/PropertyDeed/delete-all": {
+      "delete": {
+        "tags": [
+          "PropertyDeed"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/PropertyDeedImage/upload": {
       "post": {
         "tags": [
@@ -1651,19 +1651,45 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Documents.CreateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Documents.CreateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Documents.CreateDTO"
+                "required": [
+                  "Image",
+                  "PropertyDeedId"
+                ],
+                "type": "object",
+                "properties": {
+                  "Image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "PropertyDeedId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "ImageFilePath": {
+                    "type": "string",
+                    "default": ""
+                  },
+                  "ThumbnailFilePath": {
+                    "type": "string",
+                    "default": ""
+                  }
+                }
+              },
+              "encoding": {
+                "Image": {
+                  "style": "form"
+                },
+                "PropertyDeedId": {
+                  "style": "form"
+                },
+                "ImageFilePath": {
+                  "style": "form"
+                },
+                "ThumbnailFilePath": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1701,6 +1727,44 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/PropertyDeedImage/get-list": {
+      "get": {
+        "tags": [
+          "PropertyDeedImage"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Images.Documents.PropertyDeedImage"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Images.Documents.PropertyDeedImage"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RealEstate.Entities.Images.Documents.PropertyDeedImage"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1761,19 +1825,41 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Documents.UpdateDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Documents.UpdateDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealEstate.DTOs.Images.Documents.UpdateDTO"
+                "type": "object",
+                "properties": {
+                  "PropertyDeedId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "Image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "ImageFilePath": {
+                    "type": "string",
+                    "default": ""
+                  },
+                  "ThumbnailFilePath": {
+                    "type": "string",
+                    "default": ""
+                  }
+                }
+              },
+              "encoding": {
+                "PropertyDeedId": {
+                  "style": "form"
+                },
+                "Image": {
+                  "style": "form"
+                },
+                "ImageFilePath": {
+                  "style": "form"
+                },
+                "ThumbnailFilePath": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -3009,52 +3095,14 @@
   },
   "components": {
     "schemas": {
-      "RealEstate.DTOs.Images.Documents.CreateDTO": {
-        "required": [
-          "imageFilePath",
-          "propertyDeedId",
-          "thumbnailFilePath"
-        ],
-        "type": "object",
-        "properties": {
-          "imageFilePath": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "thumbnailFilePath": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "propertyDeedId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RealEstate.DTOs.Images.Documents.UpdateDTO": {
-        "type": "object",
-        "properties": {
-          "imageFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "thumbnailFilePath": {
-            "type": "string",
-            "default": "",
-            "nullable": true
-          },
-          "propertyDeedId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
       "RealEstate.DTOs.Images.Properties.UpdateDTO": {
         "type": "object",
         "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
           "imageFilePath": {
             "type": "string",
             "default": "",
@@ -3089,6 +3137,11 @@
         ],
         "type": "object",
         "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
           "imageFilePath": {
             "minLength": 1,
             "type": "string"
@@ -3107,6 +3160,11 @@
       "RealEstate.DTOs.Images.Supports.UpdateDTO": {
         "type": "object",
         "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
           "imageFilePath": {
             "type": "string",
             "default": "",
@@ -3132,6 +3190,11 @@
         ],
         "type": "object",
         "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
           "imageFilePath": {
             "minLength": 1,
             "type": "string"
@@ -3150,6 +3213,11 @@
       "RealEstate.DTOs.Images.Users.UpdateDTO": {
         "type": "object",
         "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
           "imageFilePath": {
             "type": "string",
             "default": "",
@@ -3498,13 +3566,13 @@
         "type": "object",
         "properties": {
           "deedNumber": {
-            "minLength": 1,
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "default": ""
           },
           "registryNumber": {
-            "minLength": 1,
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "default": ""
           },
           "issuedBy": {
@@ -3523,14 +3591,14 @@
         "type": "object",
         "properties": {
           "deedNumber": {
-            "type": "string",
-            "default": "",
-            "nullable": true
+            "type": "integer",
+            "format": "int64",
+            "default": ""
           },
           "registryNumber": {
-            "type": "string",
-            "default": "",
-            "nullable": true
+            "type": "integer",
+            "format": "int64",
+            "default": ""
           },
           "issuedBy": {
             "type": "string",
@@ -4358,12 +4426,12 @@
             "format": "uuid"
           },
           "deedNumber": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int64"
           },
           "registryNumber": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int64"
           },
           "issueDate": {
             "type": "string",
@@ -4373,8 +4441,13 @@
             "type": "string",
             "nullable": true
           },
-          "propertyDeedImage": {
-            "$ref": "#/components/schemas/RealEstate.Entities.Images.Documents.PropertyDeedImage"
+          "propertyDeedImages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RealEstate.Entities.Images.Documents.PropertyDeedImage"
+            },
+            "nullable": true,
+            "readOnly": true
           },
           "propertyId": {
             "type": "string",
@@ -4841,9 +4914,6 @@
       "name": "ApplicationUserImage"
     },
     {
-      "name": "Deed"
-    },
-    {
       "name": "Feature"
     },
     {
@@ -4860,6 +4930,9 @@
     },
     {
       "name": "Property"
+    },
+    {
+      "name": "PropertyDeed"
     },
     {
       "name": "PropertyDeedImage"

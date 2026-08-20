@@ -34,7 +34,6 @@ public class UserRepository(UserManager<ApplicationUser> userManager,
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
 
-
     public async Task<IEnumerable<ApplicationUser>> GetUsersListAsync() =>
          await _userManager
              .Users

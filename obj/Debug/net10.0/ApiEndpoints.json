@@ -229,115 +229,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "Add",
-    "RelativePath": "Deed/add",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "propertyDeedDTO",
-        "Type": "RealEstate.DTOs.Properties.Documents.CreateDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "DeleteAll",
-    "RelativePath": "Deed/delete-all",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "Delete",
-    "RelativePath": "Deed/delete/{propertyDeedId}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "propertyDeedId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "GetList",
-    "RelativePath": "Deed/get-list",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Documents.PropertyDeed, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "Get",
-    "RelativePath": "Deed/get/{propertyDeedId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "propertyDeedId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "RealEstate.Entities.Properties.Documents.PropertyDeed",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "RealEstate.Controllers.Properties.Documents.DeedController",
-    "Method": "Update",
-    "RelativePath": "Deed/update/{propertyDeedId}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "propertyDeedId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "propertyDeedDTO",
-        "Type": "RealEstate.DTOs.Properties.Documents.UpdateDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "RealEstate.Controllers.Properties.Features.FeatureController",
     "Method": "Add",
     "RelativePath": "Feature/add",
@@ -992,6 +883,115 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.PropertyDeedController",
+    "Method": "Add",
+    "RelativePath": "PropertyDeed/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedDTO",
+        "Type": "RealEstate.DTOs.Properties.Documents.CreateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.PropertyDeedController",
+    "Method": "DeleteAll",
+    "RelativePath": "PropertyDeed/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.PropertyDeedController",
+    "Method": "Delete",
+    "RelativePath": "PropertyDeed/delete/{propertyDeedId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.PropertyDeedController",
+    "Method": "GetList",
+    "RelativePath": "PropertyDeed/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Properties.Documents.PropertyDeed, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.PropertyDeedController",
+    "Method": "Get",
+    "RelativePath": "PropertyDeed/get/{propertyDeedId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RealEstate.Entities.Properties.Documents.PropertyDeed",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Properties.Documents.PropertyDeedController",
+    "Method": "Update",
+    "RelativePath": "PropertyDeed/update/{propertyDeedId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyDeedId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "propertyDeedDTO",
+        "Type": "RealEstate.DTOs.Properties.Documents.UpdateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
     "Method": "DeleteAll",
     "RelativePath": "PropertyDeedImage/delete-all",
@@ -1040,6 +1040,26 @@
   },
   {
     "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
+    "Method": "GetList",
+    "RelativePath": "PropertyDeedImage/get-list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RealEstate.Entities.Images.Documents.PropertyDeedImage, RealEstate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RealEstate.Controllers.Images.Documents.PropertyDeedImageController",
     "Method": "Get",
     "RelativePath": "PropertyDeedImage/get/{propertyDeedImageId}",
     "HttpMethod": "GET",
@@ -1078,13 +1098,23 @@
         "IsRequired": true
       },
       {
-        "Name": "propertyDeedImageDTO",
-        "Type": "RealEstate.DTOs.Images.Documents.UpdateDTO",
-        "IsRequired": true
+        "Name": "PropertyDeedId",
+        "Type": "System.Guid",
+        "IsRequired": false
       },
       {
-        "Name": "images",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "Name": "Image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "ImageFilePath",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ThumbnailFilePath",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -1099,13 +1129,23 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "propertyDeedImageDTO",
-        "Type": "RealEstate.DTOs.Images.Documents.CreateDTO",
-        "IsRequired": true
+        "Name": "Image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       },
       {
-        "Name": "images",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "Name": "PropertyDeedId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "ImageFilePath",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ThumbnailFilePath",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],

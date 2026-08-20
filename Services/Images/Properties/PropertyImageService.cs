@@ -18,10 +18,10 @@ interface IPropertyImageService
 }
 
 #pragma warning disable CA1515
-public class PropertyImageService(PropertyImageRepository
+public class PropertyImageService(PropertyImageRepository<PropertyImage>
                                         repository, ImageProccess imageProccess) : IPropertyImageService
 {
-    private readonly PropertyImageRepository _repository = repository;
+    private readonly PropertyImageRepository<PropertyImage> _repository = repository;
 
     private readonly ImageProccess _imageProccess = imageProccess;
 
@@ -52,7 +52,7 @@ public class PropertyImageService(PropertyImageRepository
 
         var allPropertyImages = await GetListAsync().ConfigureAwait(false);
 
-        var createDTO = new CreateDTO { PropertyId = id};
+        var createDTO = new CreateDTO {Image = image ,PropertyId = id};
 
         if (!allPropertyImages.Any())
         {

@@ -15,9 +15,9 @@ interface IDeedService
 }
 
 #pragma warning disable CA1515
-public class PropertyDeedService(PropertyDeedRepository repository) : IDeedService
+public class PropertyDeedService(PropertyDeedRepository<PropertyDeed> repository) : IDeedService
 {
-    private readonly PropertyDeedRepository _repository = repository;
+    private readonly PropertyDeedRepository<PropertyDeed> _repository = repository;
 
     public async Task<IEnumerable<PropertyDeed>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);
@@ -49,8 +49,8 @@ public class PropertyDeedService(PropertyDeedRepository repository) : IDeedServi
 
         ArgumentNullException.ThrowIfNull(updateDTO);
 
-        propertyDeed.DeedNumber = string.IsNullOrEmpty(updateDTO.DeedNumber) ? propertyDeed.DeedNumber : updateDTO.DeedNumber;
-        propertyDeed.RegistryNumber = string.IsNullOrEmpty(updateDTO.RegistryNumber) ? propertyDeed.RegistryNumber : updateDTO.RegistryNumber;
+        propertyDeed.DeedNumber = updateDTO.DeedNumber != propertyDeed.DeedNumber ? updateDTO.DeedNumber : propertyDeed.DeedNumber;
+        propertyDeed.RegistryNumber = updateDTO.RegistryNumber != propertyDeed.RegistryNumber ? updateDTO.RegistryNumber : propertyDeed.RegistryNumber;
         propertyDeed.IssuedBy = string.IsNullOrEmpty(updateDTO.IssuedBy) ? propertyDeed.IssuedBy : updateDTO.IssuedBy;
         propertyDeed.PropertyId = updateDTO.PropertyId != propertyDeed.PropertyId ? updateDTO.PropertyId : propertyDeed.PropertyId;
 

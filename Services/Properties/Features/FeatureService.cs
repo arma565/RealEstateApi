@@ -15,9 +15,9 @@ interface IFeatureService
 }
 
 #pragma warning disable CA1515
-public class FeatureService(FeatureRepository repository) : IFeatureService
+public class FeatureService(FeatureRepository<PropertyFeature> repository) : IFeatureService
 {
-    private readonly FeatureRepository _repository = repository;
+    private readonly FeatureRepository<PropertyFeature> _repository = repository;
 
     public async Task<IEnumerable<PropertyFeature>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);

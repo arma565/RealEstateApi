@@ -8,11 +8,11 @@ public class CreateDTO
 {
     [DefaultValue("")]
     [Required(ErrorMessage = "DeedNumber is required!")]
-    public required string DeedNumber { get; set; }
+    public required long DeedNumber { get; set; }
 
     [DefaultValue("")]
     [Required(ErrorMessage = "RegistryNumber is required!")]
-    public required string RegistryNumber { get; set; } 
+    public required long RegistryNumber { get; set; } 
 
     [DefaultValue("")]
     [Required(ErrorMessage = "IssuedBy is required!")]

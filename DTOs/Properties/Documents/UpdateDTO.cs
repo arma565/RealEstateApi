@@ -6,10 +6,10 @@ namespace RealEstate.DTOs.Properties.Documents;
 public class UpdateDTO
 {
     [DefaultValue("")]
-    public string? DeedNumber { get; set; }
+    public long DeedNumber { get; set; }
 
     [DefaultValue("")]
-    public string? RegistryNumber { get; set; }
+    public long RegistryNumber { get; set; }
 
     [DefaultValue("")]
     public string? IssuedBy { get; set; }

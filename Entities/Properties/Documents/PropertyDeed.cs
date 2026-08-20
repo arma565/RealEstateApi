@@ -1,4 +1,5 @@
 ﻿using RealEstate.Entities.Images.Documents;
+using RealEstate.Entities.Images.Properties;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.Json.Serialization;
@@ -11,9 +12,9 @@ public class PropertyDeed
     [Key]
     public Guid Id { get; set; } = new();
 
-    public required string DeedNumber { get; set; }
+    public required long DeedNumber { get; set; }
 
-    public required string RegistryNumber { get; set; }
+    public required long RegistryNumber { get; set; }
 
     public DateTime IssueDate { get; set; } = DateTime.Parse(DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
@@ -21,7 +22,7 @@ public class PropertyDeed
 
     #region Relationships
 
-    public PropertyDeedImage? PropertyDeedImage { get; set; }
+    public ICollection<PropertyDeedImage> PropertyDeedImages { get; } = [];
 
     public Guid PropertyId { get; set; }
     [JsonIgnore]

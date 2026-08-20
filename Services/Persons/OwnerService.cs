@@ -1,6 +1,6 @@
 using RealEstate.DTOs.Persons;
 using RealEstate.Entities.Persons.Owners;
-using RealEstate.Repositories.Owners;
+using RealEstate.Repositories.Persons;
 
 namespace RealEstate.Services.Persons;
 
@@ -15,9 +15,9 @@ interface IOwnerService
 }
 
 #pragma warning disable CA1515
-public class OwnerService(OwnerRepository repository) : IOwnerService
+public class OwnerService(OwnerRepository<Owner> repository) : IOwnerService
 {
-    private readonly OwnerRepository _repository = repository;
+    private readonly OwnerRepository<Owner> _repository = repository;
 
     public async Task<IEnumerable<Owner>> GetListAsync() =>
      await _repository.GetListAsync().ConfigureAwait(false);

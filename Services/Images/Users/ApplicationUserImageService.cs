@@ -17,10 +17,10 @@ interface IApplicationUserImageService
 }
 
 #pragma warning disable CA1515
-public class ApplicationUserImageService(ApplicationUserImageRepository
+public class ApplicationUserImageService(ApplicationUserImageRepository<ApplicationUserImage>
                                         repository, ImageProccess imageProccess) : IApplicationUserImageService
 {
-    private readonly ApplicationUserImageRepository _repository = repository;
+    private readonly ApplicationUserImageRepository<ApplicationUserImage> _repository = repository;
 
     private readonly ImageProccess _imageProccess = imageProccess;
 

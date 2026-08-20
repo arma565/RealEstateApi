@@ -1,6 +1,7 @@
 using RealEstate.DTOs.Persons;
+using RealEstate.Entities.Persons.Owners;
 using RealEstate.Entities.Persons.Tenants;
-using RealEstate.Repositories.Tenants;
+using RealEstate.Repositories.Persons;
 
 namespace RealEstate.Services.Persons;
 
@@ -15,9 +16,9 @@ interface ITenantService
 }
 
 #pragma warning disable CA1515
-public class TenantService(TenantRepository repository) : ITenantService
+public class TenantService(TenantRepository<Tenant> repository) : ITenantService
 {
-    private readonly TenantRepository _repository = repository;
+    private readonly TenantRepository<Tenant> _repository = repository;
 
     public async Task<IEnumerable<Tenant>> GetListAsync() =>
      await _repository.GetListAsync().ConfigureAwait(false);

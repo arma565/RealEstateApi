@@ -15,9 +15,9 @@ interface IAddressService
 }
 
 #pragma warning disable CA1515
-public class AddressService(AddressRepository repository) : IAddressService
+public class AddressService(AddressRepository<PropertyAddress> repository) : IAddressService
 {
-    private readonly AddressRepository _repository = repository;
+    private readonly AddressRepository<PropertyAddress> _repository = repository;
 
     public async Task<IEnumerable<PropertyAddress>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);

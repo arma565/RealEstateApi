@@ -98,9 +98,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         #region PropertyDeed
 
         builder.Entity<PropertyDeed>()
-			.HasOne(propertyDeed => propertyDeed.PropertyDeedImage)
+			.HasMany(propertyDeed => propertyDeed.PropertyDeedImages)
 			.WithOne(propertyDeedImage => propertyDeedImage.PropertyDeed)
-			.HasForeignKey<PropertyDeedImage>(propertyDeedImage => propertyDeedImage.PropertyDeedId)
+			.HasForeignKey(propertyDeedImage => propertyDeedImage.PropertyDeedId)
 			.OnDelete(DeleteBehavior.Cascade)
 			.IsRequired();
 

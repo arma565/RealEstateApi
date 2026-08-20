@@ -4,57 +4,47 @@ using RealEstate.Entities.Properties.Documents;
 
 namespace RealEstate.Repositories.Properties.Documents;
 
-interface IDeedRepository
-{
-    Task<IEnumerable<PropertyDeed>> GetListAsync();
-    Task<PropertyDeed?> GetAsync(Guid id);
-    Task<PropertyDeed> AddAsync(PropertyDeed propertyDeed);
-    Task UpdateAsync(PropertyDeed propertyDeed);
-    Task DeleteAsync(PropertyDeed propertyDeed);
-    Task DeleteAllAsync();
-}
-
 #pragma warning disable CA1515
-public class PropertyDeedRepository(AppDbContext context) : IDeedRepository
+public class PropertyDeedRepository<TPropertyDeed>(AppDbContext context) : BaseRepository<PropertyDeed>
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<IEnumerable<PropertyDeed>> GetListAsync() =>
+    public override async Task<IEnumerable<PropertyDeed>> GetListAsync() =>
      await _context
         .PropertyDeeds
         .AsNoTracking()
-        .Include(propertyDeed => propertyDeed.PropertyDeedImage)
+        .Include(propertyDeed => propertyDeed.PropertyDeedImages)
         .ToListAsync()
         .ConfigureAwait(false);
 
-    public async Task<PropertyDeed?> GetAsync(Guid id) =>
+    public override async Task<PropertyDeed?> GetAsync(Guid id) =>
     await _context
        .PropertyDeeds
        .AsNoTracking()
-       .Include(propertyDeed => propertyDeed.PropertyDeedImage)
+       .Include(propertyDeed => propertyDeed.PropertyDeedImages)
        .SingleOrDefaultAsync(deed => deed.Id == id)
        .ConfigureAwait(false);
 
-    public async Task<PropertyDeed> AddAsync(PropertyDeed propertyDeed)
+    public override async Task<PropertyDeed> AddAsync(PropertyDeed propertyDeed)
     {
         await _context.PropertyDeeds.AddAsync(propertyDeed).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
         return propertyDeed;
     }
 
-    public async Task UpdateAsync(PropertyDeed propertyDeed)
+    public override async Task UpdateAsync(PropertyDeed propertyDeed)
     {
         _context.PropertyDeeds.Update(propertyDeed);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task DeleteAsync(PropertyDeed propertyDeed)
+    public override async Task DeleteAsync(PropertyDeed propertyDeed)
     {
         _context.PropertyDeeds.Remove(propertyDeed);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task DeleteAllAsync()
+    public override async Task DeleteAllAsync()
     {
         await _context.PropertyDeeds.ExecuteDeleteAsync().ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);

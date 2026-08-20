@@ -18,17 +18,19 @@ public class PropertyDeedImageController(PropertyDeedImageService service, ILogg
     private readonly ILogger<PropertyDeedImageController> _logger = logger;
 
     [HttpPost("upload")]
-    public async Task<IActionResult> Upload([FromBody] CreateDTO propertyDeedImageDTO, [FromForm] IFormFile[] images)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Upload([FromForm] CreateDTO propertyDeedImageDTO)
     {
         try
         {
-            if (images == null || images.Length == 0)
-                return BadRequest("No images provided for upload.");
+            ArgumentNullException.ThrowIfNull(propertyDeedImageDTO);
 
-            foreach (var image in images)
-            {
-                await _service.AddAsync(propertyDeedImageDTO, image).ConfigureAwait(false);
-            }
+            var image = propertyDeedImageDTO.Image;
+
+            if (image == null || image.Length == 0)
+                return BadRequest("No image provided for upload.");
+
+            await _service.AddAsync(propertyDeedImageDTO, image).ConfigureAwait(false);
 
             return Created();
         }
@@ -109,6 +111,9 @@ public class PropertyDeedImageController(PropertyDeedImageService service, ILogg
         }
     }
 
+    [HttpGet("get-list")]
+    public async Task<ActionResult<IEnumerable<PropertyDeedImage>>> GetList() => Ok(await _service.GetListAsync().ConfigureAwait(false));
+
     [HttpGet("get/{propertyDeedImageId}")]
     public async Task<ActionResult<PropertyDeedImage>> Get(string propertyDeedImageId)
     {
@@ -140,7 +145,8 @@ public class PropertyDeedImageController(PropertyDeedImageService service, ILogg
     }
 
     [HttpPut("update/{propertyDeedImageId}")]
-    public async Task<ActionResult> Update(string propertyDeedImageId, [FromBody] UpdateDTO propertyDeedImageDTO, [FromForm] IFormFile[] images)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult> Update(string propertyDeedImageId, [FromForm] UpdateDTO propertyDeedImageDTO)
     {
         try
         {
@@ -156,13 +162,12 @@ public class PropertyDeedImageController(PropertyDeedImageService service, ILogg
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (images == null || images.Length == 0)
+            var image = propertyDeedImageDTO.Image;
+
+            if (image == null || image.Length == 0)
                 return BadRequest("No images provided for upload.");
 
-            foreach (var image in images)
-            {
-                await _service.UpdateAsync(id, propertyDeedImageDTO, image).ConfigureAwait(false);
-            }
+            await _service.UpdateAsync(id, propertyDeedImageDTO, image).ConfigureAwait(false);
 
             return NoContent();
         }

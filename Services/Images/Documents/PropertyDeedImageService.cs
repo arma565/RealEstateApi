@@ -3,8 +3,6 @@ using RealEstate.Entities.Images.Documents;
 using RealEstate.Repositories.Images.Documents;
 
 namespace RealEstate.Services.Images.Documents;
-
-
 interface IPropertyDeedImageService
 {
     Task<IEnumerable<PropertyDeedImage>> GetListAsync();
@@ -17,10 +15,10 @@ interface IPropertyDeedImageService
 }
 
 #pragma warning disable CA1515
-public class PropertyDeedImageService(PropertyDeedImageRepository
+public class PropertyDeedImageService(PropertyDeedImageRepository<PropertyDeedImage>
                                         repository, ImageProccess imageProccess) : IPropertyDeedImageService
 {
-    private readonly PropertyDeedImageRepository _repository = repository;
+    private readonly PropertyDeedImageRepository<PropertyDeedImage> _repository = repository;
 
     private readonly ImageProccess _imageProccess = imageProccess;
 
@@ -63,6 +61,7 @@ public class PropertyDeedImageService(PropertyDeedImageRepository
     {
         var existPropertyDeedImage = await GetAsync(id).ConfigureAwait(false);
         ArgumentNullException.ThrowIfNull(existPropertyDeedImage);
+
         await _imageProccess.DeleteFilesAsync(new ImagePaths
         {
             OriginalPath = existPropertyDeedImage.ImageFilePath,

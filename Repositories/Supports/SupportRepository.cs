@@ -2,58 +2,47 @@ using Microsoft.EntityFrameworkCore;
 using RealEstate.Data;
 using RealEstate.Entities.Supports;
 
-
 namespace RealEstate.Repositories.Supports;
 
-interface ISupportRepository
-{
-    Task<IEnumerable<RealEstateSupport>> GetListAsync();
-    Task<RealEstateSupport?> GetAsync(Guid id);
-    Task<RealEstateSupport> AddAsync(RealEstateSupport realEstateSupport);
-    Task UpdateAsync( RealEstateSupport realEstateSupport);
-    Task DeleteAsync(RealEstateSupport realEstateSupport);
-    Task DeleteAllAsync();
-}
-
 #pragma warning disable CA1515
-public class SupportRepository(AppDbContext context) : ISupportRepository
+public class SupportRepository<TRealEstateSupport>(AppDbContext context) : BaseRepository<RealEstateSupport>
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<IEnumerable<RealEstateSupport>> GetListAsync() =>
+    public override async Task<IEnumerable<RealEstateSupport>> GetListAsync() =>
        await _context
       .Supports
       .AsNoTracking()
       .Include(support => support.SupportImage)
       .ToListAsync().ConfigureAwait(false);
 
-    public async Task<RealEstateSupport?> GetAsync(Guid id) =>
+    public override async Task<RealEstateSupport?> GetAsync(Guid id) =>
       await _context
           .Supports.AsNoTracking()
           .Include(support => support.SupportImage)
           .SingleOrDefaultAsync(support => support.Id == id)
           .ConfigureAwait(false);
 
-    public async Task<RealEstateSupport> AddAsync(RealEstateSupport realEstateSupport)
+    public override async Task<RealEstateSupport> AddAsync(RealEstateSupport realEstateSupport)
     {
         await _context.Supports.AddAsync(realEstateSupport).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
         return realEstateSupport;
     }
 
-    public async Task UpdateAsync(RealEstateSupport realEstateSupport)
+    public override async Task UpdateAsync(RealEstateSupport realEstateSupport)
     {
         _context.Supports.Update(realEstateSupport);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task DeleteAsync(RealEstateSupport realEstateSupport)
+    public override async Task DeleteAsync(RealEstateSupport realEstateSupport)
     {
         _context.Supports.Remove(realEstateSupport);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public async Task DeleteAllAsync()
+    public override async Task DeleteAllAsync()
     {
         await _context.Supports.ExecuteDeleteAsync().ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);

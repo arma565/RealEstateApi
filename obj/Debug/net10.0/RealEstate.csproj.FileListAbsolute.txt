@@ -173,10 +173,10 @@ M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\n
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\staticwebassets.development.json
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\swae.build.ex.cache
+M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\RealEstate.csproj.Up2Date
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\RealEstate.dll
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\refint\RealEstate.dll
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\RealEstate.pdb
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\RealEstate.genruntimeconfig.cache
 M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\ref\RealEstate.dll
-M:\Applications\WebProgramming\NetCore\MinimalApiProjects\RealEstate\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

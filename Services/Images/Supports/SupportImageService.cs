@@ -17,10 +17,10 @@ interface ISupportImageService
 }
 
 #pragma warning disable CA1515
-public class SupportImageService(SupportImageRepository
+public class SupportImageService(SupportImageRepository<SupportImage>
                                         repository, ImageProccess imageProccess) : ISupportImageService
 {
-    private readonly SupportImageRepository _repository = repository;
+    private readonly SupportImageRepository<SupportImage> _repository = repository;
 
     private readonly ImageProccess _imageProccess = imageProccess;
 

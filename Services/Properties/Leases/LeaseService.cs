@@ -1,5 +1,4 @@
 ﻿using RealEstate.DTOs.Properties.Leases;
-using RealEstate.Entities.Persons;
 using RealEstate.Entities.Properties.Leases;
 using RealEstate.Repositories.Properties.Leases;
 
@@ -16,9 +15,9 @@ interface ILeaseService
 }
 
 #pragma warning disable CA1515
-public class LeaseService(LeaseRepository repository) : ILeaseService
+public class LeaseService(LeaseRepository<Lease> repository) : ILeaseService
 {
-    private readonly LeaseRepository _repository = repository;
+    private readonly LeaseRepository<Lease> _repository = repository;
 
     public async Task<IEnumerable<Lease>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);

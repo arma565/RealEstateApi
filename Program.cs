@@ -1,10 +1,24 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using RealEstate.Data;
 using RealEstate.Data.Authentication;
+using RealEstate.Entities.Images.Documents;
+using RealEstate.Entities.Images.Properties;
+using RealEstate.Entities.Images.Supports;
+using RealEstate.Entities.Images.Users;
+using RealEstate.Entities.Persons.Owners;
+using RealEstate.Entities.Persons.Tenants;
+using RealEstate.Entities.Properties.Addresses;
+using RealEstate.Entities.Properties.Addresses.Map;
+using RealEstate.Entities.Properties.Documents;
+using RealEstate.Entities.Properties.Features;
+using RealEstate.Entities.Properties.Leases;
+using RealEstate.Entities.Properties.Leases.Payments;
+using RealEstate.Entities.Supports;
 using RealEstate.Entities.Users;
 using RealEstate.Entities.Users.Authentications;
 using RealEstate.Enums.Users.Authentications;
@@ -12,7 +26,7 @@ using RealEstate.Repositories.Images.Documents;
 using RealEstate.Repositories.Images.Properties;
 using RealEstate.Repositories.Images.Supports;
 using RealEstate.Repositories.Images.Users;
-using RealEstate.Repositories.Owners;
+using RealEstate.Repositories.Persons;
 using RealEstate.Repositories.Properties;
 using RealEstate.Repositories.Properties.Addresses;
 using RealEstate.Repositories.Properties.Addresses.Maps;
@@ -21,11 +35,13 @@ using RealEstate.Repositories.Properties.Features;
 using RealEstate.Repositories.Properties.Leases;
 using RealEstate.Repositories.Properties.Leases.Payments;
 using RealEstate.Repositories.Supports;
-using RealEstate.Repositories.Tenants;
 using RealEstate.Repositories.Users;
 using RealEstate.Repositories.Users.Authentications;
 using RealEstate.Services.Images;
+using RealEstate.Services.Images.Documents;
 using RealEstate.Services.Images.Properties;
+using RealEstate.Services.Images.Supports;
+using RealEstate.Services.Images.Users;
 using RealEstate.Services.Persons;
 using RealEstate.Services.Properties;
 using RealEstate.Services.Properties.Addresses;
@@ -38,6 +54,7 @@ using RealEstate.Services.Supports;
 using RealEstate.Services.Users;
 using RealEstate.Services.Users.Authentications;
 using RealEstate.Validations;
+using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -80,26 +97,28 @@ public partial class Program
             .AddDefaultTokenProviders();
 
         //Repositories
-        builder.Services.AddScoped<PropertyDeedImageRepository>();
-        builder.Services.AddScoped<PropertyImageRepository>();
-        builder.Services.AddScoped<SupportImageRepository>();
-        builder.Services.AddScoped<ApplicationUserImageRepository>();
-        builder.Services.AddScoped<OwnerRepository>();
-        builder.Services.AddScoped<TenantRepository>();
-        builder.Services.AddScoped<LocationRepository>();
-        builder.Services.AddScoped<AddressRepository>();
-        builder.Services.AddScoped<PropertyDeedRepository>();
-        builder.Services.AddScoped<FeatureRepository>();
-        builder.Services.AddScoped<PaymentRepository>();
-        builder.Services.AddScoped<LeaseRepository>();
-        builder.Services.AddScoped<PropertyRepository>();
-        builder.Services.AddScoped<SupportRepository>();
+        builder.Services.AddScoped<PropertyDeedImageRepository<PropertyDeedImage>>();
+        builder.Services.AddScoped<PropertyImageRepository<PropertyImage>>();
+        builder.Services.AddScoped<SupportImageRepository<SupportImage>>();
+        builder.Services.AddScoped<ApplicationUserImageRepository<ApplicationUserImage>>();
+        builder.Services.AddScoped<OwnerRepository<Owner>>();
+        builder.Services.AddScoped<TenantRepository<Tenant>>();
+        builder.Services.AddScoped<LocationRepository<PropertyLocation>>();
+        builder.Services.AddScoped<AddressRepository<PropertyAddress>>();
+        builder.Services.AddScoped<PropertyDeedRepository<PropertyDeed>>();
+        builder.Services.AddScoped<FeatureRepository<PropertyFeature>>();
+        builder.Services.AddScoped<PaymentRepository<Payment>>();
+        builder.Services.AddScoped<LeaseRepository<Lease>>();
+        builder.Services.AddScoped<PropertyRepository<Property>>();
+        builder.Services.AddScoped<SupportRepository<RealEstateSupport>>();
         builder.Services.AddScoped<TokenRepository>();
         builder.Services.AddScoped<UserRepository>();
 
         //Services
-        builder.Services.AddScoped<ImageProccess>();
+        builder.Services.AddScoped<PropertyDeedImageService>();
         builder.Services.AddScoped<PropertyImageService>();
+        builder.Services.AddScoped<SupportImageService>();
+        builder.Services.AddScoped<ApplicationUserImageService>();
         builder.Services.AddScoped<OwnerService>();
         builder.Services.AddScoped<TenantService>();
         builder.Services.AddScoped<LocationService>();
@@ -112,6 +131,9 @@ public partial class Program
         builder.Services.AddScoped<SupportService>();
         builder.Services.AddScoped<TokenService>();
         builder.Services.AddScoped<UserService>();
+
+        //Other services
+        builder.Services.AddScoped<ImageProccess>();
         builder.Services.AddScoped<EmailValidationService>();
         builder.Services.AddScoped<PasswordValidationService>();
 

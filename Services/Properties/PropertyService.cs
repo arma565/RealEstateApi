@@ -17,9 +17,9 @@ interface IPropertyService
 }
 
 #pragma warning disable CA1515
-public class PropertyService(PropertyRepository repository) : IPropertyService
+public class PropertyService(PropertyRepository<RealEstateProperty> repository) : IPropertyService
 {
-    private readonly PropertyRepository _repository = repository;
+    private readonly PropertyRepository<RealEstateProperty> _repository = repository;
 
     public async Task<IEnumerable<RealEstateProperty>> GetListAsync() =>
         await _repository.GetListAsync().ConfigureAwait(false);

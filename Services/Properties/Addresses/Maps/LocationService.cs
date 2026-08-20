@@ -1,5 +1,6 @@
 ﻿using RealEstate.DTOs.Properties.Addresses.Map;
 using RealEstate.Entities.Persons;
+using RealEstate.Entities.Persons.Tenants;
 using RealEstate.Entities.Properties.Addresses.Map;
 using RealEstate.Repositories.Properties.Addresses.Maps;
 
@@ -16,9 +17,9 @@ interface ILocationService
 }
 
 #pragma warning disable CA1515
-public class LocationService(LocationRepository repository) : ILocationService
+public class LocationService(LocationRepository<PropertyLocation> repository) : ILocationService
 {
-    private readonly LocationRepository _repository = repository;
+    private readonly LocationRepository<PropertyLocation> _repository = repository;
 
     public async Task<IEnumerable<PropertyLocation>> GetListAsync() =>
      await _repository.GetListAsync().ConfigureAwait(false);
